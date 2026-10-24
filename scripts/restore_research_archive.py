@@ -153,7 +153,8 @@ def restore(root, *, verify_only=False):
 def verify_restored(root):
     root = Path(root).resolve()
     snapshot = json.loads((root / 'handoff/SOURCE_SNAPSHOT.json').read_text())
-    aliases = {'README.md': 'legacy/V4_README.md', '.gitignore': 'legacy/V4_gitignore.txt'}
+    aliases = {'README.md': 'legacy/V4_README.md', '.gitignore': 'legacy/V4_gitignore.txt',
+               'AGENTS.md': 'legacy/V4_AGENTS.md'}
     for item in snapshot['files']:
         path = safe_path(root, aliases.get(item['path'], item['path']))
         if not path.is_file() or path.stat().st_size != item['bytes'] or digest(path) != item['sha256']:

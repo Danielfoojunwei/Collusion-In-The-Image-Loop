@@ -31,7 +31,7 @@ Read in order:
 6. The live output root, its three existing amendments and driver diagnostics.
 
 `CODEX_CLOUD_HANDOFF.md`, the original README saved in `legacy/`, and original
-AGENTS.md describe historical V4 work. Keep their evidence-integrity and secret
+`legacy/V4_AGENTS.md` describe historical V4 work. Keep their evidence-integrity and secret
 handling principles, but do not restart their superseded schedule or routes.
 
 ## Repository and restore

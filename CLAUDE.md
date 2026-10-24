@@ -4,8 +4,8 @@ Read `CLAUDE_CODE_HANDOFF.md` before taking any action. It records the latest
 user-authorized V16 experiment, the real paused state, remaining repair, original
 budget, and the distinction between development and blinded Codex review.
 
-`CODEX_CLOUD_HANDOFF.md` and `AGENTS.md` were supplied for the historical V4
-experiment. Preserve those originals. Their old model stack, six-block design,
+`CODEX_CLOUD_HANDOFF.md` and `legacy/V4_AGENTS.md` were supplied for the historical
+V4 experiment. Preserve those originals. Their old model stack, six-block design,
 and launch instructions are not the current V16 schedule. The latest user
 instructions and the current handoff govern which study to resume.
 

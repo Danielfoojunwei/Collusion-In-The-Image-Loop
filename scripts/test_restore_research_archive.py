@@ -15,6 +15,22 @@ spec.loader.exec_module(module)
 
 
 class RestoreTests(unittest.TestCase):
+    def test_preserved_original_instructions_verify_through_legacy_alias(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'handoff').mkdir()
+            (root / 'legacy').mkdir()
+            original = b'original historical instructions\n'
+            (root / 'legacy/V4_AGENTS.md').write_bytes(original)
+            (root / 'AGENTS.md').write_text('current V16 entry point\n')
+            item = {'path': 'AGENTS.md', 'bytes': len(original),
+                    'sha256': hashlib.sha256(original).hexdigest()}
+            (root / 'handoff/SOURCE_SNAPSHOT.json').write_text(json.dumps({'files': [item]}))
+            self.assertEqual(module.verify_restored(root)['files'], 1)
+            (root / 'legacy/V4_AGENTS.md').write_bytes(b'changed')
+            with self.assertRaisesRegex(ValueError, 'Restored project file differs'):
+                module.verify_restored(root)
+
     def test_actual_archive_window_fits_explicit_decoder_limit(self):
         parameters = zstandard.ZstdCompressionParameters.from_level(3, window_log=29, write_content_size=0)
         compressed = zstandard.ZstdCompressor(compression_params=parameters).compress(b'x' * (4 * 1024 * 1024))

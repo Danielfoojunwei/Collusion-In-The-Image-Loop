@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checked_at_unix": 1792852912.1879697,
+  "ledger_path": "runs/main/budget.sqlite3",
+  "bytes": 645636096,
+  "sha256": "c167832d683872160f9763906b6dd04532d89a187a06353986b05f20d6c2a961",
+  "sha256_matches_archived_snapshot": true,
+  "sqlite_quick_check": "ok",
+  "request_rows": 1780,
+  "connection_mode": "read_only_immutable",
+  "paid_calls": 0
+}

@@ -1,0 +1,23 @@
+{
+  "status": "all_source_state_and_archive_uploaded",
+  "checked_at_unix": 1792853040.4039392,
+  "repository": "https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop",
+  "branch": "main",
+  "archive_complete_commit": "a0db433a6ebaa453f8be19e1f3fa86108da74bb3",
+  "remote_archive_head_verified": true,
+  "archive_parts_in_remote_commit": 56,
+  "archive_bytes": 2769922206,
+  "archived_research_files_verified": 27987,
+  "all_parts_below_github_100_mib_limit": true,
+  "archive_index_sha256": "7ad9bb59af2df7c4a69c6e308d3c7303dd9941dbb15374f24d30be9f64a270f0",
+  "source_snapshot_sha256": "e41ffdffd10410e7e896c6cbe0bfd3a9e9c7ce1095ad7869dc0aa6cb51a4e64d",
+  "latest_source_and_current_state_export_verified": true,
+  "credentials_included": false,
+  "new_paid_calls": 0,
+  "experiment_still_paused": true,
+  "pending_technical_amendment": "004",
+  "handoff": "CLAUDE_CODE_HANDOFF.md",
+  "claude_entry_point": "CLAUDE.md",
+  "current_agent_entry_point": "AGENTS.md",
+  "start_message": "handoff/COPY_PASTE_TO_CLAUDE.txt"
+}

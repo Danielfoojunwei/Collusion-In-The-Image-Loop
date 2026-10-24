@@ -22,7 +22,7 @@ It leaves the current V16 stop marker unchanged. It does not import experiment
 modules, use keys or make API calls. `--verify-only` validates the full archive
 without extracting it. After restoration, `--verify-restored` checks all included
 original source files and run files against the transfer manifest; the original
-README and gitignore are checked through their preserved `legacy/` copies.
+README, gitignore and V4 AGENTS are checked through their preserved `legacy/` copies.
 
 An equivalent bare extraction, into an empty destination, is:
 

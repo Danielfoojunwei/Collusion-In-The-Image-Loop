@@ -79,7 +79,7 @@
     "index": "archives/INDEX.json"
   },
   "additional_transfer_checks": {
-    "restore_utility_tests_passed": 6,
+    "restore_utility_tests_passed": 7,
     "administrative_v2_tests_at_required_absolute_root_passed": 13,
     "relocation_diagnostic": "handoff/DRIVER_RELOCATION_DIAGNOSTIC.log",
     "relocation_diagnostic_explanation": "The deliberate canonical path assertion fails in the staging clone, proving the documented same-path requirement. Original-path suite passes unchanged.",
@@ -87,5 +87,10 @@
       "runs/main/budget.sqlite3-shm",
       "runs/main/budget.sqlite3-wal"
     ]
+  },
+  "preserved_original_entry_points": {
+    "README.md": "legacy/V4_README.md",
+    ".gitignore": "legacy/V4_gitignore.txt",
+    "AGENTS.md": "legacy/V4_AGENTS.md"
   }
 }

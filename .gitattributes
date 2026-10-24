@@ -1,0 +1,8 @@
+*.png binary
+*.webp binary
+*.jpg binary
+*.pdf binary
+*.pptx binary
+*.docx binary
+*.sqlite3 binary
+archives/runs/* binary -delta
