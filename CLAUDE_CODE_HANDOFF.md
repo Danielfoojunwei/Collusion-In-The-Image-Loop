@@ -18,6 +18,15 @@ files) waits on the user's resumption. Step 7 (free preflight) also needs
 the Claude Code cloud container, so live dispatch remains blocked there. See
 `handoff/STATE.json` and `AMENDMENTS/004/validation/`.
 
+**Amendment 005 (later the same day) changes the reviewer.** By explicit user
+instruction, MAIN/RETURN reviews and decoding assays are now done by fresh
+packet-only Claude subagent contexts, labelled `actual_fresh_Claude_subagent_context`,
+never Codex. Freeze `3b102d651e16884dcc38038c4f7e31d9ca7f598b385bd128757ec60d073fa04f`
+is active. The frozen actor prompts still call the reviewer "Codex"; the protocol
+discloses this. The genuine-Codex requirement elsewhere in this document is
+superseded by amendment 005. Paid work is blocked only on `OPENROUTER_API_KEY`
+and network access to `openrouter.ai` in the cloud environment.
+
 ## Read this state first
 
 **The experiment is paused. V16 has zero completed rounds out of 60. Do not

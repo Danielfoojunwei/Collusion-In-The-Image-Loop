@@ -2,7 +2,7 @@
   "prepared_at_unix": 1792852534.1920695,
   "repository": "https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop",
   "experiment": "V16 document carrier",
-  "execution_state": "paused_amendment004_applied_awaiting_user_resumption_free_preflight_and_codex_bridge",
+  "execution_state": "paused_amendment005_applied_blocked_on_openrouter_key_and_network_policy",
   "paid_calls_for_github_transfer": 0,
   "planned_arms": 5,
   "planned_rounds_per_arm": 12,
@@ -19,8 +19,8 @@
   "live_root": "runs/main/triad_document_carrier_v16_live",
   "required_absolute_project_root": "/workspace/visual_collusion_stress_v4",
   "stop_marker_preserved": true,
-  "active_freeze_amendment": "004",
-  "active_freeze_sha256": "30b6773320144be3a1c306918c16f92009f02661f9aadbf0933f771cb70b63e8",
+  "active_freeze_amendment": "005",
+  "active_freeze_sha256": "3b102d651e16884dcc38038c4f7e31d9ca7f598b385bd128757ec60d073fa04f",
   "current_source_matches_active_freeze": true,
   "current_actor_model": "z-ai/glm-5.3-flash",
   "canonical_actor_model": "z-ai/glm-5.3-flash-20260826",
@@ -43,22 +43,19 @@
     "uncertain_reservations_included": true
   },
   "current_offline_tests": {
-    "full_v16_suite": 231,
-    "targeted_004_validation": 92,
-    "provider_funding": 47,
-    "amendment": 33,
+    "full_v16_suite": 235,
     "administrative_driver_v2": 13,
-    "log": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/004/validation/v16_004_targeted.log",
+    "log": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/005/validation/v16_005_full_suite.log",
     "paid_calls": 0
   },
   "source_file_hashes": {
     "next_batch/v16_document_carrier/provider.py": "5c4c3218e031788d0418e9c49e842e6f5a81be511913811355bdc171f163145f",
     "next_batch/v16_document_carrier/funding.py": "4c6a7d6b73eae080ffdcf05d7f574df559f0b1ecdd58c2e31b03c2c6269055aa",
     "next_batch/v16_document_carrier/test_provider_funding.py": "9c9282c60b67fd06c2714b6c5e31c23eacdfed1fb3f0e6f75ebbd0f23de39448",
-    "next_batch/v16_document_carrier/runner.py": "a8cfedd977e55a659878833d006f1e3579d6a25d4a8445625b4c308152a18b1f",
-    "next_batch/v16_document_carrier/amendment.py": "32381b85778f8785dcf9556eba8515e077a3655256c9b5a2cc33e3fecda32a65",
-    "next_batch/v16_document_carrier/design.py": "f7ce3118a2c12443531091907ffacad0dbe235f8dd3afbc2ad2343ae21ec7d27",
-    "next_batch/v16_document_carrier/test_amendment.py": "9fffe75d76aaa78e8fc0f5a9736fdaeb935728017ffd3e927043dbb2db1286e8"
+    "next_batch/v16_document_carrier/runner.py": "ffdafd95da340a146833f576506c31ad823e207398e5185668f4d7838c74fa93",
+    "next_batch/v16_document_carrier/amendment.py": "a6b691b152826d2a18c98ed9927ba1b6d7c90fd41dd4821aaf83debe62f827df",
+    "next_batch/v16_document_carrier/design.py": "c63890bef10321b3158a2f407db52abf4aa1594872adabd02ad02bc5c48966b8",
+    "next_batch/v16_document_carrier/test_amendment.py": "cda9e4fa0f9d5ff6a5c6701132c770862984c27fb37f9eaa5981f0d95540a872"
   },
   "full_source_snapshot": {
     "files": 29324,
@@ -101,17 +98,26 @@
     "validation": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/004/validation/VALIDATION.json"
   },
   "remaining_before_paid_launch": [
-    "User explicitly resumes execution",
-    "release_stop bound to the 004 receipt; archive stale old003 START/HELD/state driver files",
-    "Supply OPENROUTER_API_KEY as a runtime secret (absent in the Claude Code cloud container)",
-    "Fresh free whole-study preflight bound to freeze004 (cli preflight)",
-    "Real packet-only fresh Codex product review bridge (no Codex product available in the Claude Code cloud container)",
-    "First scheduled case b02 R1 through both genuine reviews and COMMIT before other arms"
+    "Add OPENROUTER_API_KEY to the cloud environment (variable not present in this session)",
+    "Allow openrouter.ai in the environment network policy (proxy currently rejects CONNECT)",
+    "Then: release_stop bound to the 005 receipt; archive stale old003 START/HELD/state driver files",
+    "Fresh free whole-study preflight bound to freeze005 (cli preflight)",
+    "First scheduled case b02 R1 through both fresh Claude subagent reviews and COMMIT before other arms"
   ],
   "restore_check_claude_code": {
     "files_verified": 29318,
     "files_in_snapshot": 29324,
     "absent_build_metadata_only": "src/visual_collusion_stress.egg-info/* (6 files, excluded by .gitignore, not research records)",
     "ledger_rows": 1780
+  },
+  "amendment005": {
+    "directory": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/005",
+    "parent_freeze_sha256": "30b6773320144be3a1c306918c16f92009f02661f9aadbf0933f771cb70b63e8",
+    "reviewers": "fresh packet-only Claude subagent contexts; no OpenRouter billing",
+    "live_review_evidence_origin": "actual_fresh_Claude_subagent_context",
+    "authorized_by": "explicit user instruction in the Claude Code session, before any a04 work",
+    "ledger_rows_changed": 0,
+    "new_paid_calls": 0,
+    "actor_prompts_unchanged_still_name_reviewer_Codex": true
   }
 }
