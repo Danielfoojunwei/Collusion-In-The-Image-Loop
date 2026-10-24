@@ -4,10 +4,11 @@ This module never sends a request, changes a ledger row, or authors a review.
 The original freeze and raw attempts stay intact. A technical recovery is a new
 prospective resource condition, recorded before another paid identity is used.
 """
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from copy import deepcopy
 from decimal import Decimal
 from pathlib import Path
+import fcntl
 import json
 import os
 import re
@@ -605,16 +606,28 @@ def _provider_route_configuration(old, fixture):
 
 def _route_failure_scope(out, snapshot, previous_receipt):
     """Exactly five new uncertain HTTP404 reservations, with no model output."""
-    expected = {NAMESPACE + arm + '.r01.a02.B_INITIAL.native' for arm in ARMS}
+    def unavailable_route(message, payload):
+        return 'relace' in message and 'open-inference/fp4' in message
+    return _initial_http404_scope(out, snapshot, previous_receipt, 'a02', unavailable_route,
+                                  'Actual provider-unavailable HTTP404 evidence is missing')
+
+
+def _initial_http404_scope(out, snapshot, previous_receipt, attempt, diagnosed, missing):
+    """Five uncertain R1 B_INITIAL HTTP404 reservations added after the parent receipt.
+
+    ``diagnosed(message, logical_payload)`` must confirm the specific router
+    rejection for every arm. No native result or model response may exist.
+    """
+    expected = {NAMESPACE + arm + '.r01.' + attempt + '.B_INITIAL.native' for arm in ARMS}
     rows = {row['request_id']: row for row in snapshot['rows'] if row['request_id'] in expected}
     baseline = [row for row in snapshot['rows'] if row['request_id'] not in expected]
     if (set(rows) != expected or len(baseline) != previous_receipt['ledger_row_count'] or
             sha(canonical(baseline).encode()) != previous_receipt['ledger_after_sha256']):
-        raise IntegrityError('Provider repair must add exactly the five known a02 route failures')
+        raise IntegrityError('Repair must add exactly the five known ' + attempt + ' HTTP404 failures')
     failures = []
     retained = []
     for arm in ARMS:
-        identifier = NAMESPACE + arm + '.r01.a02.B_INITIAL.native'
+        identifier = NAMESPACE + arm + '.r01.' + attempt + '.B_INITIAL.native'
         row = rows[identifier]
         if (row['status'] != 'uncertain' or row['kind'] != 'chat' or
                 row['model'] != 'z-ai/glm-5.3-flash' or row['reserved_units'] != 11011200 or
@@ -623,24 +636,24 @@ def _route_failure_scope(out, snapshot, previous_receipt):
         failure = out / 'provider_evidence' / 'transport_failures' / (sha(identifier.encode()) + '.json')
         observed = read(failure)
         message = str((observed.get('router_diagnostic') or {}).get('message', '')).lower()
-        if (observed.get('request_id') != identifier or observed.get('http_status') != 404 or
-                observed.get('failure_class') != 'HTTPError' or
-                observed.get('request_not_reposted') is not True or
-                'relace' not in message or 'open-inference/fp4' not in message):
-            raise IntegrityError('Actual provider-unavailable HTTP404 evidence is missing')
-        owner = out / 'paid_operations' / (sha(identifier.encode()) + '.json')
-        started = read(owner)
-        finished = owner.with_suffix('.finished.json')
-        if (started.get('request_id') != identifier or started.get('attempt_id') != arm + '.r01.a02' or
-                read(finished).get('owner_sha256') != sha(owner.read_bytes()) or
-                row['request_hash'] != request_digest({'endpoint': '/chat/completions',
-                                                        'wire_body_sha256': started.get('wire_sha256')})):
-            raise IntegrityError('Failed request has no matching completed transport-owner proof')
         logical = identifier.removeprefix(NAMESPACE)
         request_archive = out / 'provider_evidence' / 'transport_requests' / (sha(logical.encode()) + '.json')
         request = read(request_archive)
         mapping = request.get('mapping') or {}
         logical_payload = request.get('logical_payload') or {}
+        if (observed.get('request_id') != identifier or observed.get('http_status') != 404 or
+                observed.get('failure_class') != 'HTTPError' or
+                observed.get('request_not_reposted') is not True or
+                not diagnosed(message, logical_payload)):
+            raise IntegrityError(missing)
+        owner = out / 'paid_operations' / (sha(identifier.encode()) + '.json')
+        started = read(owner)
+        finished = owner.with_suffix('.finished.json')
+        if (started.get('request_id') != identifier or started.get('attempt_id') != arm + '.r01.' + attempt or
+                read(finished).get('owner_sha256') != sha(owner.read_bytes()) or
+                row['request_hash'] != request_digest({'endpoint': '/chat/completions',
+                                                        'wire_body_sha256': started.get('wire_sha256')})):
+            raise IntegrityError('Failed request has no matching completed transport-owner proof')
         calls = logical_payload.get('tools') or []
         if (request.get('request_id') != logical or request.get('endpoint') != '/chat/completions' or
                 mapping.get('wire_body_sha256') != started.get('wire_sha256') or mapping.get('images') != [] or
@@ -650,7 +663,7 @@ def _route_failure_scope(out, snapshot, previous_receipt):
             raise IntegrityError('Failed initial request archive does not match its paid wire')
         native = out / 'provider_evidence' / 'native_results' / (sha(logical.encode()) + '.json')
         if native.exists():
-            raise IntegrityError('A native/model result exists before provider repair')
+            raise IntegrityError('A native/model result exists before technical repair')
         for proof in [failure, owner, finished, request_archive]:
             retained.append({'path': str(proof), 'sha256': sha(proof.read_bytes())})
         failures.append({'arm': arm, 'request_id': identifier, 'http_status': 404,
@@ -660,7 +673,7 @@ def _route_failure_scope(out, snapshot, previous_receipt):
         observed = read(path)
         identifier = observed.get('binding', {}).get('request_id', '')
         if identifier in expected:
-            raise IntegrityError('An actual model response exists before provider repair')
+            raise IntegrityError('An actual model response exists before technical repair')
     return failures, retained
 
 
@@ -829,6 +842,281 @@ def apply_provider_route_recovery(runner, ledger):
         return {'status': 'provider_amended_held_for_free_preflight', 'directory': str(destination),
                 'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
                 'all_arms_next_attempt': 'r01.a03', 'unknown_reservations_forgiven': 0,
+                'STOP_still_present': True}
+
+
+RELACE_ROUTES = {'actors': 'relace', 'actor_precision': 'unreported', 'image': 'alibaba', 'fallbacks': False}
+FORCED_INITIAL_TOOL_CHOICE = {'type': 'function', 'function': {'name': 'record_initial_judgment'}}
+EXPECTED_TRANSPORT_POLICY = {
+    'tool_choice': 'auto', 'functions_per_turn': 1,
+    'content_json_normalization': 'one_entire_JSON_object_or_exact_JSON_fence_with_exact_argument_keys_no_value_repair',
+    'absolute_post_deadline_seconds': {'publish_document': 3600, 'other_calls': 600},
+    'socket_post_timeout_matches_absolute_deadline': True}
+MAX3_TECHNICAL_RECOVERY = ('Restart only incomplete current round from same arm prior checkpoint; '
+                           'max3attempts; all costs/unknowns retained')
+MAX4_TECHNICAL_RECOVERY = ('Restart only incomplete current round from same arm prior checkpoint; '
+                           'max4attempts; all costs/unknowns retained')
+
+
+@contextmanager
+def _driver_idle(out):
+    """Hold the administrative driver's own lock, proving no driver process runs."""
+    path = safe(out / 'driver' / 'driver.lock', out)
+    if not path.exists():
+        yield
+        return
+    with path.open('rb') as stream:
+        try:
+            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise IntegrityError('The administrative driver still owns its lock') from None
+        try:
+            yield
+        finally:
+            fcntl.flock(stream, fcntl.LOCK_UN)
+
+
+def _tool_choice_configuration(old, fixture):
+    """Same model, route, sampling and money; only the tool-choice wire and attempt limit change."""
+    from . import design
+    from .funding import NATIVE_PROFILES, NORMAL_RESERVATION_USD
+    from .provider import TRANSPORT_POLICY
+    if old.get('routes') != RELACE_ROUTES or design.CONFIG.get('routes') != RELACE_ROUTES:
+        raise IntegrityError('Tool-choice repair must keep the amendment003 Relace route')
+    if (old.get('technical_amendment') or {}).get('number') != 3:
+        raise IntegrityError('Tool-choice repair must follow the provider-route amendment')
+    if old.get('technical_recovery') != MAX3_TECHNICAL_RECOVERY:
+        raise IntegrityError('Unexpected prior technical-attempt policy')
+    if TRANSPORT_POLICY != EXPECTED_TRANSPORT_POLICY:
+        raise IntegrityError('Installed provider transport differs from the audited repair')
+    if (Decimal(NORMAL_RESERVATION_USD) != Decimal('18.528') or
+            NATIVE_PROFILES['publish_document']['output_tokens'] != 65536 or
+            Decimal(str(old.get('normal_reservation_ceiling_usd'))) != Decimal('18.528')):
+        raise IntegrityError('Tool-choice repair changed resource allowance or reservation')
+    for field in ('models', 'routes', 'seed', 'rounds_per_arm', 'total_rounds', 'scoring', 'sampling',
+                  'documents', 'validation_payload', 'post_main_decode_assays', 'budget'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Tool-choice repair changed scientific/resource condition: ' + field)
+    recovery = deepcopy(design.CONFIG.get('recovery') or {})
+    if recovery.pop('maximum_technical_attempts_per_round', None) != 4 or recovery != old.get('recovery'):
+        raise IntegrityError('Tool-choice repair changed recovery terms beyond the fourth attempt')
+    result = deepcopy(old)
+    result['recovery'] = deepcopy(design.CONFIG['recovery'])
+    result['technical_recovery'] = MAX4_TECHNICAL_RECOVERY
+    result['transport'] = deepcopy(TRANSPORT_POLICY)
+    result['technical_amendment'] = {
+        'number': 4, 'revision': 'v16.4',
+        'reason': 'Relace rejected the forced named tool_choice: five HTTP404 responses before any a03 model output.',
+        'previous_tool_choice': 'forced named function', 'tool_choice': 'auto',
+        'functions_offered_per_call': 1,
+        'content_json_normalization': EXPECTED_TRANSPORT_POLICY['content_json_normalization'],
+        'content_json_argument_origin_recorded': True, 'native_call_ids_invented': False,
+        'absolute_post_deadline_seconds': deepcopy(EXPECTED_TRANSPORT_POLICY['absolute_post_deadline_seconds']),
+        'maximum_technical_attempts_per_round': 4,
+        'actor_provider': 'relace', 'actor_precision': 'unreported',
+        'all_main_cohorts_uniform_after_zero_a03_model_outputs': True,
+        'models_routes_prompts_cases_sampling_incentives_and_money_limits_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _tool_choice_diagnostic(out):
+    """The free endpoint diagnostic must show auto support and no forced-function support."""
+    diagnostic = out / 'driver' / 'FREE_TOOL_CHOICE_DIAGNOSTIC.json'
+    if not diagnostic.is_file():
+        raise IntegrityError('The observed free tool-choice diagnostic is required')
+    endpoint = read(diagnostic).get('endpoint') or {}
+    support = endpoint.get('supports_tool_choice') or {}
+    if (endpoint.get('tag') != 'relace' or support.get('auto') is not True or
+            support.get('function') is not False):
+        raise IntegrityError('Free diagnostic does not show Relace auto-only tool choice')
+    return diagnostic
+
+
+def _prepare_tool_choice_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    third = out / 'AMENDMENTS' / '003'
+    if previous['directory'] != third:
+        raise IntegrityError('Tool-choice repair must directly follow amendment003')
+    if not (third / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Amendment003 was never released; a03 failures cannot be its evidence')
+    prior_receipt = read(third / 'RECOVERY_RECEIPT.json')
+    if sha((out / 'STOP_REQUESTED.json').read_bytes()) == prior_receipt['stop_original_sha256']:
+        raise IntegrityError('Tool-choice repair requires the newer post-003 operator hold')
+
+    def forced_choice_rejected(message, payload):
+        provider = payload.get('provider') or {}
+        return ('tool_choice' in message and payload.get('tool_choice') == FORCED_INITIAL_TOOL_CHOICE and
+                provider.get('only') == ['relace'] and provider.get('allow_fallbacks') is False)
+    failures, retained = _initial_http404_scope(
+        out, snapshot, prior_receipt, 'a03', forced_choice_rejected,
+        'Actual forced tool_choice HTTP404 evidence is missing')
+    _tool_choice_configuration(read(third / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(third / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(third / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Tool-choice repair changed cases or actor prompts')
+    attempts = []
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; zero-output tool-choice recovery forbidden')
+        parent = out / 'arms' / arm / 'attempts' / 'r01'
+        if read(parent / 'a02' / 'abandoned.json').get('amendment_number') != 3:
+            raise IntegrityError('Amendment003 did not abandon the a02 route failure')
+        root = parent / 'a03'
+        context = read(root / 'context.json')
+        if (context.get('attempt_id') != arm + '.r01.a03' or context.get('attempt') != 3 or
+                context.get('previous_checkpoint_sha256') is not None or
+                context.get('case_sha256') != sha(canonical(design.cases()[0]).encode())):
+            raise IntegrityError('Failed R1a03 context differs from the common R0 checkpoint')
+        if ((root / 'abandoned.json').exists() or
+                any(path.is_file() for name in ('stages', 'documents', 'finished')
+                    for path in (root / name).rglob('*'))):
+            raise IntegrityError('Failed attempt already contains output or abandonment')
+        if read(root / 'hold.json').get('code') != 'paid_outcome_unresolved':
+            raise IntegrityError('Failed attempt does not have the observed transport hold')
+        if read(root / 'inflight' / 'B_INITIAL.json').get('stage') != 'B_INITIAL':
+            raise IntegrityError('Failed attempt is not the first B_INITIAL dispatch')
+        for extra in parent.glob('a[0-9][0-9]'):
+            if extra.name not in ('a01', 'a02', 'a03') and any(path.is_file() for path in extra.rglob('*')):
+                raise IntegrityError('The replacement a04 identity already has bookkeeping/work')
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before tool-choice recovery')
+        retained.extend(_inventory(root))
+        attempts.append({'arm': arm, 'path': str(root), 'attempt_id': arm + '.r01.a03'})
+    for directory in (out / 'reviews').glob('*'):
+        if (directory / 'launch.json').exists() or (directory / 'assessment.json').exists():
+            raise IntegrityError('A Codex review exists before zero-output tool-choice recovery')
+    diagnostic = _tool_choice_diagnostic(out)
+    retained.append({'path': str(diagnostic), 'sha256': sha(diagnostic.read_bytes())})
+    return {'amendment_number': 4, 'revision': 'v16.4', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Five HTTP404 responses before any a03 model response: the pinned Relace endpoint supports tool_choice=auto but rejects the forced named function.',
+            'previous_tool_choice': deepcopy(FORCED_INITIAL_TOOL_CHOICE), 'tool_choice': 'auto',
+            'actor_provider': 'relace', 'actor_precision': 'unreported',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [],
+            'attempts': attempts, 'http404_evidence': failures,
+            'new_round_attempt': 'Existing R0 checkpoint, fresh unused R1a04 in all five arms.',
+            'a03_model_outputs_observed': 0,
+            'all_uncertain_rows_and_full_reservations_retained': True,
+            'diagnostic_path': str(diagnostic), 'diagnostic_sha256': sha(diagnostic.read_bytes())}
+
+
+def apply_tool_choice_recovery(runner, ledger):
+    """Append004 and seal five a03 HTTP404 reservations, without forgiving any cost.
+
+    Requires active003, the exact newer STOP, idle producer and driver locks,
+    and zero commits. Old request identities are retired, never reposted.
+    """
+    from .funding import seal
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '004'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before tool-choice recovery')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during tool-choice recovery')
+        else:
+            intent = _prepare_tool_choice_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during tool-choice recovery')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Failed tool-choice evidence changed during recovery')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        additional_archives, retained_proofs = [], []
+        for failure in intent['http404_evidence']:
+            archive = destination / 'http404_archive' / (failure['arm'] + '.json')
+            put_bytes(archive, safe(failure['raw_path'], out).read_bytes())
+            additional_archives.append({'path': str(archive), 'sha256': failure['raw_sha256']})
+        for attempt in intent['attempts']:
+            marker = Path(attempt['path']) / 'abandoned.json'
+            put(marker, {'status': 'abandoned_technical', 'technical': True,
+                         'attempt_id': attempt['attempt_id'], 'fault_class': 'forced_tool_choice_unsupported_http404',
+                         'prior_checkpoint_sha256': None, 'amendment_number': 4,
+                         'recovery_intent_sha256': sha(intent_path.read_bytes()),
+                         'all_costs_and_unknown_reserves_retained': True,
+                         'not_a_behavioral_outcome': True, 'model_response_observed': False})
+            if seal(out, marker, ledger) != 1:
+                raise IntegrityError('Expected exactly one unknown HTTP404 reservation per arm')
+            identifier = NAMESPACE + attempt['attempt_id'] + '.B_INITIAL.native'
+            proof = out / 'funding_seals' / (sha(identifier.encode()) + '.json')
+            proof_body = read(proof)
+            if proof_body.get('full_unknown_reservation_retained') is not True:
+                raise IntegrityError('Tool-choice failure reservation was not fully retained')
+            archive = destination / 'funding_seal_archive' / (attempt['arm'] + '.json')
+            put_bytes(archive, proof.read_bytes())
+            digest = sha(proof.read_bytes())
+            additional_archives.append({'path': str(archive), 'sha256': digest})
+            retained_proofs.append({'path': str(proof), 'sha256': digest})
+        diagnostic_archive = destination / 'FREE_TOOL_CHOICE_DIAGNOSTIC.original.json'
+        put_bytes(diagnostic_archive, safe(intent['diagnostic_path'], out).read_bytes())
+        additional_archives.append({'path': str(diagnostic_archive), 'sha256': intent['diagnostic_sha256']})
+        third = out / 'AMENDMENTS' / '003'
+        put(destination / 'CONFIG.json', _tool_choice_configuration(read(third / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (third / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            archive = destination / 'source_archive' / relative
+            put_bytes(archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Sealing tool-choice failures unexpectedly changed invoice rows')
+        receipt = {'amendment_number': 4, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 5,
+                   'additional_archives': additional_archives, 'retained_proofs': retained_proofs,
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'uncertain_rows_retained': 5, 'unknown_reservation_units_retained': 55056000,
+                   'a03_actor_responses_observed': 0,
+                   'scientific_note': 'Same model and Relace route; only the tool-choice wire (forced named function to auto with one offered function, exact content-JSON normalization) and the fourth technical attempt change. Main cohorts uniformly restart from R0 at a04 after five a03 HTTP404 failures; no failure is collusion/refusal evidence.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=4, revision='v16.4',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_tool_choice_repair_after_zero_model_outputs')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'tool_choice_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'all_arms_next_attempt': 'r01.a04', 'unknown_reservations_forgiven': 0,
                 'STOP_still_present': True}
 
 

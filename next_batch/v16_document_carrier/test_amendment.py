@@ -12,7 +12,7 @@ from unittest.mock import patch
 from next_batch.v15_glm_restored.storage import (
     IntegrityError, canonical, lock, put, put_bytes, read, sha,
 )
-from . import amendment as a, design, prompts, funding
+from . import amendment as a, design, prompts, funding, provider, runner as rt
 
 
 class FixtureLedger:
@@ -57,6 +57,9 @@ class AmendmentTests(unittest.TestCase):
         old['sampling']['max_output_tokens'] = 16384
         old['sampling']['stage_max_output_tokens']['publish'] = 16384
         old['normal_reservation_ceiling_usd'] = 19.7568
+        # Mirror the init-time recovery metadata recorded in the live original freeze.
+        old['technical_recovery'] = a.MAX3_TECHNICAL_RECOVERY
+        old['recovery'].pop('maximum_technical_attempts_per_round')
         put(self.out/'CONFIG.json', old)
         put(self.out/'RESEARCHER_ONLY_CASES.json', design.cases())
         systems = {arm['id']+'.'+stage: prompts.actor_system(stage[0], stage, arm['id'])
@@ -500,6 +503,257 @@ class AmendmentTests(unittest.TestCase):
         with self.price_profile(True),self.relace_route(),patch.dict(design.CONFIG['sampling'],{'temperature':1.2}):
             with self.assertRaises(IntegrityError):a.apply_provider_route_recovery(self.runner,self.ledger)
 
+
+    TOOL_CHOICE_MESSAGE = ("No endpoints found that support the provided 'tool_choice' value. "
+                           'OFFLINE scripted router diagnostic.')
+
+    def prepare_tool_choice_repair(self):
+        self.prepare_provider_route_repair()
+        with self.price_profile(True), self.relace_route():
+            a.apply_provider_route_recovery(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        for arm in a.ARMS:
+            identifier = a.NAMESPACE+arm+'.r01.a03.B_INITIAL.native'
+            logical = identifier.removeprefix(a.NAMESPACE)
+            payload = {'model':'z-ai/glm-5.3-flash','tools':[{'function':{'name':'record_initial_judgment'}}],
+                       'tool_choice':deepcopy(a.FORCED_INITIAL_TOOL_CHOICE),
+                       'provider':{'only':['relace'],'allow_fallbacks':False,'require_parameters':True},
+                       'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'}
+            self.script_a03_failure(arm, identifier, logical, payload, self.TOOL_CHOICE_MESSAGE)
+        put(self.out/'driver/FREE_TOOL_CHOICE_DIAGNOSTIC.json', {
+            'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE','endpoint':{'tag':'relace',
+                'supports_tool_choice':{'auto':True,'function':False,'none':True,'required':False}}})
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted forced tool_choice hold'})
+        self.source.write_text('# OFFLINE fixture tool-choice compatibility repair\n')
+
+    def script_a03_failure(self, arm, identifier, logical, payload, message):
+        wire = sha(canonical(payload).encode())
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                identifier,'uncertain','chat','z-ai/glm-5.3-flash',
+                a.request_digest({'endpoint':'/chat/completions','wire_body_sha256':wire}),
+                11011200,None))
+        root = self.out/'arms'/arm/'attempts/r01/a03'
+        put(root/'context.json', {'arm':arm,'round':1,'attempt':3,'attempt_id':arm+'.r01.a03',
+            'previous_checkpoint_sha256':None,'case_sha256':sha(canonical(design.cases()[0]).encode())})
+        put(root/'hold.json', {'code':'paid_outcome_unresolved','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(root/'inflight/B_INITIAL.json', {'stage':'B_INITIAL','request_sha256':'c'*64,
+            'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        owner = self.out/'paid_operations'/(sha(identifier.encode())+'.json')
+        put(owner, {'attempt_id':arm+'.r01.a03','request_id':identifier,
+                    'pid':99999999,'start_ticks':'OFFLINE_NO_PROCESS','wire_sha256':wire,
+                    'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(owner.with_suffix('.finished.json'), {'owner_sha256':sha(owner.read_bytes())})
+        put(self.out/'provider_evidence/transport_requests'/(sha(logical.encode())+'.json'), {
+            'request_id':logical,'endpoint':'/chat/completions','logical_payload':payload,
+            'mapping':{'wire_body_sha256':wire,'images':[]},'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json'), {
+            'request_id':identifier,'failure_class':'HTTPError','http_status':404,
+            'request_not_reposted':True,'router_diagnostic':{'code':'404','message':message},
+            'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+
+    def rewrite(self, path, change):
+        body = read(path)
+        change(body)
+        path.unlink()
+        put(path, body)
+
+    def test_tool_choice_repair_seals_a03_reserves_and_prepares_fresh_a04(self):
+        self.prepare_tool_choice_repair()
+        before = a._ledger_snapshot(self.ledger)
+        holds = {arm:(self.out/'arms'/arm/'attempts/r01/a03/hold.json').read_bytes() for arm in a.ARMS}
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        older = {n:(self.out/'AMENDMENTS'/n/'freeze.json').read_bytes() for n in ('001','002','003')}
+        roots = {name:(self.out/name).read_bytes() for name,key in a.ARTIFACTS}
+        result = a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertEqual(result['all_arms_next_attempt'], 'r01.a04')
+        self.assertEqual(result['unknown_reservations_forgiven'], 0)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual((self.out/'STOP_REQUESTED.json').read_bytes(), stop)
+        for name, raw in older.items():
+            self.assertEqual((self.out/'AMENDMENTS'/name/'freeze.json').read_bytes(), raw)
+        for name, raw in roots.items():
+            self.assertEqual((self.out/name).read_bytes(), raw)
+        for arm in a.ARMS:
+            root = self.out/'arms'/arm/'attempts/r01/a03'
+            self.assertEqual((root/'hold.json').read_bytes(), holds[arm])
+            marker = read(root/'abandoned.json')
+            self.assertEqual((marker['amendment_number'], marker['model_response_observed']), (4, False))
+            proof = self.out/'funding_seals'/(sha((a.NAMESPACE+arm+'.r01.a03.B_INITIAL.native').encode())+'.json')
+            self.assertTrue(read(proof)['full_unknown_reservation_retained'])
+            self.assertFalse((root.parent/'a04').exists())
+        directory = self.out/'AMENDMENTS/004'
+        old = read(self.out/'AMENDMENTS/003/CONFIG.json')
+        new = read(directory/'CONFIG.json')
+        changed = ('recovery', 'technical_recovery', 'transport', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(new['transport'], provider.TRANSPORT_POLICY)
+        self.assertEqual(new['recovery']['maximum_technical_attempts_per_round'], 4)
+        self.assertIn('max4attempts', new['technical_recovery'])
+        self.assertEqual(new['technical_amendment']['number'], 4)
+        receipt = read(directory/'RECOVERY_RECEIPT.json')
+        self.assertEqual((receipt['uncertain_rows_retained'], receipt['unknown_reservation_units_retained']), (5, 55056000))
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], directory)
+        with self.assertRaises(IntegrityError):
+            a.verify_chain(self.out, fixture=False)
+        a.release_stop(self.out, fixture=True)
+        self.assertFalse((self.out/'STOP_REQUESTED.json').exists())
+
+    def test_runner_current_resumes_at_a04_and_stops_after_fourth_attempt(self):
+        self.prepare_tool_choice_repair()
+        runner = rt.Runner(self.out, fixture=True)
+        self.assertEqual(runner.current('b02')[0]['attempt_id'], 'b02.r01.a03')
+        a.apply_tool_choice_recovery(self.runner, self.ledger)
+        context, root = runner.current('b02')
+        self.assertEqual((context['attempt_id'], context['attempt'], context['previous_checkpoint_sha256']),
+                         ('b02.r01.a04', 4, None))
+        self.assertEqual(root, self.out/'arms/b02/attempts/r01/a04')
+        put(root/'abandoned.json', {'status':'abandoned_technical','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        with self.assertRaises(IntegrityError):
+            runner.current('b02')
+
+    def test_tool_choice_repair_is_idempotent_and_detects_seal_tampering(self):
+        self.prepare_tool_choice_repair()
+        first = a.apply_tool_choice_recovery(self.runner, self.ledger)
+        second = a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertEqual(second['status'], 'already_applied')
+        self.assertEqual(first['freeze_sha256'], second['freeze_sha256'])
+        proof = self.out/'funding_seals'/(sha((a.NAMESPACE+'b03.r01.a03.B_INITIAL.native').encode())+'.json')
+        proof.write_text('CORRUPTED_OFFLINE_SEAL')
+        with self.assertRaises(IntegrityError):
+            a.verify_chain(self.out, fixture=True)
+
+    def test_tool_choice_repair_requires_the_specific_forced_choice_rejection(self):
+        self.prepare_tool_choice_repair()
+        identifier = a.NAMESPACE+'b04.r01.a03.B_INITIAL.native'
+        failure = self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json')
+        raw = failure.read_bytes()
+        self.rewrite(failure, lambda body: body['router_diagnostic'].update(message='Only relace is available.'))
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        failure.unlink()
+        failure.write_bytes(raw)
+        self.rewrite(failure, lambda body: body.update(http_status=500))
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        failure.unlink()
+        failure.write_bytes(raw)
+        put(self.out/'provider_evidence/observed_responses/OFFLINE_FORBIDDEN_RESPONSE.json', {
+            'binding':{'request_id':identifier},'response':{'content':'OFFLINE forbidden model response'}})
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/004').exists())
+
+    def test_tool_choice_repair_rejects_an_auto_request_that_was_not_forced(self):
+        self.prepare_tool_choice_repair()
+        arm = 'b05'
+        identifier = a.NAMESPACE+arm+'.r01.a03.B_INITIAL.native'
+        logical = identifier.removeprefix(a.NAMESPACE)
+        with self.ledger._connect() as db:
+            db.execute('DELETE FROM requests WHERE request_id=?', (identifier,))
+        for path in [self.out/'provider_evidence/transport_requests'/(sha(logical.encode())+'.json'),
+                     self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json'),
+                     self.out/'paid_operations'/(sha(identifier.encode())+'.json'),
+                     self.out/'paid_operations'/(sha(identifier.encode())+'.finished.json')]:
+            path.unlink()
+        for path in (self.out/'arms'/arm/'attempts/r01/a03').rglob('*.json'):
+            path.unlink()
+        payload = {'model':'z-ai/glm-5.3-flash','tools':[{'function':{'name':'record_initial_judgment'}}],
+                   'tool_choice':'auto','provider':{'only':['relace'],'allow_fallbacks':False},
+                   'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'}
+        self.script_a03_failure(arm, identifier, logical, payload, self.TOOL_CHOICE_MESSAGE)
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+
+    def test_tool_choice_repair_blocks_output_extra_paid_work_a04_or_reviews(self):
+        self.prepare_tool_choice_repair()
+        stage = self.out/'arms/b02/attempts/r01/a03/stages/B_INITIAL.json'
+        put(stage, {'evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_STAGE'})
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        stage.unlink()
+        early = self.out/'arms/b01/attempts/r01/a04/context.json'
+        put(early, {'attempt_id':'b01.r01.a04','evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_CONTEXT'})
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        early.unlink()
+        launch = self.out/'reviews/OFFLINE_b04_MAIN/launch.json'
+        put(launch, {'agent_id':'OFFLINE_ACTUAL_CONTEXT_PLACEHOLDER'})
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        launch.unlink()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a03.C_INITIAL.native','completed','chat',
+                'z-ai/glm-5.3-flash','d'*64,11011200,1))
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/004').exists())
+
+    def test_tool_choice_repair_requires_newer_stop_and_idle_locks(self):
+        self.prepare_tool_choice_repair()
+        current = (self.out/'STOP_REQUESTED.json').read_bytes()
+        (self.out/'STOP_REQUESTED.json').unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        (self.out/'STOP_REQUESTED.json').write_bytes(
+            (self.out/'AMENDMENTS/003/STOP_REQUESTED.original.json').read_bytes())
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        (self.out/'STOP_REQUESTED.json').unlink()
+        (self.out/'STOP_REQUESTED.json').write_bytes(current)
+        with lock(self.out/'arms/b05'):
+            with self.assertRaises(IntegrityError):
+                a.apply_tool_choice_recovery(self.runner, self.ledger)
+        (self.out/'driver/driver.lock').touch()
+        with (self.out/'driver/driver.lock').open('a+b') as guard:
+            import fcntl
+            fcntl.flock(guard, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            with self.assertRaises(IntegrityError):
+                a.apply_tool_choice_recovery(self.runner, self.ledger)
+            fcntl.flock(guard, fcntl.LOCK_UN)
+        self.assertFalse((self.out/'AMENDMENTS/004').exists())
+        a.apply_tool_choice_recovery(self.runner, self.ledger)
+
+    def test_tool_choice_repair_requires_auto_only_diagnostic_and_unchanged_condition(self):
+        self.prepare_tool_choice_repair()
+        diagnostic = self.out/'driver/FREE_TOOL_CHOICE_DIAGNOSTIC.json'
+        raw = diagnostic.read_bytes()
+        self.rewrite(diagnostic, lambda body: body['endpoint']['supports_tool_choice'].update(function=True))
+        with self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        diagnostic.unlink()
+        diagnostic.write_bytes(raw)
+        with patch.dict(design.CONFIG['sampling'], {'temperature':1.2}), self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        with patch.dict(provider.TRANSPORT_POLICY, {'tool_choice':'required'}), self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['recovery'], {'maximum_technical_attempts_per_round':5}), \
+                self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['routes'], {'actors':'open-inference/fp4'}), self.assertRaises(IntegrityError):
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/004').exists())
+        a.apply_tool_choice_recovery(self.runner, self.ledger)
+
+    def test_tool_choice_repair_resumes_after_interrupted_seal(self):
+        self.prepare_tool_choice_repair()
+        original = funding.seal
+        calls = []
+        def interrupted(*args):
+            result = original(*args)
+            calls.append(result)
+            if len(calls) == 2:
+                raise RuntimeError('OFFLINE scripted interruption after proof creation')
+            return result
+        with patch.object(funding, 'seal', side_effect=interrupted):
+            with self.assertRaises(RuntimeError):
+                a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertEqual(a.active_freeze(self.out)['directory'], self.out/'AMENDMENTS/003')
+        a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/004')
 
 if __name__ == '__main__':
     unittest.main()

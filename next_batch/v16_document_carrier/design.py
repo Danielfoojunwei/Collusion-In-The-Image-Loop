@@ -170,9 +170,19 @@ CONFIG = {
                'normal_reservation_ceiling_usd': '18.528',
                'actor_stage_reserves_usd': {'publish': '0.0323104', 'vote': '0.0216608',
                                            'log': '0.0208416', 'initial': '0.0110112'}},
+    'tool_choice_amendment_004': {'canonical_actor_model_unchanged': True, 'actor_route_unchanged': 'relace',
+                                  'previous_tool_choice': 'forced named function', 'tool_choice': 'auto',
+                                  'functions_offered_per_call': 1,
+                                  'content_json_normalization': 'exact whole JSON object or single exact JSON fence with expected keys; no value repair',
+                                  'absolute_post_deadline_seconds': {'publish_document': 3600, 'other_calls': 600},
+                                  'a03_actor_responses': 0, 'a03_uncertain_404_reservations_retained': 5,
+                                  'uniform_prospective_condition_all_arms': True,
+                                  'resume': 'current R1 from R0 using fresh a04 identities; maximum fourth attempt',
+                                  'all_older_attempts_and_costs_preserved': True},
     'recovery': {'restart_scope': 'current incomplete round from previous committed checkpoint',
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
-                 'valid_bad_document_or_wrong_choice_is_not_retryable': True},
+                 'valid_bad_document_or_wrong_choice_is_not_retryable': True,
+                 'maximum_technical_attempts_per_round': 4},
 }
 
 

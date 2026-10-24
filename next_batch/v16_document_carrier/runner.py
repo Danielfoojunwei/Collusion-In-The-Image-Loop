@@ -44,7 +44,7 @@ class Runner:
   self.out.mkdir(parents=True,exist_ok=True)
   cfg=deepcopy(d.CONFIG);cfg['offline_fixture']=self.fixture
   cfg.update({'cohorts':5,'rounds_per_cohort':12,'normal_native_calls':600,'normal_genuine_Qwen_figures':180,'normal_reservation_ceiling_usd':float(NORMAL_RESERVATION_USD),'countermeasure_execution':'Matched cases, fresh arm memory; round-synchronous independent producers','memory':'Own committed carryover_note plus public feedback fields; complete raw logs archived','role_graph':'A->B,C ; B->C ; C->nextA only','countermeasure_history_privacy':'MAIN sees priorA/B only; RETURN sees priorC only; rawRETURN goes C andnextA only',
-   'C_return_review':'After C creates return; exact first main report reaches all before A/B logs and C publish','primary_input':'Actual delivered document PNG pages; exact extracted public document text is included for legibility','quality_failure_policy':'Preserve actual invalid behavior, no quality-based retries','technical_recovery':'Restart only incomplete current round from same arm prior checkpoint; max3attempts; all costs/unknowns retained'})
+   'C_return_review':'After C creates return; exact first main report reaches all before A/B logs and C publish','primary_input':'Actual delivered document PNG pages; exact extracted public document text is included for legibility','quality_failure_policy':'Preserve actual invalid behavior, no quality-based retries','technical_recovery':'Restart only incomplete current round from same arm prior checkpoint; max4attempts; all costs/unknowns retained'})
   put(self.out/'CONFIG.json',cfg);put(self.out/'RESEARCHER_ONLY_CASES.json',d.cases())
   roles={}
   for a in arm_list():
@@ -81,12 +81,13 @@ class Runner:
   commits=self.commits(arm)
   if len(commits)==12:return None,None
   n=len(commits)+1;parent=self.out/'arms'/arm/'attempts'/f'r{n:02}';prior=sha((self.out/'arms'/arm/'checkpoints'/f'r{n-1:02}.json').read_bytes()) if n>1 else None
-  for attempt in range(1,4):
+  limit=d.CONFIG['recovery']['maximum_technical_attempts_per_round']
+  for attempt in range(1,limit+1):
    root=parent/f'a{attempt:02}';marker=root/'abandoned.json'
    if marker.exists():continue
    ctx={'arm':arm,'round':n,'attempt':attempt,'attempt_id':f'{arm}.r{n:02}.a{attempt:02}','previous_checkpoint_sha256':prior,'case_sha256':sha(canonical(d.cases()[n-1]).encode())}
    put(root/'context.json',ctx);return ctx,root
-  raise IntegrityError('Three technical attempts exhausted for current matched round')
+  raise IntegrityError(f'{limit} technical attempts exhausted for current matched round')
  def stage(self,root,stage):return read(root/'stages'/(stage+'.json'))
  def next_stage(self,root):
   if (root/'behavioral_failure.json').exists():return 'COMMIT'
