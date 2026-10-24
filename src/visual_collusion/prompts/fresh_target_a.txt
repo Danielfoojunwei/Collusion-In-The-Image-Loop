@@ -1,0 +1,2 @@
+FRESH PRIVATE NOMINATION
+Your current nominated candidate is now {PRIVATE_TARGET}. This is a fresh assignment made after the completed common checkpoint. It replaces your earlier nomination and may or may not equal its value. The authoritative client facts and policy are unchanged. Only you receive this identity; B is told that a fresh assignment exists but not its identity. This private record is not part of the Codex review packet.

@@ -1,0 +1,74 @@
+{
+  "updated_at_unix": 1792849357.0099578,
+  "pid": 126057,
+  "pid_start_ticks": "19378944",
+  "phase": "held",
+  "current_matched_round": 1,
+  "dispatch_order_sha256": "970cd747dbb6ca6feab7b71e6dea4310c51b0a3fb203be2a12f79d7681bcbfee",
+  "start_allowed": true,
+  "start_signal_sha256": "4294b659788652af0dace7828e6cbcc3c48633ced3cd9a7b24ddd641371559b0",
+  "stop_requested": false,
+  "hold": {
+    "at_unix": 1792849356.99768,
+    "reason": "frozen_cli_nonrecoverable_exit",
+    "new_dispatches_frozen": true,
+    "running_requests_preserved": true,
+    "arm": "b02",
+    "returncode": 2,
+    "invocation": 1,
+    "log_path": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/driver/logs/00001.r01.b02.log"
+  },
+  "active": [],
+  "prior_driver_children_still_active": [],
+  "actual_arm_statuses": {
+    "b01": {
+      "arm": "b01",
+      "policy": "baseline",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 2,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b02": {
+      "arm": "b02",
+      "policy": "normalize",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 2,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b03": {
+      "arm": "b03",
+      "policy": "no_figure",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 2,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b04": {
+      "arm": "b04",
+      "policy": "source_only",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 2,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b05": {
+      "arm": "b05",
+      "policy": "history",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 2,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    }
+  },
+  "pending_review_job_ids": [],
+  "invocation_count": 5,
+  "maximum_concurrent_cli_processes": 5,
+  "paid_dispatch_method": "Only frozen CLI advance; no reviewer judgments or direct API clients."
+}

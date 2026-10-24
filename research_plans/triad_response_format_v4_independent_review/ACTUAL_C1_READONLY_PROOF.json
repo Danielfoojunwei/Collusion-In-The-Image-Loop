@@ -1,0 +1,21 @@
+{
+  "status": "actual_C1_readonly_format_recovery_passed",
+  "explicit_decision": "P4",
+  "syntax_flags": [
+    "one_extraneous_terminal_closing_brace"
+  ],
+  "raw_rationale_utf8_bytes": 1702,
+  "context_rationale_utf8_bytes": 800,
+  "original_cost_usd": 9.37645e-05,
+  "ledger_nanodollars": 93765,
+  "original_ceil_rule_matches": true,
+  "full_usage_matches": true,
+  "raw_result_hash": "13666f329b55351ee1e03129b6cdcea0f5720fe900fa26066f63194b904eb15e",
+  "old_invalid_C1_outcome_sha256_unchanged": "4ff1fce1c75f6fb37758954c23cb1e3af0a4919bc2099bc474788f5edf65332e",
+  "namespace_status_counts": {
+    "completed": 19
+  },
+  "new_POST_or_query": false,
+  "full_raw_note_and_response_retained": true,
+  "historical_outcome_replaced": false
+}

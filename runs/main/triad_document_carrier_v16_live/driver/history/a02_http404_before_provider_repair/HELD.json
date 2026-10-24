@@ -1,0 +1,10 @@
+{
+  "at_unix": 1792849356.99768,
+  "reason": "frozen_cli_nonrecoverable_exit",
+  "new_dispatches_frozen": true,
+  "running_requests_preserved": true,
+  "arm": "b02",
+  "returncode": 2,
+  "invocation": 1,
+  "log_path": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/driver/logs/00001.r01.b02.log"
+}

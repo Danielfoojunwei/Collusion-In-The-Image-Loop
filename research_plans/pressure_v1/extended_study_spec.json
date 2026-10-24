@@ -1,0 +1,99 @@
+{
+  "activation_blockers": [
+    "Current canonical validator/scheduler hardcode two prefix and two continuation rounds; config changes alone do not extend execution.",
+    "Fresh notices, primary/replay triggers, checkpoint/evidence checks, report labels and maximum call counts must use round9/the new schedule.",
+    "GLM16-image/64-message/text-token envelopes cannot carry worst-case twelve-round full history (up to48 actor image blocks).",
+    "Sonnet8-image envelope cannot carry the desired24-image final history view.",
+    "The independent strictly-under10MiB actual wire guard remains enforced; more image slots alone do not solve payload size.",
+    "A separately versioned context/transport policy must be implemented and pass maximum-context offline tests; any changed view must be disclosed.",
+    "The shared aggregate budget and request namespace must be implemented and worst-case reservations recalculated, not copied from v4.",
+    "All ten actual task-author outputs must be collected and frozen for the new cases before their actor trials."
+  ],
+  "actor_prompt_bindings": [
+    {
+      "path": "prompts/agent_a_explicit_system.txt",
+      "role": "A",
+      "sha256": "95fda48a00ea8b2e32a7a37d96636f1576ad2ad14207011f1cc17c889e2ca97f"
+    },
+    {
+      "path": "prompts/agent_b_explicit_system.txt",
+      "role": "B",
+      "sha256": "5de5f05b8c6dbaa4f74f31da952e9dc486f90a4cadbd1fef10285f78b5aa4c88"
+    }
+  ],
+  "base_case_generator_protocol": "4.0.0",
+  "budget": {
+    "Codex_excluded": true,
+    "aggregate_cap_usd": 40,
+    "cash_ceiling_OpenRouter_usd": 50,
+    "new_automatic_spend_allowance": false,
+    "old_5_dollar_exploratory_proposal_superseded": true,
+    "old_spending_and_unknown_reserves_count": true,
+    "reserve_before_each_POST_and_stop_if_cap_would_be_exceeded": true
+  },
+  "case_seed": 20261024,
+  "context_policy": {
+    "desired": "preserve complete exact-pixel history and own permitted tool traces",
+    "implemented_for_this_horizon": false,
+    "silent_dropping_resizing_or_history_truncation_allowed": false
+  },
+  "counts": {
+    "Codex_task_author_jobs": 10,
+    "continuation_rounds_per_branch": 4,
+    "delivered_images_per_final_trajectory": 24,
+    "desired_final_audit_views": 32,
+    "desired_maximum_OpenRouter_chat_calls": 1232,
+    "final_trajectories": 16,
+    "flattened_final_history_entries_including_shared_prefix_repetitions": 192,
+    "honest_pairs": 2,
+    "independent_main_blocks": 6,
+    "maximum_actor_chat_calls": 1200,
+    "maximum_image_requests": 600,
+    "neutral_B_actor_turns": 12,
+    "overt_pairs": 2,
+    "planned_primary_receptions": 12,
+    "primary_reception_round": 9,
+    "real_actor_turns": 288,
+    "real_delivered_image_slots": 288,
+    "rounds_per_final_trajectory": 12,
+    "shared_main_rounds_per_pair": 8,
+    "total_actor_turns": 300,
+    "unique_AB_rounds_and_Codex_reviews": 144,
+    "unique_control_AB_rounds": 48,
+    "unique_main_AB_rounds": 96,
+    "unique_main_rounds_per_pair_including_two_branches": 16
+  },
+  "horizon": {
+    "fresh_target_and_primary_round": 9,
+    "honest_rounds": 12,
+    "main_branch_rounds": 4,
+    "main_shared_rounds": 8,
+    "overt_rounds": 12,
+    "review_after_each_completed_AB_round": true,
+    "rounds_per_trajectory": 12,
+    "success_dependent_extensions": false
+  },
+  "inference_started": false,
+  "interpretation": "Combined pressure-prompt and longer-horizon revision, not a prompt-only intervention. Six independent main blocks; repeated turns and branches are dependent.",
+  "models": {
+    "image": "qwen/qwen-image-2.1-turbo",
+    "monitor": "anthropic/claude-sonnet-5.5",
+    "producer": "z-ai/glm-5.3-flash",
+    "verifier": "z-ai/glm-5.3-flash"
+  },
+  "per_turn": {
+    "image_size": "1024x1024",
+    "max_image_requests": 2,
+    "max_model_actions": 4,
+    "paid_retries": 0
+  },
+  "revision": "pressure_v1_long12",
+  "sampling_request": {
+    "temperature": "omitted",
+    "top_k": "omitted",
+    "top_p": "omitted"
+  },
+  "source_config": "configs/canonical.json",
+  "source_config_sha256": "251329f9d478b0c76710c96b8b56c6ebabdb1c18d643aa96be927cff654e4b3c",
+  "state": "prepared_specification_not_executable"
+}

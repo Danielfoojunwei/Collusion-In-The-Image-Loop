@@ -1,0 +1,546 @@
+{
+  "evidence_origin": "fixture",
+  "no_paid_calls": true,
+  "production_ledger_touched": false,
+  "report_utf8_bytes": 10000,
+  "task_brief_utf8_bytes": 1600,
+  "ballot_rationale_utf8_bytes_each": 800,
+  "B_message_utf8_bytes": 800,
+  "private_carryover_utf8_bytes_each": 2048,
+  "contexts": [
+    {
+      "round": 1,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 4038,
+      "initial_input_estimate": 12490,
+      "inline_images": 0
+    },
+    {
+      "round": 1,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 4036,
+      "initial_input_estimate": 16784,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 5683,
+      "initial_input_estimate": 18094,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16198,
+      "initial_input_estimate": 27886,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16091,
+      "initial_input_estimate": 27779,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 17742,
+      "initial_input_estimate": 33695,
+      "inline_images": 1
+    },
+    {
+      "round": 2,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 18798,
+      "initial_input_estimate": 44423,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 18698,
+      "initial_input_estimate": 39869,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16316,
+      "initial_input_estimate": 45573,
+      "inline_images": 3
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16431,
+      "initial_input_estimate": 44964,
+      "inline_images": 3
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16225,
+      "initial_input_estimate": 36336,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 17980,
+      "initial_input_estimate": 51023,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19035,
+      "initial_input_estimate": 61665,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 18832,
+      "initial_input_estimate": 48426,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16514,
+      "initial_input_estimate": 54194,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16628,
+      "initial_input_estimate": 53583,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16360,
+      "initial_input_estimate": 44894,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18178,
+      "initial_input_estimate": 59804,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19191,
+      "initial_input_estimate": 61981,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 18967,
+      "initial_input_estimate": 56984,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16669,
+      "initial_input_estimate": 54349,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16783,
+      "initial_input_estimate": 53738,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16495,
+      "initial_input_estimate": 53452,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18333,
+      "initial_input_estimate": 60119,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19346,
+      "initial_input_estimate": 62296,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19061,
+      "initial_input_estimate": 57078,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16824,
+      "initial_input_estimate": 54504,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16938,
+      "initial_input_estimate": 53893,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16589,
+      "initial_input_estimate": 53546,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18488,
+      "initial_input_estimate": 60434,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19501,
+      "initial_input_estimate": 62611,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19154,
+      "initial_input_estimate": 57171,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16979,
+      "initial_input_estimate": 54659,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17093,
+      "initial_input_estimate": 54048,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16682,
+      "initial_input_estimate": 53639,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18643,
+      "initial_input_estimate": 60749,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19656,
+      "initial_input_estimate": 62926,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19247,
+      "initial_input_estimate": 57264,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17134,
+      "initial_input_estimate": 54814,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17248,
+      "initial_input_estimate": 54203,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16775,
+      "initial_input_estimate": 53732,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18798,
+      "initial_input_estimate": 61064,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19811,
+      "initial_input_estimate": 63241,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19340,
+      "initial_input_estimate": 57357,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17289,
+      "initial_input_estimate": 54969,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17403,
+      "initial_input_estimate": 54358,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16868,
+      "initial_input_estimate": 53825,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18953,
+      "initial_input_estimate": 61379,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19966,
+      "initial_input_estimate": 63556,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19433,
+      "initial_input_estimate": 57450,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17444,
+      "initial_input_estimate": 55124,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17558,
+      "initial_input_estimate": 54513,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16961,
+      "initial_input_estimate": 53918,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19108,
+      "initial_input_estimate": 61694,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 15991,
+      "initial_input_estimate": 59742,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19529,
+      "initial_input_estimate": 57548,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17602,
+      "initial_input_estimate": 55284,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17718,
+      "initial_input_estimate": 54676,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17058,
+      "initial_input_estimate": 54017,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19267,
+      "initial_input_estimate": 62015,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16152,
+      "initial_input_estimate": 60067,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19626,
+      "initial_input_estimate": 57647,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17762,
+      "initial_input_estimate": 55448,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17878,
+      "initial_input_estimate": 54840,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17153,
+      "initial_input_estimate": 54114,
+      "inline_images": 4
+    },
+    {
+      "round": 11,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19426,
+      "initial_input_estimate": 62338,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16310,
+      "initial_input_estimate": 60388,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19721,
+      "initial_input_estimate": 57744,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17920,
+      "initial_input_estimate": 55608,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 18035,
+      "initial_input_estimate": 54998,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17248,
+      "initial_input_estimate": 54211,
+      "inline_images": 4
+    },
+    {
+      "round": 12,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19584,
+      "initial_input_estimate": 62658,
+      "inline_images": 4
+    }
+  ],
+  "wire_checks": [
+    {
+      "mode": "image_vote",
+      "posts": 6,
+      "image_posts": 2,
+      "max_actual_wire_bytes": 2752351,
+      "four_actions_and_two_images": true,
+      "all_wire_bytes_below10MiB": true
+    },
+    {
+      "mode": "image_memory",
+      "posts": 6,
+      "image_posts": 2,
+      "max_actual_wire_bytes": 2757899,
+      "four_actions_and_two_images": true,
+      "all_wire_bytes_below10MiB": true
+    }
+  ],
+  "passed": true,
+  "twelve_rounds_finished": 12,
+  "recorded_at_utc": "2026-10-22T14:10:33.705842+00:00",
+  "max_view_utf8_bytes": 19966,
+  "source_hashes": {
+    "experiments/triad_consensus_v2/cli.py": "96ac8f04f37aeffb1fbe7a81ad6346c261df667b51f768dc3758acf0ca3da317",
+    "experiments/triad_consensus_v2/engine.py": "626d211ada6b4df43be428c8de1dc4c18e308ad7311b4418edb2f4f9068a8844",
+    "experiments/triad_consensus_v2/contracts.py": "773b6d8352131d72793b3d7b15bcb09d3bb8363fce40405c45f666b07b902cf5",
+    "experiments/triad_consensus_v2/__init__.py": "3d5b8e7aa782853866c17572002ee7f718ed0022a430d1d3a2e50848cf9b7ef2",
+    "experiments/triad_consensus_v2/coordinator.py": "ae029100368f00d0dc3a12f1d05196f42cc5cdccfbec978890d7d84bfb201f9c",
+    "experiments/triad_consensus_v2/backend.py": "c7f9755e070b6f6cf09c58b348a9d980b69ea3008bd451237c11465aa059124a"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "experiments/pressure_interview_v1/tests",
+    "-v"
+  ],
+  "started_at_utc": "2026-10-22T12:33:56.288508+00:00",
+  "ended_at_utc": "2026-10-22T12:37:15.006289+00:00",
+  "elapsed_seconds": 198.718,
+  "exit_code": 0,
+  "scientific_observations": false,
+  "paid_calls": 0
+}

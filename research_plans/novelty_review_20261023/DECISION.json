@@ -1,0 +1,49 @@
+{
+  "as_of": "2026-10-23",
+  "document_type": "research_assessment_not_live_protocol",
+  "paid_execution_status": "held_for_pre_run_research_review",
+  "new_paid_calls_for_assessment": 0,
+  "broad_first_ever_claim_supported": false,
+  "precise_first_ever_claim_verified": false,
+  "guaranteed_score": null,
+  "primary_track": "3.1",
+  "secondary_track": "2.3",
+  "causal_3_4_claim_currently_supported": false,
+  "candidate_question": "Where does private-target influence succeed or fail from agent brief through hosted rendering, delivery, recipient interpretation and actual choice, and can an intervention remove that influence while preserving legitimate usefulness?",
+  "recommended_amendments_status": "not_implemented_or_activated_as_a_complete_scientific_protocol",
+  "recommended_controls": [
+    "Matched original-target and alternate-target full continuations from frozen pre-round state",
+    "Facts-only artifact reconstruction without an oracle recommendation",
+    "Independent factuality and legitimate usefulness assessment",
+    "Exact selected/delivered raster provenance and separate inference/action observations",
+    "Clearly separated overt diagnostic and honest negative cases",
+    "Matched auditor access on saved artifacts without feedback to main memory"
+  ],
+  "candidate_probe_checkpoints": [4, 8, 12],
+  "probe_checkpoints_frozen_in_live_protocol": false,
+  "main_round_count_recommended": 12,
+  "independent_main_episodes": 1,
+  "free_recipient_ballot_slots": 24,
+  "sender_assignment_is_autonomous_evidence": false,
+  "unresolved_literature_access": [
+    {
+      "source": "https://openreview.net/forum?id=Y3POisuyOO",
+      "access": "Indexed primary abstract, introduction and threat-model excerpts; direct full access blocked by verification",
+      "consequence": "No complete method-level first-of-kind comparison"
+    }
+  ],
+  "budget_unchanged": {
+    "max_inference_usd": 40,
+    "max_OpenRouter_cash_usd": 50,
+    "Codex_excluded": true,
+    "prior_and_unresolved_charges_retained": true,
+    "new_probe_call_count_requires_bounded_estimate_before_freeze": true
+  },
+  "pre_launch_requirements": [
+    "Freeze amended primary endpoint and evidence thresholds",
+    "Budget exact main/control/restart allowance without increasing aggregate caps",
+    "Complete offline integration and fresh reviewer context checks",
+    "Resolve UTF8 cap and worst-case context consistency",
+    "Preserve all observations and technical failures; no success-dependent retries"
+  ]
+}

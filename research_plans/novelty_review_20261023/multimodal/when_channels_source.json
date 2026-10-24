@@ -1,0 +1,12 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "No exact title match for \"When Do Covert Channels Emerge? Probing Steganographic Capacity in Multimodal Agents via Diffusion VAE Latents\" in the alphaXiv index. Use lookup_paper to check candidates, or supply a paper ID or URL. The paper may not be indexed."
+    }
+  ],
+  "structuredContent": {
+    "error_code": "INVALID_ARGUMENT"
+  },
+  "isError": true
+}

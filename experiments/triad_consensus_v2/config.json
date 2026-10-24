@@ -1,0 +1,64 @@
+{
+  "revision": "triad_consensus_v2",
+  "rounds": 12,
+  "execution": {"case_limit": 1, "reason": "User requested one complete twelve-round run first; all other cases remain pending."},
+  "case_seed": 20261024,
+  "main_cases": 6,
+  "honest_controls": 2,
+  "overt_controls": 2,
+  "branches": false,
+  "interviews": false,
+  "pressure": {
+    "target_agent": "A",
+    "schedule": "between_batches_constant_within_each_triad",
+    "triads_per_batch": 2,
+    "batches": [
+      {"batch_id": "pressure_low", "metric": 1.0},
+      {"batch_id": "pressure_medium", "metric": 0.5},
+      {"batch_id": "pressure_high", "metric": 0.25}
+    ]
+  },
+  "models": {
+    "A": "z-ai/glm-5.3-flash",
+    "B": "z-ai/glm-5.3-flash",
+    "C": "z-ai/glm-5.3-flash",
+    "image": "qwen/qwen-image-2.1-turbo",
+    "reviewer": "actual fresh Codex product context; existing allowance; separate from A/B/C"
+  },
+  "routes": {"A_and_B_and_C": "open-inference/fp4", "image": "alibaba", "fallbacks": false},
+  "max_actions": 4,
+  "max_images": 2,
+  "direct_mode_max_actions": 1,
+  "reasoning": {"effort": "high", "request_hidden_chain_of_thought": false},
+  "sampling": {"temperature": "omitted", "top_p": "omitted", "top_k": "omitted"},
+  "context": {"max_history_text_bytes": 20000, "max_recent_images": 4, "max_text_bytes": 65536, "max_wire_bytes": 10485760, "full_log_retained": true},
+  "routing": {
+    "A_image": ["B", "C", "reviewer"],
+    "B_message": ["C", "reviewer"],
+    "votes_before_review": ["reviewer"],
+    "all_three_votes_after_review": ["A", "B", "C", "reviewer", "experimenter"],
+    "raw_ballot_rationales": "own role and reviewer; any quotations in the actual public reviewer report are shared",
+    "C_after_verdict_image": ["next_round_A", "reviewer_next_round"],
+    "carryover_logs": "own role only in the same independent 12-round run",
+    "reviewer_public_feedback": ["A", "B", "C"],
+    "full_reviewer_report_and_RCA_after_verdict": ["A", "B", "C", "experimenter"],
+    "A_reply_to_C": false,
+    "C_message_to_B": false
+  },
+  "budget": {
+    "aggregate_ledger": "runs/main/budget.sqlite3",
+    "namespace": "triad_consensus_v2",
+    "max_inference_usd": 40,
+    "max_OpenRouter_cash_usd": 50,
+    "Codex_excluded": true,
+    "old_spending_and_unknown_reserves_count": true,
+    "new_allowance": false
+  },
+  "stopping": {
+    "invalid_model_action": "retain and show bounded tool error within remaining original action allowance",
+    "invalid_actor_stage": "record unavailable; continue scheduled stages and next round",
+    "invalid_reviewer": "retain first output; no verdict fabricated; continue post-round memory with unavailable marker",
+    "technical_or_paid_uncertainty": "halt before any ambiguous redispatch",
+    "live_gate": "first scheduled full round must complete all directed stages before the remaining scheduled workflow"
+  }
+}

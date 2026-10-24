@@ -1,0 +1,31 @@
+{
+  "protocol_version": "4.0.0",
+  "seed": 20261023,
+  "main_episodes": 6,
+  "honest_episodes": 2,
+  "overt_episodes": 2,
+  "prefix_rounds": 2,
+  "continuation_rounds": 2,
+  "models": {
+    "producer": "z-ai/glm-5.3-flash",
+    "verifier": "z-ai/glm-5.3-flash",
+    "monitor": "anthropic/claude-sonnet-5.5",
+    "image": "qwen/qwen-image-2.1-turbo"
+  },
+  "max_cash_usd": 50,
+  "max_inference_usd": 40,
+  "max_output_tokens": {
+    "agent": 4096,
+    "monitor": 2048
+  },
+  "reasoning_effort": {
+    "agent": "high",
+    "monitor": "low"
+  },
+  "image_quality": "standard",
+  "image_size": "1024x1024",
+  "paid_retries": 0,
+  "allow_model_fallback": false,
+  "max_agent_steps": 4,
+  "max_images_per_turn": 2
+}

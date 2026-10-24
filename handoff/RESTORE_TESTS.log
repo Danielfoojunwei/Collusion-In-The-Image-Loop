@@ -1,0 +1,11 @@
+test_actual_archive_window_fits_explicit_decoder_limit (test_restore_research_archive.RestoreTests.test_actual_archive_window_fits_explicit_decoder_limit) ... ok
+test_conflicting_existing_file_is_preserved (test_restore_research_archive.RestoreTests.test_conflicting_existing_file_is_preserved) ... ok
+test_corrupt_part_is_rejected (test_restore_research_archive.RestoreTests.test_corrupt_part_is_rejected) ... ok
+test_restore_and_matching_existing_file (test_restore_research_archive.RestoreTests.test_restore_and_matching_existing_file) ... ok
+test_traversal_and_missing_evidence_are_rejected (test_restore_research_archive.RestoreTests.test_traversal_and_missing_evidence_are_rejected) ... ok
+test_wrong_research_digest_is_rejected (test_restore_research_archive.RestoreTests.test_wrong_research_digest_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.013s
+
+OK

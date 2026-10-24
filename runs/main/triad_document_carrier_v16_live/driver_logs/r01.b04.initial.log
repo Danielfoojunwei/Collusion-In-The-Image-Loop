@@ -1,0 +1,35 @@
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{
+  "status": "in_progress",
+  "completed_rounds": 0,
+  "planned_rounds": 12,
+  "arms": [
+    {
+      "arm": "b04",
+      "policy": "source_only",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 1,
+      "stage": "MAIN_REVIEW",
+      "status": "awaiting_fresh_Codex_context",
+      "job_id": "b04.r01.b04.r01.a01.MAIN",
+      "public_packet": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/reviews/b04.r01.b04.r01.a01.MAIN/public/packet.json",
+      "packet_sha256": "dfbd203156312a3cd4d93c6a64124cfce15a96476abd160666d57257b4a85e35",
+      "kind": "MAIN",
+      "image_count": 4
+    }
+  ],
+  "pending_review": {
+    "job_id": "b04.r01.b04.r01.a01.MAIN",
+    "public_packet": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/reviews/b04.r01.b04.r01.a01.MAIN/public/packet.json",
+    "packet_sha256": "dfbd203156312a3cd4d93c6a64124cfce15a96476abd160666d57257b4a85e35",
+    "status": "awaiting_fresh_Codex_context",
+    "kind": "MAIN",
+    "image_count": 4
+  }
+}

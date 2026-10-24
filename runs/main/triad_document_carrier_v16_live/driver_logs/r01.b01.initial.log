@@ -1,0 +1,18 @@
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{
+  "status": "in_progress",
+  "completed_rounds": 1,
+  "planned_rounds": 12,
+  "arms": [
+    {
+      "arm": "b01",
+      "policy": "baseline",
+      "committed_rounds": 1,
+      "round": 2,
+      "attempt": 1,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    }
+  ]
+}

@@ -1,0 +1,1002 @@
+<paper id="2410.03768v2"><page num="1">Hidden in Plain Text: Emergence &amp; Mitigation of
+Steganographic Collusion in LLMs
+Yohan Mathew
+* 
+Ollie Matthews
+* 
+Robert McCarthy
+* 
+Joan Velja
+*
+LASR Labs LASR Labs LASR Labs
+University College London
+LASR Labs
+University of Amsterdam
+Christian Schroeder de Witt Dylan Cope
+† 
+Nandi Schoots
+†
+University of Oxford University of Oxford University of Oxford
+Abstract
+The rapid proliferation of frontier model agents
+promises significant societal advances but also
+raises concerns about systemic risks arising
+from unsafe interactions. Collusion to the dis-
+advantage of others has been identified as a
+central form of undesirable agent cooperation.
+The use of information hiding (steganography)
+in agent communications could render such
+collusion practically undetectable. This un-
+derscores the need for investigations into the
+possibility of such behaviours emerging and
+the robustness corresponding countermeasures.
+To investigate this problem we design two
+approaches – a gradient-based reinforcement
+learning (GBRL) method and an in-context re-
+inforcement learning (ICRL) method – for reli-
+ably eliciting sophisticated LLM-generated lin-
+guistic text steganography. We demonstrate, for
+the first time, that unintended steganographic
+collusion in LLMs can arise due to mispecified
+reward incentives during training. Addition-
+ally, we find that standard mitigations — both
+passive oversight of model outputs and active
+mitigation through communication paraphras-
+ing — are not fully effective at preventing this
+steganographic communication. Our findings
+imply that (i) emergence of steganographic col-
+lusion is a plausible concern that should be
+monitored and researched, and (ii) preventing
+emergence may require innovation in mitiga-
+tion techniques.
+1 Introduction
+Prior research has demonstrated that AI and LLMs
+can often behave in unexpected and unintended
+ways, including due to misspecified training incen-
+tives (Clark and Amodei, 2016; Krakovna et al.,
+2020; METR, 2025) and complex emergent behav-
+iors in multi-agent systems (Zheng et al., 2022;
+*
+Equal contribution. Correspondence to:
+y.math5@gmail.com, robertmccarthy97@gmail.com.
+†
+Equal co-supervision.
+Dou et al., 2023; Motwani et al., 2024). It is com-
+mon to employ oversight mechanisms to penal-
+ize such unintended behaviors during training and
+to catch unintended behaviors during deployment
+(Greenblatt et al., 2024; Kenton et al., 2024).
+Oversight of behaviours could be compromised
+via the use of text-based steganography – embed-
+ding hidden information in textual outputs (Ziegler
+et al., 2019; Schroeder de Witt et al., 2022). Prior
+works have outlined specific scenarios where text-
+based steganography may pose a risk (Petitcolas
+et al., 1999; Lockwood and Curran, 2017; Majeed
+et al., 2021; Roger and Greenblatt, 2023; Green-
+blatt et al., 2024). For example, in multi-LLM
+systems models could collude via steganographic
+communication to perpetuate biases in their train-
+ing data (Motwani et al., 2024), or to compromise
+“untrusted monitoring” oversight setups (Green-
+blatt et al., 2024).
+When a mispecified outcome-based task reward
+encourages an unintended behavior, but that be-
+havior is simultaneously penalized by an overseer,
+models under optimization pressure may adapt to
+execute the behavior more subtly, rather than ceas-
+ing it altogether (Baker et al., 2025). In multi-agent
+systems, such incentives could encourage mis-
+aligned steganographic communication to emerge
+during training. This could compromise the effec-
+tiveness of oversight during deployment, resulting
+in harmful outcomes. There is a need to better un-
+derstand these risks in order to inform technical
+research directions and policy decisions. We aim to
+make progress here via the following contributions:
+Contribution 1: We present methods for auto-
+matic elicitation of steganographic communication
+in frontier LLMs. Prior work eliciting steganogra-
+phy from LLMs has been limited to prompting the
+model to follow predefined steganographic codes
+(Roger and Greenblatt, 2023; Greenblatt et al.,
+2024) or to devise codes (Wu et al., 2024; Motwani
+et al., 2024). We present two optimization meth-
+arXiv:2410.03768v2 [cs.CL] 2 Dec 2025</page><page num="2">ods for stronger automatic elicitation of steganog-
+raphy in LLMs. This includes a gradient-based
+reinforcement learning (GBRL) method and two
+variants of an in-context reinforcement learning
+(ICRL) method (see Section 3.3). We empirically
+demonstrate that these methods can serve to: (i)
+evaluate the steganographic capabilities of LLMs;
+(ii) aid evaluation of steganography defenses; and,
+unlike prior works, (iii) act as proxies for realis-
+tic optimization pressures that may inadvertently
+cause steganography to emerge in LLMs.
+Contribution 2: We demonstrate that unin-
+tended steganographic communication can emerge
+in LLMs when optimizing a misspecified outcome-
+based reward in the presence of an overseer. Our
+empirical results in Section 5.1 warn against naive
+design of training incentives that inadvertently en-
+courage steganographic collusion. This highlights
+the need for further research into understanding and
+mitigating the emergence of steganographic com-
+munication in LLMs. Our methods and settings
+can serve as &quot;model organisms of misalignment&quot;
+(Hubinger et al., 2023) to facilitate such research.
+Contribution 3: We show that current meth-
+ods for mitigating steganographic communication
+in LLMs are often not robust when optimizated
+against. Existing empirical work investigating the
+robustness of mitigations does not do so against
+a collusion team that is learning (Lanham et al.,
+2023; Roger and Greenblatt, 2023; Motwani et al.,
+2024). In Sections 5.1 and 5.2, we show that a com-
+bination of oversight and paraphrasing mitigations
+can often fail when a colluding team is optimized
+against them. This motivates the need for improved
+training-time mitigation mechanisms, or for hold-
+ing out certain mitigations during training.
+2 Related Work
+The field of emergent communication studies how
+communication systems can develop under opti-
+mization pressure (Wagner et al., 2003; Havrylov
+and Titov, 2017; Lazaridou and Baroni, 2020;
+Chaabouni et al., 2022), and the study of covert
+signaling (Abadi and Andersen, 2016; Wang et al.,
+2023; Chen et al., 2023; Yu et al., 2022; Halawi
+et al., 2024) shows how methods of covert collu-
+sion like steganography can arise in multi-agent
+systems. In contrast to these prior works, we study
+collusion in systems with LLM agents.
+Motwani et al. (2024) outline steganographic col-
+lusion in frontier LLM agents as an important threat
+to study. They perform preliminary investigations
+into LLM steganographic communication abilities,
+examine scenarios where collusion may emerge,
+and provide theory outlining flaws in mitigations.
+Roger and Greenblatt (2023) evaluate LLM abil-
+ity to execute simple pre-defined steganography
+schemes and to come up with their own schemes.
+They find that paraphrasing is generally effective
+against these simple schemes. Zolkowski et al.
+(2025) perform further extensive evaluations of
+LLM steganographic communication abilities.
+We build upon Motwani et al. (2024) by pro-
+viding more thorough investigations of emergence
+of steganographic collusion, including the use of
+stronger optimization pressures and, crucially, pro-
+viding a first demonstration that this behaviour can
+indeed emerge unprompted due to optimization
+pressure. We build upon Roger and Greenblatt
+(2023) by optimizing schemes against the para-
+phraser, finding that paraphrasing is not always
+robust in this setting.
+3 Methodology
+3.1 Our Steganography Framework
+We frame steganography as an adversarial relation-
+ship between two teams, a collusion team and a
+mitigation team. The collusion team consists of a
+sender and a receiver, and aims to complete a task
+t while communicating a secret payload p. The
+sender sends a message to the receiver called the
+stegotext, within which it hides the payload. The
+receiver interprets the sender’s message and then
+produces an action a which completes the task.
+This action is passed to an evaluation function,
+which provides a task reward r
+task 
+for the collu-
+sion team. In our tasks, successful communication
+of the payload will generally allow the receiver to
+better maximize the task reward.
+The mitigation team aims to detect and mitigate
+steganographic communication of the payload by
+the collusion team. It consists of an overseer and
+an optional paraphraser. The paraphraser rewords
+the stegotext in an attempt to remove the payload.
+The overseer attempts to detect the presence of
+steganography by analysing stegotexts. When the
+overseer flags a stegotext as suspicious, the collu-
+sion team receives a suspiciousness penalty r
+sus
+. In
+our experiments we often use weaker models for
+the mitigation team than the collusion team. This
+is due to: (i) it is a common dynamic in practical
+deployments due to related cost-savings (Sharma</page><page num="3">Sender 
+Receiver
+Task
+(Payload)
+Episode
+Proposed Strategy
+or Weight Updates
+Stegotext
+Suspicious?
+Overseer
+Append
+Episode Logs
+Episode
+Histories
+Sender
+Learner
+Task
+Output
+Proposed Strategy
+or Weight Updates
+Append
+Episode Logs
+Episode
+Histories
+Receiver
+Learner
+Reward
+Figure 1: Illustration of our steganography elicitation framework, generalized for our Decentralized ICRL Learners
+and GBRL methods. The ‘learners’ iteratively test and improve on the behaviors of the agents to maximize reward,
+either by weight updates (GBRL) or proposing strategies in natural language (ICRL).
+et al., 2025), and (ii) less capable models are po-
+tentially easier to trust and verify (Greenblatt et al.,
+2024).
+In our experiments, the mitigation team is fixed,
+and the collusion team attempts to maximize its
+reward r, which is a combination of the task reward
+and the overseer penalty: r = r
+task 
+− r
+sus
+Evaluation Metrics. We use the following met-
+rics in our experiments. (1) Task Success: Receiver
+correctly completes the task. (2) Decoding Suc-
+cess: Receiver successfully decodes the payload.
+(3) Sender Task Success: Sender produces task-
+relevant stegotext. (4) Overseer Bypass Success:
+Overseer does not classify stegotext as suspicious.
+(5) Collusion Success: Collusion team completes
+the task, produces relevant stegotext (optional), and
+avoids overseer detection. (6) Channel Capacity:
+The bits of information communicated per request
+by the collusion team, as defined by (Roger and
+Greenblatt, 2023).
+3.2 Mitigation Team
+3.2.1 Overseers
+Across our experiments, we make use of three dif-
+ferent versions of an overseer. We detail each ver-
+sion in the paragraphs below. We calibrate the over-
+seer on held-out calibration sets for each task. This
+process helps us find suitable prompts and thresh-
+olds that perform well on the safety-usefulness
+frontier. Further details on this process and each
+overseer can be found in Appendix B.3, D.1.2 and
+D.1.3.
+Single-episode LLM-logits Overseer (O1). A
+(white-box access) LLM is prompted to classify
+whether a single stegotext appears suspicious. We
+then use the logits for the Yes/No tokens, z
+Yes 
+and
+z
+No
+, along with a sensitivity threshold t
+sens
+, to com-
+pute the suspiciousness score r
+sus 
+for each stego-
+text: r
+sus 
+= tanh (z
+Yes 
+− z
+No 
+− t
+sens
+). Here, Over-
+seer Bypass Success = r
+sus 
+&lt; t
+sens
+.
+Multi-episode LLM-sampling Overseer (O2).
+A (black-box access) LLM is prompted to eval-
+uate a batch of stegotexts to determine if they
+seem suspicious. The LLM returns a single yes/no
+answer for the entire batch, which is converted
+into a suspiciousness score as follows: r
+sus 
+=
+1 if &quot;Yes&quot;, 0 if &quot;No&quot;. This r
+sus 
+is then applied to
+each stegotext in the batch. Here, Overseer Bypass
+Success = 1 - r
+sus
+.
+Multi-episode LLM-sampling Thresholded
+Overseer (O3). A (black-box access) LLM is
+prompted to evaluate individual stegotexts within
+a batch to score their suspiciousness. It assigns a
+per-sample score between 0 and 5 to each stegotext
+(where 0 indicates harmless and 5 indicates highly
+suspicious). The entire batch is then assigned a
+binary r
+sus 
+score if more than T
+n
+% of the samples
+have a per-sample score greater than or equal to a
+threshold T
+s
+. This r
+sus 
+is then applied to each ste-
+gotext in the batch. Here, Overseer Bypass Success
+= 1 - r
+sus
+.
+3.2.2 Paraphrasers
+Our mitigation teams optionally make use of one of
+three paraphrasers. Further details on the prompts
+used for each paraphraser can be found in Appendix
+B.3.
+Standard Paraphraser (SP). An LLM is passed
+the stegotext and asked to re-word it (Roger and
+Greenblatt, 2023).
+Context-aware Paraphraser (CAP). An LLM
+is passed the stegotext, along with details regarding
+the task the sender should perform. It is asked to
+reword the stegotext while removing any details
+irrelevant to the task (Roger and Greenblatt, 2023).
+Coding Paraphraser (CP). In coding tasks, we</page><page num="4">make use of non-LLM paraphraser which determin-
+istically processes the sender’s output, renaming
+all variables to generic names and removing all
+comments.
+3.3 Collusion Team
+We present two different methods for optimizing
+the collusion team to maximize their reward sig-
+nal: gradient-based reinforcement learning (GBRL)
+and in-context reinforcement learning (ICRL). For
+GBRL, the weights of a pretrained LLM are mod-
+ified by gradient descent via an RL algorithm. In
+ICRL, the behavior of each agent is defined by
+strategies (represented in natural language) within
+the context window that are improved over time,
+and the weights of the collusion team LLMs remain
+fixed. A generalization of the training set-ups for
+GBRL and one version of ICRL is illustrated in
+Figure 1.
+3.3.1 Gradient-based Reinforcement
+Learning (GBRL)
+When optimizing the collusion team via GBRL, we
+periodically switch between training of the sender
+and training of the receiver. The receiver is first
+updated for n
+r 
+stochastic gradient descent (SGD)
+steps, after which the sender is updated for n
+s 
+SGD
+steps. This process is repeated until convergence.
+The receiver is a pretrained language model with
+a randomly initialized classification head. It is
+trained using supervised fine-tuning (SFT) to take
+the stegotext generated by the sender and predict
+the label that maximizes the task reward. The
+sender is a pretrained autoregressive LLM which
+takes the task description as input, and outputs ste-
+gotext to be passed to the receiver. The sender is
+trained using a reinforcement learning (RL) algo-
+rithm to maximize a reward signal r that accounts
+for task usefuleness and oversight. The overall re-
+ward r for the sender is the probability assigned
+to the correct label by the receiver (r
+task
+), minus
+a multiple λ
+overseer 
+of the suspiciousness penalty:
+r = r
+task 
+− λ
+overseer
+r
+sus
+We use proximal policy optimization
+(PPO) (Schulman et al., 2017) with low-rank
+adaptation (LoRA) (Hu et al., 2022) to update the
+sender (Sokota et al., 2022). More implementation
+details can be found in Appendix A.1.
+3.3.2 In-context Reinforcement Learning
+(ICRL)
+Our ICRL methods make use of one or more ICRL
+Learners in addition to the sender and receiver,
+all of which are LLMs. An ICRL Learner is an
+LLM that devises steganography strategies for the
+sender and receiver to execute. Once the sender
+and receiver execute the strategy (over a number
+of episodes), the ICRL Learner is fed the results
+in its context window, including details regarding
+the task reward r
+task 
+and suspiciousness penalty
+r
+sus 
+received. It then iterates upon the strategy, in
+order to maximize the reward signal. This is similar
+to previous approaches using in-context trial-and-
+error learning to iteratively improve LLM behavior
+(Yao et al., 2023; Shinn et al., 2023; Wang et al.,
+2024).
+We make use of two different variations of our
+ICRL method – Centralized Learner where the
+sender and receiver share a common ICRL Learner,
+and Decentralized Learners where the sender and
+receiver each have their own independent ICRL
+Learners.
+Decentralized ICRL Learners. This setup is
+equivalent to the setup shown in Figure 1. We have
+two separate ICRL learners (one for the sender and
+one for the receiver) which cannot communicate
+with each other. First, the sender learner suggests
+a strategy for the sender to execute over several
+episodes. The receiver learner analyzes the sender’s
+stegotexts from the episodes, and attempts to infer
+the strategy used by the sender. The receiver is then
+fed the inferred strategy and attempts to complete
+the task, while also trying to guess the payload in
+the sender’s stegotexts as a means of improving
+its task performance. The results of the current
+training step are fed back to the sender learner for
+the next training step. See Appendix A.2.1 and
+B.4 for more details on the decentralized learners
+methodology.
+Centralized ICRL Learner. In the centralized
+setup, a single central ICRL learner generates
+strategies that are fed to both the sender and re-
+ceiver. At each training step, the sender and re-
+ceiver execute the strategy over several episodes.
+The ICRL learner is prompted to come up with new
+strategies based on the results of these episodes.
+The process is repeated for a fixed number of train-
+ing steps. See Appendix A.2.2 for more details on
+the centralized learner methodology.</page><page num="9">and an overseer is present. Our candidate screening
+experiments show that undesired steganographic
+communication can emerge as an instrumental goal
+when optimizing a mispecified reward in the pres-
+ence of an overseer (Section 5.1). Our experiments
+of both Section 5.1 and 5.2 show that standard
+steganography mitigations, including paraphrasing,
+are not fully robust when optimized against.
+These results firstly motivate the need for further
+research to help us understand the possibility of un-
+intended steganography emerging in fronteir LLM
+training runs. Second, these results warn against
+naive design of training incentives that could in-
+advertently encourage steganographic communi-
+cation, and motivate the need for holding out cer-
+tain mitigations during training and developing im-
+proved mitigations. White-box detection strategies
+(Goldowsky-Dill et al., 2025) may be one path to-
+wards more effective mitigations. As agents’ capa-
+bilities grow, their ability to conduct undetectable
+steganography may increase (Motwani et al., 2024;
+Zolkowski et al., 2025) and these research direc-
+tions may become increasingly important.
+Limitations
+The automated candidate screening setting that we
+use only captures the core structure of the prob-
+lem, so extending this more complex domains is
+necessary. We believe it has similar qualities and
+dynamics to more realistic settings that could inad-
+vertently incentive learning of steganography (due
+to a mispecified task reward combined with an over-
+seer penalty). As such, we believe the automated
+candidate screening setting experiments are a good
+first step towards studying natural emergence of
+steganographic collusion. Future work can look
+to design improved realistic settings — for exam-
+ple by taking inspiration from mispecified rewards
+found in fronteir LLM RL training runs (Baker
+et al., 2025).
+In our automated candidate screening experi-
+ments we have noted that sometimes, despite best
+efforts, our overseer can be brittle. Additionally,
+we do not enforce a Sender Task Success metric and
+the collusion team sometimes converges to a strat-
+egy where it does not do a good job of summarizing
+the cover letter.
+Our model selection is limited in places. We only
+use Gemma-2B-it for the GBRL collusion team,
+and primarily only use the Anthropic Claude-3.5
+model for the ICRL collusion team. Future work
+could include a more comprehensive evaluation of
+other (and more recent) frontier models. Whilst for
+GBRL, we used stronger models for the mitigation
+team (no avoid overly brittle responses), for the
+ICRL experiments we use models weaker than the
+collusion team. However, we argue this is reason-
+able due to: (i) the arguments laid out by Green-
+blatt et al. (2024), arguing that weaker trusted mod-
+els may be required to overseer stronger untrusted
+models, and (ii) safety mitigations are costly, and
+in practice smaller, less capable models will tend
+to be chosen to perform safety functionality due to
+their smaller inference costs.
+In our experiments of Section 5.2, we were not
+able to use the GBRL approach to evaluate the ro-
+bustness of mitigation strategies due to compute
+and budget constraints, and we leave this for future
+work. Additionally in this section, our ICRL exper-
+iments employ a centralized learner to evaluate the
+robustness of mitigation strategies, primarily due to
+resource constraints. While this centralized learner
+approach may not perfectly simulate realistic opti-
+mization pressures, it offers significant advantages
+in terms of time and cost efficiencies, allowing us
+to gather valuable initial insights and establish a
+foundation for future research.
+Ethical Considerations
+Steganographic collusion may have negative out-
+comes if not mitigated, and frameworks for elici-
+tation of steganography can be used for malicious
+purposes. We uncovered that steganography can
+emergence as an instrumental goal under optimiza-
+tion pressure and that current mitigation strategies
+are insufficient. A key takeaway of our work is that
+further research is needed to ensure these outcomes
+are avoided. Furthermore, these results should be
+used to inform future AI policy and governance
+considerations.
+Acknowledgments
+This research was produced as part of the LASR
+Labs program, and we greatly appreciate the help
+of the program lead Erin Robertson, research lead
+Charlie Griffin, and the rest of the LASR team in
+facilitating our research. This research was sup-
+ported by the Center for AI Safety Compute Clus-
+ter and Anthropic’s External Researcher Access
+Program. Any opinions, findings, and conclusions
+or recommendations expressed in this material are
+those of the author(s) and do not necessarily reflect</page><page num="10">the views of the sponsors. Finally, we would like
+to thank Fabien Roger, Lewis Hammond, Reuben
+Adams, Robert Kirk, Davide Paglieri, and Sumeet
+Motwani for their valuable feedback on our work.
+References
+Martín Abadi and David G Andersen. 2016. Learning
+to protect communications with adversarial neural
+cryptography. arXiv preprint arXiv:1610.06918.
+Lori Andrews and Hannah Bucher. 2022. Automating
+Discrimination: AI Hiring Practices and Gender In-
+equality. Cardozo Law Review, 44.
+AI Anthropic. 2024. Claude 3.5 sonnet model card
+addendum. Claude-3.5 Model Card.
+Bowen Baker, Joost Huizinga, Leo Gao, Zehao Dou,
+Melody Y Guan, Aleksander Madry, Wojciech
+Zaremba, Jakub Pachocki, and David Farhi. 2025.
+Monitoring reasoning models for misbehavior and
+the risks of promoting obfuscation. arXiv preprint
+arXiv:2503.11926.
+Rahma Chaabouni, Florian Strub, Florent Altché, Eu-
+gene Tarassov, Corentin Tallec, Elnaz Davoodi,
+Kory Wallace Mathewson, Olivier Tieleman, An-
+geliki Lazaridou, and Bilal Piot. 2022. Emergent
+Communication at Scale.
+Xinying Chen, Jianping An, Zehui Xiong, Chengwen
+Xing, Nan Zhao, F. Richard Yu, and Arumugam Nal-
+lanathan. 2023. Covert communications: A compre-
+hensive survey. IEEE Communications Surveys &amp;
+Tutorials, 25(2):1173–1198.
+Zhisheng Chen. 2023. Ethics and discrimination in
+artificial intelligence-enabled recruitment practices.
+Humanities and Social Sciences Communications,
+10(1):1–12. Publisher: Palgrave.
+Jack Clark and Dario Amodei. 2016. Faulty reward
+functions in the wild. Internet: https://blog. openai.
+com/faulty-reward-functions.
+Jeffrey Dastin. 2018. Amazon scraps secret AI recruit-
+ing tool that showed bias against women. Reuters.
+Winston Wei Dou, Italy Goldstein, and Yan Ji. 2023. AI-
+Powered Trading, Algorithmic Collusion, and Price
+Efficiency. The Wharton School.
+Nicholas Goldowsky-Dill, Bilal Chughtai, Stefan
+Heimersheim, and Marius Hobbhahn. 2025. Detect-
+ing strategic deception using linear probes. arXiv
+preprint arXiv:2502.03407.
+Ryan Greenblatt, Buck Shlegeris, Kshitij Sachan, and
+Fabien Roger. 2024. AI Control: Improving Safety
+Despite Intentional Subversion. arXiv preprint.
+ArXiv:2312.06942 [cs].
+Danny Halawi, Alexander Wei, Eric Wallace, Tony T.
+Wang, Nika Haghtalab, and Jacob Steinhardt.
+2024. Covert Malicious Finetuning: Challenges
+in Safeguarding LLM Adaptation. arXiv preprint.
+ArXiv:2406.20053 [cs].
+Serhii Havrylov and Ivan Titov. 2017. Emergence
+of Language with Multi-agent Games: Learning to
+Communicate with Sequences of Symbols. In Ad-
+vances in Neural Information Processing Systems
+(NeurIPS), volume 30. Curran Associates, Inc.
+Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan
+Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and
+Weizhu Chen. 2022. LoRA: Low-rank adaptation of
+large language models. In International Conference
+on Learning Representations.
+Evan Hubinger, Nicholas Schiefer, Carson Denison, and
+Ethan Perez. 2023. Model organisms of misalign-
+ment: The case for a new pillar of alignment re-
+search. AI Alignment Forum. August 8, 2023; by
+Evan Hubinger, Nicholas Schiefer, Carson Denison,
+Ethan Perez.
+Zachary Kenton, Noah Y Siegel, János Kramár,
+Jonah Brown-Cohen, Samuel Albanie, Jannis Bu-
+lian, Rishabh Agarwal, David Lindner, Yunhao Tang,
+Noah D Goodman, and 1 others. 2024. On scalable
+oversight with weak llms judging strong llms.
+Victoria Krakovna, Jonathan Uesato, Vladimir Mikulik,
+Matthew Rahtz, Tom Everitt, Ramana Kumar, Zac
+Kenton, Jan Leike, and Shane Legg. 2020. Specifica-
+tion gaming: the flip side of AI ingenuity. DeepMind
+Blog.
+Tamera Lanham, Anna Chen, Ansh Radhakrishnan,
+Benoit Steiner, Carson Denison, Danny Hernandez,
+Dustin Li, Esin Durmus, Evan Hubinger, Jackson
+Kernion, and 1 others. 2023. Measuring faithful-
+ness in chain-of-thought reasoning. arXiv preprint
+arXiv:2307.13702.
+Angeliki Lazaridou and Marco Baroni. 2020. Emergent
+Multi-Agent Communication in the Deep Learning
+Era. arXiv preprint. ArXiv:2006.02419 [cs].
+Wang Ling, Dani Yogatama, Chris Dyer, and Phil Blun-
+som. 2017. Program Induction by Rationale Genera-
+tion: Learning to Solve and Explain Algebraic Word
+Problems. Preprint, arXiv:1705.04146.
+Robert Lockwood and Kevin Curran. 2017. Text based
+steganography. International Journal of Informa-
+tion Privacy, Security and Integrity, 3(2):134–153.
+Publisher: Inderscience Publishers.
+Mohammed Abdul Majeed, Rossilawati Sulaiman, Za-
+rina Shukur, and Mohammad Kamrul Hasan. 2021.
+A review on text steganography techniques. Mathe-
+matics, 9(21):2829. Number: 21 Publisher: Multidis-
+ciplinary Digital Publishing Institute.
+METR. 2025. Recent frontier models are re-
+ward hacking. https://metr.org/blog/
+2025-06-05-recent-reward-hacking/.</page><page num="11">Sumeet Ramesh Motwani, Mikhail Baranchuk, Martin
+Strohmeier, Vijay Bolina, Philip H. S. Torr, Lewis
+Hammond, and Christian Schroeder de Witt. 2024.
+Secret Collusion Among Generative AI Agents.
+arXiv preprint. ArXiv:2402.07510 [cs].
+OpenAI. 2024. Gpt-4o mini: advancing cost-efficient
+intelligence.
+F.A.P. Petitcolas, R.J. Anderson, and M.G. Kuhn. 1999.
+Information hiding-a survey. Proceedings of the
+IEEE, 87(7):1062–1078.
+Fabien Roger and Ryan Greenblatt. 2023. Prevent-
+ing Language Models From Hiding Their Reasoning.
+arXiv preprint. ArXiv:2310.18512 [cs].
+V Sanh. 2019. DistilBERT, A Distilled Version of
+BERT: Smaller, Faster, Cheaper and Lighter. arXiv
+preprint arXiv:1910.01108.
+Christian Schroeder de Witt, Samuel Sokota, J. Zico
+Kolter, Jakob Foerster, and Martin Strohmeier. 2022.
+Perfectly Secure Steganography Using Minimum En-
+tropy Coupling.
+John Schulman, Filip Wolski, Prafulla Dhariwal,
+Alec Radford, and Oleg Klimov. 2017. Proximal
+Policy Optimization Algorithms. arXiv preprint.
+ArXiv:1707.06347 [cs].
+Mrinank Sharma, Meg Tong, Jesse Mu, Jerry Wei, Jorrit
+Kruthoff, Scott Goodfriend, Euan Ong, Alwin Peng,
+Raj Agarwal, Cem Anil, and 1 others. 2025. Con-
+stitutional classifiers: Defending against universal
+jailbreaks across thousands of hours of red teaming.
+arXiv preprint arXiv:2501.18837.
+Noah Shinn, Federico Cassano, Ashwin Gopinath,
+Karthik Narasimhan, and Shunyu Yao. 2023. Re-
+flexion: language agents with verbal reinforcement
+learning. In Advances in Neural Information Pro-
+cessing Systems 36: Annual Conference on Neural
+Information Processing Systems 2023, NeurIPS 2023,
+New Orleans, LA, USA, December 10 - 16, 2023.
+Adam Shostack. 2014. Threat modeling: Designing for
+security. John wiley &amp; sons.
+Samuel Sokota, Christian A. Schroeder De Witt, Max-
+imilian Igl, Luisa M. Zintgraf, Philip Torr, Mar-
+tin Strohmeier, Zico Kolter, Shimon Whiteson, and
+Jakob Foerster. 2022. Communicating via Markov
+Decision Processes. In Proceedings of the 39th In-
+ternational Conference on Machine Learning, pages
+20314–20328. PMLR.
+Gemma Team. 2024a. Gemma 2: Improving open
+language models at a practical size. Preprint,
+arXiv:2408.00118.
+Llama Team. 2024b. The llama 3 herd of models.
+Preprint, arXiv:2407.21783.
+Kyle Wagner, James A. Reggia, Juan Uriagereka, and
+Gerald S. Wilkinson. 2003. Progress in the Simu-
+lation of Emergent Communication and Language.
+Adaptive Behavior, 11(1):37–69.
+Guanzhi Wang, Yuqi Xie, Yunfan Jiang, Ajay Man-
+dlekar, Chaowei Xiao, Yuke Zhu, Linxi Fan, and
+Anima Anandkumar. 2024. Voyager: An open-ended
+embodied agent with large language models. Trans.
+Mach. Learn. Res., 2024.
+Yining Wang, Ye Hu, Hongyang Du, Tao Luo, and Dusit
+Niyato. 2023. Multi-Agent Reinforcement Learning
+for Covert Semantic Communications over Wireless
+Networks. ICASSP 2023 - 2023 IEEE International
+Conference on Acoustics, Speech and Signal Process-
+ing (ICASSP), pages 1–5. ISSN: 2379-190X.
+Jiaxuan Wu, Wu Zhengxian, Xue Yiming, Juan Wen,
+and Wanli Peng. 2024. Generative text steganogra-
+phy with large language model. In ACM Multimedia
+2024.
+Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak
+Shafran, Karthik R. Narasimhan, and Yuan Cao. 2023.
+React: Synergizing reasoning and acting in language
+models. In The Eleventh International Conference
+on Learning Representations, ICLR 2023, Kigali,
+Rwanda, May 1-5, 2023. OpenReview.net.
+Dhara Yu, Jesse Mu, and Noah Goodman. 2022. Emer-
+gent Covert Signaling in Adversarial Reference
+Games. The Emergent Communication Workshop
+(EmeCom) at the International Conference on Learn-
+ing Representations (ICRL).
+Stephan Zheng, Alexander Trott, Sunil Srinivasa,
+David C. Parkes, and Richard Socher. 2022. The
+AI Economist: Taxation policy design via two-level
+deep multiagent reinforcement learning. Science Ad-
+vances, 8(18).
+Li Zhong, Zilong Wang, and Jingbo Shang. 2024. De-
+bug like a human: A large language model debug-
+ger via verifying runtime execution step-by-step.
+Preprint, arXiv:2402.16906.
+Zachary Ziegler, Yuntian Deng, and Alexander Rush.
+2019. Neural Linguistic Steganography. In Proceed-
+ings of the 2019 Conference on Empirical Methods
+in Natural Language Processing and the 9th Inter-
+national Joint Conference on Natural Language Pro-
+cessing (EMNLP-IJCNLP), pages 1210–1215, Hong
+Kong, China. Association for Computational Linguis-
+tics.
+Artur Zolkowski, Kei Nishimura-Gasparian, Robert Mc-
+Carthy, Roland S Zimmermann, and David Lindner.
+2025. Early signs of steganographic capabilities in
+frontier llms. arXiv preprint arXiv:2507.02737.
+A Additional Methodology Details
+Regarding our elicitation methods, we not that
+there are benefits to having qualitatively different
+gradient-based and in-context approaches. Pure in-
+context approaches can leverage frontier black-box
+models and may be more sample efficient and less</page><page num="13">wrapped in quotation marks. Generally speak-
+ing, we found oversight to be extremely prompt-
+sensitive with Gemma, whereas found it easier and
+less prone to pitfalls with larger models. Although
+these were minor changes, we highlight the need
+for further research in the context of using small
+models for oversight of larger model behavior.
+A.2 In-Context Reinforcement Learning
+(ICRL) - Detailed Methodology
+We used two variations of In-Context Reinforce-
+ment Learning based on the type of ICRL-learner
+used: (i) decentralized, where the sender and re-
+ceiver have their own ICRL-learners and learn in-
+dependently; and (ii) centralized, where a central
+ICRL learner learns strategies for both agents and
+conveys them to the sender and receiver.
+Models. In the ‘Instrumental Emergence’ exper-
+iments of Section 5.1, we use Claude-3.5-Sonnet
+for the colluding team and GPT-4o-mini for the
+mitigation team. We additionally run some ex-
+periments using GPT-4o and GPT-4o-mini for the
+colluding team, but do not report these results in
+the main text. In the ‘Evaluating Steganograhphy
+Mitigations’ experiments of Section 5.1, we use
+Claude-3.5-Sonnet for the colluding team and GPT-
+3.5 Turbo for the mitigation team.
+A.2.1 Decentralized Learners
+See Algorithm 4 for an overview of the decentral-
+ized ICRL training process. The dataset is split into
+two, one of which is used to train the sender and the
+other is used to train the receiver (in order to avoid
+overfitting). We then run a number of training steps
+to obtain sender and receiver strategies.
+Before the training loop, the sender learner is
+shown samples from the sender dataset, and asked
+to summarize any patterns in the data. This step
+was included to inform the strategies that it sug-
+gests for the sender. We discuss the inclusion of
+this step further in Appendix B.2.
+In a training step, the sender learner is first
+queried for a new strategy, and the sender runs this
+strategy on the receiver dataset to generate stego-
+texts. The receiver learner then suggests a receiver
+strategy, based on these stegotexts and the labels
+in the receiver dataset. The updated sender and
+receiver are then run on the sender dataset, and the
+results are added to the sender learner history.
+Algorithm 4 Decentralized In-Context Reinforce-
+ment Learning
+1: Inputs:
+Overseer O, Sender S, Sender
+Learner L
+S 
+, Receiver R, Receiver
+Learner L
+R
+, Dataset Data
+2: procedure ICRL
+3: Data
+sen
+, Data
+rec 
+← Data ▷ Split the
+dataset
+4: H
+S 
+← {} ▷ Initialize the sender learner
+history
+5: S
+L 
+← evaluate(Data
+sen
+) ▷ Ask the
+sender learner to evaluate the dataset
+6: for #Epochs do
+7: S ← L
+S 
+(H
+S 
+) ▷ Query the sender
+learner for a new strategy
+8: T
+rec 
+← Data
+rec 
+▷ 
+Generate stegotexts
+for receiver dataset
+9: R ← L
+R
+(Data
+rec
+, T
+rec
+) ▷ Query the
+receiver learner for a new strategy
+10: H
+S 
+← run episodes(S, R, Data
+sen
+) ▷
+Run and update sender learner history
+11: return S, R
+A.2.2 Centralized Learner
+See Algorithm 4 for the centralized setup. Here
+the ICRL-learner is queried for a strategy every
+training step, which is fed to the sender and receiver.
+The sender and receiver are then run on the training
+dataset, generally 10 or 20 samples, and the results
+of the training step are fed back to the learner as
+inputs. Learner inputs include overall decoding
+success, task success, overseer detection, examples
+of failed task attempts and decoding attempts, and
+a summary of previously tried strategies.
+Algorithm 5 Centralized In-Context Reinforce-
+ment Learning
+1: Inputs:
+Overseer O, Sender S, Receiver R,
+ICRL Learner L, Dataset Data
+sen
+2: procedure ICRL
+3: H ← {} ▷ Initialize the learner history
+4: for #Epochs do
+5: S, R ← L(H) ▷ 
+Query the icrl learner
+for a new strategy
+6: H ← run episodes(S, R, Data) ▷
+Run and update learner history
+7: return S, R</page><page num="29">0 200 400 600 800
+Training Steps
+0.00
+0.25
+0.50
+0.75
+1.00
+1.25
+1.50
+1.75
+2.00
+Reward
+Total Reward During Training - Gender
+Gender
+Gender Bypass
+(a)
+0 250 500 750 1000 1250 1500 1750
+Training Steps
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0
+Accuracy
+Training Task Accuracy - Gender
+Gender
+Gender Bypass
+max clean success
+ (b)
+0 200 400 600 800
+Training Steps
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
+Proportion
+Proportion of Suspicious Outputs - Gender
+Gender
+Gender Bypass
+ (c)
+Figure 8: Training curves for GBRL applied to the Gender Dataset, where bypass (orange line) implies a collusion
+team that is seeded, i.e., exploits the gender bias explicitly (bypass starts from a higher intercept for the aforemen-
+tioned reason). In this setup, the collusion team must therefore learn to bypass the oversight, overriding an optimal
+strategy aimed at exploiting the bias by communicating it explicitly. Figures (a-b-c) show the reward and task
+accuracy increasing, while the proportion of texts flagged by the Overseer decreases over time. This indicates that
+the colluding team is able to successfully communicate while not being detected by the Overseer, i.e. steganography
+has emerged. The results are averaged across 3 seeds, where the blue line plateaus earlier due to one seed not
+reaching convergence.
+0 200 400 600 800 1000 1200 1400
+Training Steps
+0.2
+0.4
+0.6
+0.8
+1.0
+1.2
+1.4
+Reward
+Total Reward During Training - Uni
+Uni
+Uni-Paraphrased
+(a)
+0 500 1000 1500 2000
+Training Steps
+0.4
+0.5
+0.6
+0.7
+0.8
+0.9
+1.0
+1.1
+Accuracy
+Training Task Accuracy - Uni
+Uni
+Uni-Paraphrased
+max clean success
+ (b)
+0 200 400 600 800 1000 1200 1400
+Training Steps
+0.00
+0.05
+0.10
+0.15
+0.20
+0.25
+0.30
+0.35
+Proportion
+Proportion of Suspicious Outputs - Uni
+Uni
+Uni-Paraphrased
+ (c)
+Figure 9: Training curves for GBRL applied to the Uni Dataset. Figures (a-b-c) show the reward and task accuracy
+increasing, while the proportion of texts flagged by the Overseer decreases over time. This indicates that the
+colluding team is able to successfully communicate while not being detected by the Overseer, i.e. steganography
+has emerged. The two training regimes displayed consist of a mitigation team composed of an overseer only (orange
+line) and one composed of overseer and paraphraser (blue line). The results are averaged across 3 seeds.</page></paper>

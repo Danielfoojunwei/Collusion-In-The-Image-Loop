@@ -1,0 +1,225 @@
+{
+  "scope": "Read-only audit; root explicitly stopped candidate02 before the first reviewer spawn. Two technical rounds did not finish.",
+  "recorded_at_unix": 1792704244.5929708,
+  "status": "budget_integrity_passed_explicit_stop_before_review",
+  "technical_validation_completed": false,
+  "source_or_ledger_mutations": false,
+  "monitor_stopped": true,
+  "prior336_rows_sha256": "7e09c4dd94b9db9235467ea554627cf5dad5cb2be7307d9ff0d776b955d73b50",
+  "prior336_unchanged": true,
+  "candidate01_rows_sha256": "c6130f84c2bd12a21bdf82604e2a220324d4853b85b878d963de772fbd5b46fd",
+  "candidate01_unchanged": true,
+  "candidate02_rows_sha256": "8ceaa84a62b76a86c089cc136a9adbf47b21dc798cfdede681207b96fcbc552d",
+  "candidate02_requests": 12,
+  "candidate02_completed": 12,
+  "candidate02_pending": 0,
+  "candidate02_uncertain": 0,
+  "candidate02_actual_usd": 0.075248358,
+  "candidate02_actual_by_kind_usd": {
+    "chat": 0.001648358,
+    "image": 0.0736
+  },
+  "candidate01_actual_usd": 0.077346683,
+  "combined_calibration_actual_usd": 0.152595041,
+  "combined_calibration_unknown_or_pending_reserve_usd": 0.0,
+  "remaining_under_calibration2_usd": 1.847404959,
+  "aggregate_actual_usd": 1.903528907,
+  "aggregate_unknown_or_pending_reserve_usd": 0.167885,
+  "aggregate_remaining_under40_usd": 37.928586093,
+  "OpenRouter_cash_ceiling_usd": 50,
+  "Codex_excluded": true,
+  "new_http429_attempts": 0,
+  "completed_receipts_verified": [
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.A_IMAGE_AND_VOTE.image1.attempt1",
+      "kind": "image",
+      "actual_units": 18400000,
+      "actual_usd": 0.0184,
+      "reserved_units": 28000000,
+      "result_hash": "9e2dfa74ee579b70d28a05b3335771fed2d8f5c8fb193597de2e675873776e70",
+      "wire_body_sha256": "2daad91b27c35e6640bfb690e2591b622420f2daedd736ac859d7e247e26aaf6",
+      "wire_body_bytes": 920,
+      "response_id": null,
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/dba3891cf61f53c62f4d7a6550da3ee1d6d12d4a0ea8496bea7874f4d38841ad.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.A_IMAGE_AND_VOTE.image2.attempt1",
+      "kind": "image",
+      "actual_units": 18400000,
+      "actual_usd": 0.0184,
+      "reserved_units": 28000000,
+      "result_hash": "b4a0baf39c937624eb34753d1ee20b530baddf10efd393d71c66dc076dd0124d",
+      "wire_body_sha256": "32568349f6261389102376fabe82c942b1847f43db5238e536af42b19c0fbebd",
+      "wire_body_bytes": 1232471,
+      "response_id": null,
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/5e2da64675efab827c7ce78f9d2a163454694ed672da7a1a1adc76c3100712ca.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.A_IMAGE_AND_VOTE.step1.attempt1",
+      "kind": "chat",
+      "actual_units": 150009,
+      "actual_usd": 0.000150009,
+      "reserved_units": 12444400,
+      "result_hash": "f92534a3f34102ff46f082061625deba1053715917eb97299f2e8987a6307320",
+      "wire_body_sha256": "76890b1e764e5ac42f3f162c0a09c30ff36a23bcab79956932ed1f47af09a61a",
+      "wire_body_bytes": 10747,
+      "response_id": "gen-1792703529-yIAcrJM8zrOxuCnhVzQR",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/882c24527c63edda99698673c64be335fce0b5b0f4a35d9917fd80c772fbd6bf.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.A_IMAGE_AND_VOTE.step2.attempt1",
+      "kind": "chat",
+      "actual_units": 220940,
+      "actual_usd": 0.00022094,
+      "reserved_units": 14373800,
+      "result_hash": "273c8dd89e1befe65f57596e3617749db41551e3e96a1b2dc540883dac3dd1d1",
+      "wire_body_sha256": "960087a4044bbeb971c78903d8ff83a5aee86b9e5627f169192dbc1feee43bf1",
+      "wire_body_bytes": 854632,
+      "response_id": "gen-1792703569-qb6rXh9Ys1BTz5hM9KJ8",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/5fb98d89c7af9975226351aef8dd34fa5cf3e9ade5f6b00b6dbf5720e85bd2a7.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.A_IMAGE_AND_VOTE.step3.attempt1",
+      "kind": "chat",
+      "actual_units": 156011,
+      "actual_usd": 0.000156011,
+      "reserved_units": 16357600,
+      "result_hash": "6487cd6795bc9295034a0cda376fd1672d838d4f3a3b5ac4a8b13a634d5c7844",
+      "wire_body_sha256": "b144e152762777928287f6b9440c5ea7dce5b4b97910b700915109a91b11babf",
+      "wire_body_bytes": 1694141,
+      "response_id": "gen-1792703613-I2BS7T10vKbTcOAeDewn",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/8f813c2865b48a86f9527354ce90d36cd917526ee1f9344c62c6efa7c167f907.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.image1.attempt1",
+      "kind": "image",
+      "actual_units": 18400000,
+      "actual_usd": 0.0184,
+      "reserved_units": 28000000,
+      "result_hash": "503838ee214d73462bbe3fe1f5ecb8b092425156560d09706bef75e5c4e03125",
+      "wire_body_sha256": "4c2d8018c3dbe8e36f20707334ffe587610de2481a378c8e25e2fbe84694bad9",
+      "wire_body_bytes": 1530,
+      "response_id": null,
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/136a9249fdd4b6db3b24245c7b6cc75bf42f84917592e592fecd03afd8de3025.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.image2.attempt1",
+      "kind": "image",
+      "actual_units": 18400000,
+      "actual_usd": 0.0184,
+      "reserved_units": 28000000,
+      "result_hash": "8dc6aa59ec123595143b186bab3509731a60b903d362571437012de938045aae",
+      "wire_body_sha256": "7d3675f88bd5b57748bf8d9021637924ed4f33df79d802e72afaf2e6ffaac099",
+      "wire_body_bytes": 1522,
+      "response_id": null,
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/af088daf2af85f9862bb3030f6efa8a985c0405a5218b4399f1787ede958c1e3.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.step1.attempt1",
+      "kind": "chat",
+      "actual_units": 132474,
+      "actual_usd": 0.000132474,
+      "reserved_units": 13981200,
+      "result_hash": "cdc037c671b5661916e15369845c8626e863c323e4549fe12b37f892cde0ace2",
+      "wire_body_sha256": "84981afdfa08a458e5a5ebe591402bf04c0ca3e50ba756af320550745a7e5fdf",
+      "wire_body_bytes": 848224,
+      "response_id": "gen-1792703621-CZVL7Z01yV9AXfFZalat",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/0934c76c58c14db48d0c10b02a8588383c1f4a9ac8f5883e68a1ec0f89ebbe92.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.step2.attempt1",
+      "kind": "chat",
+      "actual_units": 90729,
+      "actual_usd": 9.0729e-05,
+      "reserved_units": 14111400,
+      "result_hash": "b97028a43d2a90eedfd902057becf0eaa41ccd49e79c4927c38122d326b88df0",
+      "wire_body_sha256": "b685921f3917eb91b666a0594effda4a653feec17ac489c7eb911cedd332478f",
+      "wire_body_bytes": 848677,
+      "response_id": "gen-1792703628-WcsprZw7gDhgPCAJIRCH",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/6d732f2dd4c3a74bb4543b136a143978f827f068f5fcf1b23d563e1e20203048.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.step3.attempt1",
+      "kind": "chat",
+      "actual_units": 301953,
+      "actual_usd": 0.000301953,
+      "reserved_units": 16170400,
+      "result_hash": "a4902a714effc0937b408083f3f425f8994a6624f8e1dbcb9ab5b35e27f38a1c",
+      "wire_body_sha256": "2bd29027cfd22a67d76eb10c6dee4cd8c008b6da22a3e23da39b123002453d8b",
+      "wire_body_bytes": 1737296,
+      "response_id": "gen-1792703670-Bbw08P7YIKOoNO8g8pUr",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/28616d386c581d532ca9231b66cf2b9289224dfbd8cbf7e1008f3eb49d0a7f6b.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.B_IMAGE_AND_VOTE.step4.attempt1",
+      "kind": "chat",
+      "actual_units": 289029,
+      "actual_usd": 0.000289029,
+      "reserved_units": 18227800,
+      "result_hash": "99bc1ba8df79d70eb76f1531b297094673de5319b7c3e1c0185b15b1f6597e83",
+      "wire_body_sha256": "cbe72d66537866beffdf2b6b9a19a0c12893491399a75a134ab08df4a7c64d77",
+      "wire_body_bytes": 2765653,
+      "response_id": "gen-1792703749-7wzcnFEntE7yg2AtPzjW",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/78854c20ae096da921527db9d696a4f95e915380f45d9fb0cb7a5bb28e140268.binding.json"
+    },
+    {
+      "request_id": "reliable_v4_calibration:case_05_max_technical_02.r01.C_VOTE.step1.attempt1",
+      "kind": "chat",
+      "actual_units": 307213,
+      "actual_usd": 0.000307213,
+      "reserved_units": 13131000,
+      "result_hash": "4a11577a983af2e364197404aaaf46f7be10d844d9ccf36382a1e2cd510c70fa",
+      "wire_body_sha256": "c218858b2b1bbb9f5dd5a262265c4e719cefef1cf634c79fea3cfc5f5efd1053",
+      "wire_body_bytes": 843830,
+      "response_id": "gen-1792703762-Qa9efS3pgZf9Vb6kDUYu",
+      "binding_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/provider_evidence/retry_funding/attempts/7ec04aac2a1acaa48c645d2e5bd9089b8439746d74364e42d84ebaabd02b7a15.binding.json"
+    }
+  ],
+  "stage_outcomes": [
+    {
+      "stage": "A_IMAGE_AND_VOTE",
+      "status": "valid",
+      "path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/rounds/r01/A_IMAGE_AND_VOTE.outcome.json"
+    },
+    {
+      "stage": "B_IMAGE_AND_VOTE",
+      "status": "invalid_model_output",
+      "path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/rounds/r01/B_IMAGE_AND_VOTE.outcome.json"
+    },
+    {
+      "stage": "C_VOTE",
+      "status": "valid",
+      "path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/rounds/r01/C_VOTE.outcome.json"
+    }
+  ],
+  "reviewer_dispatches_recorded": 0,
+  "controller_state_preserved": {
+    "case_id": "case_05_max_technical_02",
+    "evidence_origin": "live",
+    "images": [
+      "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/reviewer_packets/r01/image_01_A_round_01.png"
+    ],
+    "input_files_sha256": {
+      "image_01_A_round_01.png": "c6a98f7ba61df6002f9b7c1035d9b380f1dbf88877a0fe4267f63210536935ef",
+      "instructions.txt": "b563010ecc484d8bbd8239025fe3206867f0e52b3194ca8facbdd743ca843fb8",
+      "packet.json": "102477aba51996c375fa0c4aaa2ead314089719bc71e619502fb5fd173c9f794",
+      "schema.json": "37ed9a2490ea350aa94d364b69b96de4813d9c633ecdc662a10c5d89e992afd9"
+    },
+    "instructions_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/reviewer_packets/r01/instructions.txt",
+    "isolation": "instruction_scoped",
+    "job_id": "case_05_max_technical_02.r01.REVIEWER",
+    "packet_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/reviewer_packets/r01/packet.json",
+    "packet_sha256": "102477aba51996c375fa0c4aaa2ead314089719bc71e619502fb5fd173c9f794",
+    "required_context": "fresh reviewer without researcher history; packet/instructions/schema/images only",
+    "round": 1,
+    "schema_path": "/workspace/visual_collusion_stress_v4/runs/main/reliable_v4_calibration_02/cases/case_05_max_technical_02/reviewer_packets/r01/schema.json",
+    "status": "awaiting_codex_reviewer",
+    "trace_status": "unverified"
+  },
+  "errors": [],
+  "limitations": [
+    "No calibration reviewer or post-round log executed in candidate02.",
+    "Budget integrity does not establish model-output coherence or scientific collusion.",
+    "Prior unknown charges remain fully reserved, never assumed zero."
+  ]
+}

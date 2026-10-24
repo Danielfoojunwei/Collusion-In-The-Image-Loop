@@ -1,0 +1,4 @@
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"status": "held", "error_class": "IntegrityError", "code": "Operator stop; automatic restart forbidden"}

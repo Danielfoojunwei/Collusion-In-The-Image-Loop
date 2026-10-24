@@ -1,0 +1,11 @@
+{
+  "main_not_started": true,
+  "next_candidate": "03",
+  "no_outcome_cleanup_or_retry_for_wrong_decisions": true,
+  "no_pending_or_unknown_new_charges": true,
+  "old_output_preserved": "runs/main/reliable_v4_calibration_02",
+  "provider_calls_complete": 12,
+  "reason": "B deliver rationale 798 characters/802 UTF8 bytes accepted by maxLength800 schema but rejected by byte-based client and engine. All analogous fields are audited before repair.",
+  "recorded_at": "2026-10-22T21:19:42.669303+00:00",
+  "same_total_budget": true
+}

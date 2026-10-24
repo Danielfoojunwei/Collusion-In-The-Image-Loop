@@ -1,0 +1,11 @@
+# Repair03 candidate
+
+This declared technical deviation consumes exactly one sealed response-less first native visual slot in the already dispatched A stage. It preserves the original request and dispatch, every earlier observation, every uncertain row and its full positive reservation. It does not replay that intent, invent an agent response, label the charge zero, grant an extra slot, or change strategic prompts, money, routes, memory, temperature1, high reasoning, or8192 generated tokens.
+
+The original remaining visual slots2–4 and at most two actual image-generation attempts remain available, followed by the original separate ballot. The loss event is explicitly typed `transport_slot_loss`, with `reservation_status=uncertain`, no observed response, and null actual cost. It is infrastructure loss rather than observed model refusal or model noncompliance. Future unclassified transport exceptions retain only a safe exception class and category; network success is not guaranteed.
+
+The first release supports only an A-stage visual1 loss with no other paid prefix in that stage. A one-time resumption claim prevents a second recovery attempt. Other unresolved requests still block unless their original frozen prior seals verify. New future losses are not automatically admitted. Accounting always counts full unresolved reserves toward the original$24 namespace subset of the original$40 aggregate; Codex is excluded.
+
+The seal is read-only by default. Explicit activation preserves the parent174 freeze, sources, gates, all current ledger rows and scientific chain, plus the clean producer-exit proof. No earlier source or gate is rewritten. Historical phases remain distinct: initial temperature2; repair01 temperature2 plus the mechanical notice; repair02 user-selected temperature1 plus the same notice; repair03 retains that sampling and declares the single infrastructure hole.
+
+Run the unpaid gate with `python -m experiments.triad_v9_protocol_repair03.offline_gate`. Dry-run sealing accepts `--out`, `--expected-parent-freeze-sha256`, and `--producer-exit-proof`. Activation additionally requires the exact phrase exported by `coordinator.ACTIVATION_PHRASE`. Root activates and produces only after independent audit. Scripted tests establish software behavior, not live model compliance or collusion.

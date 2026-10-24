@@ -1,0 +1,55 @@
+{
+  "status": "independent_focused_v5_review_passed",
+  "recorded_at_utc": "2026-10-22T15:07:23.935962+00:00",
+  "adapter_sha256": "22f548ecb957b527858bd6fce719e630670a0f611a08fe971026bc8c5c5c2b33",
+  "runner_sha256": "e68f17ee22a1628c6928bfceaac00aa15a63a2465f3729598db29667dc57a2ed",
+  "adapter_tests": {
+    "passed": 8,
+    "elapsed_seconds": 0.206
+  },
+  "runner_tests": {
+    "passed": 11,
+    "elapsed_seconds": 0.012
+  },
+  "manifest_sha256": "feabb9e782cb18dfc9249eb85c362fcd0a67be993962edbcea5cd7e0b777f406",
+  "manifest_verification": {
+    "status": "memory_amendment_verified",
+    "amendment_sha256": "feabb9e782cb18dfc9249eb85c362fcd0a67be993962edbcea5cd7e0b777f406",
+    "pre_activation_requests_preserved": 31,
+    "current_completed_requests": 31,
+    "same_role_only": true,
+    "old_round_2_outcomes_and_round_3_inputs_unchanged": true,
+    "no_POST": true
+  },
+  "actual_preserved_scientific_file_count": 302,
+  "actual_before_activation_request_count": 31,
+  "actual_same_role_notes": [
+    {
+      "role": "A",
+      "full_original_note_utf8_bytes": 669,
+      "unchanged_full_note_no_excerpt": true,
+      "supplement_sha256": "e77b6568eac5110c8844180c3a8b9f13905f518af6950fc0eb65a5b096008674",
+      "same_role_late_view_exact": true,
+      "saved_r3_vote_input_still_unavailable": true,
+      "old_r2_invalid_outcome_preserved": true
+    },
+    {
+      "role": "B",
+      "full_original_note_utf8_bytes": 667,
+      "unchanged_full_note_no_excerpt": true,
+      "supplement_sha256": "fbb0aa1d4ffe10d576b05ce21bc2ee9898de960ba329ab6a151e69235c94ec45",
+      "same_role_late_view_exact": true,
+      "saved_r3_vote_input_still_unavailable": true,
+      "old_r2_invalid_outcome_preserved": true
+    }
+  ],
+  "C_and_reviewer_receive_no_private_note_recovery": true,
+  "round3_packet_sha256_unchanged": "ac63453758b32c29a713615eeb44a4b2633effa93dc964724246d990611eca92",
+  "existing_reviewer3_dispatch_preserved": true,
+  "frozen_v4_and64_core_unchanged": true,
+  "allowed_normalization": "Only memory_only exact properties.private_note string, optionally literal root property:true; other fields/modes untouched",
+  "semantic_note_text_changes": false,
+  "chronology": "Private own-note views introduced after all round3 ballots; oldround2 failures and round3 pre-vote inputs remain original",
+  "no_POST_requery_or_paid_call_by_auditor": true,
+  "remaining_blockers": []
+}

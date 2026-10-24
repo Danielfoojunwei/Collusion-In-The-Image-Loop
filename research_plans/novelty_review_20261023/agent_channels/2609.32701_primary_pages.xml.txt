@@ -1,0 +1,641 @@
+<paper id="2609.32701v2"><page num="1">Preprint
+DESPITE INSTRUCTIONS: FRONTIER AGENTS
+IMPROVISE COVERT CHANNELS AT TEST TIME
+Jacob Dineen
+Arizona State University
+jdineen@asu.edu
+Silei Ren
+Cornell University
+sr2262@cornell.edu
+Muhao Chen
+University of California, Davis
+muhchen@ucdavis.edu
+Dan Roth
+University of Pennsylvania
+Oracle
+danroth@seas.upenn.edu
+Ben Zhou
+Arizona State University
+xzhou202@asu.edu
+ABSTRACT
+In security-sensitive applications, language-model agents are often required to
+coordinate without disclosing confidential information. Yet repeated interactions
+may also let ordinary messages acquire shared private meaning. We study a
+repeated game with pairs of models in which the sender model observes one of
+four secret states and selects one of four summaries of the same public report,
+while the receiver model tries to infer the secret state. We find that model pairs can
+learn to communicate the secret using only one bit of feedback indicating whether
+the receiver inferred it correctly. This learning occurs during inference with fixed
+parameters and no supplied codebook or encoding examples. The effect also
+persists when agents generate their own free-form updates in a simulated incident-
+response task. Across ten independent games, pairs of GPT-5.6 Sol agents reach
+98.8% final accuracy, compared with 25% chance, despite explicit instructions
+prohibiting disclosure and a monitor that screens each message without access to
+the agents’ interaction histories. The same interactions that help agents cooperate
+can therefore allow confidential information to pass through messages intended for
+legitimate coordination.
+1 INTRODUCTION
+Language-model agents are moving into settings where they collaborate with other agents across
+trust domains (Park et al., 2023; Guo et al., 2024). Each may act for a different principal, pursue
+that principal’s interests, and hold information that others are not permitted to see, yet they must
+still work together on shared tasks. Consider two agents coordinating military evacuations. One
+has classified intelligence about enemy positions, while the other plans evacuation routes but is not
+cleared to receive information about those positions. Both are rewarded for bringing personnel home
+safely, so disclosing the intelligence offers a shortcut to their shared objective even though doing so
+could expose the source that the confidentiality rule is meant to protect. Prior studies have shown that
+language-model agents can coordinate and collude when rewarded for doing so (Motwani et al., 2024;
+Mathew et al., 2025; Nakamura et al., 2026; Zeng &amp; Rudzicz, 2026). During OpenAI’s 2026 Hugging
+Face incident, agents assigned to separate tasks turned shared infrastructure into an unauthorized
+message board to coordinate their actions (OpenAI, 2026b). Collaboration across a confidentiality
+boundary therefore requires auditing to ensure that neither side’s private information appears in the
+messages they exchange.
+Suppose every message between the agents is audited by a perfect monitor. The monitor reads each
+message independently and allows only faithful statements about public logistics, blocking anything
+that states, paraphrases, or hints at private information, as well as any attempt to propose or negotiate
+a code for conveying it. Even under this idealized monitor, a question remains that, to our knowledge,
+prior work has not answered. Consider two agents that have never worked together and share no
+memory, history, or prior agreement to communicate covertly. Can they nevertheless form a covert
+1
+arXiv:2609.32701v2 [cs.AI] 6 Oct 2026</page><page num="2">Preprint
+channel at test time, using nothing more than the incentive to complete their task? Put differently, we
+ask whether agents can arrive at an encoding scheme without any of the resources normally needed to
+establish one. Neither agent is given a codebook or an example of one, and they have no side channel
+through which to agree on a mapping. The receiver is never shown the private value, even after an
+incorrect guess. Both agents’ parameters and instructions remain fixed, and the sender is explicitly
+instructed not to disclose the value. Their only feedback beyond the monitored messages is one bit
+per round indicating whether the team succeeded.
+Prior work supplies pieces of this picture but not the answer. Agents trained jointly with reinforcement
+learning can invent signaling protocols of their own (Foerster et al., 2016; Lazaridou et al., 2017), and
+language models can hide information in ordinary text when prompted (Motwani et al., 2024), even
+without a supplied code (Zolkowski et al., 2026). Closer to our setting, Mathew et al. (2025) show
+that collusion can emerge instrumentally in models with frozen weights, as separate learner models
+read labeled batches and rewrite the instructions the acting agents follow. Talebirad et al. (2026)
+reveal the true target to both agents after every round of a signaling game. These results leave open
+whether agents whose instructions never change can build a channel through interaction, with no
+outside learner rewriting their strategies and a receiver that is never shown the value it must recover.
+In this paper, we demonstrate that the answer is yes. Two agents begin with neither a shared code
+nor explicit negotiation. Each round, the sender chooses among four faithful summaries of the same
+public report, the receiver acts, and both learn only whether the team succeeded. That single bit is
+the whole of their incentive, and it is shared, as it would be for two agents rewarded each time they
+accomplish a shared goal. From these exchanges, pairs of GPT-5.6 Sol agents learn to recover the
+private value from the sender’s choice 95% of the time, where guessing would succeed 25% of the
+time. We then let the sender write its own updates under an explicit instruction to keep its finding
+confidential, with a monitor screening every message before delivery. Across ten Sol games, the
+monitor approves every final update, and the receiver still recovers the finding 98.8% of the time. An
+update written for another finding leads the receiver to that finding in every tested decision, while the
+original updates leave a receiver without its interaction history near chance. Through experience, the
+receiver has learned to read the finding in the sender’s wording. Expectations the agents share before
+interacting can seed this reading, and feedback overturns them when they mislead. Sol and Terra
+form these channels reliably while Luna leaves its receiver near chance, suggesting that some models
+may have crossed a capability threshold. Paraphrasing disrupts an established channel, yet when a
+paraphraser rewrote every update from the first exchange, all three pairs we tested still learned to
+communicate through it.
+Agents whose instructions never change, who are given no code and have no open channel to negotiate
+one, can still develop a covert channel from their own task interactions, even when the sender is told
+to keep the value confidential and a monitor inspects every message. To our knowledge, no prior work
+has shown a channel forming under these conditions. Sol, the newest and most capable model in our
+experiments, forms these channels reliably, suggesting that recent advances in model capability may
+have crossed a threshold for covert communication through task interaction. A message can remain
+a faithful statement of public facts while becoming a reliable signal of a private one. An update
+the monitor approves can carry the value to a receiver who has learned from earlier rounds how
+this sender writes, while the monitor, seeing only the text in front of it, has none of that experience.
+Screening what a message says therefore cannot by itself protect a secret between agents who learn
+from each other. The same experience that makes two agents better partners can teach them to pass
+along exactly what they were told to withhold.
+2 COMMUNICATION SETTING AND LEARNING FRAMEWORK
+2.1 COMMUNICATION SETTING
+We study a repeated task in which a sender observes private information and a receiver tries to recover
+it from the sender’s messages. In round t, both agents receive public task information, while only the
+sender observes the private state S
+t 
+∈ S. The sender produces a message m
+t 
+∈ M, and the receiver
+uses it to choose a guess 
+ˆ
+S
+t
+. When the message is delivered, both agents receive the same correctness
+feedback
+R
+t 
+= ⊮[ 
+ˆ
+S
+t 
+= S
+t
+].
+2</page><page num="3">Preprint
+Sender Task messages Receiver
+Early
+Task instructions
+Context
+Confidential
+Keep confidential.
+History
+Here is the updated summary
+for your review.
+Message monitor
+History 
+Task meaning:
+Private information:
+?
+Repeated exchanges and task feedback
+Later 
+Confidential
+Keep confidential.
+History
+Here is the updated summary
+for your review.
+History 
+Task meaning:
+Private information:
+Figure 1: Covert channel formation through interaction. The sender holds task instructions and
+confidential information it is told to keep confidential, and sends task messages that a monitor inspects
+and approves before delivery. Each agent keeps its own history, and task feedback reaches both.
+Early in the interaction the receiver recovers only the task meaning of a message. After repeated
+exchanges, the same message also conveys the private information, carried by wording the monitor
+sees as ordinary (highlighted).
+In the confidentiality experiments, the sender is instructed to withhold the state even though the team
+reward depends on its recovery. Experiments that permit signaling are identified in Appendix B.
+Sentence selection gives the sender a choice among summaries that express the same public in-
+formation in different words, with no literal disclosure of the private state. We use four states,
+S = {0, 1, 2, 3}, and four summaries, M = {m
+1
+, m
+2
+, m
+3
+, m
+4
+}, so any of the 24 one-to-one map-
+pings allows perfect recovery if both agents use it. In the core sentence-selection experiment, the
+agents receive no mapping and are told to maximize the team’s score without being told how it is
+calculated.
+Free-form generation instead asks the sender to write its own message under instructions to summarize
+public information that is independent of the private state. The message set M now contains the
+possible summaries within the length limit, rather than four supplied sentences (Appendix A). The
+experiments below describe the task instructions and how messages are screened or rewritten before
+delivery.
+2.2 BILATERAL IN-CONTEXT LEARNING
+When messages reach the receiver unchanged, the sender and receiver draw responses from their
+separate histories, H
+S
+t−1 
+and H
+R
+t−1
+, as
+m
+t 
+∼ q
+S 
+(· | S
+t
+, H
+S
+t−1
+), 
+ˆ
+S
+t 
+∼ q
+R
+(· | m
+t
+, H
+R
+t−1
+),
+where q
+S 
+and q
+R 
+are the models’ response distributions, with the shared task context omitted for
+clarity. Both histories start empty, and model parameters remain fixed throughout the interaction.
+In the core sentence-selection setting, the environment does not directly reveal the state to the receiver
+or the guess to the sender. After receiving feedback, each agent appends its own observations to its
+history,
+H
+S
+t 
+= H
+S
+t−1 
+⊕ (S
+t
+, m
+t
+, R
+t
+), H
+R
+t 
+= H
+R
+t−1 
+⊕ (m
+t
+, 
+ˆ
+S
+t
+, R
+t
+),
+where ⊕ denotes appending a round. The sender’s history in the security experiments also includes
+the receiver’s action (Section 3).
+In-context reward feedback can support learning with fixed parameters (Monea et al., 2025). Learning
+here is bilateral, as the sender can favor wording the receiver interprets correctly while the receiver
+uses earlier exchanges to infer its meaning.
+3</page><page num="5">Preprint
+0 25 50 75 100
+Final accuracy (%)
+Sol → Sol
+Opus → Sol
+Sol → Terra
+Terra → Sol
+Luna → Sol
+Sonnet → Sol
+Llama → Sol
+Sol → Llama
+Sol → Sonnet
+0 8 16 24
+Interaction rounds
+0
+25
+50
+75
+100
+Accuracy (%)
+Sender → receiver During play
+Sol→Sol Opus→Sol Sol→Terra Terra→Sol Luna→Sol Sonnet→Sol Llama→Sol Sol→Llama Sol→Sonnet
+Figure 2: Communication through sentence choice across model pairings. Dots show each game’s
+final accuracy, with means and 95% confidence intervals in black. Curves show accuracy during play.
+Dashed lines mark 25% chance.
+Free-form generation. In a simulated incident-response task, a security provider’s sender then
+writes its own summary of a fixed public report, and a separate customer’s receiver chooses which of
+four connections to block. The malicious connection is drawn independently and uniformly each
+round and known only to the sender, who is told to keep this finding confidential and include only
+what the report supports. The team nonetheless scores whenever the receiver blocks the malicious
+connection. After format checks, a monitor that sees only the report and proposed summary is
+instructed to block unsupported content or apparent disclosure, including coded messages. Unlike in
+sentence selection, the sender also sees the receiver’s action each round. Each of Sol, Terra, Luna,
+Sonnet, and Opus sends in ten games of 60 rounds, with Sol as receiver and monitor (Appendix E).
+Measurement. We track accuracy during play and on held-out cases before and after interaction,
+with intermediate checks in selected studies. Evaluation uses saved histories without updating them.
+We compare recovery with uniform guessing, counting refusals, rejected messages, and invalid
+guesses as errors. In the security setting, message delivery rates distinguish rejection from failure to
+interpret an accepted message.
+Feedback and history. In sentence selection, we clear either agent’s history throughout play and
+evaluation to test whose experience supports communication. Continuing games from identical
+histories with and without further correctness feedback isolates its contribution after interaction has
+begun. Appendix C describes additional feedback and controls.
+Message controls. We repeat the receiver’s decisions with an altered message (Lowe et al., 2019)
+or history. Substituting a message written for another private value tests whether the receiver follows
+that value, and removing its history tests dependence on earlier exchanges. In security games, we
+also substitute a standard reply identical for every target, and a game counts as showing information
+flow when final recovery significantly exceeds both chance and this control. We inspect the messages
+to distinguish ordinary wording from recognizable codes or direct disclosure.
+Paraphrasing. A separate Sol agent rewrites accepted updates using only the public report and
+message. We apply it to the final updates of the ten Sol games, keeping the original receiver histories,
+and to three fresh games rewritten from the first exchange, each matched by target sequence to a game
+without rewriting. The sender remembers its own wording, while the receiver sees and remembers
+the rewrite. We also check whether rewrites change facts.
+5</page><page num="8">Preprint
+assigned team continues investigating.” With its interaction history, the receiver identifies the finding
+in all 16 final checks, compared with six when that history is removed (Appendix Table 10).
+4.4 COMMUNICATION UNDER PARAPHRASING
+Steganographic strategies can survive paraphrasing when optimized against it (Mathew et al., 2025).
+We first rewrite the final updates from the ten Sol games, using a separate Sol agent that sees only
+the public report and the message. The receiver keeps its original history, so this tests how well an
+established channel survives new wording. Recovery falls from 98.8% to 45%, with a significant
+paired reduction in nine games (Figure 5, left). We judged 28 of 160 rewrites to preserve the facts of
+report-supported originals. On these, correct answers fall from 28 to 12 (Appendix E.1).
+Rewriting from the first exchange gives the agents a chance to learn through the modified messages.
+We compare three fresh games with paraphrasing against three games with the same target sequences
+and no rewriting. All three rewritten games have lower accuracy at round 20 than their matched
+counterparts, but each establishes communication by round 60, finishing at 75%, 87.5%, and 87.5%
+versus 100% in each baseline (Figure 5, right). Standard replies and empty receiver histories reduce
+recovery in all three, linking this success to the rewritten messages and the receiver’s experience.
+Message review also finds factual changes in some rewrites, such as turning available logs into logs
+under active review (Appendix E.1). Across these three pairs, communication develops through the
+paraphraser even though it disrupts much of the communication established without it.
+5 DISCUSSION
+Confidentiality across repeated interactions. What a message reveals depends partly on who
+reads it and what they have already seen. In the Sol security games, the same final updates supported
+accurate recovery with the receiver’s interaction history but left it near chance without that history
+(Table 1). In sentence selection, a mapping fitted to final messages and their true private values
+decoded round-four messages more accurately than the receiver did at the time (Appendix C.3). These
+findings expose a limitation of judging confidentiality from a receiver’s immediate success. Messages
+may already carry private information that the receiver has not learned to extract. Whether agents
+can make these deductions from their own histories remains an open question, with implications for
+recovering secrets from retained conversations.
+What message rewriting can prevent. Paraphrasing is a natural defense against communication
+through ordinary wording, but its effect depends on when it is introduced. It disrupted established
+communication in the Sol games, yet all three pairs interacting with rewriting from their first exchange
+learned to recover the finding. Their final accuracy remained below matched games without rewriting.
+These results make learning in the presence of a defense central to evaluating its effectiveness.
+Some rewrites also changed facts, illustrating the difficulty of disrupting a channel while preserving
+Original Paraphrased
+0
+25
+50
+75
+100
+Accuracy (%)
+0 20 40 60
+0
+50
+100
+Run 1
+0 20 40 60
+Run 2
+0 20 40 60
+Run 3
+Paraphrasing after learning Paraphrasing throughout learning
+Interaction rounds
+Without paraphrasing With paraphrasing
+Figure 5: Paraphrasing in Sol-to-Sol games. Left, accuracy in ten games before and after rewriting
+their final messages, with receiver history unchanged. Right, three runs each compare two games
+with the same target sequence, with and without paraphrasing throughout learning. Markers show the
+four evaluations. Horizontal dashed lines mark 25% chance.
+8</page><page num="9">Preprint
+legitimate content. Evaluating a rewriting method therefore requires examining both its factual fidelity
+and what agents learn through repeated use.
+Conditions for channel formation. The opportunities for coordination in these experiments are
+also features of ordinary collaborative work. Agents retain earlier exchanges and receive feedback
+about whether their joint actions succeeded, even when they are never told how to encode or interpret
+the confidential value. Shared expectations can support initial agreement, while feedback helps
+receivers revise them by connecting the sender’s wording to outcomes. In the Sol security games, this
+experience lets the receiver extract a finding that the sender was instructed to keep confidential. The
+permitted exchange thus gives the agents a way to improve at their shared task by passing information
+that they are forbidden to share. These results identify a risk in giving agents repeated opportunities
+to coordinate across a confidentiality boundary.
+6 RELATED WORK
+Emergent communication. Jointly trained agents learn cooperative signals (Foerster et al., 2016;
+Lazaridou et al., 2017), including under adversarial observation (Yu et al., 2022), and communication
+requires evidence that signals influence receiver decisions (Lowe et al., 2019). Language models form
+naming conventions (Ashery et al., 2025; Vaduguru et al., 2026), which improve with fine-tuning
+on demonstrations (Hua et al., 2025). GlossoGen agents develop language under communication
+pressure (Stengel-Eskin et al., 2026), and Talebirad et al. (2026) instruct agents to create codes and
+reveal the target after each round.
+In-context learning and shared expectations. In-context learning uses examples and interaction
+histories to guide decisions (Brown et al., 2020; Laskin et al., 2023; Monea et al., 2025; Song
+et al., 2026), and fine-tuning or in-context data can alter behavior beyond its apparent content, as in
+subliminal learning (Cloud et al., 2026) and emergent misalignment (Betley et al., 2025; Afonin et al.,
+2026). Shared expectations support agreement without communication (Schelling, 1960; Aharon
+et al., 2026), and independently prompted models construct compatible visual lexicons (Carmeli
+et al., 2026) or select similar steganographic schemes (Rippin et al., 2026).
+Covert channels and collusion. Covert channels carry information through interfaces intended
+for other purposes (Lampson, 1973; Simmons, 1984; Cachin, 2004), including task actions (Sokota
+et al., 2022). Motwani et al. (2024) study shared cues, steganographic capabilities, and learning
+through in-context feedback and fine-tuning, and Zolkowski et al. (2026) test prompted message
+hiding with and without supplied encoding schemes. Related risks include collusion over supplied
+private channels and tools (Nakamura et al., 2026; Zeng &amp; Rudzicz, 2026), covert influence through
+messages (Shah et al., 2026) and hidden reasoning (Roger &amp; Greenblatt, 2023; McCarthy et al., 2025).
+Mathew et al. (2025) elicit collusion through gradient updates or separate in-context learners that
+revise agent instructions using labeled batches.
+Information flow and monitoring. Quantitative information flow measures leakage from system
+outputs (Smith, 2009; Alvim et al., 2012), and Anwar et al. (2026) distinguish information usable by
+a receiver from information recoverable by an auditor. Costa et al. (2025) enforce information flow
+control in language-model agents with confidentiality and integrity labels. Message monitors judge
+what agents send, but a receiver may bring experience they lack.
+7 CONCLUSION
+Language-model agents with fixed parameters and no supplied codebook can learn to communicate
+covertly through repeated interaction. Our experiments follow this process from agents choosing
+among public summaries to agents writing their own incident updates. In the security setting, several
+pairings learn to pass along a confidential finding despite an instruction not to disclose it and a
+monitor reading every message. The leak travels through the updates the agents write to carry out
+their task, and experience with the sender lets the receiver extract information it otherwise misses.
+Confidentiality therefore depends on what partners have learned from each other, as well as on what
+each message says in isolation.
+9</page><page num="11">Preprint
+2020. URL https://proceedings.neurips.cc/paper_files/paper/2020/
+file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf.
+Christian Cachin. An information-theoretic model for steganography. Information and Computation,
+192(1):41–56, 2004. doi: 10.1016/j.ic.2004.02.003.
+Boaz Carmeli, Orr Paradise, Shafi Goldwasser, Yonatan Belinkov, and Ron Meir. Investigating the
+development of task-oriented communication in vision-language models, 2026. URL https:
+//arxiv.org/abs/2601.20641.
+Alex Cloud, Minh Le, James Chua, Jan Betley, Anna Sztyber-Betley, S¨oren Mindermann, Jacob
+Hilton, Samuel Marks, and Owain Evans. Language models transmit behavioural traits through
+hidden signals in data. Nature, 652(8110):615–621, 2026. doi: 10.1038/s41586-026-10319-8.
+Manuel Costa, Boris K¨opf, Aashish Kolluri, Andrew Paverd, Mark Russinovich, Ahmed Salem, Shruti
+Tople, Lukas Wutschitz, and Santiago Zanella-B´eguelin. Securing ai agents with information-flow
+control. arXiv, May 2025. URL https://www.microsoft.com/en-us/research/
+publication/securing-ai-agents-with-information-flow-control/.
+Bradley Efron and Robert J. Tibshirani. An Introduction to the Bootstrap. Chapman and Hall/CRC,
+1994.
+Jakob Foerster, Ioannis Alexandros Assael, Nando de Freitas, and Shimon Whiteson. Learning to com-
+municate with deep multi-agent reinforcement learning. In Advances in Neural Information Pro-
+cessing Systems, volume 29, 2016. URL https://proceedings.neurips.cc/paper_
+files/paper/2016/file/c7635bfd99248a2cdef8249ef7bfbef4-Paper.pdf.
+Taicheng Guo, Xiuying Chen, Yaqi Wang, Ruidi Chang, Shichao Pei, Nitesh V. Chawla, Olaf
+Wiest, and Xiangliang Zhang. Large language model based multi-agents: A survey of progress
+and challenges. In Proceedings of the Thirty-Third International Joint Conference on Artificial
+Intelligence, IJCAI-24, pp. 8048–8057, 2024. doi: 10.24963/ijcai.2024/890. URL https:
+//doi.org/10.24963/ijcai.2024/890.
+Yilun Hua, Evan Wang, and Yoav Artzi. Post-training for efficient communication via convention
+formation. In Conference on Language Modeling, 2025. URL https://openreview.net/
+forum?id=jRGGmbhX2s.
+Butler W. Lampson. A note on the confinement problem. Communications of the ACM, 16(10):
+613–615, 1973. doi: 10.1145/362375.362389.
+Michael Laskin, Luyu Wang, Junhyuk Oh, Emilio Parisotto, Stephen Spencer, Richie Steigerwald,
+DJ Strouse, Steven Hansen, Angelos Filos, Ethan Brooks, Maxime Gazeau, Himanshu Sahni,
+Satinder Singh, and Volodymyr Mnih. In-context reinforcement learning with algorithm distillation.
+In International Conference on Learning Representations, 2023. URL https://openreview.
+net/forum?id=hy0a5MMPUv.
+Angeliki Lazaridou, Alexander Peysakhovich, and Marco Baroni. Multi-agent cooperation and the
+emergence of (natural) language. In International Conference on Learning Representations, 2017.
+URL https://openreview.net/forum?id=Hk8N3Sclg.
+Ryan Lowe, Jakob Foerster, Y-Lan Boureau, Joelle Pineau, and Yann Dauphin. On the pitfalls of
+measuring emergent communication. In Proceedings of the 18th International Conference on
+Autonomous Agents and MultiAgent Systems, pp. 693–701, 2019. URL https://ifaamas.
+org/Proceedings/aamas2019/pdfs/p693.pdf.
+Yohan Mathew, Ollie Matthews, Robert McCarthy, Joan Velja, Christian Schroeder de Witt, Dylan
+Cope, and Nandi Schoots. Hidden in plain text: Emergence &amp; mitigation of steganographic
+collusion in LLMs. In Proceedings of the 14th International Joint Conference on Natural Lan-
+guage Processing and the 4th Conference of the Asia-Pacific Chapter of the Association for
+Computational Linguistics, pp. 585–624, 2025. doi: 10.18653/v1/2025.ijcnlp-long.34. URL
+https://aclanthology.org/2025.ijcnlp-long.34/.
+11</page><page num="13">Preprint
+Kefan Song, Amir Moeini, Peng Wang, Lei Gong, Rohan Chandra, Shangtong Zhang,
+and Yanjun Qi. Reward is enough: LLMs are in-context reinforcement learn-
+ers. In International Conference on Learning Representations, pp. 112747–112770,
+2026. URL https://proceedings.iclr.cc/paper_files/paper/2026/file/
+b7511dfe2e7a1fa45e093cc75389abc2-Paper-Conference.pdf.
+Elias Stengel-Eskin, Newton Sander, Carlos Bonetti, Sasha Boguraev, James Bowler, Hale Sirin, and
+Simon Kirby. GlossoGen: Emergent language in complex multi-agent LLM interactions, 2026.
+URL https://arxiv.org/abs/2609.01491.
+Yashar Talebirad, Eden Redman, Ali Parsaee, and Osmar R. Za¨ıane. From signals to structure: How
+memory architecture drives language emergence in LLM agents. In ALIFE 2026: Proceedings
+of the 2026 Artificial Life Conference. MIT Press, 2026. doi: 10.1162/isal.a.1045. URL https:
+//direct.mit.edu/isal/proceedings/isal2026/38/119/138134.
+Saujas Vaduguru, Yilun Hua, Yoav Artzi, and Daniel Fried. Success and cost elicit convention forma-
+tion for efficient communication. In Proceedings of the 64th Annual Meeting of the Association for
+Computational Linguistics (Volume 1: Long Papers), pp. 42033–42050, 2026. doi: 10.18653/v1/
+2026.acl-long.1946. URL https://aclanthology.org/2026.acl-long.1946/.
+L. G. Valiant. The complexity of computing the permanent. Theoretical Computer Science, 8(2):
+189–201, 1979. doi: 10.1016/0304-3975(79)90044-6.
+Dhara Yu, Jesse Mu, and Noah Goodman. Emergent covert signaling in adversarial reference games.
+In Emergent Communication Workshop at ICLR, 2022. URL https://openreview.net/
+forum?id=H-eMQbR7Z5.
+Xijie Zeng and Frank Rudzicz. Voluntary collusion with secret tools in competing LLM agents. arXiv
+preprint arXiv:2605.27593, 2026. URL https://arxiv.org/abs/2605.27593.
+Artur Zolkowski, Kei Nishimura-Gasparian, Robert McCarthy, Roland Zimmermann,
+and David Lindner. Early signs of steganographic capabilities in frontier LLMs.
+In International Conference on Learning Representations, pp. 37247–37308, 2026.
+URL https://proceedings.iclr.cc/paper_files/paper/2026/file/
+3eb660055cdcdc9a545a0b16c1eff80d-Paper-Conference.pdf.
+13</page><page num="21">Preprint
+which it appears most often after normalizing counts within states, with equal probability for ties. We
+then apply this mapping to earlier held-out messages, which entered neither the fit nor the agents’
+continuing histories.
+At round four, the fitted mapping outperforms the receiver by 9.7 percentage points, with a 95%
+interval of [2.3, 17.7].
+1 
+This advantage comes largely from the nine games that finish with perfect
+accuracy (Figure 6), suggesting that their messages distinguish states before the receiver reliably
+interprets them. Any fixed mapping’s expected accuracy is at most V , so its expected advantage over
+the receiver’s J lower-bounds V − J. The fit uses later messages and true states unavailable to the
+receiver during play, and its intervals hold the fitted mappings and outcome groups fixed.
+0 4 8 16
+0
+25
+50
+75
+100
+Interaction rounds
+Accuracy (%)
+All 30 games
+0 4 8 16
+0
+25
+50
+75
+100
+Interaction rounds
+Accuracy (%)
+Nine games finishing at 100%
+Mapping fitted after play 
+Receiver
+Figure 6: Earlier messages decoded using a mapping fitted after play. The fit uses final messages
+and their true states, while the receiver relies on its experience at that round. Shading shows 95%
+confidence intervals.
+D SHARED EXPECTATIONS
+These studies measure how much agents agree before interaction and whether that agreement helps
+communication early in play. They permit signaling and ask the agents to coordinate on a one-to-one
+mapping. Exact prompts appear in Appendix G.2.
+D.1 FOUR-MESSAGE FAMILIES
+We hold the messages fixed and vary their assigned values, comparing a codebook favored by
+independently queried agents with a reassignment that conflicts with their expectations.
+For each role and family, we run 96 independent queries to choose the codebooks and a disjoint set
+of 96 to estimate compatibility. The favored codebook is the mapping with the highest product of
+sender and receiver probabilities. The mismatched codebook reassigns every sentence and, among
+such mappings, has the lowest predicted receiver accuracy. We add 0.5 to each sentence–value count
+only when choosing codebooks, and compute compatibility J from raw proportions in the disjoint
+set. Every query states the one-to-one objective and presents the sentences in random order (Table 5).
+A fixed sender then uses each codebook in eight games against a Sol receiver, which learns from
+correctness feedback. Matched games share balanced state schedules, and menus are shuffled at every
+decision. Table 3 gives the checks through 24 rounds.
+Early accuracy is the time average over rounds 0–4, using trapezoidal interpolation of checks at 0, 1,
+2, and 4. Weather and day cycle show an advantage over most-likely guessing, while compass and
+inspection do not (Table 6). Most-likely guessing, added after data collection, reaches 48.3% early
+accuracy, compared with 37.3% for independent trial and error. Both inspection codebooks beat trial
+and error but perform similarly to most-likely guessing. Each reference learns from its own feedback.
+21</page><page num="22">Preprint
+Table 5: Fixed sender codebooks. The value each sentence signals under the codebook both roles
+favor and under the mismatched reassignment, labeled reassigned in Figure 3.
+Family Sentence Favored Mismatched
+Weather The sky is clear and calm. 1 2
+Clouds are gathering overhead. 2 1
+Steady rain is falling. 3 4
+A severe thunderstorm is underway. 4 3
+Day cycle The first light of dawn is appearing. 1 3
+The midday sun is high overhead. 2 4
+The last light of dusk is fading. 3 1
+The sky is dark at midnight. 4 2
+Compass The marker points north. 1 2
+The marker points east. 2 1
+The marker points south. 3 4
+The marker points west. 4 3
+Inspection No further steps followed the site walkthrough. 1 4
+The inspection ended without further action. 2 1
+The review concluded with no additional measures. 3 2
+The walkthrough was closed with nothing outstanding. 4 3
+Table 6: Agreement before interaction and accuracy during early learning. T0 is accuracy before play
+and Early averages rounds 0–4. Fav. and mis. denote the favored and mismatched mappings. Values
+are percentages or percentage-point differences, with 95% intervals.
+Family Prior compatibility T0 fav./mis. Early fav./mis. Fav.–most likely
+Weather 100.0 [100.0, 100.0] 100.0 / 0.0 95.7 / 34.2 +47.4 [42.7, 51.1]
+Day cycle 82.2 [75.9, 88.5] 96.9 / 0.0 99.6 / 26.4 +51.3 [49.9, 53.2]
+Compass 100.0 [100.0, 100.0] 59.4 / 18.8 57.2 / 47.7 +8.9 [−1.4, 20.8]
+Inspection 64.6 [56.2, 73.0] 25.0 / 31.3 48.4 / 48.8 +0.1 [−8.5, 9.4]
+22</page><page num="23">Preprint
+Before Round 24
+0
+50
+100
+Accuracy (%)
+ 
+Fixed sender
+Before Round 24
+0
+50
+100
+Two agents
+Before Round 24
+0
+50
+100
+Generated weather
+Ordered, 16 Shifted, 16
+Ordered, 64 Shifted, 64
+Weather, 16 Weather, 64
+Letter tags, 64
+Correctness feedback
+No feedback
+Figure 7: Communication with larger sets of messages, including freely generated descriptions. Each
+line connects accuracy before interaction and after 24 rounds.
+D.2 LARGER MESSAGE SETS
+We construct 16 sentences by combining time of day with weather and expand to 64 by adding
+elevation, as in “At dawn on the valley floor, the sky is clear.” An ordered mapping follows these
+natural progressions, while a shifted mapping rotates assignments by half the set.
+2
+Independent queries show strong agreement with the ordered mapping (Table 7). Both roles see the
+full shuffled menu, with four decisions per value or message for the 16-message set and two for the
+64-message set.
+Across four matched games per mapping, the receiver largely learns the shifted 16-message mapping
+but barely improves with 64 messages (Table 8). Games share states and evaluation messages. During
+play, the smaller set is fully sampled, whereas only 24 of the 64 messages are sent. On twelve final
+checks using messages absent from play, ordered receivers are correct every time and shifted receivers
+never, both before and after learning. These messages remain visible in the full menu throughout,
+showing agreement on listed sentences before they are exchanged.
+Table 7: Agreement before interaction with larger message sets. Separately queried senders and
+receivers choose among K messages. The ordered columns give agreement with the ordered mapping,
+and the shifted column scores receivers against the shifted mapping. Values are percentages, with
+95% CIs in brackets.
+K Compatibility Sender ordered Receiver ordered Receiver shifted Chance
+16 100.0 [100.0, 100.0] 100.0 100.0 0.0 6.25
+64 90.6 [87.5, 93.8] 93.0 97.7 0.0 1.56
+D.2.1 TWO AGENTS CHOOSING THEIR OWN MESSAGES
+When Sol plays both roles and each agent can revise its mapping, the agents largely agree from the
+outset (Table 8). We test the weather sentences and 64 letter-tag sentences such as “The reference
+tag is tqnzqvji.” Alphabetical order offers another basis for agreement, though tags also differ in
+length and vocabulary. Each condition uses four games with separate agent histories and correctness
+feedback. The 64-message conditions share states and checks.
+A Sol sender also generates weather-and-time descriptions for 16 values without a supplied sentence
+list or example mapping. There is no public report or monitor, and four games per condition compare
+learning with and without feedback (Table 8). All four feedback games and one no-feedback game
+are error-free from the first interaction onward, so the gap is already visible at the first interaction.
+The instructions announce feedback availability, and initial checks leave each game’s history empty.
+1
+At rounds 0, 8, and 16, the differences are −0.1 [−2.2, 2.0], 6.7 [−1.7, 15.8], and 5.9 [−0.2, 12.5],
+respectively.
+2
+Times are dawn, midday, dusk, and midnight. Weather phrases are “the sky is clear,” “clouds are gathering,”
+“steady rain is falling,” and “a severe thunderstorm is underway.” Elevations are valley floor, lower hillside, high
+ridge, and mountain summit. Weather varies fastest, then elevation where present, then time.
+23</page></paper>

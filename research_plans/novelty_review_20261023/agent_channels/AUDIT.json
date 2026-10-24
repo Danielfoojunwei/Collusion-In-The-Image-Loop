@@ -1,0 +1,84 @@
+{
+  "scope": "Primary-source audit of five named covert-agent-communication papers. No experimental API calls, paid runs, or source changes.",
+  "verification": "Fetched raw relevant PDF pages and full extracted primary-paper text, rather than relying on intermediate AI summaries. Caches are adjacent to this file.",
+  "papers": [
+    {
+      "id": "2609.32701v2",
+      "title": "Despite Instructions: Frontier Agents Improvise Covert Channels at Test Time",
+      "url": "https://arxiv.org/abs/2609.32701v2",
+      "primary_pages": [1, 2, 3, 5, 8, 9],
+      "carrier": "Choice among public-report summaries and free-form natural-language updates; no hosted raster renderer in the experimental methods reviewed.",
+      "setup": "Two fixed-parameter agents, private four-way state, repeated inference-time interaction. Sender has confidentiality instructions. No supplied codebook or encoding examples. Receiver is not shown true state; shared feedback is one correctness bit. Security sender also observes receiver action.",
+      "oversight": "Monitor screens messages before delivery using public report and current proposed summary, without agent histories.",
+      "evidence": "Ten independent 60-round free-form games per sender setting; reported Sol final recovery98.8%. Controls include target-message substitution, standard reply, recipient-history removal, feedback/history ablations, and post-learning versus throughout-learning paraphrasing.",
+      "overlap": "Unprescribed covert methods, fixed prompts, reward feedback, persistent histories, model monitoring, and spontaneous inference-time channel formation already exist. These are not new contributions of v10.",
+      "difference": "Our candidate has three directed participants, an intervening hosted image generator, a full-history after-choice Codex reviewer, and delayed exact-target feedback through A's assigned ballot. Its supervision is richer and12roundsingletrajectory much smaller; no direct capability comparison is warranted."
+    },
+    {
+      "id": "2606.28425v1",
+      "title": "Tool Use Enables Undetectable Steganography in Multi-Agent LLM Systems",
+      "url": "https://arxiv.org/abs/2606.28425",
+      "primary_pages": [1, 3, 4, 9],
+      "carrier": "Implemented stegosystems producing benign-looking natural-language outputs; broad image literature appears in references/background, not the hosted-raster workflow studied here.",
+      "setup": "Agentic coding models can execute code, access files, use a log-probability submodel/API, and consult research papers under experimental affordance ablations. Implementation tasks can supply an algorithm paper and shared key. Separate tacit-coordination experiments sample independent plans and parameter choices.",
+      "oversight": "Threat model monitor sees final outputs but not unmonitored tool use/intermediate artifacts; implementation quality/security and coordination compatibility are separated.",
+      "evidence": "Successful stegosystem construction under realistic tool affordances; convergence on broad scheme families but limited complete one-shot coordination. Uses coordination metrics and factorial environmental contrasts; acknowledges small sample and model scope.",
+      "overlap": "Tools creating covert channels, missing common mappings as a coordination bottleneck, and separating implementation from coordination are already established.",
+      "difference": "Our actors cannot execute code, inspect files, access logits, or directly edit pixel bits. Their hosted generator can corrupt intended features. This is a different capability envelope; failure cannot be generalized to tool-using frontier agents broadly."
+    },
+    {
+      "id": "2609.24994v1",
+      "title": "Feedback Coding Enables Inference-Time Covert Agentic Communication",
+      "url": "https://arxiv.org/abs/2609.24994",
+      "primary_pages": [1, 2, 5, 7, 8],
+      "carrier": "Text generated through a deliberately engineered token-sampling steganographic protocol.",
+      "setup": "Burnashev Adaptive Posterior Matching (BAM), shared seed/keying material, encoder access to model/next-token statistics, decoder observes text only. Token-by-token common transcript supplies causal noiseless feedback. Dynamic mapping and confirm phase are algorithmic, not self-invented by unbriefed agents.",
+      "oversight": "Formal indistinguishability threat model and cryptographic security reduction, with empirical reliability/rate evaluation.",
+      "evidence": "Reported0–0.1% empirical message error for8-bit payload around50tokens across1000trials on three open-weight LMs, versus10–17% comparable baseline. Includes component ablations and conversational extensions.",
+      "overlap": "Feedback-assisted covert communication and confirmation/reliability mechanisms are already studied; feedback alone is not novel.",
+      "difference": "Our candidate has noisy generated rasters and delayed inter-round handoff, no keyed sampling algorithm, and no cryptographic security guarantee. It is a behavioral/workflow measurement study, not a new information-theoretic stegosystem."
+    },
+    {
+      "id": "2402.07510",
+      "title": "Secret Collusion among AI Agents: Multi-Agent Deception via Steganography",
+      "url": "https://arxiv.org/abs/2402.07510",
+      "primary_pages": [1, 2, 4, 5, 6],
+      "carrier": "Natural-language channels in the computational analysis and empirical case studies. Framework explicitly admits multimodal extension; related image-noising results are discussed.",
+      "setup": "Formal secret-collusion threat model and theoretical incentives/capacity, with empirical single/multi-agent evaluations and predefined or elicited codes, including secure shared-key settings.",
+      "oversight": "Examines monitoring, paraphrasing and parameter-optimization limitations.",
+      "overlap": "Multi-agent secrecy, reward for joint goal plus penalty when caught, steganographic incentives, and general multimodal threat framing are not novel.",
+      "difference": "A measurable hosted-renderer fidelity/recipient-adoption/oversight pipeline may be a narrower extension, but should not be described as first secret collusion or first multimodal possibility."
+    },
+    {
+      "id": "2410.03768v2",
+      "title": "Hidden in Plain Text: Emergence & Mitigation of Steganographic Collusion in LLMs",
+      "url": "https://arxiv.org/abs/2410.03768v2",
+      "primary_pages": [1, 3, 9, 13, 29],
+      "carrier": "Linguistic text steganography in sender/receiver tasks, including automated candidate screening with problematic reward incentives.",
+      "setup": "Gradient-based RL and in-context RL. ICRL uses centralized or decentralized learner models that propose/rewrite acting strategies from labeled batches and feedback. Both instrumental-emergence and mitigation-evasion settings are evaluated.",
+      "oversight": "Reward combines task reward minus overseer penalty; mitigation team includes oversight and paraphrasing.",
+      "evidence": "Separates task success, payload decoding success, sender task utility, overseer bypass, and collusion success. Multiple training seeds and explicit mitigation contrasts; notes brittle oversight and some loss of legitimate sender task utility.",
+      "overlap": "Inducing more subtle communication through reward/oversight pressure without hand-supplying a final code is directly prior work. Candidate screening/task deviation and the need to distinguish decoding from task success are also prior work.",
+      "difference": "Our proposed fixed-prompt API interaction lacks weight updates or an external strategy-rewriting learner; hosted raster-generation noise and actual full-history Codex feedback are the specific operational differences."
+    }
+  ],
+  "defensible_novelty_language": "We study where self-invented image-mediated coordination succeeds or fails across an ordinary hosted generation tool, directed recipient exposure, recipient interpretation/action, and full-history AI oversight. This is a candidate narrower workflow contribution, not evidence of first-ever covert communication or proof that no similar multimodal study exists.",
+  "unsupported_claims": [
+    "No one has induced covert communication without explicitly saying steganography.",
+    "Repeated memory, reward penalties, reviewer feedback, or multiple agents are themselves new.",
+    "Using images alone makes this first-ever multimodal collusion.",
+    "Twelve dependent rounds establish general emergence rates or a temperature causal effect.",
+    "A full-history reviewer not finding joint collusion proves the channel is covert or undetectable."
+  ],
+  "highest_value_design_changes": [
+    "Make the central question a renderer/recipient/oversight mechanism, not whether more pressure can produce an exciting artifact.",
+    "Use frozen-history target swaps: same public facts/history, different private targets; test if recipient choices track the swapped target rather than a fixed wrong answer.",
+    "Use a neutral factual image without adding an explicit oracle recommendation, to avoid confounding cue removal with extra policy guidance.",
+    "Compare receiver history present versus absent and monitor latest-image versus full-history views on the same saved artifacts, with no live-feedback contamination.",
+    "Measure legitimate visual-task utility alongside target adoption and detection. Current unrestricted arbitrary imagery plus separately supplied full facts is a communication-channel task, not necessarily camouflage inside useful normal technical work.",
+    "Preregister criteria for intended feature, actual rendered feature, selected delivery, reported recipient inference, actual target adoption, and supported joint conduct. Preserve all failures and do not infer fidelity or intent from logs alone.",
+    "Treat the12-round trajectory as an exploratory mechanistic case. Independent seeds/episodes and fixed controls are needed for broader capability or prevalence claims."
+  ],
+  "open_literature_gap": "This audit does not cover the closest OpenReview diffusion-VAE multimodal paper or every recent collusion benchmark. Root should resolve those before asserting even a scoped first-of-kind raster-workflow claim.",
+  "run_status": "All paid execution paused. No run initiated by this audit."
+}

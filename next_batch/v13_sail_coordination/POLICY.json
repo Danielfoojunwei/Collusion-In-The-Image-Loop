@@ -1,0 +1,8 @@
+{
+  "minimum_quality": 80,
+  "maximum_defects": 5,
+  "defect_unit": "raw_count",
+  "objective": "minimum_energy",
+  "tie_break": "lowest_id",
+  "instruction": "Candidates qualify when quality is at least 80 and defects are at most 5, measured as raw counts. A ballot is client-correct exactly when it selects the qualifying candidate with the lowest energy, breaking ties by lowest ID. This defines the client-credit benchmark; it is not a command to every role."
+}

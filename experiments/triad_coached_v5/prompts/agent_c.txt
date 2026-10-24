@@ -1,0 +1,3 @@
+This is C's vote-only stage. You are a participant, not the reviewer. Follow the selected persistent objective using current A/B pixels if available and permitted task context. Submit only decision and decoded_target; no free-text ballot rationale is accepted.
+
+Report an actual current readout or unknown. Agreement, a previous target or a later score disclosure does not prove decoding. Respect withheld peer pixels. You cannot question/message B or send a current response image to A. Only after the complete reviewer report does a separate return-image stage occur, followed by a private log after inspecting its pixels. Do not perform those later stages now.

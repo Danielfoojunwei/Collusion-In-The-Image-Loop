@@ -1,0 +1,93 @@
+{
+  "status": "passed",
+  "recorded_at_utc": "2026-10-22T12:38:22.583488+00:00",
+  "source_files": {
+    "__init__.py": "7f800455b29f21a180218b09cd4e9f9f7acfbf6f5007599620a2b4b3e2b398b1",
+    "budget_guard.py": "1271f6e0cd2918b8ff5511f4d7bcff4e87ff0454b557ce6975cfa61fae1493ce",
+    "cli.py": "80928679ce1be8ac1a7b94984695f83b8ac476edc75936d589757ad3a5b03be2",
+    "context.py": "acf29ee5883b4494814ee211015964167d0f37288411be81ff7ce16dbc3a83d6",
+    "contracts.py": "e2117aaf9e930095e081089aaed196f99a31ee3c35713818041e7f3a0d23251c",
+    "engine.py": "99745616098181f59e03de6ee0c62cb01a2a6d630615e9b3d39ab584533a7892",
+    "live_analysis.py": "d2417f58adda2e0214b783c261b073f60aae0159602b94a702c6fb444cfab4c1",
+    "live_cli.py": "35726c3790d66a7429570fb6e5fcb68418200c51a82d63889311ec9aca7cdae4",
+    "live_loss_policy.py": "45113fd3f5d70c42ac54697eb40630860cf8988c8860c13dd2599691c59a77ca",
+    "live_provider.py": "19769024909924e5417deef20b549eda0f2803aebb3a8e0180abfde2d70c283a",
+    "live_scheduler.py": "3635d3c6eaec4a9d33c253380a62577c299e31403bc80b4dbcff75bc733e7d07",
+    "memory.py": "6b0b99c51f285c5bc97b670c3e8ea1c6b069d35fee79a1152c95c8162b0ca413",
+    "planning.py": "21b7f0b1062558443d5abbb1cd22c282330601e4e20d3c1fb90c2300937db331",
+    "prompts/agent_a.txt": "3bde2ec1dfb464a069bed99b7b62ea1e5d26197b6c20bff13cb90b85aba8d84c",
+    "prompts/agent_a_honest.txt": "b1009736366865078e8cfbe9f56b56a63fca521706986335025d773ef6c3aea0",
+    "prompts/agent_a_interview.txt": "5736feb89b4753809364449b5764b94eda8797a0c4cddb51337314dac400ca12",
+    "prompts/agent_a_overt.txt": "48064426989ef8862e3b61095cba7668df51cbbd860e098af74e51459b28285e",
+    "prompts/agent_b.txt": "189be6882a7ea8755cb12755dff201b9d6617377994f0d60452052f64e0c3a75",
+    "prompts/agent_c.txt": "588fe37943c4243b34bc97b47fde03a9b96d826fb6db8d713fd33dbcb2222fab"
+  },
+  "config_sha256": "268047d67fe652f27371213119d5eb67552c9f09c77d58954449a98c48cd3a03",
+  "live_compatibility_probe_calls": 0,
+  "scientific_results": false,
+  "full_suite": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "experiments/pressure_interview_v1/tests",
+      "-v"
+    ],
+    "started_at_utc": "2026-10-22T12:33:56.288508+00:00",
+    "ended_at_utc": "2026-10-22T12:37:15.006289+00:00",
+    "elapsed_seconds": 198.718,
+    "exit_code": 0,
+    "scientific_observations": false,
+    "paid_calls": 0
+  },
+  "full_suite_test_count": 104,
+  "post_suite_verification_fix": {
+    "reason": "Before live freeze, final writeup cross-check found verification was re-serializing task-author and fixture C packets, unlike scheduler exact-byte hashes including newline. Verification now checks SHA256 of saved bytes for every packet.",
+    "scientific_or_prompt_change": false,
+    "paid_calls": 0,
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "unittest",
+      "experiments.pressure_interview_v1.tests.test_live_analysis",
+      "-v"
+    ],
+    "observed_exit_code": 0,
+    "observed_test_count": 8,
+    "observed_elapsed_seconds": 0.33,
+    "observed_result": "OK",
+    "source_file": "live_analysis.py",
+    "source_sha256": "d2417f58adda2e0214b783c261b073f60aae0159602b94a702c6fb444cfab4c1",
+    "test_file_sha256": "aafd4a81c327f3a11040fbe8e85708f2afca8ca4e7422963b54fc7db682bcbc9",
+    "recorded_at_utc": "2026-10-22T12:36:37.622381+00:00"
+  },
+  "unique_tests_passed": 105,
+  "workflow_evidence": {
+    "all144_round_scheduler_fixture": "passed",
+    "real_backend_guard_codec_engine_fixture_118_mock_requests_32_C_jobs": "passed",
+    "actual_scheduler_packet_report_verification": "passed",
+    "restart_duplicate_calls": 0,
+    "all_model_calls_are_offline_fixtures": true
+  },
+  "original_canonical_freeze_unchanged": true,
+  "budget_before_first_new_request": {
+    "scope": "Original aggregate; all new experiment costs must enter this same ledger",
+    "aggregate_path": "/workspace/visual_collusion_stress_v4/runs/main/budget.sqlite3",
+    "cap_usd": 40,
+    "cash_ceiling_OpenRouter_usd": 50,
+    "Codex_excluded": true,
+    "actual_usd": 0.985513925,
+    "reserved_unresolved_usd": 0.1551066,
+    "committed_usd": 1.140620525,
+    "remaining_usd": 38.859379475,
+    "request_count": 150,
+    "completed_count": 137,
+    "pending_count": 0,
+    "uncertain_count": 13,
+    "halt_reason": null,
+    "local_subset_totals_must_not_be_added_again": true,
+    "unknown_charges_asserted_zero": false
+  }
+}

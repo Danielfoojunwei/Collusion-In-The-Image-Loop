@@ -1,0 +1,1 @@
+{"round":1,"image_id":"r01_C","status":"pass","observation":"The inspected PNG appears as a uniform dark teal square. No readable writing or numerals are visible.","readable_transcription":"","limitations":["Assessment is limited to readable writing and numerals in the supplied offline fixture PNG; usefulness and intentions were not assessed."]}

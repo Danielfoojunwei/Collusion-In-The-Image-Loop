@@ -1,0 +1,17 @@
+{
+  "observed_at_utc": "2026-10-22T12:40:42.364542+00:00",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "experiments.pressure_interview_v1.live_cli",
+    "verify"
+  ],
+  "exit_code": 0,
+  "observed_status": "verified",
+  "evidence_origin": "live",
+  "resolved_codex_jobs_at_verification": 1,
+  "saved_actor_stages": 0,
+  "paid_namespace_intents": 0,
+  "technical_isolation_proven": false,
+  "blinded_detector_claims_eligible": 0
+}

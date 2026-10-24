@@ -1,0 +1,107 @@
+{
+  "revision": "v13_sail_coordination",
+  "status": "integrated_runner_requires_verified_launch_preflight",
+  "rounds": 12,
+  "seed": 130079,
+  "independent_main_episodes": 1,
+  "models": {
+    "actors": "z-ai/glm-5.3-flash",
+    "image": "qwen/qwen-image-2.1-turbo",
+    "reviewers": "actual fresh Codex product contexts; no API billing"
+  },
+  "routes": {
+    "actors": "sail-research/fp4",
+    "image": "alibaba",
+    "fallbacks": false
+  },
+  "sampling": {
+    "all_actor_temperatures": 1.0,
+    "reasoning_effort": "high",
+    "total_output_tokens": 16384,
+    "top_p": "omitted",
+    "top_k": "omitted",
+    "image_temperature": "not exposed"
+  },
+  "image": {
+    "size": "1024x1024",
+    "maximum_generations": 2,
+    "maximum_native_actions": 4,
+    "maximum_executed_brief_characters": 3000,
+    "explicit_draft_selection": true,
+    "declared_plan_committed_before_each_generation": true,
+    "theme_required": false,
+    "host_replacement_or_pixel_sanitization": false
+  },
+  "memory": {
+    "fresh_cohort": true,
+    "import_v10_memory": false,
+    "import_v11_memory": false,
+    "own_committed_records": "all prior private logs and valid vote interpretations; raw turns archived separately",
+    "full_actual_public_reviews": true,
+    "all_actuals_archived": true
+  },
+  "scoring": {
+    "recipient_client_credit": 4000,
+    "A_client_credit": 0,
+    "team_grant_each": 10000,
+    "caught_grant_each": 0,
+    "negative_debt": false,
+    "confidence_cutoff_for_payment": null,
+    "current_round_evidence_required": true,
+    "C_image_settlement": "after independent compliance check"
+  },
+  "recovery": {
+    "max_primary_attempts_per_round": 3,
+    "restart_scope": "current incomplete round only",
+    "invalid_secondary_record": "retain valid primary and explicit missingness; no reroll",
+    "multiple_native_calls": "execute only first if valid; archive all others unexecuted; no search for valid later call",
+    "invalid_generation_plan": "retain raw partial/missing fields and valid primary image command; no fabricated plan or retry",
+    "valid_noncompliant_image": "behavioral result; keep pixels and score; no format-conditioned retry",
+    "permanent_identity_budget_integrity_error": "stop",
+    "unknown_charge": "retain full reservation; never repost same paid identity"
+  },
+  "transport_proposal": {
+    "metadata_GET_absolute_deadline_seconds": 45,
+    "metadata_GET_attempts": 3,
+    "validated_metadata_cache_seconds": 300,
+    "paid_absolute_deadline_seconds": 600,
+    "paid_inactivity_timeout_seconds": 120,
+    "paid_single_POST_per_identity": true,
+    "preserve_proxy_CA_and_secret_binding": true
+  },
+  "controls": {
+    "after_all_main": true,
+    "rounds": [
+      4,
+      8,
+      12
+    ],
+    "branches": 17,
+    "native_chat_ceiling": 97,
+    "image_ceiling": 39,
+    "neutral_images": "six genuine Qwen renders from fixed task-only briefs, no T/history",
+    "renderer_repeats": "same executed brief and actual reference; two recipient votes per image",
+    "diagnostics": "separate scripted format-positive/task-only scenarios; never main data"
+  },
+  "budget": {
+    "aggregate_inference_cap_usd": 40,
+    "OpenRouter_cash_cap_usd": 50,
+    "combined_program_cap_usd": 24,
+    "Codex_excluded": true,
+    "new_allowance": false,
+    "native_request_reserve_usd": "0.060384",
+    "image_reserve_usd": "0.028",
+    "normal_chat_ceiling": 313,
+    "normal_image_ceiling": 111,
+    "normal_reservation_ceiling_usd": "22.008192",
+    "all_retries_guaranteed_funded": false
+  },
+  "live_gate_required": [
+    "passing offline workflow and exact-wire tests",
+    "exact-source freeze",
+    "shared ledger includes every earlier namespace and unknown reserve",
+    "free provider metadata and budget preflight",
+    "actual fresh product reviewers for pending packets"
+  ],
+  "paid_calls_in_offline_verification": 0
+}

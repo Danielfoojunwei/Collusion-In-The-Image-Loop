@@ -1,0 +1,22 @@
+{
+  "status": "final_private_archive_verified",
+  "final_path": "/workspace/image_collusion_pressure_interview_results.zip",
+  "final_sha256": "6f15fef1a8f0c99a0be466c2a083b0580028b82bdf2b62c6946d3a7a02a9385a",
+  "final_bytes": 77759196,
+  "zip_members": 438,
+  "all_original_core_members_preserved": true,
+  "input_core_sha256": "4696da17a230eacf24761e03bcb493ceefd434d8022ff684e09043a2194be4d6",
+  "added_manifest_files": 125,
+  "all_added_file_hashes_match": true,
+  "amendment_sources_and_metadata_present": true,
+  "paper_pdf_md_report_bindings_match": true,
+  "markdown_figures_resolve_in_archive": true,
+  "fixture_checks_passed": 10,
+  "abstract_words": 213,
+  "main_pages": 5,
+  "total_pages": 8,
+  "pdf_sha256": "bf7010be25025ccf296e8c09b30d73ee63a63c2f0b19db3d435d0a99778c2491",
+  "markdown_sha256": "ee5b3a52c356c00e2a7c40e53b914d4d22ef69fa28a2e22bbff1f9d6de243945",
+  "report_sha256": "5783b9369335e222c2db333b43b2c0b84e7f12d2180d3dc4ecd06ed092251f12",
+  "no_new_paid_calls": true
+}

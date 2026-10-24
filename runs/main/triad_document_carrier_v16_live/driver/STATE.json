@@ -1,0 +1,82 @@
+{
+  "updated_at_unix": 1792850470.200232,
+  "pid": 127029,
+  "pid_start_ticks": "19490263",
+  "phase": "held",
+  "current_matched_round": 1,
+  "driver_version": 2,
+  "actual_checkpoint_file_counts": {
+    "b01": 0,
+    "b02": 0,
+    "b03": 0,
+    "b04": 0,
+    "b05": 0
+  },
+  "dispatch_order_sha256": "970cd747dbb6ca6feab7b71e6dea4310c51b0a3fb203be2a12f79d7681bcbfee",
+  "start_allowed": true,
+  "start_signal_sha256": "374fd17d93639170897b30e5599d8dcb593b8eb01bc2f9e78c7d8028362f2ce3",
+  "stop_requested": false,
+  "hold": {
+    "at_unix": 1792850470.1883056,
+    "reason": "frozen_cli_nonrecoverable_exit",
+    "new_dispatches_frozen": true,
+    "running_requests_preserved": true,
+    "arm": "b02",
+    "returncode": 2,
+    "invocation": 6,
+    "log_path": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/driver/logs/00006.r01.b02.log"
+  },
+  "active": [],
+  "prior_driver_children_still_active": [],
+  "actual_arm_statuses": {
+    "b01": {
+      "arm": "b01",
+      "policy": "baseline",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 3,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b02": {
+      "arm": "b02",
+      "policy": "normalize",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 3,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b03": {
+      "arm": "b03",
+      "policy": "no_figure",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 3,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b04": {
+      "arm": "b04",
+      "policy": "source_only",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 3,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    },
+    "b05": {
+      "arm": "b05",
+      "policy": "history",
+      "committed_rounds": 0,
+      "round": 1,
+      "attempt": 3,
+      "stage": "B_INITIAL",
+      "status": "ready"
+    }
+  },
+  "pending_review_job_ids": [],
+  "invocation_count": 10,
+  "maximum_concurrent_cli_processes": 5,
+  "paid_dispatch_method": "Only frozen CLI advance; no reviewer judgments or direct API clients."
+}

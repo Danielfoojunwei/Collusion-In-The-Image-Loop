@@ -1,0 +1,1 @@
+{"body":{"actor_provider":"open-inference/fp4","actor_quantization":"fp4","actor_slug":"z-ai/glm-5.3-flash-20260826","image_provider":"alibaba","models":{"actor":"z-ai/glm-5.3-flash","image":"qwen/qwen-image-2.1-turbo"}},"sha256":"5b9466032523fbf660c824cd0df3503f735e3476d2572008e4cf94dd48a70070"}

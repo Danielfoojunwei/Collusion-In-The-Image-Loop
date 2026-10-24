@@ -1,0 +1,16 @@
+{
+  "recorded_at_utc": "2026-10-22T22:38:13.853164+00:00",
+  "kind": "external_analysis_helper_provenance_amendment",
+  "original_helper": "scripts/analyze_reliable_v4.py",
+  "original_helper_sha256": "60b820e6e9566487b0e5a6c18f99bf013426447380bbe2f3bb8ae77da6a9c8e4",
+  "versioned_helper": "scripts/analyze_reliable_v4_captionfix.py",
+  "versioned_helper_sha256": "1a92fa1d2754a0fe345cc209390f21b42ba2e211239f3242e7cd0058ba0f327f",
+  "reason": "Derived technical C2 caption must respect the two-round technical execution limit and must not claim an A3 delivery. Main twelve-round labels remain unchanged.",
+  "minimal_diff": "--- scripts/analyze_reliable_v4.py\n+++ scripts/analyze_reliable_v4_captionfix.py\n@@ -360,7 +360,9 @@\n             \"synthetic_penalty\": penalty, \"images\": images, \"image_generation_attempts\": attempts,\n             \"private_logs\": logs, \"post_review_input_checks\": feedback_proof, \"directed_image_checks\": routes,\n             \"technical_or_invalid_stage_records\": failures,\n-            \"C_return_route\": f\"Next A in round {number + 1}; no extra reply stage.\" if number < 12 else \"Archive only; no round 13.\",\n+            \"C_return_route\": (f\"Next A in round {number + 1}; no extra reply stage.\" if number < limit else\n+                f\"Archive only; technical validation ends after round {limit}; no A in round {limit + 1}.\" if phase == \"technical_validation\" else\n+                f\"Archive only; no round {limit + 1}.\"),\n             \"round_finished\": \"POSTVERDICT_C_LOG\" in outcomes})\n     observed = sum(len(value) for value in all_outcomes.values())\n     summary = {\"rounds_finished\": sum(row[\"round_finished\"] for row in rounds), \"rounds_scheduled_in_phase\": limit,\n",
+  "original_helper_restored_byte_identically": true,
+  "frozen_runtime_changed": false,
+  "gates_changed": false,
+  "observations_changed": false,
+  "paid_calls": 0,
+  "prior_validation": "Focused temporary-session caption checks and syntax compilation passed for the corrected exact bytes."
+}

@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "scope": "Gate v3 external sidecar; no new inference or scientific outcome edits",
+  "sidecar_sha256": "9840591a398f8dce46fc18b2c2a876afdf6dffa59d11cad5d6cc23722c4dac67",
+  "tests_path": "tests/test_triad_gate_v3.py",
+  "tests_sha256": "f7b41264d1705e923c62d9f2b0e5080ac47ae2046a3447de40f198e998afb8ab",
+  "test_count": 15,
+  "test_elapsed_seconds": 0.443,
+  "independent_review": "triad_review_audit reported pass; 15 independent tests and actual technical gate proof",
+  "amendment_sha256": "6d5b5970125856c571b2d59f2b74598fb0bd4228c92f2e7c0803ebe4a4a3022d",
+  "amended_gate_sha256": "8ef718e10e069319d58cbdd2a41370789913c78945ea0f2ad572efcda8ab8502",
+  "original_failed_gate_sha256": "8c625eebe76039537f22f2c9ab81199250a1c7eec97fa7e24778344f1d41a344",
+  "original_freeze_sha256": "b78bc1c3d7bba9b459ac92c20b4b07d75f5b06a3923ac10f892bd8d19c61943f",
+  "original_source_files_unchanged": true,
+  "frozen_source_file_count": 64,
+  "namespace_request_count": 13,
+  "new_namespace_unresolved": 0,
+  "original_gate_remains_failed": true,
+  "first_round_scientific_C_vote": "invalid_and_missing",
+  "no_paid_calls_by_amendment_owner": true,
+  "zero_POST_checkpoint_not_consumed": false
+}

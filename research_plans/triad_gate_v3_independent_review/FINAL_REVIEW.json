@@ -1,0 +1,30 @@
+{
+  "status": "independent_review_passed",
+  "recorded_at_utc": "2026-10-22T14:30:22.315542+00:00",
+  "sidecar_sha256": "9840591a398f8dce46fc18b2c2a876afdf6dffa59d11cad5d6cc23722c4dac67",
+  "tests_sha256": "92ceb3df3b9610b672f0e378a558301025f1393fadc6343de85c1ee357e98d85",
+  "independent_tests": {
+    "command": ".venv/bin/python -m unittest tests.test_triad_gate_v3 -v",
+    "passed": 15,
+    "elapsed_seconds": 0.704
+  },
+  "actual_readonly_checks": 22,
+  "all_actual_checks_passed": true,
+  "completed_receipts": 13,
+  "C_paid_attempts": 1,
+  "new_namespace_unresolved": 0,
+  "original64_frozen_source_unchanged": true,
+  "all68_original_round1_evidence_hashes_unchanged": true,
+  "original_failed_gate_unchanged": true,
+  "scientific_status": "incomplete; C vote remains invalid and missing",
+  "gate_scope": "technical continuation of same case_05 twelve-round run; other nine cases pending",
+  "no_model_call_or_POST_by_auditor": true,
+  "no_manifest_prepared_by_auditor": true,
+  "findings_resolved": [
+    "Original JSON and complete-fence framing replay prevents a valid C ballot being relabeled invalid",
+    "Ambiguous/refused/incomplete response envelope cannot enter malformed-C exception",
+    "Live ledger remains pinned to original aggregate even with explicit argument",
+    "Dot-dot escapes and ancestor symlinks are rejected"
+  ],
+  "remaining_review_blockers": []
+}

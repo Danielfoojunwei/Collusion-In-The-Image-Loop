@@ -1,0 +1,10 @@
+test_C_image_reaches_A2_and_reviewer2_but_not_B2_and_notes_stay_private (tests.test_triad_max_format_v1_runner.FormatRunnerTests.test_C_image_reaches_A2_and_reviewer2_but_not_B2_and_notes_stay_private) ... ok
+test_literal_fields_and_own_note_are_not_inferred_from_A1 (tests.test_triad_max_format_v1_runner.FormatRunnerTests.test_literal_fields_and_own_note_are_not_inferred_from_A1) ... ok
+test_pending_request_cannot_be_bypassed_by_amendment (tests.test_triad_max_format_v1_runner.FormatRunnerTests.test_pending_request_cannot_be_bypassed_by_amendment) ... ok
+test_prepare_is_offline_and_preserves_original_files_and_three_failures (tests.test_triad_max_format_v1_runner.FormatRunnerTests.test_prepare_is_offline_and_preserves_original_files_and_three_failures) ... ok
+test_tampered_old_file_or_supplement_blocks_future_execution (tests.test_triad_max_format_v1_runner.FormatRunnerTests.test_tampered_old_file_or_supplement_blocks_future_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 5.622s
+
+OK

@@ -1,0 +1,91 @@
+{
+  "prepared_at_unix": 1792852534.1920695,
+  "repository": "https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop",
+  "experiment": "V16 document carrier",
+  "execution_state": "paused_user_review_and_pending_technical_amendment004",
+  "paid_calls_for_github_transfer": 0,
+  "planned_arms": 5,
+  "planned_rounds_per_arm": 12,
+  "planned_total_rounds": 60,
+  "completed_v16_rounds": 0,
+  "completed_rounds_by_arm": {
+    "b01": 0,
+    "b02": 0,
+    "b03": 0,
+    "b04": 0,
+    "b05": 0
+  },
+  "planned_post_main_decoding_assays": 30,
+  "live_root": "runs/main/triad_document_carrier_v16_live",
+  "required_absolute_project_root": "/workspace/visual_collusion_stress_v4",
+  "stop_marker_preserved": true,
+  "active_freeze_amendment": "003",
+  "active_freeze_sha256": "969bb92c98fef2a96cc4f1f7b13f96616647890bd1c3e56ba14baeb703f3cdd4",
+  "current_source_matches_active_freeze": false,
+  "source_difference_reason": "Offline pending004 native tool_choice auto/content-JSON compatibility, deadlines and a04 funding identifiers",
+  "remaining_004": [
+    "Runner.current max3 must support a04",
+    "CONFIG recovery metadata max3 must support a04",
+    "Narrow audited a03 HTTP404 recovery helper and tests",
+    "Immutable linked004 source/config freeze and receipt",
+    "Fresh freeze004 whole-study free preflight after authorized stop release",
+    "Real packet-only Codex review bridge on receiving host"
+  ],
+  "current_actor_model": "z-ai/glm-5.3-flash",
+  "canonical_actor_model": "z-ai/glm-5.3-flash-20260826",
+  "actor_provider": "relace",
+  "actor_precision": "unreported",
+  "image_model": "qwen/qwen-image-2.1-turbo",
+  "image_provider": "alibaba",
+  "temperature": 1.0,
+  "reasoning": "high",
+  "budget": {
+    "aggregate_ledger": "runs/main/budget.sqlite3",
+    "request_rows": 1780,
+    "aggregate_committed_usd": "9.122570192",
+    "combined_program_committed_usd": "3.684441929",
+    "normal_new_schedule_reservation_usd": "18.528",
+    "aggregate_inference_cap_usd": "40",
+    "combined_program_cap_usd": "24",
+    "openrouter_cash_cap_usd": "50",
+    "codex_excluded_per_user": true,
+    "uncertain_reservations_included": true
+  },
+  "current_offline_tests": {
+    "passed": 71,
+    "provider_funding": 47,
+    "amendment": 24,
+    "log": "handoff/OFFLINE_TESTS.log",
+    "paid_calls": 0
+  },
+  "source_file_hashes": {
+    "next_batch/v16_document_carrier/provider.py": "5c4c3218e031788d0418e9c49e842e6f5a81be511913811355bdc171f163145f",
+    "next_batch/v16_document_carrier/funding.py": "4c6a7d6b73eae080ffdcf05d7f574df559f0b1ecdd58c2e31b03c2c6269055aa",
+    "next_batch/v16_document_carrier/test_provider_funding.py": "9c9282c60b67fd06c2714b6c5e31c23eacdfed1fb3f0e6f75ebbd0f23de39448",
+    "next_batch/v16_document_carrier/runner.py": "0de119e0ad61459bc2a4408c7e08afbc14733f60517c57fcb26f69d18a67261d",
+    "next_batch/v16_document_carrier/amendment.py": "93120735a1ec20de81a654a2e9440b96431075e99e06c5a807a6d36ebd67a537",
+    "next_batch/v16_document_carrier/design.py": "3963482d19e7d5430e8bb52beaa8bd0a0fba97f74c7fb9ba2b572967ce3196ae"
+  },
+  "full_source_snapshot": {
+    "files": 29324,
+    "bytes": 15025843942,
+    "manifest": "handoff/SOURCE_SNAPSHOT.json",
+    "high_confidence_secret_findings": 0,
+    "credentials_included": false
+  },
+  "archive": {
+    "parts": 56,
+    "compressed_bytes": 2769922206,
+    "index": "archives/INDEX.json"
+  },
+  "additional_transfer_checks": {
+    "restore_utility_tests_passed": 6,
+    "administrative_v2_tests_at_required_absolute_root_passed": 13,
+    "relocation_diagnostic": "handoff/DRIVER_RELOCATION_DIAGNOSTIC.log",
+    "relocation_diagnostic_explanation": "The deliberate canonical path assertion fails in the staging clone, proving the documented same-path requirement. Original-path suite passes unchanged.",
+    "non_data_sqlite_sidecars_excluded": [
+      "runs/main/budget.sqlite3-shm",
+      "runs/main/budget.sqlite3-wal"
+    ]
+  }
+}

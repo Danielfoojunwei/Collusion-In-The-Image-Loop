@@ -1,0 +1,11 @@
+{
+  "prior_program_committed_usd": 1.660918358,
+  "prior_aggregate_committed_usd": 7.099046621,
+  "new_allowance": false,
+  "normal_reservation_ceiling_usd": "22.008192",
+  "program_total_at_normal_ceiling_usd": "23.669110358",
+  "aggregate_total_at_normal_ceiling_usd": "29.107238621",
+  "fits_existing_program_and_aggregate_caps": true,
+  "all_possible_retries_guaranteed_funded": false,
+  "live_shared_ledger_and_cash_preflight_still_required": true
+}

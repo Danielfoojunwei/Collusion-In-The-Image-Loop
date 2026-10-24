@@ -1,0 +1,87 @@
+{
+  "scope": "Quickcontractauditofrootrunner.py against v16review.py; noAPIcalls; no edits torunner.",
+  "runner_sha256_at_audit": "067c5a9780dd877b05e91da05790abe3d1adb8427afe58b53061600ebbe44e39",
+  "findings": [
+    {
+      "id": "R01",
+      "severity": "blocking",
+      "location": "prepare_review/main_report",
+      "finding": "RETURN currently receives MAINstage.report only; model_invalid meansNone and violates the genuine-main-context contract.",
+      "remedy": "Pass full immutable MAINassessment. review.py now accepts validreport or truthfulmodel_invalid raw/hash/provenance context; rawisneverreplaced.",
+      "status": "Review modulefixed; callerfixownedbyroot."
+    },
+    {
+      "id": "R02",
+      "severity": "blocking",
+      "location": "settlement",
+      "finding": "Missing or unassessable reviewer quality is folded into eligible=False and classifiedquality_failed, rather than missing assessment.",
+      "remedy": "Separate mechanicalfailure, observedpoor quality and unknown/unavailable quality. Invalid/unassessable review mustkeepgrantpending; no fabricatedactorqualityfailure.",
+      "status": "Rootnotified; rootownssettlementfix."
+    },
+    {
+      "id": "R03",
+      "severity": "blocking",
+      "location": "prepare_review/public_history",
+      "finding": "Prior behaviorallyinvalid roundscanlackrole documents and ballots. Earlier review contract requiredallABC.",
+      "remedy": "Keep3chronologicalroundwindow with genuinepresentdocs and explicitmissingness/nullhistoricalballots. Currentballotsremainrequired/valid.",
+      "status": "Fixedinreview.py;21offlinetests pass."
+    },
+    {
+      "id": "R04",
+      "severity": "privacy",
+      "location": "prepare_review/public_history + full MAINbroadcast",
+      "finding": "IncludingoldCreturn inpublicMAINhistoryallowsCcontent to reachBthrough MAINreviewquotes.",
+      "remedy": "Root selectedstrictroleprivacy: MAINhistoryonlyA/B; RETURNhistoryonlyC. GenuineCreturnrawonlyC/nextA; otherrolesgetscalarsettlement.",
+      "status": "Reviewmoduleenforcesauthorizedsubsets; rootfilterscallerhistory."
+    },
+    {
+      "id": "R05",
+      "severity": "blocking",
+      "location": "documents.public_text -> review._copy_document",
+      "finding": "Earlier renderer public_text wasauthoredtranscript rather than actualPDFextract; strictreviewvalidationwouldrejectit.",
+      "remedy": "Return actualPDF-extractedpublic_text; preserve authoredtranscriptunderseparatename.",
+      "status": "Delegatedbyroottorendereragent; newtest_documents alreadycontainsPDFextractionequalitycheck."
+    },
+    {
+      "id": "R06",
+      "severity": "robustness",
+      "location": "actor_request/A_PUBLISH previous_C",
+      "finding": "Unconditionalprior[-1].documents.C access fails after a previous behavioralinvalid round beforeCpublication.",
+      "remedy": "Pass explicitno-prior-Cmissingness whennoactualCexists; do notinventimage or substitutepriorunrelatedroundwithoutdeclaredpolicy.",
+      "status": "Rootnotifiedandownsfix."
+    },
+    {
+      "id": "R07",
+      "severity": "robustness",
+      "location": "settlement/mechanicalquality",
+      "finding": "Onlyoriginal mechanical quality contributes toelibility; deliveredall_source_facts_present/delivery_allowed areignored.",
+      "remedy": "Evaluate mechanical validity forboth originalanddeliveredartifacts, retaining theirseparatequalityrecords.",
+      "status": "Rootnotified; rootownssettlementfix."
+    },
+    {
+      "id": "R08",
+      "severity": "provenance",
+      "location": "commit/evidence_origin",
+      "finding": "Behavioralinvalidbeforeanyreviewstilllabelsevidence_originactual_OpenRouter_and_actual_Codex_product_reviews.",
+      "remedy": "Addexplicitactualreviewcount/presence or conditionevidenceorigin so metadata doesnotimplya genuinejudgmentoccurredwhen absent.",
+      "status": "Recommendationtoroot."
+    }
+  ],
+  "positive_checks": [
+    "SettlementexcludesassignedAballotfromfree targetalignmentcount.",
+    "Reviewpackets sanitizepublictask andcopyonlydeliveredPDF/PNGs.",
+    "MainreportbroadcastprecedesA/BlogsandCpublication.",
+    "CreturnimageisattachedonlynextA, neverdirectlyB.",
+    "RawcurrentB/Cballotsare usedfororaclecorrectness andnot silentlyrepaired.",
+    "Firstreviewingestionimmutable; model_invalidfirstcanneverbereplaced."
+  ],
+  "owned_module_updates": {
+    "files": [
+      "next_batch/v16_document_carrier/review.py",
+      "next_batch/v16_document_carrier/test_review.py"
+    ],
+    "tests": 21,
+    "command": "python -m unittest next_batch.v16_document_carrier.test_review -v",
+    "status": "passed"
+  }
+}

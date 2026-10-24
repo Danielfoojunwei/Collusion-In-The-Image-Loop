@@ -1,0 +1,43 @@
+{
+  "status": "offline_contracts_passed_live_integration_not_implemented",
+  "tests_passed": 41,
+  "test_log": "OFFLINE_TESTS.log",
+  "paid_calls": 0,
+  "v9_frozen_runtime_sources_verified_unchanged": 188,
+  "source_sha256": {
+    "research_plans/triad_committed_sender_v10/BUDGET_REVIEW.json": "ca7d41d14b5a488a732f998fec5c04987ee7a3a9ec964ec530b212d0bac139aa",
+    "research_plans/triad_committed_sender_v10/OFFLINE_TESTS.log": "628e8d4dfc62eff4aada6a2c3b3436e3ca7adb78cb8236dee17a118c2a9c3278",
+    "research_plans/triad_committed_sender_v10/PRE_PUSH_CANDIDATE.zip": "119724ff71b8df5f6e46af780e00bb9599328864845f4ca75567cdd15e977b71",
+    "research_plans/triad_committed_sender_v10/PROTOCOL.md": "2dc97c6c7b92c6dd517f2a1748e012f7da0bdbd693a6b5b8ec4b13add7a2c6fd",
+    "research_plans/triad_committed_sender_v10/RESEARCHER_ONLY_CASES.json": "63cf1b882337e2798b83cffc6e2477f1a63567bfcf49f9b84e1c9b81dedbe70d",
+    "research_plans/triad_committed_sender_v10/REVIEW_FINDINGS.json": "c2ae06cb1760a22a7a221816e660a6b9a8b8903c4bed0a215f47749a79eeba8c",
+    "research_plans/triad_committed_sender_v10/SYSTEM_PROMPTS.txt": "843db6c7cc86ca73071ea12edcfdfb22fce51e27f2543e5739750019cbd0d7ed",
+    "research_plans/triad_committed_sender_v10/__init__.py": "63b214dcea09d3a149cdeefad677153b5221eb6b3b6f31260944cf913af1689b",
+    "research_plans/triad_committed_sender_v10/commitment.py": "31f165240dc2c3b613c20cc01436f76b70c65d710d938a7f126a3b6fe4ba8bdb",
+    "research_plans/triad_committed_sender_v10/config.json": "b609ab4c0e0329cffe4afd9602083342fadc965fec5c0d32b1d5db24d283cd4e",
+    "research_plans/triad_committed_sender_v10/pressure.py": "b03f51ac64922612ec91635614cfd50f09f76e78c9f850e3714d2db672660167",
+    "research_plans/triad_committed_sender_v10/prompts.py": "7393cea328bc30c45b2861f608ba660ab88266a8566546062f7798b2b4f29d68",
+    "research_plans/triad_committed_sender_v10/test_candidate.py": "7258f0066df596d19c2a448551f4f349d279684bb82952f91ba8cda021c91828",
+    "research_plans/triad_committed_sender_v10/test_commitment.py": "2749240dd4d86d4ea19ef002e4bf377750073cce1033fea68a4b3c226531f282",
+    "research_plans/triad_committed_sender_v10/test_pressure.py": "66fe8592d651f9421e35809edb8f67b4703ca12b06c47a688d6f627ed8e7e5a7",
+    "research_plans/triad_committed_sender_v10/test_transport_contract.py": "60e93718fa1195cac67dd13211af2e763c0adb2d61c4b397303e91bd77bb6c26",
+    "research_plans/triad_committed_sender_v10/transport_contract.py": "d9fe2444909cd55dca7580f7591f65017e2e1d9b7eb012ceb662768ebc6751b7",
+    "research_plans/triad_committed_sender_v10/views.py": "2e463075ed03312259a7eb6a5ea6b9b4810be3d3ec22cb35a885009e9ea32df8"
+  },
+  "evidence_bindings": {
+    "runs/main/triad_emergent_v9_live/freeze.json": "156c20cfe214f397816aaa47448831b9d6c7152828cdd5e4a32498c3da8045ce",
+    "runs/main/triad_emergent_v9_live/analysis/human_readable/EVIDENCE.json": "f2f8d9f0d1941b98f87c187aa45939037e4a6af3023554f82fab8528bb85a1c3",
+    "runs/main/triad_emergent_v9_live/analysis/researcher_audit/MAIN12_CHRONOLOGY_FINAL.md": "b3a97826d4212cb1f337d6dc52fd02b7c6bb32f5b88af9683c30661f9edf1a42",
+    "runs/main/triad_emergent_v9_live/analysis/researcher_audit/MAIN12_SENDER_COMMITMENT_ADDENDUM_V1.json": "aa5b8e3eaa28a92654f0f10b1be74bb3559e30d02069a27024c69a1a3bd29ecc",
+    "experiments/triad_emergent_v9/prompts.py": "57f3b40dfa3de5765cc957a4ce3d2b66cda2d381aa97f82e55b6f61ee41855a8",
+    "experiments/triad_v9_checkpoint_restart04/backend.py": "b6d3b7256b8cfebb64bf18f46d3ba19d9f0c0020e0a4077c04ed842677f9ed5b"
+  },
+  "inference_cap_usd": 40,
+  "OpenRouter_cash_cap_usd": 50,
+  "Codex_excluded": true,
+  "not_a_live_run_freeze": true,
+  "candidate_amendment": "indirect_outcome_pressure_01",
+  "reviewer_prompt_unchanged": true,
+  "original_v10_case_plan_unchanged": true,
+  "original_aggregate_request_count_unchanged": 1085
+}

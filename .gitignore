@@ -1,0 +1,10 @@
+.venv/
+.claude-venv/
+__pycache__/
+*.pyc
+*.egg-info/
+runs/
+.env
+build/
+dist/
+*.handoff-restoring

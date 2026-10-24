@@ -1,0 +1,449 @@
+{
+  "evidence_origin": "fixture",
+  "no_paid_calls": true,
+  "production_ledger_touched": false,
+  "report_utf8_bytes": 10000,
+  "task_brief_utf8_bytes": 1600,
+  "ballot_rationale_utf8_bytes_each": 800,
+  "B_message_utf8_bytes": 800,
+  "private_carryover_utf8_bytes_each": 2048,
+  "contexts": [
+    {
+      "round": 1,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 4038,
+      "initial_input_estimate": 12490,
+      "inline_images": 0
+    },
+    {
+      "round": 1,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 4036,
+      "initial_input_estimate": 16784,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 5683,
+      "initial_input_estimate": 18094,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16198,
+      "initial_input_estimate": 27886,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16091,
+      "initial_input_estimate": 27779,
+      "inline_images": 1
+    },
+    {
+      "round": 1,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 17742,
+      "initial_input_estimate": 33695,
+      "inline_images": 1
+    },
+    {
+      "round": 2,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 18798,
+      "initial_input_estimate": 44423,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 18698,
+      "initial_input_estimate": 39869,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16343,
+      "initial_input_estimate": 45600,
+      "inline_images": 3
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16458,
+      "initial_input_estimate": 44991,
+      "inline_images": 3
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16252,
+      "initial_input_estimate": 36363,
+      "inline_images": 2
+    },
+    {
+      "round": 2,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18007,
+      "initial_input_estimate": 51050,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19062,
+      "initial_input_estimate": 61692,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 18859,
+      "initial_input_estimate": 48453,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16610,
+      "initial_input_estimate": 54290,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16724,
+      "initial_input_estimate": 53679,
+      "inline_images": 4
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16414,
+      "initial_input_estimate": 44948,
+      "inline_images": 3
+    },
+    {
+      "round": 3,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18274,
+      "initial_input_estimate": 59900,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19328,
+      "initial_input_estimate": 62118,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19021,
+      "initial_input_estimate": 57038,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 16876,
+      "initial_input_estimate": 54556,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 16989,
+      "initial_input_estimate": 53944,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16576,
+      "initial_input_estimate": 53533,
+      "inline_images": 4
+    },
+    {
+      "round": 4,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18540,
+      "initial_input_estimate": 60326,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19593,
+      "initial_input_estimate": 62543,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19184,
+      "initial_input_estimate": 57201,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17142,
+      "initial_input_estimate": 54822,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17254,
+      "initial_input_estimate": 54209,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16739,
+      "initial_input_estimate": 53696,
+      "inline_images": 4
+    },
+    {
+      "round": 5,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 18806,
+      "initial_input_estimate": 60752,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 19858,
+      "initial_input_estimate": 62968,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19346,
+      "initial_input_estimate": 57363,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17408,
+      "initial_input_estimate": 55088,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17519,
+      "initial_input_estimate": 54474,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 16901,
+      "initial_input_estimate": 53858,
+      "inline_images": 4
+    },
+    {
+      "round": 6,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19072,
+      "initial_input_estimate": 61178,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16018,
+      "initial_input_estimate": 59288,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19508,
+      "initial_input_estimate": 57525,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17674,
+      "initial_input_estimate": 55354,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 17784,
+      "initial_input_estimate": 54739,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17063,
+      "initial_input_estimate": 54020,
+      "inline_images": 4
+    },
+    {
+      "round": 7,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19338,
+      "initial_input_estimate": 61604,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16283,
+      "initial_input_estimate": 59713,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19670,
+      "initial_input_estimate": 57687,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 17940,
+      "initial_input_estimate": 55620,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 18049,
+      "initial_input_estimate": 55004,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17225,
+      "initial_input_estimate": 54182,
+      "inline_images": 4
+    },
+    {
+      "round": 8,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19604,
+      "initial_input_estimate": 62030,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16548,
+      "initial_input_estimate": 60138,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19832,
+      "initial_input_estimate": 57849,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 18206,
+      "initial_input_estimate": 55886,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 18314,
+      "initial_input_estimate": 55269,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17387,
+      "initial_input_estimate": 54344,
+      "inline_images": 4
+    },
+    {
+      "round": 9,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "view_utf8_bytes": 19870,
+      "initial_input_estimate": 62456,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "A_IMAGE_AND_VOTE",
+      "view_utf8_bytes": 16815,
+      "initial_input_estimate": 60566,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "B_MESSAGE_AND_VOTE",
+      "view_utf8_bytes": 19997,
+      "initial_input_estimate": 58016,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "C_VOTE",
+      "view_utf8_bytes": 18475,
+      "initial_input_estimate": 56157,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "POSTVERDICT_A_LOG",
+      "view_utf8_bytes": 18584,
+      "initial_input_estimate": 55542,
+      "inline_images": 4
+    },
+    {
+      "round": 10,
+      "stage": "POSTVERDICT_B_LOG",
+      "view_utf8_bytes": 17553,
+      "initial_input_estimate": 54512,
+      "inline_images": 4
+    }
+  ],
+  "wire_checks": [],
+  "passed": false,
+  "failure": {
+    "stage": {
+      "round": 10,
+      "stage": "POSTVERDICT_C_IMAGE_LOG",
+      "role": "C",
+      "mode": "image_memory",
+      "request_id": "audit_max_payload.r10.POSTVERDICT_C_IMAGE_LOG"
+    },
+    "exception": "EngineError",
+    "message": "Current role text plus archive index exceeds context bound"
+  },
+  "twelve_rounds_finished": 9,
+  "recorded_at_utc": "2026-10-22T14:07:10.171117+00:00",
+  "max_view_utf8_bytes": 19997,
+  "source_hashes": {
+    "experiments/triad_consensus_v2/cli.py": "96ac8f04f37aeffb1fbe7a81ad6346c261df667b51f768dc3758acf0ca3da317",
+    "experiments/triad_consensus_v2/engine.py": "0f3decee9cc45360efe5a614c04dfb9409bbceeef8c88c70ea9c5e6816f70838",
+    "experiments/triad_consensus_v2/contracts.py": "773b6d8352131d72793b3d7b15bcb09d3bb8363fce40405c45f666b07b902cf5",
+    "experiments/triad_consensus_v2/__init__.py": "3d5b8e7aa782853866c17572002ee7f718ed0022a430d1d3a2e50848cf9b7ef2",
+    "experiments/triad_consensus_v2/coordinator.py": "ae029100368f00d0dc3a12f1d05196f42cc5cdccfbec978890d7d84bfb201f9c",
+    "experiments/triad_consensus_v2/backend.py": "c7f9755e070b6f6cf09c58b348a9d980b69ea3008bd451237c11465aa059124a"
+  }
+}

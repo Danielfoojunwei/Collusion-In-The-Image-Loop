@@ -1,0 +1,786 @@
+{
+  "schema_version": 1,
+  "purpose": "Additional bounded reproduction files beyond the inherited 64-source plus current-run-tree export",
+  "prepared_at_utc": "2026-10-22T15:19:32.932155+00:00",
+  "prepared_while_first_run_live": true,
+  "final_export_created": false,
+  "scientific_or_runtime_files_mutated": false,
+  "credentials_read_or_included": false,
+  "workspace_root": "/workspace/visual_collusion_stress_v4",
+  "current_run_root": "/workspace/visual_collusion_stress_v4/runs/main/triad_consensus_live",
+  "archive_addition_prefix": "reproduction_workspace/",
+  "counts": {
+    "already_exported_frozen_core_files": 64,
+    "required_additional_files": 45,
+    "external_runtime_sidecars": 5,
+    "external_sidecar_test_modules": 5,
+    "current_workflow_test_modules": 5,
+    "imported_fixture_modules": 2,
+    "inherited_plan_and_original_author_records": 21,
+    "additional_gallery_renderer": 1,
+    "optional_inherited_public_packets": 10,
+    "recommended_validation_records": 15,
+    "all_listed_additional_files": 70
+  },
+  "canonical_bindings": {
+    "current_config_canonical_sha256": "0b14219f2b0a24d24d808c912a03cb6a1009a61876e55b1f686f8cc75219892f",
+    "expected_canonical_sha256": "0b14219f2b0a24d24d808c912a03cb6a1009a61876e55b1f686f8cc75219892f",
+    "current_config_file_sha256": "db658c6ffed2cae305f11740b68ba84dd8b22e08ee67293cb7d80c5cf04aff31",
+    "workflow_gate_file_sha256": "d9ed52a4e31df864ff5c11b601e767e4ca00f51320910bf3c8192c968a3a1089",
+    "freeze_sha256": "b78bc1c3d7bba9b459ac92c20b4b07d75f5b06a3923ac10f892bd8d19c61943f",
+    "expected_freeze_sha256": "b78bc1c3d7bba9b459ac92c20b4b07d75f5b06a3923ac10f892bd8d19c61943f",
+    "current_config_matches_known_canonical_digest": true,
+    "config_gate_freeze_and_run_config_agree": true,
+    "workflow_gate_status": "passed",
+    "workflow_source_map_matches_freeze": true,
+    "all_64_frozen_source_hashes_match": true,
+    "full_suite_log_matches_gate_hash": true
+  },
+  "required_additional_files": [
+    {
+      "workspace_relative_path": "scripts/run_triad_gate_v3.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/run_triad_gate_v3.py",
+      "archive_path": "reproduction_workspace/scripts/run_triad_gate_v3.py",
+      "sha256": "9840591a398f8dce46fc18b2c2a876afdf6dffa59d11cad5d6cc23722c4dac67",
+      "bytes": 22891,
+      "category": "external_runtime_sidecar",
+      "reason": "Declared v3/v4/v5 behavior is outside the immutable 64-file core."
+    },
+    {
+      "workspace_relative_path": "scripts/triad_response_format_v4.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/triad_response_format_v4.py",
+      "archive_path": "reproduction_workspace/scripts/triad_response_format_v4.py",
+      "sha256": "ae312da63aae7b1aef74bf97abad6cf612dc81ed828a541be1685b47392ef92a",
+      "bytes": 15238,
+      "category": "external_runtime_sidecar",
+      "reason": "Declared v3/v4/v5 behavior is outside the immutable 64-file core."
+    },
+    {
+      "workspace_relative_path": "scripts/run_triad_format_v4.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/run_triad_format_v4.py",
+      "archive_path": "reproduction_workspace/scripts/run_triad_format_v4.py",
+      "sha256": "e59a5de50994769bf6ddf29426266cfbe551fa59a034be90011fc2dff8b9933a",
+      "bytes": 13585,
+      "category": "external_runtime_sidecar",
+      "reason": "Declared v3/v4/v5 behavior is outside the immutable 64-file core."
+    },
+    {
+      "workspace_relative_path": "scripts/triad_response_format_v5.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/triad_response_format_v5.py",
+      "archive_path": "reproduction_workspace/scripts/triad_response_format_v5.py",
+      "sha256": "22f548ecb957b527858bd6fce719e630670a0f611a08fe971026bc8c5c5c2b33",
+      "bytes": 7909,
+      "category": "external_runtime_sidecar",
+      "reason": "Declared v3/v4/v5 behavior is outside the immutable 64-file core."
+    },
+    {
+      "workspace_relative_path": "scripts/run_triad_format_v5.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/run_triad_format_v5.py",
+      "archive_path": "reproduction_workspace/scripts/run_triad_format_v5.py",
+      "sha256": "e68f17ee22a1628c6928bfceaac00aa15a63a2465f3729598db29667dc57a2ed",
+      "bytes": 14707,
+      "category": "external_runtime_sidecar",
+      "reason": "Declared v3/v4/v5 behavior is outside the immutable 64-file core."
+    },
+    {
+      "workspace_relative_path": "tests/test_triad_gate_v3.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_triad_gate_v3.py",
+      "archive_path": "reproduction_workspace/tests/test_triad_gate_v3.py",
+      "sha256": "f7b41264d1705e923c62d9f2b0e5080ac47ae2046a3447de40f198e998afb8ab",
+      "bytes": 9084,
+      "category": "external_sidecar_test",
+      "reason": "Offline parser, evidence-binding, chronology or same-role-memory regression checks."
+    },
+    {
+      "workspace_relative_path": "tests/test_triad_response_format_v4.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_triad_response_format_v4.py",
+      "archive_path": "reproduction_workspace/tests/test_triad_response_format_v4.py",
+      "sha256": "bfebe40512d61dbe1dffcd863d8776a882519f34e4f1288b0504a4baf0f97a61",
+      "bytes": 13500,
+      "category": "external_sidecar_test",
+      "reason": "Offline parser, evidence-binding, chronology or same-role-memory regression checks."
+    },
+    {
+      "workspace_relative_path": "tests/test_triad_format_v4_runner.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_triad_format_v4_runner.py",
+      "archive_path": "reproduction_workspace/tests/test_triad_format_v4_runner.py",
+      "sha256": "93494874725862357bbe6ef0c24659a9a9a4c378cd0253e18b8a6376000065c5",
+      "bytes": 11320,
+      "category": "external_sidecar_test",
+      "reason": "Offline parser, evidence-binding, chronology or same-role-memory regression checks."
+    },
+    {
+      "workspace_relative_path": "tests/test_triad_response_format_v5.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_triad_response_format_v5.py",
+      "archive_path": "reproduction_workspace/tests/test_triad_response_format_v5.py",
+      "sha256": "b63a9a898adad2217d5a250db6add656037a43e1df6aff3ab706f79d97101e6a",
+      "bytes": 8812,
+      "category": "external_sidecar_test",
+      "reason": "Offline parser, evidence-binding, chronology or same-role-memory regression checks."
+    },
+    {
+      "workspace_relative_path": "tests/test_triad_format_v5_runner.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_triad_format_v5_runner.py",
+      "archive_path": "reproduction_workspace/tests/test_triad_format_v5_runner.py",
+      "sha256": "b4024ab03c59b23dab6986e89b1f2d96e288dfa1a2cb2bf2734d6cd0f1fc03ea",
+      "bytes": 9160,
+      "category": "external_sidecar_test",
+      "reason": "Offline parser, evidence-binding, chronology or same-role-memory regression checks."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/tests/test_backend.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/tests/test_backend.py",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/tests/test_backend.py",
+      "sha256": "995c3c46950a4c84138999d74c93387de1d6d7ab086ae057b5bf3694e6835c4f",
+      "bytes": 13427,
+      "category": "current_workflow_test",
+      "reason": "Reproduces the current offline workflow checks without model calls."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/tests/test_contracts.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/tests/test_contracts.py",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/tests/test_contracts.py",
+      "sha256": "c6f91892f7933e22cce948103d2d52c14f9dffe26a7b8f49d9dce151a0d07b5b",
+      "bytes": 3584,
+      "category": "current_workflow_test",
+      "reason": "Reproduces the current offline workflow checks without model calls."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/tests/test_coordinator.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/tests/test_coordinator.py",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/tests/test_coordinator.py",
+      "sha256": "a8febd69e43ffaaa1096085d0ca81dfeaedbd1c3bae7476e373a12f03df86234",
+      "bytes": 14794,
+      "category": "current_workflow_test",
+      "reason": "Reproduces the current offline workflow checks without model calls."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/tests/test_engine.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/tests/test_engine.py",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/tests/test_engine.py",
+      "sha256": "41040a0e86d7a9147e97234b07ea6c7d8044d92ed85a80077d9c64146616bae8",
+      "bytes": 20216,
+      "category": "current_workflow_test",
+      "reason": "Reproduces the current offline workflow checks without model calls."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/tests/test_wire_pipeline.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/tests/test_wire_pipeline.py",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/tests/test_wire_pipeline.py",
+      "sha256": "bee1f0eb73f669d7bf1b0256d6c1696ef87f7ee49e3a63bb038ea13f1f3481fa",
+      "bytes": 15048,
+      "category": "current_workflow_test",
+      "reason": "Reproduces the current offline workflow checks without model calls."
+    },
+    {
+      "workspace_relative_path": "experiments/pressure_interview_v1/tests/test_live_provider.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/pressure_interview_v1/tests/test_live_provider.py",
+      "archive_path": "reproduction_workspace/experiments/pressure_interview_v1/tests/test_live_provider.py",
+      "sha256": "1050ddb5c4b3abfa4f69dd4b96e02c253ef2bb422abc3e82e87715d4272c2389",
+      "bytes": 21670,
+      "category": "imported_test_fixture",
+      "reason": "Provides ScriptedWireTransport imported by current adapter fixtures."
+    },
+    {
+      "workspace_relative_path": "tests/test_provider_budget.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/tests/test_provider_budget.py",
+      "archive_path": "reproduction_workspace/tests/test_provider_budget.py",
+      "sha256": "867f27e367fb774799d75ec969db5e570c500b48e52d6a8df66e245517fb5754",
+      "bytes": 33237,
+      "category": "imported_test_fixture",
+      "reason": "Provides FakeTransport and generated PNG helper imported by ScriptedWireTransport."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/config.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/config.json",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/config.json",
+      "sha256": "db658c6ffed2cae305f11740b68ba84dd8b22e08ee67293cb7d80c5cf04aff31",
+      "bytes": 2849,
+      "category": "configuration",
+      "reason": "Current source configuration; canonical digest is bound by the run freeze and workflow gate."
+    },
+    {
+      "workspace_relative_path": "experiments/triad_consensus_v2/WORKFLOW_GATE.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/triad_consensus_v2/WORKFLOW_GATE.json",
+      "archive_path": "reproduction_workspace/experiments/triad_consensus_v2/WORKFLOW_GATE.json",
+      "sha256": "d9ed52a4e31df864ff5c11b601e767e4ca00f51320910bf3c8192c968a3a1089",
+      "bytes": 9147,
+      "category": "configuration",
+      "reason": "Required by the live workflow verifier and records the passed offline gate."
+    },
+    {
+      "workspace_relative_path": "experiments/pressure_interview_v1/config.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/experiments/pressure_interview_v1/config.json",
+      "archive_path": "reproduction_workspace/experiments/pressure_interview_v1/config.json",
+      "sha256": "b59456c41313263874d7e6c4402558e95b58ded6e3afa85cc0efee0d3b06869d",
+      "bytes": 3679,
+      "category": "configuration",
+      "reason": "Historical configuration read by imported adapter test fixtures only."
+    },
+    {
+      "workspace_relative_path": "pyproject.toml",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/pyproject.toml",
+      "archive_path": "reproduction_workspace/pyproject.toml",
+      "sha256": "12cf093a0dffa4f007e5d5980c9ae25cf2fbc357a92577fe2d9fe0dd553a1b94",
+      "bytes": 496,
+      "category": "dependency_declaration",
+      "reason": "Defines Python/package requirements and the pinned Pillow runtime dependency."
+    },
+    {
+      "workspace_relative_path": "requirements.txt",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/requirements.txt",
+      "archive_path": "reproduction_workspace/requirements.txt",
+      "sha256": "41b54a6fb2918667ca47a61d73b522629d84490f3d78f0f20b21135faba10d35",
+      "bytes": 15,
+      "category": "dependency_declaration",
+      "reason": "Defines Python/package requirements and the pinned Pillow runtime dependency."
+    },
+    {
+      "workspace_relative_path": "scripts/render_triad_first_run_gallery.py",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/scripts/render_triad_first_run_gallery.py",
+      "archive_path": "reproduction_workspace/scripts/render_triad_first_run_gallery.py",
+      "sha256": "e805ff2f90985d8d8603b5009491d3ab87e9f3d7197375000c2e91e7d61f4c9b",
+      "bytes": 21235,
+      "category": "artifact_renderer",
+      "reason": "Recreates the portable HTML projection from retained outcomes and exact images using the standard library."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/plan.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/plan.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/plan.json",
+      "sha256": "450fdf7475a34f9153a5ab2ac4f66f4bded9810f9b3abcbb8fcf4aa4f199b30b",
+      "bytes": 9367,
+      "category": "inherited_task_data",
+      "reason": "Required by inherited_plan(); the older study result tree is not needed."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/job.json",
+      "sha256": "ec9cd5b29e07109c26a425344d7f6137afb5b066e96c89360190c44aecdc1492",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/result.json",
+      "sha256": "b1f33cc1fe27d6351f7f80ac262d8e71b774838e1a20dd7b74d63048d5485681",
+      "bytes": 984,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/job.json",
+      "sha256": "366f318660ffb298cf4d46875bd367b7bbc4c27f1bb51feeaebeb31f85e86423",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/result.json",
+      "sha256": "e81fc361385926c244caa0e11f77bf7776132764b959ea1717dc5cda8895b866",
+      "bytes": 935,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/job.json",
+      "sha256": "dc0ca7af2900288e4135a285e7d958718368234872579244186db086ff7d4448",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/result.json",
+      "sha256": "42628badbf70943a6894cdb13c47d38b3f0088e8330ceaf9b265ab9261d135f5",
+      "bytes": 953,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/job.json",
+      "sha256": "36bccf312fa2b53ca3cf7247c93fc1a2863b822d656d85133c2c98bd6e0bbc46",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/result.json",
+      "sha256": "7f7ec52ed400cd59fff8c2ab927439631496c9d829fba9718136c9e4f2e26467",
+      "bytes": 860,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/job.json",
+      "sha256": "ac6cdb6be25ac38767bcb8c224da56253c220d80ec698b944ea51b31c18df19e",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/result.json",
+      "sha256": "09a07189e1180cdb040c6505ffb4b6f185b5ff349c04bfae1752bf5107ca041d",
+      "bytes": 860,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/job.json",
+      "sha256": "cc0b3613e2a5d9fb6a45f001506cec14ba38464cacbf9b02481c1404be88a382",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/result.json",
+      "sha256": "511338ce5ed97f318500f7da1a58927a71fbee08df10cf02c8667f51227ca108",
+      "bytes": 1032,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/job.json",
+      "sha256": "ae2ad393c852447f6f91193188915929035886f0f0c0e2e96ae527f2905f5e2e",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/result.json",
+      "sha256": "3ac8123b5a42e47f19ae8ff498d25c93d48b6555147e70568d4a7d813f2613a1",
+      "bytes": 956,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/job.json",
+      "sha256": "c28af3c37731d28c93b4a83eed7464cbd21e3b7595e5df0a0dca4387e2af5620",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/result.json",
+      "sha256": "3295872c6a5697bab0ee0ce34f40d661078e7c7500eb1c28808a220df207dc83",
+      "bytes": 916,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/job.json",
+      "sha256": "1c14d848a9422aa90b0cd61af10eb4917302e275d7b29d7109732cd1cab3e9f2",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/result.json",
+      "sha256": "26fab5a4d4d55931da07ab00a523440e9dce8bbc54f032c68a55539f900c1b8f",
+      "bytes": 911,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/job.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/job.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/job.json",
+      "sha256": "22430a794982b75c4c89eeeea6a4f7df1b4444f88433a6d28cdaa204eb7b0328",
+      "bytes": 515,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/result.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/result.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/result.json",
+      "sha256": "e43ef478264f9e5003b60d5ae38374431273a4c0b18e995eb376d0ce5d55d8a6",
+      "bytes": 941,
+      "category": "inherited_task_data",
+      "reason": "Exact original task-author observation loaded and byte-checked by the current constructor."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_bundle_prep/README.md",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_bundle_prep/README.md",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_bundle_prep/README.md",
+      "sha256": "4a4eed814a073429c3fe9e81b96c8c91abfad3229fb79db7a65dbd386fba160f",
+      "bytes": 5637,
+      "category": "reproduction_instructions",
+      "reason": "Restore paths and exact offline test/verify commands."
+    }
+  ],
+  "optional_inherited_public_packets": [
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/9af05d1a036567f40f94da53df63f80a/public/packet.json",
+      "sha256": "99b5cdfda29220be2f69b971b0d1ef7bf4f1fc1ee1937c5dcf12576cfb02c033",
+      "bytes": 1967,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/5878cbb3d0a8d968a43351cbbee088bf/public/packet.json",
+      "sha256": "d41375f141a703d8618ee66525d4ecfee5cf834ca71b26ac3e4541234b7081f0",
+      "bytes": 1968,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/efa398fbe07d8f45fdc692ef4ba6bf5b/public/packet.json",
+      "sha256": "fc173041bfb3a7268b891ca0c86cbd2baec909238b66cb2d70d61d3a68dece3c",
+      "bytes": 1968,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4091ff7d07166c0f44acf7a044c6f4be/public/packet.json",
+      "sha256": "3f5c6e7db7a2c35fd198d1cb5fa0988195768902580a40f2c389a0e059780fdb",
+      "bytes": 1966,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/e70253b6cd52c4d7654b9aa7c83b91af/public/packet.json",
+      "sha256": "f2668c73b953f7845310e5609c6c9e32c2c74c60eeca122f95bb53b8e288ba6b",
+      "bytes": 1967,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c1272b9812b4477233d67189cf242b0c/public/packet.json",
+      "sha256": "4504a6707e60796ce12d2d6403441566ea396afcc41fda24445acb943bbc4cd7",
+      "bytes": 1969,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/c8e77f5d6cec71154d0b56d161c44a8c/public/packet.json",
+      "sha256": "8c4bfbb137bd1f218540b989ea014a7a9bbdcb05710ccf9289225a735a9d2d09",
+      "bytes": 1968,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/22ff62e1af8ba1ffb2e09ef51e5c4053/public/packet.json",
+      "sha256": "216ae01d71d265f53ef429a0fd566b9041a8221e5f7c4a72dadb1e785a0ec0a5",
+      "bytes": 1966,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/78cc6be4bc4d38f11ec0bf693cc223f3/public/packet.json",
+      "sha256": "6a2fc670b52b7ec34691610c42b7cff6b82c9a2e6cf00002aabcfc478421d36d",
+      "bytes": 1969,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    },
+    {
+      "workspace_relative_path": "runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/public/packet.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/public/packet.json",
+      "archive_path": "reproduction_workspace/runs/main/pressure_interview_live/codex_jobs/4174cc89c9fc37eebc78ef83e1dacd50/public/packet.json",
+      "sha256": "603167428ec945b10c87e084eb8f79881ec273f4ee64e70d686319ce8b26b8bc",
+      "bytes": 1968,
+      "category": "optional_inherited_public_packet",
+      "reason": "Completes original task-author packet provenance; constructor execution uses only job/result records."
+    }
+  ],
+  "recommended_validation_evidence_files": [
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/FINAL_SUITE.log",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/FINAL_SUITE.log",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/FINAL_SUITE.log",
+      "sha256": "1f8f40c27e137a1dc9844d5e123ce394eabf600a64f35aae9aa4bb592611fbbe",
+      "bytes": 8669,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/FINAL_SUITE_START.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/FINAL_SUITE_START.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/FINAL_SUITE_START.json",
+      "sha256": "5d9e81b4bd86869f29843edac4b0b14ed506fa5c4e5c477424fdcd816662d654",
+      "bytes": 8392,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/FINAL_CONFIG_CHECK.log",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/FINAL_CONFIG_CHECK.log",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/FINAL_CONFIG_CHECK.log",
+      "sha256": "21d8f9c064b5fc83ab7d2d0b02d70414d81202bbcd72827e098ecb5f5e99b281",
+      "bytes": 502,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/WIRE_PIPELINE_PROOF.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/WIRE_PIPELINE_PROOF.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/WIRE_PIPELINE_PROOF.json",
+      "sha256": "093380e53fa33b8cd93608bd7a23c9d135f5aca397c766fde17054c568b84500",
+      "bytes": 2566,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/GATE_V3_ROOT_TESTS.log",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/GATE_V3_ROOT_TESTS.log",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/GATE_V3_ROOT_TESTS.log",
+      "sha256": "907d62f150c679bdaa1199dd75b0e515e8f3bac90f1125949cc68732240d6b96",
+      "bytes": 2392,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_validation/FORMAT_V4_ROOT_TESTS.log",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_validation/FORMAT_V4_ROOT_TESTS.log",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_validation/FORMAT_V4_ROOT_TESTS.log",
+      "sha256": "a0887abcf192f97c51de6e5b7d864554482314737de0cbc031566b67b0f6642f",
+      "bytes": 5621,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_review_audit/ARCHITECTURE_AUDIT.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_review_audit/ARCHITECTURE_AUDIT.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_review_audit/ARCHITECTURE_AUDIT.json",
+      "sha256": "e35827aa8f82aace77cf044301c087f395bfc2c5a72986db773b87c6d37ae8b6",
+      "bytes": 4309,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_consensus_v2_review_audit/MAX_PAYLOAD_AUDIT.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_consensus_v2_review_audit/MAX_PAYLOAD_AUDIT.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_consensus_v2_review_audit/MAX_PAYLOAD_AUDIT.json",
+      "sha256": "21985a4de2ec8f81f1433e8340b58d9760600aa87f40ae615c9fabc110d274b8",
+      "bytes": 13296,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_gate_v3_validation/VALIDATION.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_gate_v3_validation/VALIDATION.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_gate_v3_validation/VALIDATION.json",
+      "sha256": "c02e50c74089a61c76b7b3fe581885c20f05f4ef13cb73646989c94d86884c35",
+      "bytes": 1209,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_gate_v3_independent_review/ACTUAL_EVIDENCE_BEFORE_AMENDMENT.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_gate_v3_independent_review/ACTUAL_EVIDENCE_BEFORE_AMENDMENT.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_gate_v3_independent_review/ACTUAL_EVIDENCE_BEFORE_AMENDMENT.json",
+      "sha256": "ce9c01580452f291a08c4a0a0f586a7e2fc2db1f00fadc45246ba7850ff215a0",
+      "bytes": 12514,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_gate_v3_independent_review/FINAL_REVIEW.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_gate_v3_independent_review/FINAL_REVIEW.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_gate_v3_independent_review/FINAL_REVIEW.json",
+      "sha256": "f7a3111db45129a982dddf6ca380ebf3af33770c33696d4b4881691e6f837ead",
+      "bytes": 1388,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_response_format_v4_independent_review/ACTUAL_C1_READONLY_PROOF.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_response_format_v4_independent_review/ACTUAL_C1_READONLY_PROOF.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_response_format_v4_independent_review/ACTUAL_C1_READONLY_PROOF.json",
+      "sha256": "b329908ffc0b2879e9c343ea22492b492ba1fa3d10d1a905d31839682793d868",
+      "bytes": 743,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_response_format_v4_independent_review/FINAL_REVIEW.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_response_format_v4_independent_review/FINAL_REVIEW.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_response_format_v4_independent_review/FINAL_REVIEW.json",
+      "sha256": "09ebb1db07ba8b7ea3f27d4e163726d8b92536e9a5fbc67903c0a260647733e1",
+      "bytes": 2065,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_response_format_v5_independent_review/FINAL_REVIEW.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_response_format_v5_independent_review/FINAL_REVIEW.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_response_format_v5_independent_review/FINAL_REVIEW.json",
+      "sha256": "0460a21e6d0001f8891f1415689a7cc773603b7de14f10abf13331f7ecb24987",
+      "bytes": 2396,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    },
+    {
+      "workspace_relative_path": "research_plans/triad_response_format_v5_validation/ROOT_VALIDATION.json",
+      "absolute_path": "/workspace/visual_collusion_stress_v4/research_plans/triad_response_format_v5_validation/ROOT_VALIDATION.json",
+      "archive_path": "reproduction_workspace/research_plans/triad_response_format_v5_validation/ROOT_VALIDATION.json",
+      "sha256": "cbc722d3e0165389e49708b315c9f995e24875f1dcb58c7ecb9296e598644f27",
+      "bytes": 1152,
+      "category": "recommended_validation_evidence",
+      "reason": "Static final gate/fixture/amendment review evidence; not needed to execute the offline commands."
+    }
+  ],
+  "base_export_already_includes": {
+    "frozen_source_files": {
+      "experiments/pressure_interview_v1/__init__.py": "7f800455b29f21a180218b09cd4e9f9f7acfbf6f5007599620a2b4b3e2b398b1",
+      "experiments/pressure_interview_v1/budget_guard.py": "1271f6e0cd2918b8ff5511f4d7bcff4e87ff0454b557ce6975cfa61fae1493ce",
+      "experiments/pressure_interview_v1/cli.py": "80928679ce1be8ac1a7b94984695f83b8ac476edc75936d589757ad3a5b03be2",
+      "experiments/pressure_interview_v1/context.py": "acf29ee5883b4494814ee211015964167d0f37288411be81ff7ce16dbc3a83d6",
+      "experiments/pressure_interview_v1/contracts.py": "e2117aaf9e930095e081089aaed196f99a31ee3c35713818041e7f3a0d23251c",
+      "experiments/pressure_interview_v1/engine.py": "99745616098181f59e03de6ee0c62cb01a2a6d630615e9b3d39ab584533a7892",
+      "experiments/pressure_interview_v1/live_analysis.py": "d2417f58adda2e0214b783c261b073f60aae0159602b94a702c6fb444cfab4c1",
+      "experiments/pressure_interview_v1/live_cli.py": "35726c3790d66a7429570fb6e5fcb68418200c51a82d63889311ec9aca7cdae4",
+      "experiments/pressure_interview_v1/live_loss_policy.py": "45113fd3f5d70c42ac54697eb40630860cf8988c8860c13dd2599691c59a77ca",
+      "experiments/pressure_interview_v1/live_provider.py": "19769024909924e5417deef20b549eda0f2803aebb3a8e0180abfde2d70c283a",
+      "experiments/pressure_interview_v1/live_scheduler.py": "3635d3c6eaec4a9d33c253380a62577c299e31403bc80b4dbcff75bc733e7d07",
+      "experiments/pressure_interview_v1/memory.py": "6b0b99c51f285c5bc97b670c3e8ea1c6b069d35fee79a1152c95c8162b0ca413",
+      "experiments/pressure_interview_v1/planning.py": "21b7f0b1062558443d5abbb1cd22c282330601e4e20d3c1fb90c2300937db331",
+      "experiments/triad_consensus_v2/PLAN.md": "ee00cae7e4d6301ed3b1b5a22e9a4d23da743130d6504c226e5ee2de01aa42d8",
+      "experiments/triad_consensus_v2/__init__.py": "3d5b8e7aa782853866c17572002ee7f718ed0022a430d1d3a2e50848cf9b7ef2",
+      "experiments/triad_consensus_v2/backend.py": "c7f9755e070b6f6cf09c58b348a9d980b69ea3008bd451237c11465aa059124a",
+      "experiments/triad_consensus_v2/cli.py": "96ac8f04f37aeffb1fbe7a81ad6346c261df667b51f768dc3758acf0ca3da317",
+      "experiments/triad_consensus_v2/contracts.py": "773b6d8352131d72793b3d7b15bcb09d3bb8363fce40405c45f666b07b902cf5",
+      "experiments/triad_consensus_v2/coordinator.py": "ae029100368f00d0dc3a12f1d05196f42cc5cdccfbec978890d7d84bfb201f9c",
+      "experiments/triad_consensus_v2/engine.py": "626d211ada6b4df43be428c8de1dc4c18e308ad7311b4418edb2f4f9068a8844",
+      "experiments/triad_consensus_v2/prompts/agent_a.txt": "a471158bb2b90c1b78a969cc1f8536c036383c5e3ef042d51a906ccbdc3e1266",
+      "experiments/triad_consensus_v2/prompts/agent_a_honest.txt": "3796fc22449224dc73613ee67f205f59c7e44b7b6934c0b1b3a92565729f4dc5",
+      "experiments/triad_consensus_v2/prompts/agent_a_overt.txt": "e9c3aae3c39aba16eff84c5b330ddb4d81c721f199bbc64ecbf6e4b1753f674b",
+      "experiments/triad_consensus_v2/prompts/agent_b.txt": "f061ef184267ac74d5df363babb2afd8bf22666b0919c3a29435d88b2a92bf98",
+      "experiments/triad_consensus_v2/prompts/agent_c.txt": "bd35a3d7419c457f54329964c5d80210d5aa0b4ef9aefeecf3a4b83d7cd32f7d",
+      "experiments/triad_consensus_v2/prompts/c_image_memory.txt": "0840748cdf573be0faf718fdaa736d9c8803dc30c798b9f2135070d39861dc02",
+      "experiments/triad_consensus_v2/prompts/memory.txt": "8fb82a4988ef24fd961e3101f6e521c846b08c0edfb6ffa98023f9888c632333",
+      "experiments/triad_consensus_v2/prompts/reviewer.txt": "03a035c46323e4f1987e5108b7fd305372d64594da97f1079b7bfed3f3f8b588",
+      "scripts/continue_repaired_execution.py": "4fbcd6782bb8302ed79a49029b28dfe3c6b0dd90aad9d9334f4d49ecae830765",
+      "scripts/lossless_wire_codec.py": "d1ecf05b90f34ae99952d09771539253f7a181706a5d7ad6d75098d3dbd15247",
+      "scripts/pressure_png_xmp_v2.py": "e5c2945662efde48a3e651e30fd9c51934c668dec0daa2d9af2e3b35bfeeab9f",
+      "scripts/repair_image_route.py": "9ec78828cb0debbccf979d88e9a0638a525789311957c90cb770453262938f1d",
+      "scripts/run_authorized_key.py": "97bcbb944e1f7d7b6a64526c7a474988d93ef3cb35290097dc9c7e168492e3ec",
+      "scripts/run_continue_independent.py": "a0536046171e74b27762f43c5ddf60908125ab6c276a813bf7eef0fdc5e5818f",
+      "scripts/run_lossless_webp_v5.py": "b192e775157b96428f8492ed4231290d51522f80f2b5bff0e5b7abd767c5bfd8",
+      "src/visual_collusion/__init__.py": "ee8e0d02d9b099477f3b57af7d5d7da97be1b1f9eca8dac3dda8f7016c053c5b",
+      "src/visual_collusion/__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+      "src/visual_collusion/analysis.py": "130f7089008ea13fcf28aae4a3229e856741dea1b759d9f50c69a918306de28f",
+      "src/visual_collusion/archive.py": "c7faaa49744af0c80cc76f4033ada04e515eb2e67043c1f9bf3656b911fbc65c",
+      "src/visual_collusion/bridge.py": "9a2a8f8e0641adc6d7073312b6ca3a287a29283cc3e1088dc4a603dfaecbebb9",
+      "src/visual_collusion/budget.py": "29e71e9fa765ae021eefa13dc8db6b81a05cf9b57366dbc97900e2e1ace6675a",
+      "src/visual_collusion/cli.py": "4107395594fe2fc5ab7f92442302a9cf613a3c2affb7b713dc8f86b76ec96d20",
+      "src/visual_collusion/common.py": "84cf8091c8361edfa14036375893b10cb4b09b7035c001bdb104d70697e5f60e",
+      "src/visual_collusion/evidence.py": "125fe0f36f520039a9b7f6374a46aaa56a5d99f4b81714c60e9fa2613ca2d183",
+      "src/visual_collusion/image_tools.py": "7dcaa433493aa5bd71d696305cb9256c2d538fe995b09de08373d9cba951830e",
+      "src/visual_collusion/mock.py": "35b9a92d42b3127c46bef449ac21a9dc46e6331d3a352608b82d03c10f0c7b9e",
+      "src/visual_collusion/prompts/agent_a_explicit_system.txt": "d86184133c8187fd63a0e48ee7958d7b7fbbf9ae025aaedce3be1b838fcd27e3",
+      "src/visual_collusion/prompts/agent_a_honest_system.txt": "129f2ba02b80dfefd4881f6997c5249e35ba9f1d7b45d30cb309d2f7e074a1d7",
+      "src/visual_collusion/prompts/agent_a_interface.txt": "e1a9949895dac88c678f2e28acb567ee39d79ad02523b854b719bfadeaf77932",
+      "src/visual_collusion/prompts/agent_a_overt_system.txt": "f8292c3b6a89413533b63c553e785df61a54d23c5ff2388ee5615ff35198afaa",
+      "src/visual_collusion/prompts/agent_b_explicit_system.txt": "ced33e87ff07d252cc9a1beb28c147bf348bf47a28d76d02a55b0d0468b62bd3",
+      "src/visual_collusion/prompts/agent_b_honest_system.txt": "2ea32af6b2b3f51ee30db698663e4e7916faec0e7d96c7dc51e07f756486c968",
+      "src/visual_collusion/prompts/agent_b_interface.txt": "6dd8a3076959cdd36dc0467ace629bf8f75a9c23661bdf09ed0a506b25d7842f",
+      "src/visual_collusion/prompts/agent_b_overt_system.txt": "6d6f9685681393f638c73196878357fc07aa0afeb0e4ec1b785ba3587c43eb94",
+      "src/visual_collusion/prompts/codex_review_system.txt": "219fccfabdc9ba3ff3f892fbe6363d7fc606b6e1c4b4411f1700f3b05e14a277",
+      "src/visual_collusion/prompts/fresh_target_a.txt": "2218ae5395c447cd30dd2674d813975a0de2b502cc52d1200db1e5341b94b218",
+      "src/visual_collusion/prompts/fresh_target_b.txt": "64632ef103b26cdacafbedd8f0bdc6064a5d2a87b787875d11d9948d9c8946e7",
+      "src/visual_collusion/prompts/offline_audit_system.txt": "cf84c6e038a9688b1f210913e7d979fdca29dd1f96cb75b65e3782ae8db3033e",
+      "src/visual_collusion/prompts/private_target_a.txt": "41eb3aa5ab9e359c27cf2240736f2b975c87cabb0ad18b7b31cde9a240c12f71",
+      "src/visual_collusion/prompts/private_target_b.txt": "c0a9930ad19f6b84977ea875a8b6d7662b27ad5a791f0a4ab658c75d40984111",
+      "src/visual_collusion/prompts/task_author_system.txt": "3f0518c1526a9d270fad481f5e9ee8455d78e21a8961c9c907756bf70d64e583",
+      "src/visual_collusion/protocol.py": "668ed5d05664c693058f311883b21f34f4b0d15f4421d01633f0830bbf43f5b2",
+      "src/visual_collusion/providers.py": "21c4c38cd54fa864238751ff82e3aa3650f2812130264f0be61f6128a5e75eb6",
+      "src/visual_collusion/runtime.py": "f52c3f07b682e87259cdc65c4a07d81e97b889a1dd8321451f168513ad125e2e"
+    },
+    "current_run_tree": "All retained current-run records including raw/wire/image artifacts, declared amendment manifests and private supplements; capture after terminal."
+  },
+  "required_final_capture": {
+    "consistent_original_aggregate_snapshot": {
+      "archive_path": "analysis/aggregate_budget_snapshot.sqlite3",
+      "restore_path": "/workspace/visual_collusion_stress_v4/runs/main/budget.sqlite3",
+      "hash_status": "Must be generated and hashed after terminal; not snapshotted by this preparation task.",
+      "retain_all_prior_rows_and_settings": true
+    },
+    "current_run_tree_restore_path": "/workspace/visual_collusion_stress_v4/runs/main/triad_consensus_live",
+    "this_manifest_archive_path": "reproduction_workspace/research_plans/triad_consensus_bundle_prep/REPRODUCTION_FILES.json",
+    "self_hash": "The archive builder must hash this manifest after writing; no circular self-hash is claimed."
+  },
+  "offline_commands": {
+    "verify": "PYTHONPATH=\"$PWD/src:$PWD\" python scripts/run_triad_format_v5.py verify",
+    "current_workflow_tests": "PYTHONPATH=\"$PWD/src:$PWD\" python -m unittest discover -s experiments/triad_consensus_v2/tests -v",
+    "external_sidecar_tests": "PYTHONPATH=\"$PWD/src:$PWD\" python -m unittest tests.test_triad_gate_v3 tests.test_triad_response_format_v4 tests.test_triad_format_v4_runner tests.test_triad_response_format_v5 tests.test_triad_format_v5_runner -v"
+  },
+  "material_export_issues": [
+    {
+      "issue": "The constructor reloads inherited_plan() from original older-run paths.",
+      "resolution": "Include only the inherited plan and twenty original author job/result files; optional public packets complete provenance.",
+      "earlier_study_results_required": false
+    },
+    {
+      "issue": "Sidecars and saved-observation tests read the original aggregate at runs/main/budget.sqlite3.",
+      "resolution": "Restore the final consistent complete aggregate snapshot to that path in a separate reproduction environment."
+    },
+    {
+      "issue": "Immutable evidence and amendments include absolute workspace paths and reject symlink aliases.",
+      "resolution": "Restore actual directories or a bind mount at the original workspace root; preserve historical bytes."
+    },
+    {
+      "issue": "Frozen core export omits active external runtime and the imported test fixture/data files.",
+      "resolution": "Add the explicit bounded required list in this manifest."
+    }
+  ],
+  "excluded_from_additions": [
+    "Runtime credentials, environment dumps and secret files",
+    "Virtual environments and Python bytecode caches",
+    "Earlier study scientific outcome/image trees other than the named inherited task-author data",
+    "Unrelated old root test suites and setup_cloud.sh",
+    "Live aggregate database copied while the run is active"
+  ]
+}

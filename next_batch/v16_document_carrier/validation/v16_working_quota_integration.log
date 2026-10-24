@@ -1,0 +1,16 @@
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+.{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+.......
+----------------------------------------------------------------------
+Ran 8 tests in 15.404s
+
+OK

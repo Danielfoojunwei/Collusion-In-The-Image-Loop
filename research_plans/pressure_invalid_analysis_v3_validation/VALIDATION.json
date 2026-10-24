@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "recorded_at_utc": "2026-10-22T13:21:29.379163+00:00",
+  "paid_calls": 0,
+  "scientific_observations": false,
+  "analysis_only": true,
+  "source_files": {
+    "scripts/pressure_invalid_analysis_v3.py": "a935afb991f1f61b1a3800acc92a81ecc08daadcf3a2e0c18b7fe7777b0e7d65"
+  },
+  "test_count": 15,
+  "test_elapsed_seconds": 0.124,
+  "test_result": "OK",
+  "test_source_sha256": "9a6d28572ef3b35ce9f89fba942d4a71819056bd510fd047587989fa83627916",
+  "coverage": [
+    "Exact billed backend-invalid proof remains a failed outcome with no fabricated outer observation",
+    "A/B/interview stage and role checks; C cannot borrow backend-invalid category",
+    "Raw actions and completed original aggregate receipt/checksum/request/model bindings",
+    "Recompute the actual actor contract violation and compare the preserved reason",
+    "Reject missing/tampered actions, raw responses, costs, usage/provider metadata, receipts, IDs and invalid reasons",
+    "Reject valid-image false generic-malformed classification; unsupported generic provider-invalid category stays unsupported",
+    "Preserve ordinary outer-invalid and Codex observation checks",
+    "Reject symlinked units before resolving paths"
+  ],
+  "actual_read_only_stage_check": {
+    "units": 10,
+    "valid_outer_stages": 1,
+    "backend_invalid_stages": 10,
+    "result": "passed"
+  },
+  "independent_review_findings_resolved": [
+    "Reject unsupported generic parser category",
+    "Bind raw response usage/provider/cost to receipt and actual ledger units",
+    "Check original unit symlink ancestry before resolving paths"
+  ],
+  "no_runtime_or_scientific_reexecution": true,
+  "original_core_and_v2_sidecars_unchanged": true
+}

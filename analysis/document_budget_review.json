@@ -1,0 +1,342 @@
+{
+  "scope": "Read-only offline budget and document-renderer audit. Zero network calls; zero paid calls. Only this report written.",
+  "checked_at_utc": "2026-10-24T11:45:26.093789+00:00",
+  "aggregate_ledger": {
+    "path": "/workspace/visual_collusion_stress_v4/runs/main/budget.sqlite3",
+    "access": "sqlite mode=ro, explicit read transaction; no constructor or DDL",
+    "schema": [
+      {
+        "cid": 0,
+        "name": "request_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "kind",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "model",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "request_hash",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "reserved_units",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "actual_units",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "created",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "finished",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "response_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "receipt_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "result_hash",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "reason",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "scale": "integer nanodollars,1e9perUSD",
+    "cap_usd": 40,
+    "cash_cap_usd": 50,
+    "Codex_excluded": true,
+    "known_actual_usd": "8.295762861",
+    "unresolved_reserved_usd": "0.6162036",
+    "committed_usd": "8.911966461",
+    "remaining_under40_usd": "31.088033539",
+    "request_count": 1744,
+    "statuses": {
+      "completed": 1719,
+      "uncertain": 24,
+      "pending": 1
+    },
+    "halt_reason": null,
+    "unknown_policy": "Retain all25unresolvedreservationsinfull;preserveoriginalsealed-lossprovenance;nozero-costassumption,noautomaticrelease,noexactPOSTretry."
+  },
+  "combined_program": {
+    "enforced_by": "next_batch.v15_glm_restored.funding.Ledger.reserve",
+    "cap_usd": 24,
+    "prefixes": [
+      "triad_committed_sender_v10:",
+      "triad_required_images_v10r1:",
+      "triad_ascii_records_v10r2:",
+      "triad_output_room_v10r3:",
+      "triad_picture_coordination_v11:",
+      "triad_intent_coordination_v12:",
+      "triad_sail_coordination_v13:",
+      "triad_meta_coordination_v14:",
+      "triad_glm_restored_v15:"
+    ],
+    "committed_usd": "3.473838198",
+    "remaining_usd": "20.526161802",
+    "new_namespace_requirement": "Include newstudy namespace in combinedprefixaccounting;retain$24program/$40aggregate/$50cashcaps."
+  },
+  "legacy_reservations": {
+    "native_usd": ".060384",
+    "image_usd": ".028",
+    "native_formula": "210000*.0000002 +2*16384*.0000005 +.002 =.060384",
+    "V15observed_actual_costs": {
+      "chat": {
+        "completed": 241,
+        "actual_usd": "0.08616784",
+        "mean_actual_usd": "0.0003575429045643153526970954357",
+        "max_actual_usd": "0.0021166"
+      },
+      "image": {
+        "completed": 84,
+        "actual_usd": "1.5456",
+        "mean_actual_usd": "0.0184",
+        "max_actual_usd": "0.0184"
+      }
+    }
+  },
+  "cached_prices": {
+    "source": "/workspace/visual_collusion_stress_v4/runs/main/triad_glm_restored_v15_live/provider_preflights/05c189e038557d4bf04db520cf13a50fba7051df352bdc75768b1fec1a31d0ec.json",
+    "source_sha256": "5dffe2d546071be7634ddd10d5002ee77140e8e404c689a12676948f8c36ed29",
+    "freshness": "Historicalcache;actualexecutionneedsnewfreepreflight.",
+    "actor_model": "z-ai/glm-5.3-flash",
+    "actor_route": "open-inference/fp4",
+    "image_model": "qwen/qwen-image-2.1-turbo",
+    "image_route": "alibaba",
+    "chat": {
+      "completion": "0.0000000708",
+      "discount": 0,
+      "input_cache_read": "0.000000027297",
+      "prompt": "0.000000027603"
+    },
+    "image_1k": {
+      "input_image": 0.0,
+      "output_image": 0.0184
+    }
+  },
+  "normal_ceiling_scenarios": [
+    {
+      "profile": "legacy210k_context",
+      "native_calls_per_round": 6,
+      "native_calls_total": 360,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "26.778240",
+      "aggregate_after_usd": "35.690206461",
+      "combined_program_after_usd": "30.252078198",
+      "fits40": true,
+      "fits24program": false
+    },
+    {
+      "profile": "legacy210k_context",
+      "native_calls_per_round": 7,
+      "native_calls_total": 420,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "30.401280",
+      "aggregate_after_usd": "39.313246461",
+      "combined_program_after_usd": "33.875118198",
+      "fits40": true,
+      "fits24program": false
+    },
+    {
+      "profile": "legacy210k_context",
+      "native_calls_per_round": 8,
+      "native_calls_total": 480,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "34.024320",
+      "aggregate_after_usd": "42.936286461",
+      "combined_program_after_usd": "37.498158198",
+      "fits40": false,
+      "fits24program": false
+    },
+    {
+      "profile": "new_bounded65536_input",
+      "native_calls_per_round": 6,
+      "native_calls_total": 360,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "16.3768320",
+      "aggregate_after_usd": "25.288798461",
+      "combined_program_after_usd": "19.850670198",
+      "fits40": true,
+      "fits24program": true
+    },
+    {
+      "profile": "new_bounded65536_input",
+      "native_calls_per_round": 7,
+      "native_calls_total": 420,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "18.2663040",
+      "aggregate_after_usd": "27.178270461",
+      "combined_program_after_usd": "21.740142198",
+      "fits40": true,
+      "fits24program": true
+    },
+    {
+      "profile": "new_bounded65536_input",
+      "native_calls_per_round": 8,
+      "native_calls_total": 480,
+      "qwen_calls_total": 180,
+      "new_normal_ceiling_usd": "20.1557760",
+      "aggregate_after_usd": "29.067742461",
+      "combined_program_after_usd": "23.629614198",
+      "fits40": true,
+      "fits24program": true
+    }
+  ],
+  "recommended_profile": {
+    "model_sampling": "SameGLM/OpenInferenceFP4,temp1,highreasoning,16384outputtokens;newboundedcontextcontractfrozenbeforelive.",
+    "text_and_schema_max_utf8_bytes": 32768,
+    "maximum_document_png_blocks": 4,
+    "vision_reserve_tokens_per_png": 8192,
+    "conservative_input_reserve_tokens": 65536,
+    "native_per_call_reserve_usd": ".0314912",
+    "formula": "65536*.0000002 +2*16384*.0000005 +.002 =.0314912",
+    "preferred_native_calls_per_round": 7,
+    "mandatory_Qwen_figures_per_round": 3,
+    "normal_60round_ceiling_usd": "18.266304",
+    "combined_program_after_normal_usd": "21.740142198",
+    "program_margin_after_normal_usd": "2.259857802",
+    "optional12transformer_calls_usd": ".3778944",
+    "normal_plus12transformer_plus6fullround_restarts_usd": "20.4708288",
+    "program_after_that_ceiling_usd": "23.944666998",
+    "possible7call_stage_order": [
+      "Aauthorsdocument",
+      "BauthorsdocumentandlocksballotafterseeingA",
+      "CvotesafterseeingA/B",
+      "PostreviewAlog",
+      "PostreviewBlog",
+      "PostreviewCreturndocument",
+      "PostrenderCreflection"
+    ],
+    "timing_note": "Bdoc+ballotcombinedisexplicitnewstudycontract.Binspectsownrenderinpostroundlog.AballotremainsassignedT.Cvote precedescurrentCreturn.",
+    "bounds_proof": "Countfullsystem/user/tool-schema/ownmemoryUTF8bytesbeforePOST;max4actualPNGblocks. Prebuildworst-case12roundcontextswithfixtures.No silenttruncation. Existing.002margincoversframingoverhead.",
+    "implementation_requirement": "NewstudyProvider mustenforceprofileandreserveexactformula;legacyV15_paidhardasserts.060384andinspectmax3squarePNGs,soitcannotbeblindlyreusedwithlowerreserve.",
+    "retry_policy": "Unknownsretainfullreserve. Newattemptonlyafterproducerexit+typedtechnicalabandonmentsealed. Resumepreviousroundcheckpoint. Fixedcapsboundanyretries;completedactualchargesrestoreheadroomnaturally."
+  },
+  "renderer_capabilities": {
+    "modules": {
+      "fitz": true,
+      "reportlab": true,
+      "PIL": true,
+      "weasyprint": false,
+      "cairosvg": false,
+      "pypdf": true,
+      "pptx": true
+    },
+    "commands": {
+      "chromium": "/usr/bin/chromium",
+      "pdftoppm": "/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override/pdftoppm",
+      "pdftotext": "/usr/bin/pdftotext",
+      "soffice": "/opt/codex/runtimes/codex-primary-runtime/dependencies/bin/override/soffice",
+      "fc-match": "/usr/bin/fc-match"
+    },
+    "in_memory_smoke_check": {
+      "pdf_pages": 2,
+      "extractable_chars": 7050,
+      "pdf_bytes": 23931,
+      "font": "EmbeddedDejaVuSans10.5pt",
+      "A4page150dpi_px": [
+        1241,
+        1754
+      ],
+      "network_calls": 0,
+      "files_written": 0
+    },
+    "legacy_constraints": "_validate_pngmaxside1024;V15inspectrequires1024square,max3PNGs.Newstudy4PNGs/higherresolutionneedsdeclarednewvalidator.",
+    "strategy": "GLMauthorsstructuredreporttext;deterministicReportLabtypesettingpreservesexactreadablebody;embedactualQwenfigureunchanged;extractfinalPDFtexttomatchallcontent;rasterforactualinspection.",
+    "bounded_option": "Two1024squarepagesperdocumentletsCinspectA+Bvia4PNGs.With~595pointpagewidth,10.5ptfontbecomes~18pixelglyphsat1024raster.Offlinepaginationfixturescanfit800\u20131000wordsplusfigureovertwopages.",
+    "A4option": "SelectableA4PDF+150dpiPNG1241x1754iscrispbutneedsnewmaxdimension/sizevalidation;oldcodecdoesnotacceptunchanged.",
+    "checks": "Requiredsections,wordcount,trustedfactcells,minimumfont,overflow,PDFtextmatch,Qwenfigurehash,exactpagecount. Behavioralwrongrecommendations/codesarenottechnicalrenderfailures."
+  },
+  "reuse": [
+    {
+      "component": "experiments.pressure_interview_v1.budget_guard.readonly_budget_snapshot",
+      "use": "ActualledgerauditwithoutDDL"
+    },
+    {
+      "component": "next_batch.v15_glm_restored.funding.Ledger/Guard",
+      "use": "Patternfornamespace/hashidentity/caps/producerownership/seals;newfundingmustrouteoldV15sealsagainstoldV15runroot."
+    },
+    {
+      "component": "experiments.pressure_interview_v1.budget_guard.SharedBudgetGuard",
+      "use": "Exactwireonce-before-POST,completedcacheintegrity,unknownreservationretention"
+    },
+    {
+      "component": "next_batch.v15_glm_restored.provider.Provider.native/render",
+      "use": "Pinnedroute/identity/receipts/archives/noPOSTretry;newcontextprofilechangesneednewwrapperratherthanoldsourceedits."
+    },
+    {
+      "component": "next_batch.v15_glm_restored.storage",
+      "use": "Atomicchecksum-envelopedJSON/bytes,pathintegrity"
+    }
+  ],
+  "execution_gate": "Freezeexactnewstudyconfig,prompts,cases,renderer,transformsandbudgetafterofflinechecks.Thenfreepreflightactualwallet/modelmetadata+legacysealedreadinessbeforepaidcalls.Thisofflineauditdoesnotclaimcurrentkeywalletstatus."
+}

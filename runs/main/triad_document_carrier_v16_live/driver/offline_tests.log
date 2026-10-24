@@ -1,0 +1,14 @@
+{"at_unix": 1792847469.5285764, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+{"at_unix": 1792847469.5317748, "event": "cli_exited", "arm": "b01", "invocation": 1, "pid": 123, "returncode": 0, "final_status": "funding_barrier"}
+{"at_unix": 1792847469.5333593, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+{"at_unix": 1792847469.5347745, "event": "root_start_signal_observed", "path": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/driver/tmpsl4c9za3/driver/START_ALLOWED.json", "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}
+{"at_unix": 1792847469.5387373, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+{"at_unix": 1792847469.5414631, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+{"at_unix": 1792847469.5435643, "event": "cli_exited", "arm": "b01", "invocation": 1, "pid": 123, "returncode": 2, "final_status": "held"}
+{"at_unix": 1792847469.5438905, "event": "new_dispatches_frozen", "reason": "frozen_cli_nonrecoverable_exit", "new_dispatches_frozen": true, "running_requests_preserved": true, "arm": "b01", "returncode": 2, "invocation": 1, "log_path": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/driver/tmpvlb66yp_/driver/example.log"}
+{"at_unix": 1792847469.546174, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+{"at_unix": 1792847469.5497518, "event": "driver_started", "pid": 123741, "start_ticks": "19190795", "project": "/workspace/visual_collusion_stress_v4", "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python"}
+----------------------------------------------------------------------
+Ran 9 tests in 0.026s
+
+OK

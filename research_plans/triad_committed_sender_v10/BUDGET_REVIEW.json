@@ -1,0 +1,12 @@
+{
+  "completed_count": 1069,
+  "unresolved_count": 16,
+  "known_usd": 5.236003063,
+  "unresolved_reserved_usd": 0.2021252,
+  "max_inference_usd": 40,
+  "max_OpenRouter_cash_usd": 50,
+  "Codex_excluded": true,
+  "new_paid_calls": 0,
+  "aggregate_committed_usd": 5.438128263,
+  "remaining_inference_after_reserves_usd": 34.561871737
+}

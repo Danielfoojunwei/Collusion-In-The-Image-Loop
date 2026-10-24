@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "checked_at_unix": 1792852663.3430014,
+  "original_source_and_browsable_v16_files_checked": 3715,
+  "original_sha256_matches": true,
+  "high_confidence_credentials_found": 0,
+  "all_research_archive_hash_validation": "handoff/ARCHIVE_VERIFICATION.json",
+  "paid_calls": 0
+}

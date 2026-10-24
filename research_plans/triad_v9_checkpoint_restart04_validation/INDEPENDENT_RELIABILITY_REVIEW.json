@@ -1,0 +1,118 @@
+{
+  "accepted_accounting_and_authority": [
+    "All attempts keep the original triad_emergent_v9 namespace, original40USD aggregate and24USD subset caps. Failed-prefix actual costs and full positive unknown reserves remain counted; Codex remains excluded as authorized.",
+    "AttemptGuard qualifies physical IDs by exact attempt. The unchanged one-POST guard caches exact completed responses and never resubmits an unresolved original ID.",
+    "Original prior seals are delegated to their frozen verifiers. New abandoned-charge authorities bind exact immutable raw rows, attempt context, technical abandonment marker and preserved evidence; rows and unknown status are not rewritten.",
+    "Future04 pending authority is narrow: exact pre-reserve callback-owner binding, context/request/model/hash/reserve, dead or replaced PID/start fingerprint, matching operation proof and actual exclusive producer lock at seal. Same/live owner, missing/tampered owner, unrelated pending or uncertain rows still block.",
+    "Authority validation after sealing checks immutable proof and callback-owner evidence without requiring the former recovery CLI to remain alive."
+  ],
+  "accepted_fault_semantics": {
+    "hold_until_repair": "Authentication, permanent provider/schema incompatibility, source/checkpoint/journal/cache integrity drift, unbound or live pending callback, concurrent producer, cap exhaustion and attempt-limit exhaustion cannot authorize more paid work.",
+    "no_missingness_inference": "A missing response or unpublished stage does not establish refusal, concealment, collusion, reasoning or absence of earlier observed prefix responses.",
+    "retain_behavior_without_retry": "Valid refusal, wrong choice, malformed model/native business arguments or logs, valid imperfect pixels, unsuccessful communication, uncertain review and invalid substantive first reviewer output remain observations.",
+    "retry_whole_round": "Recoverable transport/API errors, bad outer provider envelopes, invalid PNG transport and recoverable harness/storage faults archive the working attempt and restart from the previous fully committed round."
+  },
+  "accepted_transaction_and_reviewer_rules": [
+    "At most3 technical attempts per round, including originalR7a01. New current work begins atR7a02 using the closedR6 checkpoint.",
+    "Only all8 durable stages publish one whole-round selector. Failed-attempt images, ballots, feedback, logs, scores and reviewer answers remain archived but excluded from future actor/reviewer memory.",
+    "Actual Codex review remains a separate fresh attempt-qualified first judgment. Invalid or unfavorable substantive first answers do not trigger retries; already captured first answers recover exact envelopes without a new judgment.",
+    "Complete8-stage publication recovery and complete24-endpoint control workflow publication recovery use zero new actor/reviewer/provider calls.",
+    "The fixed24 control endpoints have at most3 isolated technical workflow attempts, use selected completed main history, preserve failed costs, and supply no feedback to main agents.",
+    "An interrupted marker-before-funding-seal is idempotently completed from exact evidence before further dispatch."
+  ],
+  "actions": {
+    "activation_performed": false,
+    "credentials_inspected": false,
+    "derived_audit_files_written": 1,
+    "ledger_mutations": 0,
+    "provider_requests": 0,
+    "source_or_test_mutations": 0,
+    "test_suites_rerun_by_this_reviewer": 0
+  },
+  "audit": "independent_reliability_acceptance_review_restart04",
+  "checks": {
+    "active_freeze_still_original": true,
+    "combined_gate_passed": true,
+    "gate_equals_validation": true,
+    "network_dispatch_disabled": true,
+    "original174_sources_match_preaudit": true,
+    "repair03_inactive": true,
+    "repair04_not_activated_by_this_audit": true,
+    "source_vector_current": true,
+    "suite_log_hash_matches": true,
+    "test_vector_current": true,
+    "zero_live_provider_calls_in_gate": true
+  },
+  "evidence": {
+    "errors": 0,
+    "failures": 0,
+    "gate_path": "experiments/triad_v9_checkpoint_restart04/WORKFLOW_GATE.json",
+    "gate_sha256": "15701d688df50c9afad8455ae72e4620b714298cf5cfa4dedd861bba991c3931",
+    "ledger_preservation_scope": "The separate readiness reviewer independently reverified all898 raw-row hashes and1007 protected scientific files. This reviewer checked unchanged original174 source vector/current freeze and funding semantics; did not repeat the large raw-row scan.",
+    "named_passing_tests": {
+      "test_actual_bridge_storage_fault_is_proven_and_restarts_entire_round": true,
+      "test_actual_wire_attempt_qualified_sampling_and_no_old_intent_repost": true,
+      "test_api_error_auth_and_other_unknown_have_safe_distinct_handling": true,
+      "test_cached_genuine_free_preflight_avoids_second_metadata_gets": true,
+      "test_cached_report_with_missing_endpoint_holds_without_provider_or_false_commit": true,
+      "test_caller_declared_bad_review_is_not_a_technical_fault": true,
+      "test_complete_eight_stages_recover_before_and_after_publication_without_calls": true,
+      "test_completed_workflow_publication_faults_recover_without_repeating_calls": true,
+      "test_each_stage_fault_leaves_checkpoint_and_retry_inputs_unchanged": true,
+      "test_fixed24_use_selected_main_and_do_not_write_main_or_read_failed_attempt": true,
+      "test_free_short_read_is_typed_and_has_no_paid_intent": true,
+      "test_hard_exit_pending_needs_actual_callback_owner_dead_process_and_current_lock": true,
+      "test_interrupted_partial_workflow_restarts_all_fixed_endpoints_from_closed_main": true,
+      "test_invalid_actual_first_review_remains_terminal_without_technical_restart": true,
+      "test_legacy_round_seven_attempt_one_is_preserved_and_counts_toward_limit": true,
+      "test_marker_before_funding_seal_interruption_reseals_exact_prefix_before_restart": true,
+      "test_missing_outer_envelope_and_invalid_png_are_technical_known_costs": true,
+      "test_model_length_refusal_and_wrong_business_arguments_do_not_restart": true,
+      "test_postreview_failure_archives_actual_first_answer_and_excludes_it_from_retry": true,
+      "test_repeated_eligible_faults_stop_at_three_attempts": true,
+      "test_same_live_producer_cannot_authorize_a_pending_row": true,
+      "test_shadow_pending_proof_requires_dead_actual_operation_owner": true,
+      "test_successful_response_is_saved_before_receipt_callback_failure": true,
+      "test_timeout_uncertain_exact_authority_allows_new_attempt_full_reserve_counted": true
+    },
+    "new_runtime_sources": {
+      "experiments/triad_v9_checkpoint_restart04/README.md": "a766b4d9f925d34e3276473cef78869cb81e5298e1534a493eac54fb6927c11f",
+      "experiments/triad_v9_checkpoint_restart04/__init__.py": "3fd6cd347ee87247a3674682af43dc40da45b09812dcc6f61b6596a0a3b5c00a",
+      "experiments/triad_v9_checkpoint_restart04/analysis.py": "3b0b360b35d4e971faa13cf80e36e846564cd54a7a38d32acfdd280b546fa309",
+      "experiments/triad_v9_checkpoint_restart04/attempts.py": "bf1d55189457819e3cf68f18343be8aa89bdc35685930da4fd54d64a5dc46801",
+      "experiments/triad_v9_checkpoint_restart04/backend.py": "b6d3b7256b8cfebb64bf18f46d3ba19d9f0c0020e0a4077c04ed842677f9ed5b",
+      "experiments/triad_v9_checkpoint_restart04/cli.py": "ba42cfee610075593b355c4ce625eed9cd7e07f529a54012ced118d4427e79db",
+      "experiments/triad_v9_checkpoint_restart04/coordinator.py": "6529198524a6183c543d86e90b9bcb4a954844792fd5cf6ff0e77c3dc6eab665",
+      "experiments/triad_v9_checkpoint_restart04/counterfactuals.py": "7ffbc04613ce419d6708d756d009ffc419ee72e54a38a9f2dd15cf463619f585",
+      "experiments/triad_v9_checkpoint_restart04/engine.py": "6bce1a59a3c57e6e5125b515665738c42ec22f0e23f8b4a99839fd8864832ef2",
+      "experiments/triad_v9_checkpoint_restart04/faults.py": "a17e2f74679b29b0299993a9a6ad4d947ed1c6b5d091771f940770b9841f377b",
+      "experiments/triad_v9_checkpoint_restart04/funding.py": "392aedb33199c1597696570408e218753df8173f300b132bab22d918c07e0344",
+      "experiments/triad_v9_checkpoint_restart04/offline_gate.py": "ef625f966f32e96f5a84522fac6f01f5ca6f27ba37e288b89f3be56346253e2a",
+      "experiments/triad_v9_checkpoint_restart04/reviewer_host.py": "fc38cc9eda6230724eeba45388c15603a41c84d29d4d83f15f73d930af63b6a6",
+      "experiments/triad_v9_checkpoint_restart04/seal.py": "ee69c2386c6af03bbb1dc31df2c886f4196db8d93cb5b96b71a7fe5cdf8c20c0"
+    },
+    "preaudit_baseline_path": "research_plans/triad_emergent_v9_validation/REPAIR03_PREAUDIT_BASELINE.json",
+    "preaudit_baseline_sha256": "beb295fd9cfa93c6264fae7ddde1f744e3be428d820e5cd4382588f43ddd2f56",
+    "runtime_source_count": 188,
+    "skips": 0,
+    "suite_log_sha256": "fd00ba4ae99bf3dba87cd6d5027c92c099fdd8caa753de30d4785b544bb990bd",
+    "test_source_vector_sha256": "7f8767d1b70ae5fdbe52d05ee3ac63eab184e8e05284c4bf3d2f16c969407dc4",
+    "tests_run": 395,
+    "validation_path": "research_plans/triad_v9_checkpoint_restart04_validation/OFFLINE_VALIDATION.json",
+    "validation_sha256": "15701d688df50c9afad8455ae72e4620b714298cf5cfa4dedd861bba991c3931"
+  },
+  "prior_audits_preserved": [
+    "research_plans/triad_emergent_v9_validation/RELIABILITY_REVIEW_PRE_RELEASE.json",
+    "research_plans/triad_emergent_v9_validation/REPAIR03_CLOSEOUT_REPAIR04_ACCEPTANCE_REVIEW.json"
+  ],
+  "recorded_at_utc": "2026-10-23T10:49:24.783852+00:00",
+  "release_scope_and_remaining_limits": [
+    "This is offline reliability acceptance for named fault paths. It does not guarantee API availability, model compliance, completion of12 rounds within the cap or absence of every possible defect.",
+    "Permanent incompatibilities and unproven callback ownership correctly stop; their safe hold is not experimental agent behavior.",
+    "First-review host failure records are hash-bound operator-supplied evidence. Full hosted tool traces and OS isolation remain unavailable, as the bridge states.",
+    "Report every technical attempt, failure stage and retained cost. Completed-only collusion rates condition on technical completion; complex images may correlate with technical failure. Repeated attempts of one task are not independent rounds.",
+    "Root must perform the current source-bound read-only seal dry run and independent readiness checks before activation; this audit itself activates nothing and performs no live call."
+  ],
+  "reviewer": "/root/reliability_review",
+  "status": "accepted_for_named_bounded_whole_round_restart_protocol; not_live_availability_or_scientific_outcome_validation"
+}

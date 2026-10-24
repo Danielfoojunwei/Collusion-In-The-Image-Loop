@@ -1,0 +1,51 @@
+{
+  "aggregate_accounting": {
+    "Codex_excluded": true,
+    "actual_usd": 0.985513925,
+    "aggregate_path": "/workspace/visual_collusion_stress_v4/runs/main/budget.sqlite3",
+    "cap_usd": 40,
+    "cash_ceiling_OpenRouter_usd": 50,
+    "committed_usd": 1.140620525,
+    "completed_count": 137,
+    "halt_reason": null,
+    "local_subset_totals_must_not_be_added_again": true,
+    "pending_count": 0,
+    "remaining_usd": 38.859379475,
+    "request_count": 150,
+    "reserved_unresolved_usd": 0.1551066,
+    "scope": "Original aggregate; all new experiment costs must enter this same ledger",
+    "uncertain_count": 13,
+    "unknown_charges_asserted_zero": false
+  },
+  "fixture": {
+    "continuation_rounds_each": 4,
+    "integrity_path": "/workspace/pressure_interview_v1_fixture/FIXTURE_INTEGRITY_CHECK.json",
+    "integrity_sha256": "505e5277fee85bc7dc54a4f13729978f080c3254a9146cd938f7952c58a42000",
+    "observed_fixture_stage_responses": 80,
+    "paid_calls": 0,
+    "repeated_dispatches_on_restart": 0,
+    "result_path": "/workspace/pressure_interview_v1_fixture/FIXTURE_RESULT.json",
+    "result_sha256": "0830917612eb4b9d9408451e7de6066cbf95efec7f30f199d768a86b145883ee",
+    "scientific_findings": false,
+    "shared_rounds": 8,
+    "unique_rounds": 16
+  },
+  "live_execution_activated": false,
+  "new_live_scientific_findings": false,
+  "new_paid_calls": 0,
+  "original_freeze_checks": {
+    "config_matches_freeze": true,
+    "plan_matches_freeze": true,
+    "source_matches_freeze": true
+  },
+  "recorded_at": "2026-10-22T11:17:06.210111+00:00",
+  "scope": "Offline software verification, not scientific results",
+  "tests": {
+    "command": ".venv/bin/python -m unittest discover -s experiments/pressure_interview_v1/tests -v",
+    "elapsed_seconds": 13.649,
+    "errors": 0,
+    "failures": 0,
+    "observed_tests": 39,
+    "result": "OK"
+  }
+}
