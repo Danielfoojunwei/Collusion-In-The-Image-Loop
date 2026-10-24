@@ -2,7 +2,7 @@
   "prepared_at_unix": 1792852534.1920695,
   "repository": "https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop",
   "experiment": "V16 document carrier",
-  "execution_state": "paused_user_review_and_pending_technical_amendment004",
+  "execution_state": "paused_amendment004_applied_awaiting_user_resumption_free_preflight_and_codex_bridge",
   "paid_calls_for_github_transfer": 0,
   "planned_arms": 5,
   "planned_rounds_per_arm": 12,
@@ -19,18 +19,9 @@
   "live_root": "runs/main/triad_document_carrier_v16_live",
   "required_absolute_project_root": "/workspace/visual_collusion_stress_v4",
   "stop_marker_preserved": true,
-  "active_freeze_amendment": "003",
-  "active_freeze_sha256": "969bb92c98fef2a96cc4f1f7b13f96616647890bd1c3e56ba14baeb703f3cdd4",
-  "current_source_matches_active_freeze": false,
-  "source_difference_reason": "Offline pending004 native tool_choice auto/content-JSON compatibility, deadlines and a04 funding identifiers",
-  "remaining_004": [
-    "Runner.current max3 must support a04",
-    "CONFIG recovery metadata max3 must support a04",
-    "Narrow audited a03 HTTP404 recovery helper and tests",
-    "Immutable linked004 source/config freeze and receipt",
-    "Fresh freeze004 whole-study free preflight after authorized stop release",
-    "Real packet-only Codex review bridge on receiving host"
-  ],
+  "active_freeze_amendment": "004",
+  "active_freeze_sha256": "30b6773320144be3a1c306918c16f92009f02661f9aadbf0933f771cb70b63e8",
+  "current_source_matches_active_freeze": true,
   "current_actor_model": "z-ai/glm-5.3-flash",
   "canonical_actor_model": "z-ai/glm-5.3-flash-20260826",
   "actor_provider": "relace",
@@ -52,19 +43,22 @@
     "uncertain_reservations_included": true
   },
   "current_offline_tests": {
-    "passed": 71,
+    "full_v16_suite": 231,
+    "targeted_004_validation": 92,
     "provider_funding": 47,
-    "amendment": 24,
-    "log": "handoff/OFFLINE_TESTS.log",
+    "amendment": 33,
+    "administrative_driver_v2": 13,
+    "log": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/004/validation/v16_004_targeted.log",
     "paid_calls": 0
   },
   "source_file_hashes": {
     "next_batch/v16_document_carrier/provider.py": "5c4c3218e031788d0418e9c49e842e6f5a81be511913811355bdc171f163145f",
     "next_batch/v16_document_carrier/funding.py": "4c6a7d6b73eae080ffdcf05d7f574df559f0b1ecdd58c2e31b03c2c6269055aa",
     "next_batch/v16_document_carrier/test_provider_funding.py": "9c9282c60b67fd06c2714b6c5e31c23eacdfed1fb3f0e6f75ebbd0f23de39448",
-    "next_batch/v16_document_carrier/runner.py": "0de119e0ad61459bc2a4408c7e08afbc14733f60517c57fcb26f69d18a67261d",
-    "next_batch/v16_document_carrier/amendment.py": "93120735a1ec20de81a654a2e9440b96431075e99e06c5a807a6d36ebd67a537",
-    "next_batch/v16_document_carrier/design.py": "3963482d19e7d5430e8bb52beaa8bd0a0fba97f74c7fb9ba2b572967ce3196ae"
+    "next_batch/v16_document_carrier/runner.py": "a8cfedd977e55a659878833d006f1e3579d6a25d4a8445625b4c308152a18b1f",
+    "next_batch/v16_document_carrier/amendment.py": "32381b85778f8785dcf9556eba8515e077a3655256c9b5a2cc33e3fecda32a65",
+    "next_batch/v16_document_carrier/design.py": "f7ce3118a2c12443531091907ffacad0dbe235f8dd3afbc2ad2343ae21ec7d27",
+    "next_batch/v16_document_carrier/test_amendment.py": "9fffe75d76aaa78e8fc0f5a9736fdaeb935728017ffd3e927043dbb2db1286e8"
   },
   "full_source_snapshot": {
     "files": 29324,
@@ -92,5 +86,32 @@
     "README.md": "legacy/V4_README.md",
     ".gitignore": "legacy/V4_gitignore.txt",
     "AGENTS.md": "legacy/V4_AGENTS.md"
+  },
+  "amendment004": {
+    "applied_at_unix": 1792857831.1540294,
+    "directory": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/004",
+    "parent_freeze_sha256": "969bb92c98fef2a96cc4f1f7b13f96616647890bd1c3e56ba14baeb703f3cdd4",
+    "helper": "next_batch.v16_document_carrier.amendment.apply_tool_choice_recovery",
+    "a03_http404_rows_sealed_uncertain_full_reserve": 5,
+    "unknown_reservation_units_retained": 55056000,
+    "ledger_rows_changed": 0,
+    "new_paid_calls": 0,
+    "next_attempt_all_arms": "r01.a04",
+    "stop_marker_preserved": true,
+    "validation": "runs/main/triad_document_carrier_v16_live/AMENDMENTS/004/validation/VALIDATION.json"
+  },
+  "remaining_before_paid_launch": [
+    "User explicitly resumes execution",
+    "release_stop bound to the 004 receipt; archive stale old003 START/HELD/state driver files",
+    "Supply OPENROUTER_API_KEY as a runtime secret (absent in the Claude Code cloud container)",
+    "Fresh free whole-study preflight bound to freeze004 (cli preflight)",
+    "Real packet-only fresh Codex product review bridge (no Codex product available in the Claude Code cloud container)",
+    "First scheduled case b02 R1 through both genuine reviews and COMMIT before other arms"
+  ],
+  "restore_check_claude_code": {
+    "files_verified": 29318,
+    "files_in_snapshot": 29324,
+    "absent_build_metadata_only": "src/visual_collusion_stress.egg-info/* (6 files, excluded by .gitignore, not research records)",
+    "ledger_rows": 1780
   }
 }

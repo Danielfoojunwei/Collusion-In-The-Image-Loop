@@ -2,6 +2,22 @@
 
 Prepared 24 October 2026. Repository: https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop
 
+## Update after the Claude Code session of 24 October 2026
+
+**Amendment 004 is now applied; the experiment is still paused.** The helper
+`amendment.apply_tool_choice_recovery` appended `AMENDMENTS/004` (freeze
+`30b6773320144be3a1c306918c16f92009f02661f9aadbf0933f771cb70b63e8`, parent 003).
+It sealed the five a03 HTTP404 reservations at full value. No ledger row changed
+(1,780 rows; $9.122570192 aggregate; $3.684441929 program), and no paid call was
+made. `Runner.current` and the CONFIG recovery metadata now allow the fourth
+attempt, so every arm's next attempt is a fresh `r01.a04`. Current source
+matches freeze004. `STOP_REQUESTED.json` is untouched. Steps 1-5 of "Remaining
+engineering" below are done. Step 6 (release STOP, archive old003 driver
+files) waits on the user's resumption. Step 7 (free preflight) also needs
+`OPENROUTER_API_KEY`. A genuine Codex product review bridge was not available in
+the Claude Code cloud container, so live dispatch remains blocked there. See
+`handoff/STATE.json` and `AMENDMENTS/004/validation/`.
+
 ## Read this state first
 
 **The experiment is paused. V16 has zero completed rounds out of 60. Do not
