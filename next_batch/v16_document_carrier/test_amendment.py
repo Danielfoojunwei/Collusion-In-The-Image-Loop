@@ -12,7 +12,7 @@ from unittest.mock import patch
 from next_batch.v15_glm_restored.storage import (
     IntegrityError, canonical, lock, put, put_bytes, read, sha,
 )
-from . import amendment as a, design, prompts, funding, provider, runner as rt
+from . import amendment as a, design, prompts, funding, provider, review, runner as rt
 
 
 class FixtureLedger:
@@ -754,6 +754,99 @@ class AmendmentTests(unittest.TestCase):
         self.assertEqual(a.active_freeze(self.out)['directory'], self.out/'AMENDMENTS/003')
         a.apply_tool_choice_recovery(self.runner, self.ledger)
         self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/004')
+
+    @contextmanager
+    def codex_reviewers(self):
+        assays = deepcopy(design.CONFIG['post_main_decode_assays'])
+        assays['fresh_Codex_context_each'] = assays.pop('fresh_Claude_subagent_context_each')
+        with patch.dict(design.CONFIG['models'], {'reviewers':a.CODEX_REVIEWERS}), \
+                patch.dict(design.CONFIG['post_main_decode_assays'], assays, clear=True):
+            yield
+
+    def prepare_reviewer_amendment(self):
+        # Script the original Codex reviewer condition before transaction1.
+        old = read(self.out/'CONFIG.json')
+        with self.codex_reviewers():
+            old['models'] = deepcopy(design.CONFIG['models'])
+            old['post_main_decode_assays'] = deepcopy(design.CONFIG['post_main_decode_assays'])
+            (self.out/'CONFIG.json').unlink()
+            put(self.out/'CONFIG.json', old)
+            frozen = read(self.out/'freeze.json')
+            frozen['config_sha256'] = sha((self.out/'CONFIG.json').read_bytes())
+            (self.out/'freeze.json').unlink()
+            put(self.out/'freeze.json', frozen)
+            self.prepare_tool_choice_repair()
+            a.apply_tool_choice_recovery(self.runner, self.ledger)
+        self.source.write_text('# OFFLINE fixture reviewer amendment\n')
+
+    def test_reviewer_amendment_discloses_claude_subagents_without_other_change(self):
+        self.prepare_reviewer_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        result = a.apply_reviewer_amendment(self.runner, self.ledger)
+        self.assertEqual((result['new_paid_calls'], result['all_arms_next_attempt']), (0, 'r01.a04'))
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual((self.out/'STOP_REQUESTED.json').read_bytes(), stop)
+        old = read(self.out/'AMENDMENTS/004/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/005/CONFIG.json')
+        changed = ('models', 'post_main_decode_assays', 'reviewer_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(new['models']['reviewers'], a.CLAUDE_SUBAGENT_REVIEWERS)
+        self.assertEqual({k:v for k,v in old['models'].items() if k != 'reviewers'},
+                         {k:v for k,v in new['models'].items() if k != 'reviewers'})
+        self.assertEqual(new['technical_amendment']['live_review_evidence_origin'], review.LIVE_REVIEW_ORIGIN)
+        self.assertEqual((self.out/'AMENDMENTS/005/SYSTEM_PROMPTS.json').read_bytes(),
+                         (self.out/'AMENDMENTS/004/SYSTEM_PROMPTS.json').read_bytes())
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/005')
+        self.assertEqual(a.apply_reviewer_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+        self.assertEqual(rt.Runner(self.out, fixture=True).current('b01')[0]['attempt_id'], 'b01.r01.a04')
+
+    def test_reviewer_amendment_allows_only_an_unfunded_a04_context(self):
+        self.prepare_reviewer_amendment()
+        rt.Runner(self.out, fixture=True).current('b03')
+        a.apply_reviewer_amendment(self.runner, self.ledger)
+        self.assertTrue((self.out/'arms/b03/attempts/r01/a04/context.json').exists())
+
+    def test_reviewer_amendment_refuses_any_a04_work_review_or_paid_row(self):
+        self.prepare_reviewer_amendment()
+        stage = self.out/'arms/b02/attempts/r01/a04/inflight/B_INITIAL.json'
+        put(stage, {'stage':'B_INITIAL','evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_DISPATCH'})
+        with self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        stage.unlink()
+        launch = self.out/'reviews/OFFLINE_b04_MAIN/launch.json'
+        put(launch, {'agent_id':'OFFLINE_ACTUAL_CONTEXT_PLACEHOLDER'})
+        with self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        launch.unlink()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a04.B_INITIAL.native','uncertain','chat',
+                'z-ai/glm-5.3-flash','e'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/005').exists())
+
+    def test_reviewer_amendment_refuses_after_release_or_with_other_changes(self):
+        self.prepare_reviewer_amendment()
+        with patch.dict(design.CONFIG['sampling'], {'temperature':1.2}), self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['models'], {'actors':'OFFLINE_OTHER_MODEL'}), self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['models'], {'reviewers':'OFFLINE_UNDISCLOSED'}), self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        with self.codex_reviewers(), self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        amended = self.source.read_bytes()
+        self.source.write_text('# OFFLINE fixture tool-choice compatibility repair\n')
+        a.release_stop(self.out, fixture=True)
+        self.source.write_bytes(amended)
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted later hold'})
+        with self.assertRaises(IntegrityError):
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/005').exists())
 
 if __name__ == '__main__':
     unittest.main()

@@ -1120,6 +1120,184 @@ def apply_tool_choice_recovery(runner, ledger):
                 'STOP_still_present': True}
 
 
+CODEX_REVIEWERS = 'actual fresh Codex product contexts; no API billing'
+CLAUDE_SUBAGENT_REVIEWERS = 'fresh packet-only Claude subagent contexts; no OpenRouter billing'
+
+
+def _reviewer_configuration(old, fixture):
+    """Only the disclosed reviewer identity changes; actors, money and science stay fixed."""
+    from . import design
+    from .review import LIVE_REVIEW_ORIGIN
+    if (old.get('technical_amendment') or {}).get('number') != 4:
+        raise IntegrityError('Reviewer amendment must follow the tool-choice amendment')
+    if (old.get('models') or {}).get('reviewers') != CODEX_REVIEWERS:
+        raise IntegrityError('Unexpected prior reviewer condition')
+    models = deepcopy(design.CONFIG['models'])
+    if models.pop('reviewers', None) != CLAUDE_SUBAGENT_REVIEWERS:
+        raise IntegrityError('Installed reviewer condition differs from the authorized amendment')
+    previous_models = deepcopy(old['models'])
+    previous_models.pop('reviewers')
+    if previous_models != models:
+        raise IntegrityError('Reviewer amendment changed actor or image models')
+    assays_old = deepcopy(old.get('post_main_decode_assays') or {})
+    assays_new = deepcopy(design.CONFIG['post_main_decode_assays'])
+    if (assays_old.pop('fresh_Codex_context_each', None) is not True or
+            assays_new.pop('fresh_Claude_subagent_context_each', None) is not True or assays_old != assays_new):
+        raise IntegrityError('Reviewer amendment changed decoding-assay terms beyond reviewer identity')
+    block = design.CONFIG.get('reviewer_amendment_005') or {}
+    if (block.get('live_review_evidence_origin') != LIVE_REVIEW_ORIGIN or
+            block.get('actor_prompts_unchanged_still_name_reviewer_Codex') is not True):
+        raise IntegrityError('Reviewer amendment disclosure differs from the installed provenance')
+    for field in ('routes', 'seed', 'rounds_per_arm', 'total_rounds', 'scoring', 'sampling', 'documents',
+                  'validation_payload', 'budget', 'recovery', 'stages', 'known_patterns',
+                  'working_context'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Reviewer amendment changed scientific/resource condition: ' + field)
+    result = deepcopy(old)
+    result['models'] = deepcopy(design.CONFIG['models'])
+    result['post_main_decode_assays'] = deepcopy(design.CONFIG['post_main_decode_assays'])
+    result['reviewer_amendment'] = deepcopy(block)
+    result['technical_amendment'] = {
+        'number': 5, 'revision': 'v16.5',
+        'reason': 'Explicit user instruction: genuine Codex product reviewers are unavailable on the execution host; '
+                  'fresh packet-only Claude subagent contexts review instead, disclosed and labelled as such.',
+        'previous_reviewers': CODEX_REVIEWERS, 'reviewers': CLAUDE_SUBAGENT_REVIEWERS,
+        'live_review_evidence_origin': LIVE_REVIEW_ORIGIN,
+        'actor_prompts_unchanged_still_name_reviewer_Codex': True,
+        'applied_before_any_a04_request_or_review': True,
+        'actors_routes_prompts_cases_sampling_incentives_and_money_limits_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _prepare_reviewer_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    fourth = out / 'AMENDMENTS' / '004'
+    if previous['directory'] != fourth:
+        raise IntegrityError('Reviewer amendment must directly follow amendment004')
+    if (fourth / 'STOP_RELEASE.json').exists():
+        raise IntegrityError('Amendment004 was already released; reviewer change must precede a04 work')
+    receipt = read(fourth / 'RECOVERY_RECEIPT.json')
+    if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
+            snapshot['count'] != receipt['ledger_row_count']):
+        raise IntegrityError('Paid ledger changed after amendment004; reviewer change forbidden')
+    if sha((out / 'STOP_REQUESTED.json').read_bytes()) != receipt['stop_original_sha256']:
+        raise IntegrityError('Reviewer amendment requires the unchanged amendment004 operator hold')
+    _reviewer_configuration(read(fourth / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(fourth / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(fourth / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Reviewer amendment changed cases or actor prompts')
+    retained = []
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; reviewer change must precede all rounds')
+        parent = out / 'arms' / arm / 'attempts' / 'r01'
+        if read(parent / 'a03' / 'abandoned.json').get('amendment_number') != 4:
+            raise IntegrityError('Amendment004 did not abandon the a03 failure')
+        for extra in parent.glob('a[0-9][0-9]'):
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if extra.name == 'a04':
+                if any(path.name != 'context.json' or path.parent != extra for path in files):
+                    raise IntegrityError('R1a04 contains work rather than an unfunded context')
+                retained.extend(_inventory(extra))
+            elif extra.name not in ('a01', 'a02', 'a03') and files:
+                raise IntegrityError('An extra attempt appeared after amendment004')
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before reviewer amendment')
+    for directory in (out / 'reviews').glob('*'):
+        if (directory / 'launch.json').exists() or (directory / 'assessment.json').exists():
+            raise IntegrityError('A launched or assessed review exists before reviewer amendment')
+    return {'amendment_number': 5, 'revision': 'v16.5', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Explicit user instruction to replace unavailable genuine Codex product reviewers with fresh packet-only Claude subagent contexts, disclosed and labelled as such.',
+            'previous_reviewers': CODEX_REVIEWERS, 'reviewers': CLAUDE_SUBAGENT_REVIEWERS,
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+            'new_round_attempt': 'Continue existing unfunded R1a04 without rewind.',
+            'paid_calls_after_amendment004': 0, 'reviews_launched_before_amendment': 0}
+
+
+def apply_reviewer_amendment(runner, ledger):
+    """Append005: disclosed reviewer substitution before any a04 request or review."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '005'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before reviewer amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during reviewer amendment')
+        else:
+            intent = _prepare_reviewer_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during reviewer amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Unfunded a04 context changed during reviewer amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        fourth = out / 'AMENDMENTS' / '004'
+        put(destination / 'CONFIG.json', _reviewer_configuration(read(fourth / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (fourth / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            archive = destination / 'source_archive' / relative
+            put_bytes(archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Reviewer amendment unexpectedly changed the paid ledger')
+        receipt = {'amendment_number': 5, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 0,
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'scientific_note': 'Reviewer identity changes from genuine Codex product contexts to fresh packet-only Claude subagent contexts before any V16 review. Actor prompts still name the reviewer Codex and remain byte-identical; reviewer packets, schemas, byte limits and first-output-only rules are unchanged.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=5, revision='v16.5',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_reviewer_substitution_before_any_review')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'reviewer_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

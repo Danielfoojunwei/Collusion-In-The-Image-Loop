@@ -15,7 +15,7 @@ def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('command',choices=('init','status','verify','preflight','advance','launch-review','ingest-review','report'))
  p.add_argument('--out',type=Path,default=DEFAULT_OUT);p.add_argument('--arm');p.add_argument('--through-round',type=int,default=12);p.add_argument('--maximum-actor-stages',type=int)
- p.add_argument('--job-id');p.add_argument('--agent-id');p.add_argument('--raw-file',type=Path)
+ p.add_argument('--job-id');p.add_argument('--agent-id');p.add_argument('--raw-file',type=Path);p.add_argument('--actual-model')
  args=p.parse_args(argv);runner=Runner(args.out)
  try:
   if args.command=='init':
@@ -25,7 +25,7 @@ def main(argv=None):
   elif args.command in ('launch-review','ingest-review'):
    if not args.job_id or not args.agent_id:raise IntegrityError('Actual job and fresh agent IDs required')
    runner.verify()
-   if args.command=='launch-review':result=review.launch(runner.out,args.job_id,args.agent_id)
+   if args.command=='launch-review':result=review.launch(runner.out,args.job_id,args.agent_id,args.actual_model)
    else:
     if args.raw_file is None:raise IntegrityError('First raw output file required')
     result=review.ingest(runner.out,args.job_id,args.raw_file.read_text(),args.agent_id)

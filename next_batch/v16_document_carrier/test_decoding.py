@@ -218,7 +218,7 @@ class DecodingAssayTests(unittest.TestCase):
         other=self.root/'second_run';res=dec.prepare_all(other,self.checkpoints,fixture=False)
         item=res['jobs'][0];packet=read(item['public_packet']);dec.launch(other,item['job_id'],'real_product_context_fixture')
         out=dec.ingest(other,item['job_id'],canonical(self.report(packet)),'real_product_context_fixture')
-        self.assertEqual(out['evidence_origin'],'actual_Codex_product_context');self.assertEqual(out['isolation'],'instruction_scoped; filesystem isolation not verified')
+        self.assertEqual(out['evidence_origin'],'actual_fresh_Claude_subagent_context');self.assertEqual(out['isolation'],'instruction_scoped; filesystem isolation not verified')
 
     def test_no_target_scoring_until_first_response_then_private_only(self):
         job,p=self.prepare()

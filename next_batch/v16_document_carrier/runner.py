@@ -1,4 +1,4 @@
-"""Durable paired-arm document study. Paid commands pause at genuine Codex reviews."""
+"""Durable paired-arm document study. Paid commands pause at genuine fresh-reviewer jobs."""
 from pathlib import Path
 from copy import deepcopy
 import base64, json, time, re, sqlite3
@@ -282,7 +282,7 @@ class Runner:
   settlement=self.settlement(ctx,root) if not failed else {'grant_state':'behavioral_invalid','scores':{r:0 for r in('A','B','C')},'target_aligned':all(ballots[r]==case['private_target']for r in('B','C')),'current_joint_supported':None,'sanction_triggered':False,'fine_each_nominal':0,'actual_fines':{r:0 for r in('A','B','C')},'bank_balances':self.prior_banks(ctx['arm']),'document_quality_eligible':False,'all_reviews_valid':False}
   if failed:
    before=self.prior_banks(ctx['arm']);credits={role:(4000 if role in('B','C')and ballots.get(role)==d.oracle(case)else 0)for role in('A','B','C')};settlement.update(scores=credits,gross_credits=credits,bank_balances={role:before[role]+credits[role]for role in('A','B','C')},previous_banks=before)
-  c={**ctx,'arm':ctx['arm'],'ballots':ballots,'client_correct':d.oracle(case),'private_target':case['private_target'],'validation_tag':case['validation_tag'],'initial_judgments':{r:self.stage(root,r+'_INITIAL')for r in('B','C')if(root/'stages'/(r+'_INITIAL.json')).exists()},'documents':docs,'logs':logs,'main_review':self.stage(root,'MAIN_REVIEW')if(root/'stages/MAIN_REVIEW.json').exists()else{},'return_review':self.stage(root,'RETURN_REVIEW')if(root/'stages/RETURN_REVIEW.json').exists()else{},'interpretations':{r:self.stage(root,r+'_VOTE').get('value')for r in('B','C')if(root/'stages'/(r+'_VOTE.json')).exists()},'settlement':settlement,'status':'behavioral_invalid'if failed else'complete','behavioral_failure':read(behavior)if failed else None,'evidence_origin':{'actor_artifacts':('offline_fixture'if self.fixture else'actual_OpenRouter'),'main_review':('actual_Codex_product_context'if(root/'stages/MAIN_REVIEW.json').exists()else'not_reached'),'return_review':('actual_Codex_product_context'if(root/'stages/RETURN_REVIEW.json').exists()else'not_reached')}}
+  c={**ctx,'arm':ctx['arm'],'ballots':ballots,'client_correct':d.oracle(case),'private_target':case['private_target'],'validation_tag':case['validation_tag'],'initial_judgments':{r:self.stage(root,r+'_INITIAL')for r in('B','C')if(root/'stages'/(r+'_INITIAL.json')).exists()},'documents':docs,'logs':logs,'main_review':self.stage(root,'MAIN_REVIEW')if(root/'stages/MAIN_REVIEW.json').exists()else{},'return_review':self.stage(root,'RETURN_REVIEW')if(root/'stages/RETURN_REVIEW.json').exists()else{},'interpretations':{r:self.stage(root,r+'_VOTE').get('value')for r in('B','C')if(root/'stages'/(r+'_VOTE.json')).exists()},'settlement':settlement,'status':'behavioral_invalid'if failed else'complete','behavioral_failure':read(behavior)if failed else None,'evidence_origin':{'actor_artifacts':('offline_fixture'if self.fixture else'actual_OpenRouter'),'main_review':(review.LIVE_REVIEW_ORIGIN if(root/'stages/MAIN_REVIEW.json').exists()else'not_reached'),'return_review':(review.LIVE_REVIEW_ORIGIN if(root/'stages/RETURN_REVIEW.json').exists()else'not_reached')}}
   c['interpretation_record_status']={r:self.stage(root,r+'_VOTE')['status']for r in('B','C')if(root/'stages'/(r+'_VOTE.json')).exists()}
   put(root/'stages/COMMIT.json',c);put(self.out/'arms'/ctx['arm']/'checkpoints'/f'r{ctx["round"]:02}.json',c);return c
  def abandon(self,ctx,root,fault,ledger):
@@ -307,7 +307,7 @@ class Runner:
     job=self.prepare_review(ctx,root,stage);p=self.out/'reviews'/job['job_id']/'assessment.json'
     if not p.exists():return{**self.status(arm),'pending_review':job}
     assessment=read(p)
-    if assessment.get('evidence_origin')!=('offline_fixture' if self.fixture else 'actual_Codex_product_context'):raise IntegrityError('Fixture cannot enter live review')
+    if assessment.get('evidence_origin')!=('offline_fixture' if self.fixture else review.LIVE_REVIEW_ORIGIN):raise IntegrityError('Fixture cannot enter live review')
     put(root/'stages'/(stage+'.json'),{**assessment,'job_id':job['job_id']});continue
    if maximum_actor_stages is not None and done>=maximum_actor_stages:return self.status(arm)
    intent=root/'inflight'/(stage+'.json');finished=root/'finished'/(stage+'.json')
