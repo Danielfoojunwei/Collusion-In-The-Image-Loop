@@ -157,7 +157,7 @@ class ProviderFundingTests(unittest.TestCase):
             self.assertEqual(payload['max_tokens'],65536);self.assertEqual(payload['reasoning'],{'effort':'high','exclude':False})
             self.assertEqual(payload['provider']['only'],['relace']);self.assertFalse(payload['provider']['allow_fallbacks'])
             self.assertNotIn('top_k',payload);self.assertNotIn('top_p',payload)
-            self.assertEqual(payload['provider']['max_price'],{'prompt':.15,'completion':.10,'request':0})
+            self.assertEqual(payload['provider']['max_price'],{'prompt':.15,'completion':.20,'request':0})
             row=self.ledger.lookup(NAMESPACE+':b01.r01.a01.A_DOCUMENT.native')
             self.assertEqual(row['reserved_usd'],.0323104)
             self.assertEqual(p._preflight['input_limits'][MODEL],INPUT_LIMITS)
@@ -178,7 +178,7 @@ class ProviderFundingTests(unittest.TestCase):
                 if mutation=='output':endpoint['max_completion_tokens']=65535
                 elif mutation=='context':endpoint['context_length']=MIN_CONTEXT_TOKENS-1
                 elif mutation=='prompt_price':endpoint['pricing']['prompt']='0.000000150001'
-                elif mutation=='completion_price':endpoint['pricing']['completion']='0.000000100001'
+                elif mutation=='completion_price':endpoint['pricing']['completion']='0.000000200001'
                 p._get_cache.clear()
                 with self.assertRaises(PreflightError):p.preflight(minimum_remaining=.1)
                 self.assertEqual(self.transport.posts_exact,[])
@@ -190,10 +190,10 @@ class ProviderFundingTests(unittest.TestCase):
             if mutation=='old_profile':old['reservation']['profiles']['publish_document']['output_tokens']=16384
             elif mutation=='old_sampling':old['sampling']['max_output_tokens']=16384
             elif mutation=='old_prompt_cap':old['reservation']['hard_prompt_max_price_per_million']='0.10'
-            elif mutation=='old_completion_cap':old['reservation']['hard_completion_max_price_per_million']='0.05'
+            elif mutation=='old_completion_cap':old['reservation']['hard_completion_max_price_per_million']='0.10'
             elif mutation=='missing_amendment':old['reservation'].pop('amendment_profile')
             else:
-                old['chat_metadata'][MODEL]['endpoint']['pricing']['completion']='0.000000100001'
+                old['chat_metadata'][MODEL]['endpoint']['pricing']['completion']='0.000000200001'
                 old['chat_metadata'][MODEL]['pricing']=deepcopy(old['chat_metadata'][MODEL]['endpoint']['pricing'])
             with self.subTest(cached_mutation=mutation),self.assertRaises(IntegrityError):p.adopt_preflight(old)
 
@@ -213,8 +213,18 @@ class ProviderFundingTests(unittest.TestCase):
         p.adopt_preflight(p._preflight)
         self.assertEqual(self.transport.posts_exact,[])
 
+    def test_observed_freeze006_relace_quote_fits_amendment007_guard(self):
+        p=self.provider([])
+        endpoint=self.transport.chat_endpoints[MODEL]['data']['endpoints'][0]
+        endpoint['pricing'].update(prompt='0.0000000191',completion='0.0000001352',input_cache_read='0.0000000191')
+        p._get_cache.clear()
+        report=p.preflight(minimum_remaining=.1)
+        self.assertEqual(report['chat_metadata'][MODEL]['pricing']['completion'],'0.0000001352')
+        self.assertEqual(report['reservation']['hard_completion_max_price_per_million'],'0.20')
+        self.assertEqual(self.transport.posts_exact,[])
+
     def test_cheap_catalog_cannot_hide_expensive_pinned_route(self):
-        for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000100001')):
+        for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000200001')):
             with self.subTest(field=field):
                 p=self.provider([])
                 row=next(row for row in self.transport.models['data']if row['id']==MODEL)

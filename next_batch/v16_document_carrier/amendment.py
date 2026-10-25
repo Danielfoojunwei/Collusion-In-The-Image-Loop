@@ -1470,6 +1470,220 @@ def apply_canonical_design_amendment(runner, ledger):
                 'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
 
 
+OLD_PRICE_CAPS = {'prompt': '0.15', 'completion': '0.10'}
+NEW_PRICE_CAPS = {'prompt': '0.15', 'completion': '0.20'}
+
+
+def _price_guard_configuration(old, fixture):
+    """Only the hard completion-price guard moves; reserves and every money cap stay fixed."""
+    from . import design
+    from .funding import NATIVE_PROFILES, NORMAL_RESERVATION_USD
+    from .provider import COMPLETION_PRICE_CEILING, PROMPT_PRICE_CEILING
+    if (old.get('technical_amendment') or {}).get('number') != 6:
+        raise IntegrityError('Price-guard amendment must follow the canonical design amendment')
+    if (old.get('budget') or {}).get('hard_unit_price_caps_usd_per_million') != OLD_PRICE_CAPS:
+        raise IntegrityError('Unexpected prior hard price guard')
+    if (design.CONFIG['budget'].get('hard_unit_price_caps_usd_per_million') != NEW_PRICE_CAPS or
+            PROMPT_PRICE_CEILING != Decimal('0.00000015') or COMPLETION_PRICE_CEILING != Decimal('0.00000020')):
+        raise IntegrityError('Installed price guard differs from the authorized amendment')
+    old_budget, new_budget = deepcopy(old['budget']), deepcopy(design.CONFIG['budget'])
+    old_budget.pop('hard_unit_price_caps_usd_per_million')
+    new_budget.pop('hard_unit_price_caps_usd_per_million')
+    if old_budget != new_budget:
+        raise IntegrityError('Price-guard amendment changed reserves or money limits')
+    if Decimal(NORMAL_RESERVATION_USD) != Decimal('18.528') or Decimal(str(old.get('normal_reservation_ceiling_usd'))) != Decimal('18.528'):
+        raise IntegrityError('Price-guard amendment changed the normal reservation ceiling')
+    for role, function in [('publish', 'publish_document'), ('vote', 'record_vote'),
+                           ('log', 'record_log'), ('initial', 'record_initial_judgment')]:
+        profile = NATIVE_PROFILES[function]
+        if Decimal(str(new_budget['actor_stage_reserves_usd'][role])) != Decimal(profile['reserve_usd']):
+            raise IntegrityError('Published stage reserve differs from funding profile')
+        # The unchanged reserve must still bound the worst case at the new guard.
+        tokens_in = profile['text_and_schema_utf8_bytes'] + profile['image_blocks'] * 8192
+        worst = (tokens_in * PROMPT_PRICE_CEILING + profile['output_tokens'] * COMPLETION_PRICE_CEILING
+                 + Decimal('0.002'))
+        if worst > Decimal(profile['reserve_usd']):
+            raise IntegrityError('Unchanged reserve no longer bounds the worst-case call')
+    block = design.CONFIG.get('price_guard_amendment_007') or {}
+    if (block.get('hard_unit_price_caps_usd_per_million') != NEW_PRICE_CAPS or
+            block.get('previous_hard_unit_price_caps_usd_per_million') != OLD_PRICE_CAPS or
+            block.get('actor_stage_reserves_unchanged') is not True):
+        raise IntegrityError('Price-guard disclosure differs from the installed condition')
+    for field in ('models', 'routes', 'seed', 'scoring', 'sampling', 'documents', 'validation_payload',
+                  'recovery', 'stages', 'known_patterns', 'working_context', 'rounds_per_arm',
+                  'total_rounds', 'active_arms', 'post_main_decode_assays'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Price-guard amendment changed scientific/resource condition: ' + field)
+    result = deepcopy(old)
+    result['budget'] = deepcopy(design.CONFIG['budget'])
+    result['price_guard_amendment'] = deepcopy(block)
+    result['technical_amendment'] = {
+        'number': 7, 'revision': 'v16.7', 'reason': block['reason'],
+        'previous_hard_unit_price_caps_usd_per_million': OLD_PRICE_CAPS,
+        'hard_unit_price_caps_usd_per_million': NEW_PRICE_CAPS,
+        'applied_before_any_a04_request_or_review': True,
+        'reserves_ceilings_models_routes_prompts_cases_sampling_and_incentives_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _price_diagnostic(out, parent_sha256):
+    """The free diagnostic must show the actual Relace quote between the old and new guards."""
+    diagnostic = out / 'driver' / 'FREE_PRICE_DIAGNOSTIC_FREEZE006.json'
+    if not diagnostic.is_file():
+        raise IntegrityError('The observed freeze006 free price diagnostic is required')
+    body = read(diagnostic)
+    endpoint = body.get('observed_relace_endpoint') or {}
+    try:
+        completion = Decimal(str((endpoint.get('pricing') or {})['completion']))
+        prompt = Decimal(str((endpoint.get('pricing') or {})['prompt']))
+    except (KeyError, ArithmeticError):
+        raise IntegrityError('Free price diagnostic lacks the observed Relace quote') from None
+    if (body.get('freeze_sha256') != parent_sha256 or body.get('new_paid_calls') != 0 or
+            endpoint.get('tag') != 'relace' or
+            not Decimal('0.00000010') < completion <= Decimal('0.00000020') or
+            not Decimal(0) <= prompt <= Decimal('0.00000015')):
+        raise IntegrityError('Free diagnostic does not show the freeze006 completion-price block')
+    return diagnostic
+
+
+def _prepare_price_guard_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    sixth = out / 'AMENDMENTS' / '006'
+    if previous['directory'] != sixth:
+        raise IntegrityError('Price-guard amendment must directly follow amendment006')
+    if not (sixth / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Amendment006 was never released; no preflight could have observed the price')
+    receipt = read(sixth / 'RECOVERY_RECEIPT.json')
+    if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
+            snapshot['count'] != receipt['ledger_row_count']):
+        raise IntegrityError('Paid ledger changed after amendment006; price-guard change forbidden')
+    for path in (out / 'preflights').glob('*.json'):
+        record = read(path)
+        if record.get('status') == 'passed' and record.get('freeze_sha256') == previous['sha256']:
+            raise IntegrityError('A freeze006 preflight passed; the guard did not block it')
+    _price_guard_configuration(read(sixth / 'CONFIG.json'), runner.fixture)
+    diagnostic = _price_diagnostic(out, previous['sha256'])
+    frozen_prompts = read(sixth / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(sixth / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Price-guard amendment changed cases or actor prompts')
+    retained = [{'path': str(diagnostic), 'sha256': sha(diagnostic.read_bytes())}]
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; price-guard change must precede all rounds')
+        parent = out / 'arms' / arm / 'attempts' / 'r01'
+        for extra in parent.glob('a[0-9][0-9]'):
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if extra.name == 'a04':
+                if any(path.name != 'context.json' or path.parent != extra for path in files):
+                    raise IntegrityError('R1a04 contains work rather than an unfunded context')
+                retained.extend(_inventory(extra))
+            elif extra.name not in ('a01', 'a02', 'a03') and files:
+                raise IntegrityError('An extra attempt appeared after amendment006')
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before the price-guard amendment')
+    for directory in ('reviews', 'decoding', 'attribution_audits'):
+        for job in (out / directory).glob('*'):
+            if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                raise IntegrityError('A launched or assessed job exists before the price-guard amendment')
+    if any(path.is_file() for path in (out / 'probes').rglob('*')):
+        raise IntegrityError('A probe exists before the price-guard amendment')
+    return {'amendment_number': 7, 'revision': 'v16.7', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Explicit user instruction after the freeze006 free preflight held on the Relace completion price; only the hard completion guard rises from 0.10/M to 0.20/M.',
+            'previous_hard_unit_price_caps_usd_per_million': OLD_PRICE_CAPS,
+            'hard_unit_price_caps_usd_per_million': NEW_PRICE_CAPS,
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+            'new_round_attempt': 'Continue existing unfunded R1a04 without rewind in active arms b01, b03, b05.',
+            'paid_calls_after_amendment006': 0, 'jobs_launched_before_amendment': 0,
+            'diagnostic_path': str(diagnostic), 'diagnostic_sha256': sha(diagnostic.read_bytes())}
+
+
+def apply_price_guard_amendment(runner, ledger):
+    """Append007: raise only the completion-price guard, before any a04 request."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '007'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the price-guard amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the price-guard amendment')
+        else:
+            intent = _prepare_price_guard_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the price-guard amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Price diagnostic or unfunded a04 context changed during the amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        diagnostic_archive = destination / 'FREE_PRICE_DIAGNOSTIC_FREEZE006.original.json'
+        put_bytes(diagnostic_archive, safe(intent['diagnostic_path'], out).read_bytes())
+        sixth = out / 'AMENDMENTS' / '006'
+        put(destination / 'CONFIG.json', _price_guard_configuration(read(sixth / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (sixth / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            archive = destination / 'source_archive' / relative
+            put_bytes(archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Price-guard amendment unexpectedly changed the paid ledger')
+        receipt = {'amendment_number': 7, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 0,
+                   'additional_archives': [{'path': str(diagnostic_archive), 'sha256': intent['diagnostic_sha256']}],
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'scientific_note': 'Only the hard completion-price guard rises from 0.10/M to 0.20/M on the same pinned Relace route. Per-call reserves, the 18.528 normal ceiling and the 24/40/50 caps are unchanged; each reserve is the exact worst case at the new guard. Models, prompts, cases, sampling, incentives and the canonical schedule are unchanged.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=7, revision='v16.7',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_price_guard_change_before_any_round')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'price_guard_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

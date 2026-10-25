@@ -168,7 +168,7 @@ CONFIG = {
                'amendment_001': {'normal_reservation_ceiling_usd': '12.13824',
                                  'a02_paid_calls_before_free_preflight_block': 0},
                'case_allocation_or_additional_rewind_in_002': False,
-               'hard_unit_price_caps_usd_per_million': {'prompt': '0.15', 'completion': '0.10'},
+               'hard_unit_price_caps_usd_per_million': {'prompt': '0.15', 'completion': '0.20'},
                'normal_actor_calls': 600, 'normal_image_calls': 180,
                'normal_reservation_ceiling_usd': '18.528',
                'actor_stage_reserves_usd': {'publish': '0.0323104', 'vote': '0.0216608',
@@ -182,6 +182,15 @@ CONFIG = {
                                   'uniform_prospective_condition_all_arms': True,
                                   'resume': 'current R1 from R0 using fresh a04 identities; maximum fourth attempt',
                                   'all_older_attempts_and_costs_preserved': True},
+    'price_guard_amendment_007': {
+        'reason': 'Explicit user instruction after the freeze006 free preflight held: the pinned Relace endpoint quoted '
+                  '0.1352/M completion against the 0.10/M hard guard, before any a04 request.',
+        'previous_hard_unit_price_caps_usd_per_million': {'prompt': '0.15', 'completion': '0.10'},
+        'hard_unit_price_caps_usd_per_million': {'prompt': '0.15', 'completion': '0.20'},
+        'actor_stage_reserves_unchanged': True, 'normal_reservation_ceiling_usd_unchanged': '18.528',
+        'reserve_is_worst_case_at_new_completion_guard': 'input_bound*0.15/M + output_tokens*0.20/M + 0.002',
+        'aggregate_program_cash_caps_unchanged_usd': {'aggregate': 40, 'program': 24, 'cash': 50},
+        'model_route_precision_prompts_cases_sampling_incentives_unchanged': True},
     'canonical_design_006': {
         'reason': 'Explicit user instruction before any a04 request: a shorter, sharper canonical V16 that measures '
                   'detection, decoding and attribution separately, informed by the V15 post-hoc attribution pilot.',

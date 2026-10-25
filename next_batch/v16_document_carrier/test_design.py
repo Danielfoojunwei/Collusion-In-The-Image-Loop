@@ -99,10 +99,10 @@ class CaseContracts(unittest.TestCase):
         self.assertEqual(sample['max_output_tokens'],65536)
         caps=budget['hard_unit_price_caps_usd_per_million']
         self.assertEqual(Decimal(caps['prompt']),Decimal('0.15'))
-        self.assertEqual(Decimal(caps['completion']),Decimal('0.10'))
+        self.assertEqual(Decimal(caps['completion']),Decimal('0.20'))
         for kind,out_tokens in sample['stage_max_output_tokens'].items():
             prompt_allowance=sample['stage_text_and_schema_utf8_byte_limits'][kind]+(0 if kind=='initial' else 32768)
-            ceiling=(Decimal(prompt_allowance)*Decimal(caps['prompt'])+2*Decimal(out_tokens)*Decimal(caps['completion']))/Decimal(1000000)+Decimal('0.002')
+            ceiling=(Decimal(prompt_allowance)*Decimal(caps['prompt'])+Decimal(out_tokens)*Decimal(caps['completion']))/Decimal(1000000)+Decimal('0.002')
             self.assertEqual(ceiling,Decimal(budget['actor_stage_reserves_usd'][kind]))
         self.assertEqual((budget['aggregate_inference_cap_usd'],budget['cash_cap_usd'],budget['combined_program_cap_usd']),(40,50,24))
         amendment=d.CONFIG['resource_amendment']

@@ -29,8 +29,8 @@ MAX_INPUT_RESERVE_TOKENS=MAX_TEXT_BYTES+MAX_IMAGE_BLOCKS*VISION_RESERVE_TOKENS
 MIN_CONTEXT_TOKENS=MAX_INPUT_RESERVE_TOKENS+MAX_OUTPUT_TOKENS
 NATIVE_RESERVE_USD=Decimal('0.0323104')
 PROMPT_PRICE_CEILING=Decimal('0.00000015')
-COMPLETION_PRICE_CEILING=Decimal('0.00000010')
-AMENDMENT_PROFILE='v16_relace_auto_content_json_65536_input_81920_initial_49152_prices_0.15_0.10'
+COMPLETION_PRICE_CEILING=Decimal('0.00000020')
+AMENDMENT_PROFILE='v16_relace_auto_content_json_65536_input_81920_initial_49152_prices_0.15_0.20'
 MODEL_BINDING_FILENAME='glm_model_binding_relace_native.json'
 REQUIRED_NATIVE_PARAMETERS=frozenset(('tools','tool_choice','max_tokens','temperature','reasoning'))
 INPUT_LIMITS={name:{k:v for k,v in p.items()if k!='reserve_usd'}for name,p in NATIVE_PROFILES.items()}
@@ -65,7 +65,7 @@ def actor_payload(messages,tools):
             'max_tokens':profile['output_tokens'],'stream':False,'temperature':1.0,
             'reasoning':{'effort':'high','exclude':False},
             'provider':{'only':[ACTOR_PROVIDER_TAG],'allow_fallbacks':False,'require_parameters':True,
-                        'max_price':{'prompt':0.15,'completion':0.10,'request':0}}}
+                        'max_price':{'prompt':0.15,'completion':0.20,'request':0}}}
 
 
 def inspect_payload(payload):
@@ -224,8 +224,8 @@ class Provider(legacy.Provider):
             "unused_model_checks": [],
             "input_limits": {MODEL: dict(INPUT_LIMITS)},
             "reservation": {"profiles":deepcopy(PROFILE_MAP),
-                "formula":"(text_bound+image_blocks*8192)*0.00000015+2*output_tokens*0.00000010+0.002",
-                "hard_prompt_max_price_per_million":"0.15","hard_completion_max_price_per_million":"0.10",
+                "formula":"(text_bound+image_blocks*8192)*0.00000015+output_tokens*0.00000020+0.002",
+                "hard_prompt_max_price_per_million":"0.15","hard_completion_max_price_per_million":"0.20",
                 "amendment_profile":AMENDMENT_PROFILE,
                 "normal_native_calls":NORMAL_NATIVE_CALLS,"normal_study_reservation_usd":str(NORMAL_RESERVATION_USD)},
             "cash_limit_note": "Original40 inference/50cash limits remain; no new allowance."}
@@ -245,7 +245,7 @@ class Provider(legacy.Provider):
                 or result.get('reservation',{}).get('normal_study_reservation_usd')!=str(NORMAL_RESERVATION_USD)
                 or result.get('reservation',{}).get('amendment_profile')!=AMENDMENT_PROFILE
                 or result.get('reservation',{}).get('hard_prompt_max_price_per_million')!='0.15'
-                or result.get('reservation',{}).get('hard_completion_max_price_per_million')!='0.10'
+                or result.get('reservation',{}).get('hard_completion_max_price_per_million')!='0.20'
                 or result.get('model_binding_setting_key')!=MODEL_BINDING_KEY
                 or result.get('model_binding_evidence_filename')!=MODEL_BINDING_FILENAME
                 or result.get('transport_policy')!=TRANSPORT_POLICY

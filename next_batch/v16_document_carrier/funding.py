@@ -55,7 +55,7 @@ def validate_native_wire(payload,reserve_usd):
     if not isinstance(payload,dict):raise BudgetError('Native wire object required')
     name,profile=profile_for_tools(payload.get('tools'))
     expected_provider={'only':[ACTOR_PROVIDER_TAG],'allow_fallbacks':False,'require_parameters':True,
-                       'max_price':{'prompt':.15,'completion':.10,'request':0}}
+                       'max_price':{'prompt':.15,'completion':.20,'request':0}}
     expected_keys={'model','messages','tools','tool_choice','max_tokens','stream','temperature','reasoning','provider'}
     if (set(payload)!=expected_keys or payload.get('model')!=MODELS['chat']
             or payload.get('max_tokens')!=profile['output_tokens']or payload.get('stream')is not False

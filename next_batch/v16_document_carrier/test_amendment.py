@@ -45,6 +45,13 @@ class FixtureRunner:
 
 class AmendmentTests(unittest.TestCase):
     def setUp(self):
+        # Fixture chains 001-006 predate amendment007's completion guard; the
+        # price-guard tests below lift this patch before applying 007.
+        self.pre_price_guard = patch.dict(design.CONFIG['budget'], {
+            'hard_unit_price_caps_usd_per_million': deepcopy(a.OLD_PRICE_CAPS)})
+        self.pre_price_guard.start()
+        self.pre_price_guard_active = True
+        self.addCleanup(self.lift_pre_price_guard)
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)
         self.out = self.root/'OFFLINE_FIXTURE_RUN'
@@ -103,6 +110,11 @@ class AmendmentTests(unittest.TestCase):
 
     def tearDown(self):
         self.temporary.cleanup()
+
+    def lift_pre_price_guard(self):
+        if self.pre_price_guard_active:
+            self.pre_price_guard.stop()
+            self.pre_price_guard_active = False
 
     def apply(self):
         return a.apply_truncation_recovery(self.runner, self.ledger)
@@ -937,6 +949,131 @@ class AmendmentTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             a.apply_canonical_design_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/006').exists())
+
+    FREEZE006_QUOTE = {'prompt':'0.0000000191','completion':'0.0000001352','input_cache_read':'0.0000000191','discount':0}
+
+    def prepare_price_guard_amendment(self):
+        self.prepare_canonical_amendment()
+        a.apply_canonical_design_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        rt.Runner(self.out, fixture=True).current('b01')
+        put(self.out/'driver/FREE_PRICE_DIAGNOSTIC_FREEZE006.json', {
+            'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE','new_paid_calls':0,
+            'freeze_sha256':a.active_freeze(self.out)['sha256'],
+            'preflight_result':{'status':'held','code':'Native pricing exceeds amended hard ceiling'},
+            'observed_relace_endpoint':{'tag':'relace','pricing':deepcopy(self.FREEZE006_QUOTE)}})
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted completion-price hold'})
+        self.lift_pre_price_guard()
+        self.source.write_text('# OFFLINE fixture price-guard amendment\n')
+
+    def test_price_guard_raises_only_completion_cap_and_keeps_reserves(self):
+        self.prepare_price_guard_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        sixth = (self.out/'AMENDMENTS/006/freeze.json').read_bytes()
+        context = (self.out/'arms/b01/attempts/r01/a04/context.json').read_bytes()
+        result = a.apply_price_guard_amendment(self.runner, self.ledger)
+        self.assertEqual((result['new_paid_calls'], result['all_arms_next_attempt']), (0, 'r01.a04'))
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual((self.out/'STOP_REQUESTED.json').read_bytes(), stop)
+        self.assertEqual((self.out/'AMENDMENTS/006/freeze.json').read_bytes(), sixth)
+        self.assertEqual((self.out/'arms/b01/attempts/r01/a04/context.json').read_bytes(), context)
+        old = read(self.out/'AMENDMENTS/006/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/007/CONFIG.json')
+        changed = ('budget', 'price_guard_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual({k:v for k,v in old['budget'].items() if k != 'hard_unit_price_caps_usd_per_million'},
+                         {k:v for k,v in new['budget'].items() if k != 'hard_unit_price_caps_usd_per_million'})
+        self.assertEqual(new['budget']['hard_unit_price_caps_usd_per_million'], a.NEW_PRICE_CAPS)
+        self.assertEqual(new['technical_amendment']['number'], 7)
+        frozen = read(self.out/'AMENDMENTS/007/freeze.json')
+        self.assertEqual(frozen['parent_freeze_sha256'], sha(sixth))
+        self.assertEqual((self.out/'AMENDMENTS/007/SYSTEM_PROMPTS.json').read_bytes(),
+                         (self.out/'AMENDMENTS/006/SYSTEM_PROMPTS.json').read_bytes())
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/007')
+        self.assertEqual(a.apply_price_guard_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        archive = self.out/'AMENDMENTS/007/FREE_PRICE_DIAGNOSTIC_FREEZE006.original.json'
+        raw = archive.read_bytes();archive.write_text('CORRUPTED_OFFLINE_ARCHIVE')
+        with self.assertRaises(IntegrityError):
+            a.verify_chain(self.out, fixture=True)
+        archive.write_bytes(raw)
+        a.release_stop(self.out, fixture=True)
+        self.assertEqual(rt.Runner(self.out, fixture=True).current('b01')[0]['attempt_id'], 'b01.r01.a04')
+
+    def test_price_guard_requires_released_parent_new_stop_and_observed_block(self):
+        self.prepare_price_guard_amendment()
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        (self.out/'STOP_REQUESTED.json').unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        (self.out/'STOP_REQUESTED.json').write_bytes(stop)
+        release = self.out/'AMENDMENTS/006/STOP_RELEASE.json'
+        raw = release.read_bytes();release.unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        release.write_bytes(raw)
+        diagnostic = self.out/'driver/FREE_PRICE_DIAGNOSTIC_FREEZE006.json'
+        original = diagnostic.read_bytes()
+        for quote in ('0.0000000709', '0.0000002500'):
+            self.rewrite(diagnostic, lambda body: body['observed_relace_endpoint']['pricing'].update(completion=quote))
+            with self.assertRaises(IntegrityError):
+                a.apply_price_guard_amendment(self.runner, self.ledger)
+            diagnostic.unlink();diagnostic.write_bytes(original)
+        self.rewrite(diagnostic, lambda body: body.update(freeze_sha256='0'*64))
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        diagnostic.unlink();diagnostic.write_bytes(original)
+        put(self.out/'preflights/OFFLINE_passed.json', {'status':'passed',
+            'freeze_sha256':a.active_freeze(self.out)['sha256'],'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        (self.out/'preflights/OFFLINE_passed.json').unlink()
+        self.assertFalse((self.out/'AMENDMENTS/007').exists())
+        a.apply_price_guard_amendment(self.runner, self.ledger)
+
+    def test_price_guard_refuses_paid_rows_a04_work_jobs_or_locks(self):
+        self.prepare_price_guard_amendment()
+        stage = self.out/'arms/b03/attempts/r01/a04/inflight/B_INITIAL.json'
+        put(stage, {'stage':'B_INITIAL','evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_DISPATCH'})
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        stage.unlink()
+        probe = self.out/'probes/sentinel/b01.r01.delivered.json'
+        put(probe, {'evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_PROBE'})
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        probe.unlink()
+        with lock(self.out/'arms/b05'):
+            with self.assertRaises(IntegrityError):
+                a.apply_price_guard_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a04.B_INITIAL.native','uncertain','chat',
+                'z-ai/glm-5.3-flash','f'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/007').exists())
+
+    def test_price_guard_refuses_reserve_cap_or_other_changes(self):
+        self.prepare_price_guard_amendment()
+        with patch.dict(design.CONFIG['budget'], {'combined_program_cap_usd':30}), self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['budget'], {'hard_unit_price_caps_usd_per_million':{'prompt':'0.20','completion':'0.20'}}), \
+                self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        with patch.object(provider, 'COMPLETION_PRICE_CEILING', Decimal('0.00000030')), self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        profiles = deepcopy(funding.NATIVE_PROFILES)
+        profiles['publish_document']['output_tokens'] = 131072
+        with patch.dict(funding.NATIVE_PROFILES, profiles, clear=True), self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['sampling'], {'temperature':1.2}), self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['routes'], {'actors':'open-inference/fp4'}), self.assertRaises(IntegrityError):
+            a.apply_price_guard_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/007').exists())
+        a.apply_price_guard_amendment(self.runner, self.ledger)
 
 if __name__ == '__main__':
     unittest.main()
