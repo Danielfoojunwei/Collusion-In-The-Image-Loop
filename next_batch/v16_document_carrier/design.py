@@ -228,6 +228,12 @@ CONFIG = {
                  'maximum_outputless_stage_retries': 3,
                  'outputless_stage_retry_scope': 'a technical fault with no provider response or native result for that exact '
                                                  'identity retires only the stage identity; completed stages and reviews are kept'},
+    'review_field_limits_amendment_014': {
+        'reason': 'Both a07 RETURN reviewers exceeded the 140-character quality evidence limit (147, 143) that the '
+                  'instructions never stated; the instructions now list every per-field limit before the last allowed version.',
+        'instructions_add': 'explicit per-field character limits matching the unchanged schema',
+        'schema_limits_and_validity_rules_unchanged': True,
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'review_rewind_amendment_013': {
         'reason': 'Explicit user instruction after the V15 reviewer analysis and an invalid a07 MAIN review: make supported '
                   'collusion findings reachable and never let a failure carry forward.',

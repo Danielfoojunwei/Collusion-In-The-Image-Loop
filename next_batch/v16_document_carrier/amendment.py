@@ -2070,7 +2070,8 @@ def _sealed_http_failure(out, identifier):
 
 
 def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
-                             changed_fields=(), failed_identities=(), abandoned_attempts=()):
+                             changed_fields=(), failed_identities=(), abandoned_attempts=(),
+                             active_attempt=None, completed_identities=()):
     """Append a no-paid-change amendment directly after the released previous freeze.
 
     The ledger must equal the parent receipt exactly, apart from ``failed_identities``:
@@ -2078,7 +2079,9 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
     Current attempts may hold only unfunded contexts, and no job or probe may exist.
     ``block_key`` is added and only ``changed_fields`` may take new design values.
     Completed rows of ``abandoned_attempts`` (technically abandoned after the parent)
-    are also allowed; every other row must match the parent receipt exactly.
+    and the explicitly declared ``completed_identities`` are also allowed; every other
+    row must match the parent receipt exactly. ``active_attempt`` (``bNN.rNN.aNN``)
+    may contain in-progress work and reviews, which are retained by hash.
     """
     from . import design, prompts
     out = safe(runner.out)
@@ -2118,8 +2121,12 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                 arm_id, round_id, attempt_number = attempt.split('.')
                 if read(out / 'arms' / arm_id / 'attempts' / round_id / attempt_number / 'abandoned.json').get('technical') is not True:
                     raise IntegrityError('Declared attempt is not technically abandoned')
+            declared = set(completed_identities)
             completed = [row for row in snapshot['rows']
-                         if row['request_id'] not in failed and prefixes and row['request_id'].startswith(prefixes)]
+                         if row['request_id'] not in failed and
+                         (row['request_id'] in declared or (prefixes and row['request_id'].startswith(prefixes)))]
+            if not declared <= {row['request_id'] for row in completed}:
+                raise IntegrityError('A declared completed identity is missing from the ledger')
             baseline = [row for row in snapshot['rows'] if row['request_id'] not in failed and row not in completed]
             new_rows = [row for row in snapshot['rows'] if row['request_id'] in failed]
             if (len(baseline) != receipt['ledger_row_count'] or len(new_rows) != len(failed) or
@@ -2142,11 +2149,18 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
                 raise IntegrityError('Control amendment changed cases or actor prompts')
             retained = list(failure_proofs)
+            active_root = None
+            if active_attempt is not None:
+                arm_id, round_id, attempt_number = active_attempt.split('.')
+                active_root = out / 'arms' / arm_id / 'attempts' / round_id / attempt_number
+                if not active_root.is_dir() or (active_root / 'abandoned.json').exists():
+                    raise IntegrityError('Declared active attempt is missing or abandoned')
+                retained.extend(_inventory(active_root))
             for arm in ARMS:
                 if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
                     raise IntegrityError('A checkpoint exists; control change must precede all rounds')
                 for extra in (out / 'arms' / arm / 'attempts' / 'r01').glob('a[0-9][0-9]'):
-                    if (extra / 'abandoned.json').exists():
+                    if (extra / 'abandoned.json').exists() or extra == active_root:
                         continue
                     files = [path for path in extra.rglob('*') if path.is_file()]
                     if any(path.name != 'context.json' or path.parent != extra for path in files):
@@ -2161,8 +2175,10 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                         continue
                     # A review of a technically abandoned attempt is retained evidence, not current work.
                     owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)(?:\.v\d)?', job.name)
-                    if (directory != 'reviews' or owner is None or not
-                            (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3) / 'abandoned.json').is_file()):
+                    owner_root = (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3)
+                                  if owner is not None else None)
+                    if (directory != 'reviews' or owner_root is None or not
+                            ((owner_root / 'abandoned.json').is_file() or owner_root == active_root)):
                         raise IntegrityError('A launched or assessed job exists before the control amendment')
                     retained.extend(_inventory(job))
             if any(path.is_file() for path in (out / 'probes').rglob('*')):
@@ -2463,6 +2479,23 @@ def apply_review_rewind_amendment(runner, ledger):
         return {'status': 'review_rewind_amended_held_for_free_preflight', 'directory': str(destination),
                 'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
                 'a07_next': 'MAIN_REVIEW v2 then A_LOG.retry1, B_LOG.retry1', 'STOP_still_present': True}
+
+
+FIELD_LIMITS_014_COMPLETED = tuple(NAMESPACE + 'b01.r01.a07.' + name for name in
+                                   ('A_LOG.retry1.native', 'B_LOG.retry1.native', 'C_PUBLISH.native', 'C_PUBLISH.figure'))
+
+
+def apply_review_field_limits_amendment(runner, ledger):
+    """Append014: state the unchanged per-field review limits before a07 RETURN v3."""
+    from .review import REVIEW_INSTRUCTIONS
+    if 'each quality evidence 140' not in REVIEW_INSTRUCTIONS or 'feedback 500' not in REVIEW_INSTRUCTIONS:
+        raise IntegrityError('Installed reviewer instructions lack the amendment014 field limits')
+    return _apply_control_amendment(
+        runner, ledger, 14, 'review_field_limits_amendment_014', 'review_field_limits_amendment',
+        'Both a07 RETURN reviewers exceeded an unstated 140-character schema limit; state every limit before the last version.',
+        'Reviewer instructions now list the unchanged schema per-field character limits. a07 continues in place at RETURN v3; its A_LOG.retry1, B_LOG.retry1 and C_PUBLISH calls completed under freeze013 and are retained. Nothing else changes.',
+        'prospectively_frozen_reviewer_field_limit_disclosure',
+        active_attempt='b01.r01.a07', completed_identities=FIELD_LIMITS_014_COMPLETED)
 
 
 def release_stop(out, fixture=False):

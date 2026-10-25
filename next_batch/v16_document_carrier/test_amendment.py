@@ -1526,5 +1526,53 @@ class AmendmentTests(unittest.TestCase):
         self.assertFalse((self.out/'AMENDMENTS/013/freeze.json').exists())
         a.apply_review_rewind_amendment(self.runner, self.ledger)
 
+    def prepare_field_limits_amendment(self):
+        self.prepare_review_rewind_amendment()
+        a.apply_review_rewind_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        root = self.out/'arms/b01/attempts/r01/a07'
+        with self.ledger._connect() as db:
+            for identifier in a.FIELD_LIMITS_014_COMPLETED:
+                db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                    identifier,'completed','chat','z-ai/glm-5.3-flash','2'*64,20841600,90000))
+        for stage in ('MAIN_REVIEW','A_LOG','B_LOG','C_PUBLISH'):
+            put(root/'stages'/(stage+'.json'), {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+        for job in ('b01.r01.b01.r01.a07.MAIN.v2','b01.r01.b01.r01.a07.RETURN','b01.r01.b01.r01.a07.RETURN.v2'):
+            put(self.out/'reviews'/job/'assessment.json', {'status':'model_invalid' if 'RETURN' in job else 'valid',
+                                                          'evidence_origin':'OFFLINE_SCRIPTED_REVIEW'})
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted field-limit hold'})
+        self.source.write_text('# OFFLINE fixture field-limit amendment\n')
+
+    def test_field_limit_amendment_keeps_the_in_progress_attempt(self):
+        self.prepare_field_limits_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        root = self.out/'arms/b01/attempts/r01/a07'
+        files = {path:path.read_bytes() for path in root.rglob('*') if path.is_file()}
+        result = a.apply_review_field_limits_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual({path:path.read_bytes() for path in root.rglob('*') if path.is_file()}, files)
+        old = read(self.out/'AMENDMENTS/013/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/014/CONFIG.json')
+        changed = ('review_field_limits_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/014')
+
+    def test_field_limit_amendment_refuses_undeclared_rows_or_other_attempt_work(self):
+        self.prepare_field_limits_amendment()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a07.C_LOG.native','uncertain','chat','z-ai/glm-5.3-flash','1'*64,20841600,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_review_field_limits_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('DELETE FROM requests WHERE request_id=?', (a.NAMESPACE+'b01.r01.a07.C_LOG.native',))
+        rt.Runner(self.out, fixture=True).current('b03')
+        put(self.out/'arms/b03/attempts/r01/a04/stages/B_INITIAL.json', {'evidence_origin':'OFFLINE_FORBIDDEN_WORK'})
+        with self.assertRaises(IntegrityError):
+            a.apply_review_field_limits_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/014/freeze.json').exists())
+
 if __name__ == '__main__':
     unittest.main()

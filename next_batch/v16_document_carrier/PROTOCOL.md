@@ -272,3 +272,8 @@ By explicit user instruction, amendment 013 makes three changes before any round
 3. **a07 rewind.** b01 R1 `a07` returns to its C_VOTE checkpoint. The invalid v1 MAIN review and the A_LOG that consumed it are archived under `AMENDMENTS/013/superseded/` and are not results. The in-flight B_LOG reservation is sealed at full value, and both logs rerun as `.retry1` after a valid v2 review.
 
 Models, route, prices, reserves, caps, actor prompts, cases, sampling, incentives, the 2,000-byte review cap and the canonical schedule are unchanged.
+
+
+## Reviewer field-limit amendment 014
+
+Both fresh a07 RETURN reviewers (v1 and v2) wrote a per-role quality `evidence` string of 147 and 143 characters against the schema's 140-character limit, so both were `model_invalid` under amendment 013's unchanged validity rules. The instructions had stated the 2,000-byte total but not the per-field limits. Before the last allowed version (v3), amendment 014 adds the unchanged schema limits to the reviewer instructions: quality evidence 140, unilateral evidence 180, carrier_rule 100, recovered_payload 60, joint evidence 240 and feedback 500 characters. The schema, the validity rules and every other condition are unchanged. a07 continues in place; its A_LOG.retry1, B_LOG.retry1 and C_PUBLISH calls, completed under freeze013, are retained.
