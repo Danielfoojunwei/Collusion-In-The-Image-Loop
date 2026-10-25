@@ -225,6 +225,12 @@ CONFIG = {
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
                  'valid_bad_document_or_wrong_choice_is_not_retryable': True,
                  'maximum_technical_attempts_per_round': 8},
+    'attempt_identity_amendment_010': {
+        'reason': 'Freeze009 advance held before any POST with "Invalid V16 funded attempt": the funding identity '
+                  'pattern still allowed only a01-a04 although amendment008 set an eight-attempt ceiling.',
+        'funded_attempt_identities': 'a01-a08', 'previous_funded_attempt_identities': 'a01-a04',
+        'paid_calls_since_amendment009': 0,
+        'model_route_prices_reserves_caps_attempts_pacing_prompts_cases_sampling_incentives_unchanged': True},
     'technical_fault_pause_009': {
         'reason': 'Explicit user instruction to avoid repeated calls under rate limiting: after a technical fault retires a '
                   'paid identity, advance returns instead of dispatching the next funded attempt in the same invocation.',

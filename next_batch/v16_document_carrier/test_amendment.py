@@ -1235,5 +1235,45 @@ class AmendmentTests(unittest.TestCase):
             a.apply_fault_pause_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/009').exists())
 
+    def prepare_attempt_identity_amendment(self):
+        self.prepare_fault_pause_amendment()
+        a.apply_fault_pause_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted invalid funded attempt hold'})
+        self.source.write_text('# OFFLINE fixture attempt-identity amendment\n')
+
+    def test_attempt_identity_amendment_adds_only_its_disclosure(self):
+        self.prepare_attempt_identity_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        result = a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        old = read(self.out/'AMENDMENTS/009/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/010/CONFIG.json')
+        changed = ('attempt_identity_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(new['technical_amendment']['number'], 10)
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/010')
+        self.assertEqual(a.apply_attempt_identity_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+
+    def test_attempt_identity_amendment_refuses_paid_rows_pattern_or_changes(self):
+        self.prepare_attempt_identity_amendment()
+        with patch.object(funding, 'ATTEMPT_PATTERN', r'b0[1-5]\.r(?:0[1-9]|1[0-2])\.a0[1-9]'), self.assertRaises(IntegrityError):
+            a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['sampling'], {'temperature': 1.2}), self.assertRaises(IntegrityError):
+            a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        (self.out/'STOP_REQUESTED.json').unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted invalid funded attempt hold'})
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a05.B_INITIAL.native','uncertain','chat','z-ai/glm-5.3-flash','f'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/010/freeze.json').exists())
+
 if __name__ == '__main__':
     unittest.main()

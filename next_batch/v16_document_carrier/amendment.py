@@ -2036,6 +2036,151 @@ def apply_fault_pause_amendment(runner, ledger):
                 'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
 
 
+FROZEN_CONDITION_FIELDS = ('models', 'routes', 'seed', 'scoring', 'sampling', 'documents', 'validation_payload',
+                           'budget', 'recovery', 'stages', 'known_patterns', 'working_context', 'rounds_per_arm',
+                           'total_rounds', 'active_arms', 'post_main_decode_assays')
+
+
+def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin):
+    """Append a no-paid-change amendment directly after the released previous freeze.
+
+    The ledger must equal the parent receipt exactly, current attempts may hold only
+    unfunded contexts, and no job or probe may exist. Only ``block_key`` is added.
+    """
+    from . import design, prompts
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / f'{number:03}'
+    parent = out / 'AMENDMENTS' / f'{number - 1:03}'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before a control amendment')
+    block = design.CONFIG.get(block_key) or {}
+    if not block.get('reason'):
+        raise IntegrityError('Control amendment disclosure is not installed')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        old = read(parent / 'CONFIG.json')
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the control amendment')
+        else:
+            previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+            if previous['directory'] != parent or not (parent / 'STOP_RELEASE.json').is_file():
+                raise IntegrityError('Control amendment must directly follow the released previous freeze')
+            receipt = read(parent / 'RECOVERY_RECEIPT.json')
+            if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
+                    snapshot['count'] != receipt['ledger_row_count']):
+                raise IntegrityError('Paid ledger changed after the previous freeze; control change forbidden')
+            if (old.get('technical_amendment') or {}).get('number') != number - 1 or config_key in old:
+                raise IntegrityError('Unexpected parent configuration')
+            for field in FROZEN_CONDITION_FIELDS:
+                if old.get(field) != design.CONFIG.get(field):
+                    raise IntegrityError('Control amendment changed scientific/resource condition: ' + field)
+            frozen_prompts = read(parent / 'SYSTEM_PROMPTS.json')
+            if (frozen_prompts != {key: prompts.actor_system(key.split('.', 1)[1][0], key.split('.', 1)[1], key.split('.', 1)[0])
+                                   for key in frozen_prompts} or
+                    read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
+                raise IntegrityError('Control amendment changed cases or actor prompts')
+            retained = []
+            for arm in ARMS:
+                if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+                    raise IntegrityError('A checkpoint exists; control change must precede all rounds')
+                for extra in (out / 'arms' / arm / 'attempts' / 'r01').glob('a[0-9][0-9]'):
+                    if (extra / 'abandoned.json').exists():
+                        continue
+                    files = [path for path in extra.rglob('*') if path.is_file()]
+                    if any(path.name != 'context.json' or path.parent != extra for path in files):
+                        raise IntegrityError('A current attempt contains work rather than an unfunded context')
+                    retained.extend(_inventory(extra))
+                for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+                    if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                        raise IntegrityError('Future-round work exists before the control amendment')
+            for directory in ('reviews', 'decoding', 'attribution_audits'):
+                for job in (out / directory).glob('*'):
+                    if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                        raise IntegrityError('A launched or assessed job exists before the control amendment')
+            if any(path.is_file() for path in (out / 'probes').rglob('*')):
+                raise IntegrityError('A probe exists before the control amendment')
+            intent = {'amendment_number': number, 'revision': f'v16.{number}', 'recorded_at_unix': time.time(),
+                      'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture), 'reason': reason,
+                      'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+                      'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+                      'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+                      'paid_calls_after_previous_freeze': 0,
+                      'new_round_attempt': 'Continue existing unfunded current attempts without rewind.'}
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the control amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Unfunded context changed during the control amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        config = deepcopy(old)
+        config[config_key] = deepcopy(block)
+        config['technical_amendment'] = {'number': number, 'revision': f'v16.{number}', 'reason': block['reason'],
+                                         'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
+        if bool(config.get('offline_fixture')) != bool(runner.fixture):
+            raise IntegrityError('Fixture mode differs')
+        put(destination / 'CONFIG.json', config)
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (parent / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Control amendment unexpectedly changed the paid ledger')
+        put(destination / 'RECOVERY_RECEIPT.json', {
+            'amendment_number': number, 'intent_sha256': sha(intent_path.read_bytes()),
+            'parent_freeze_sha256': intent['parent_freeze_sha256'],
+            'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': [],
+            'retained_attempt_count': 0, 'stop_original_sha256': intent['stop_sha256'], 'scientific_note': note})
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=number, revision=f'v16.{number}',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin=origin)
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'control_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
+
+
+def apply_attempt_identity_amendment(runner, ledger):
+    """Append010: funded identity pattern covers the eight-attempt ceiling (a01-a08)."""
+    from .funding import ATTEMPT_PATTERN
+    if (re.fullmatch(ATTEMPT_PATTERN, 'b01.r01.a08') is None or
+            re.fullmatch(ATTEMPT_PATTERN, 'b01.r01.a09') is not None):
+        raise IntegrityError('Installed funding identity pattern differs from a01-a08')
+    return _apply_control_amendment(
+        runner, ledger, 10, 'attempt_identity_amendment_010', 'attempt_identity_amendment',
+        'Freeze009 advance held before any POST: funding accepted only a01-a04 while the attempt ceiling is eight.',
+        'Funding identity pattern widened from a01-a04 to a01-a08 to match the amendment008 ceiling. No POST was made under freeze009; nothing else changes.',
+        'prospectively_frozen_attempt_identity_repair_before_any_a05_request')
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

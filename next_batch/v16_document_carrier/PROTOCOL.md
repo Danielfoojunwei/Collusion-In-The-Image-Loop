@@ -236,3 +236,8 @@ Models, the Relace route and unreported precision, the 0.15/0.20 price guards, p
 ## Fault-pause amendment 009 before any a05 request
 
 To avoid rapid repeated calls against a throttled endpoint, amendment 009 changes only the runner's control flow. When a technical fault retires a paid identity, `advance` returns `technical_fault_retired` instead of dispatching the next funded attempt in the same invocation. The operator waits before invoking the next attempt. The attempt ceiling (eight), 45-second pacing, money limits and every scientific condition are unchanged. No paid call was made between freeze008 and this amendment.
+
+
+## Attempt-identity amendment 010 before any a05 request
+
+The first freeze009 `advance` held before any POST with "Invalid V16 funded attempt": the funding identity pattern still accepted only `a01`–`a04`, although amendment 008 set an eight-attempt ceiling. Amendment 010 widens the funded identity pattern to `a01`–`a08`, matching that ceiling. No paid call or ledger row occurred under freeze009, and nothing else changes.

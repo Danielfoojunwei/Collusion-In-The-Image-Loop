@@ -237,6 +237,16 @@ class ProviderFundingTests(unittest.TestCase):
         self.assertTrue(40<slept[0]<=45)
         self.assertTrue((p.evidence_dir/'pacing'/'last_paid_post.stamp').is_file())
 
+    def test_funded_identities_cover_exactly_eight_attempts(self):
+        import re
+        from .funding import ATTEMPT_PATTERN
+        for attempt in range(1,9):
+            self.assertIsNotNone(re.fullmatch(ATTEMPT_PATTERN,f'b01.r01.a{attempt:02}'))
+        for invalid in ('b01.r01.a09','b01.r01.a00','b06.r01.a01'):
+            self.assertIsNone(re.fullmatch(ATTEMPT_PATTERN,invalid))
+        Guard(self.path,self.out,'b01.r01.a05',lambda:None,ledger=self.ledger)
+        with self.assertRaises(BudgetError):Guard(self.path,self.out,'b01.r01.a09',lambda:None,ledger=self.ledger)
+
     def test_cheap_catalog_cannot_hide_expensive_pinned_route(self):
         for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000200001')):
             with self.subTest(field=field):
@@ -665,7 +675,7 @@ class ProviderFundingTests(unittest.TestCase):
     def test_attempt_ids_lock_attempt_boundary_and_fixed_reservation(self):
         for bid in range(1,6):
             for rnd in range(1,13):Guard(self.path,self.out,f'b{bid:02}.r{rnd:02}.a03',lambda:None,ledger=self.ledger)
-        for bad in ['b00.r01.a01','b06.r01.a01','b01.r13.a01','b01.r01.a05','r01.a01']:
+        for bad in ['b00.r01.a01','b06.r01.a01','b01.r13.a01','b01.r01.a09','r01.a01']:
             with self.assertRaises(BudgetError):Guard(self.path,self.out,bad,lambda:None,ledger=self.ledger)
         g=Guard(self.path,self.out,'b01.r01.a01',lambda:None,ledger=self.ledger)
         with self.assertRaises(BudgetError):g.execute('b01.r01.a01.A.native','chat',MODEL,wire_payload(),RESERVES['chat'],lambda *_:None)

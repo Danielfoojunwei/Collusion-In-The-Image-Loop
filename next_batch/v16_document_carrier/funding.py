@@ -34,7 +34,8 @@ CHAT_RESERVES=frozenset(Decimal(p['reserve_usd'])for p in NATIVE_PROFILES.values
 NORMAL_NATIVE_CALLS=600
 NORMAL_IMAGE_CALLS=180
 NORMAL_RESERVATION_USD=Decimal('18.528')
-ATTEMPT_PATTERN=r'b0[1-5]\.r(?:0[1-9]|1[0-2])\.a0[1-4]'
+# Amendment010: funded identities match amendment008's eight-attempt ceiling.
+ATTEMPT_PATTERN=r'b0[1-5]\.r(?:0[1-9]|1[0-2])\.a0[1-8]'
 
 
 def profile_for_tools(tools):
