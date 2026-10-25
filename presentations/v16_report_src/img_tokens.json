@@ -1,0 +1,492 @@
+{
+ "chars_per_token_text_only": 3.851098119414929,
+ "n_image_calls": 30,
+ "images_per_call": 4,
+ "extra_tokens_per_image": {
+  "min": 103.95780049121049,
+  "median": 154.7937233578939,
+  "max": 208.73656314305435
+ },
+ "calls": [
+  {
+   "arm": "b01",
+   "round": 1,
+   "stage": "B_INITIAL",
+   "text_chars": 8548,
+   "images": 0,
+   "prompt_tokens": 2201
+  },
+  {
+   "arm": "b01",
+   "round": 1,
+   "stage": "C_INITIAL",
+   "text_chars": 8555,
+   "images": 0,
+   "prompt_tokens": 2203
+  },
+  {
+   "arm": "b01",
+   "round": 1,
+   "stage": "B_VOTE",
+   "text_chars": 27351,
+   "images": 4,
+   "prompt_tokens": 7618
+  },
+  {
+   "arm": "b01",
+   "round": 1,
+   "stage": "C_VOTE",
+   "text_chars": 27622,
+   "images": 4,
+   "prompt_tokens": 7692
+  },
+  {
+   "arm": "b01",
+   "round": 2,
+   "stage": "B_INITIAL",
+   "text_chars": 11234,
+   "images": 0,
+   "prompt_tokens": 2903
+  },
+  {
+   "arm": "b01",
+   "round": 2,
+   "stage": "C_INITIAL",
+   "text_chars": 11241,
+   "images": 0,
+   "prompt_tokens": 2905
+  },
+  {
+   "arm": "b01",
+   "round": 2,
+   "stage": "B_VOTE",
+   "text_chars": 30614,
+   "images": 4,
+   "prompt_tokens": 8478
+  },
+  {
+   "arm": "b01",
+   "round": 2,
+   "stage": "C_VOTE",
+   "text_chars": 29705,
+   "images": 4,
+   "prompt_tokens": 8245
+  },
+  {
+   "arm": "b01",
+   "round": 3,
+   "stage": "B_INITIAL",
+   "text_chars": 12040,
+   "images": 0,
+   "prompt_tokens": 3130
+  },
+  {
+   "arm": "b01",
+   "round": 3,
+   "stage": "C_INITIAL",
+   "text_chars": 12014,
+   "images": 0,
+   "prompt_tokens": 3118
+  },
+  {
+   "arm": "b01",
+   "round": 3,
+   "stage": "B_VOTE",
+   "text_chars": 31240,
+   "images": 4,
+   "prompt_tokens": 8764
+  },
+  {
+   "arm": "b01",
+   "round": 3,
+   "stage": "C_VOTE",
+   "text_chars": 30378,
+   "images": 4,
+   "prompt_tokens": 8547
+  },
+  {
+   "arm": "b01",
+   "round": 4,
+   "stage": "B_INITIAL",
+   "text_chars": 12420,
+   "images": 0,
+   "prompt_tokens": 3238
+  },
+  {
+   "arm": "b01",
+   "round": 4,
+   "stage": "C_INITIAL",
+   "text_chars": 12612,
+   "images": 0,
+   "prompt_tokens": 3295
+  },
+  {
+   "arm": "b01",
+   "round": 4,
+   "stage": "B_VOTE",
+   "text_chars": 31329,
+   "images": 4,
+   "prompt_tokens": 8686
+  },
+  {
+   "arm": "b01",
+   "round": 4,
+   "stage": "C_VOTE",
+   "text_chars": 30448,
+   "images": 4,
+   "prompt_tokens": 8510
+  },
+  {
+   "arm": "b01",
+   "round": 5,
+   "stage": "B_INITIAL",
+   "text_chars": 12670,
+   "images": 0,
+   "prompt_tokens": 3331
+  },
+  {
+   "arm": "b01",
+   "round": 5,
+   "stage": "C_INITIAL",
+   "text_chars": 12861,
+   "images": 0,
+   "prompt_tokens": 3402
+  },
+  {
+   "arm": "b01",
+   "round": 5,
+   "stage": "B_VOTE",
+   "text_chars": 31123,
+   "images": 4,
+   "prompt_tokens": 8677
+  },
+  {
+   "arm": "b01",
+   "round": 5,
+   "stage": "C_VOTE",
+   "text_chars": 31293,
+   "images": 4,
+   "prompt_tokens": 8767
+  },
+  {
+   "arm": "b03",
+   "round": 1,
+   "stage": "B_INITIAL",
+   "text_chars": 8699,
+   "images": 0,
+   "prompt_tokens": 2234
+  },
+  {
+   "arm": "b03",
+   "round": 1,
+   "stage": "C_INITIAL",
+   "text_chars": 8706,
+   "images": 0,
+   "prompt_tokens": 2236
+  },
+  {
+   "arm": "b03",
+   "round": 1,
+   "stage": "B_VOTE",
+   "text_chars": 27355,
+   "images": 4,
+   "prompt_tokens": 7519
+  },
+  {
+   "arm": "b03",
+   "round": 1,
+   "stage": "C_VOTE",
+   "text_chars": 27288,
+   "images": 4,
+   "prompt_tokens": 7510
+  },
+  {
+   "arm": "b03",
+   "round": 2,
+   "stage": "B_INITIAL",
+   "text_chars": 11343,
+   "images": 0,
+   "prompt_tokens": 2918
+  },
+  {
+   "arm": "b03",
+   "round": 2,
+   "stage": "C_INITIAL",
+   "text_chars": 11570,
+   "images": 0,
+   "prompt_tokens": 2985
+  },
+  {
+   "arm": "b03",
+   "round": 2,
+   "stage": "B_VOTE",
+   "text_chars": 30631,
+   "images": 4,
+   "prompt_tokens": 8437
+  },
+  {
+   "arm": "b03",
+   "round": 2,
+   "stage": "C_VOTE",
+   "text_chars": 29956,
+   "images": 4,
+   "prompt_tokens": 8325
+  },
+  {
+   "arm": "b03",
+   "round": 3,
+   "stage": "B_INITIAL",
+   "text_chars": 11775,
+   "images": 0,
+   "prompt_tokens": 3010
+  },
+  {
+   "arm": "b03",
+   "round": 3,
+   "stage": "C_INITIAL",
+   "text_chars": 12232,
+   "images": 0,
+   "prompt_tokens": 3142
+  },
+  {
+   "arm": "b03",
+   "round": 3,
+   "stage": "B_VOTE",
+   "text_chars": 30111,
+   "images": 4,
+   "prompt_tokens": 8425
+  },
+  {
+   "arm": "b03",
+   "round": 3,
+   "stage": "C_VOTE",
+   "text_chars": 30242,
+   "images": 4,
+   "prompt_tokens": 8472
+  },
+  {
+   "arm": "b03",
+   "round": 4,
+   "stage": "B_INITIAL",
+   "text_chars": 12263,
+   "images": 0,
+   "prompt_tokens": 3174
+  },
+  {
+   "arm": "b03",
+   "round": 4,
+   "stage": "C_INITIAL",
+   "text_chars": 12709,
+   "images": 0,
+   "prompt_tokens": 3301
+  },
+  {
+   "arm": "b03",
+   "round": 4,
+   "stage": "B_VOTE",
+   "text_chars": 31176,
+   "images": 4,
+   "prompt_tokens": 8803
+  },
+  {
+   "arm": "b03",
+   "round": 4,
+   "stage": "C_VOTE",
+   "text_chars": 30860,
+   "images": 4,
+   "prompt_tokens": 8752
+  },
+  {
+   "arm": "b03",
+   "round": 5,
+   "stage": "B_INITIAL",
+   "text_chars": 12708,
+   "images": 0,
+   "prompt_tokens": 3298
+  },
+  {
+   "arm": "b03",
+   "round": 5,
+   "stage": "C_INITIAL",
+   "text_chars": 13348,
+   "images": 0,
+   "prompt_tokens": 3479
+  },
+  {
+   "arm": "b03",
+   "round": 5,
+   "stage": "B_VOTE",
+   "text_chars": 31786,
+   "images": 4,
+   "prompt_tokens": 8968
+  },
+  {
+   "arm": "b03",
+   "round": 5,
+   "stage": "C_VOTE",
+   "text_chars": 31325,
+   "images": 4,
+   "prompt_tokens": 8824
+  },
+  {
+   "arm": "b05",
+   "round": 1,
+   "stage": "B_INITIAL",
+   "text_chars": 8825,
+   "images": 0,
+   "prompt_tokens": 2251
+  },
+  {
+   "arm": "b05",
+   "round": 1,
+   "stage": "C_INITIAL",
+   "text_chars": 8832,
+   "images": 0,
+   "prompt_tokens": 2253
+  },
+  {
+   "arm": "b05",
+   "round": 1,
+   "stage": "B_VOTE",
+   "text_chars": 28769,
+   "images": 4,
+   "prompt_tokens": 7933
+  },
+  {
+   "arm": "b05",
+   "round": 1,
+   "stage": "C_VOTE",
+   "text_chars": 27688,
+   "images": 4,
+   "prompt_tokens": 7691
+  },
+  {
+   "arm": "b05",
+   "round": 2,
+   "stage": "B_INITIAL",
+   "text_chars": 11366,
+   "images": 0,
+   "prompt_tokens": 2932
+  },
+  {
+   "arm": "b05",
+   "round": 2,
+   "stage": "C_INITIAL",
+   "text_chars": 11613,
+   "images": 0,
+   "prompt_tokens": 3011
+  },
+  {
+   "arm": "b05",
+   "round": 2,
+   "stage": "B_VOTE",
+   "text_chars": 30459,
+   "images": 4,
+   "prompt_tokens": 8529
+  },
+  {
+   "arm": "b05",
+   "round": 2,
+   "stage": "C_VOTE",
+   "text_chars": 29481,
+   "images": 4,
+   "prompt_tokens": 8330
+  },
+  {
+   "arm": "b05",
+   "round": 3,
+   "stage": "B_INITIAL",
+   "text_chars": 12092,
+   "images": 0,
+   "prompt_tokens": 3108
+  },
+  {
+   "arm": "b05",
+   "round": 3,
+   "stage": "C_INITIAL",
+   "text_chars": 12567,
+   "images": 0,
+   "prompt_tokens": 3266
+  },
+  {
+   "arm": "b05",
+   "round": 3,
+   "stage": "B_VOTE",
+   "text_chars": 31896,
+   "images": 4,
+   "prompt_tokens": 8883
+  },
+  {
+   "arm": "b05",
+   "round": 3,
+   "stage": "C_VOTE",
+   "text_chars": 31378,
+   "images": 4,
+   "prompt_tokens": 8809
+  },
+  {
+   "arm": "b05",
+   "round": 4,
+   "stage": "B_INITIAL",
+   "text_chars": 12544,
+   "images": 0,
+   "prompt_tokens": 3305
+  },
+  {
+   "arm": "b05",
+   "round": 4,
+   "stage": "C_INITIAL",
+   "text_chars": 13258,
+   "images": 0,
+   "prompt_tokens": 3536
+  },
+  {
+   "arm": "b05",
+   "round": 4,
+   "stage": "B_VOTE",
+   "text_chars": 31576,
+   "images": 4,
+   "prompt_tokens": 8993
+  },
+  {
+   "arm": "b05",
+   "round": 4,
+   "stage": "C_VOTE",
+   "text_chars": 31714,
+   "images": 4,
+   "prompt_tokens": 9070
+  },
+  {
+   "arm": "b05",
+   "round": 5,
+   "stage": "B_INITIAL",
+   "text_chars": 12566,
+   "images": 0,
+   "prompt_tokens": 3288
+  },
+  {
+   "arm": "b05",
+   "round": 5,
+   "stage": "C_INITIAL",
+   "text_chars": 13280,
+   "images": 0,
+   "prompt_tokens": 3519
+  },
+  {
+   "arm": "b05",
+   "round": 5,
+   "stage": "B_VOTE",
+   "text_chars": 30337,
+   "images": 4,
+   "prompt_tokens": 8586
+  },
+  {
+   "arm": "b05",
+   "round": 5,
+   "stage": "C_VOTE",
+   "text_chars": 31014,
+   "images": 4,
+   "prompt_tokens": 8811
+  }
+ ]
+}
