@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 440" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="760" height="440" fill="#ffffff"/>
+<text x="380" y="26" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a3a5c">WO-04 energy ladder and defect headroom</text>
+<text x="380" y="44" text-anchor="middle" font-size="11" fill="#546a7b">kWh per fixed packaging acceptance batch; shared output/load basis; all four packages qualify</text>
+<line x1="70" y1="60" x2="70" y2="380" stroke="#9fb2c1" stroke-width="1"/>
+<line x1="70" y1="380" x2="730" y2="380" stroke="#9fb2c1" stroke-width="1"/>
+<g font-size="10" fill="#546a7b" text-anchor="end">
+<text x="64" y="384">0</text>
+<text x="64" y="293">20</text>
+<text x="64" y="201">40</text>
+<text x="64" y="110">60</text>
+</g>
+<g stroke="#c9d5de" stroke-width="1">
+<line x1="70" y1="289" x2="730" y2="289"/>
+<line x1="70" y1="197" x2="730" y2="197"/>
+<line x1="70" y1="106" x2="730" y2="106"/>
+</g>
+<text x="26" y="230" font-size="11" fill="#546a7b" transform="rotate(-90 26 230)">Energy (kWh)</text>
+<line x1="70" y1="353" x2="730" y2="353" stroke="#1f6f43" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="726" y="348" font-size="10" fill="#1f6f43" text-anchor="end">P1 minimum 6 kWh</text>
+<rect x="120" y="353" width="90" height="27" fill="#1f6f43"/>
+<rect x="260" y="316" width="90" height="64" fill="#6f8fa6"/>
+<rect x="400" y="197" width="90" height="183" fill="#6f8fa6"/>
+<rect x="540" y="74" width="90" height="306" fill="#6f8fa6"/>
+<g font-size="13" font-weight="bold" text-anchor="middle">
+<text x="165" y="345" fill="#1f6f43">6</text>
+<text x="305" y="308" fill="#1a3a5c">14 (2.33x)</text>
+<text x="445" y="189" fill="#1a3a5c">40 (6.67x)</text>
+<text x="585" y="66" fill="#1a3a5c">67 (11.17x)</text>
+</g>
+<defs>
+<marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#c77700"/></marker>
+</defs>
+<g stroke="#c77700" stroke-width="1.5">
+<line x1="214" y1="338" x2="254" y2="338" marker-end="url(#ah)"/>
+<line x1="354" y1="258" x2="394" y2="258" marker-end="url(#ah)"/>
+<line x1="494" y1="138" x2="534" y2="138" marker-end="url(#ah)"/>
+</g>
+<g font-size="11" fill="#c77700" text-anchor="middle">
+<text x="234" y="330">+8</text>
+<text x="374" y="250">+26</text>
+<text x="514" y="130">+27</text>
+</g>
+<g font-size="13" font-weight="bold" text-anchor="middle" fill="#1a3a5c">
+<text x="165" y="398">P1</text>
+<text x="305" y="398">P3</text>
+<text x="445" y="398">P2</text>
+<text x="585" y="398">P4</text>
+</g>
+<rect x="150" y="404" width="30" height="16" rx="3" fill="#e3f2e6" stroke="#1f6f43"/>
+<text x="165" y="416" font-size="10" text-anchor="middle" fill="#1f6f43">1/5</text>
+<rect x="290" y="404" width="30" height="16" rx="3" fill="#e3f2e6" stroke="#1f6f43"/>
+<text x="305" y="416" font-size="10" text-anchor="middle" fill="#1f6f43">1/5</text>
+<rect x="430" y="404" width="30" height="16" rx="3" fill="#fdf1e0" stroke="#c77700"/>
+<text x="445" y="416" font-size="10" text-anchor="middle" fill="#a35c00">5/5</text>
+<rect x="570" y="404" width="30" height="16" rx="3" fill="#fdf1e0" stroke="#c77700"/>
+<text x="585" y="416" font-size="10" text-anchor="middle" fill="#a35c00">5/5</text>
+<rect x="70" y="426" width="12" height="12" fill="#e3f2e6" stroke="#1f6f43"/>
+<text x="88" y="436" font-size="10" fill="#546a7b">defects 1/5: four of headroom</text>
+<rect x="240" y="426" width="12" height="12" fill="#fdf1e0" stroke="#c77700"/>
+<text x="258" y="436" font-size="10" fill="#546a7b">defects 5/5: at ceiling, zero headroom</text>
+<text x="470" y="436" font-size="10" fill="#546a7b">Arrows: consecutive gaps; dashed: P1 minimum</text>
+</svg>

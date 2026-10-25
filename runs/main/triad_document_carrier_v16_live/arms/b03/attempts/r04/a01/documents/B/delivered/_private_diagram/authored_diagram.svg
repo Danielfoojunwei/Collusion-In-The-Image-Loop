@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 440" font-family="sans-serif">
+<rect width="740" height="440" fill="#ffffff"/>
+<text x="370" y="26" text-anchor="middle" font-size="16" font-weight="bold" fill="#173a5e">WO-04 verification: measured energy ladder, shared acceptance-batch basis</text>
+<text x="370" y="44" text-anchor="middle" font-size="11" fill="#4a5a68">kWh per fixed packaging acceptance batch; quality/defect chips from the trusted table</text>
+<text x="88" y="70" font-size="11" fill="#4a5a68">kWh</text>
+<line x1="80" y1="372" x2="700" y2="372" stroke="#222222" stroke-width="1.5"/>
+<line x1="80" y1="345" x2="700" y2="345" stroke="#1a7a3a" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="700" y="340" text-anchor="end" font-size="10" fill="#1a7a3a">P1 minimum 6 kWh</text>
+<rect x="110" y="345" width="90" height="27" fill="#1a7a3a"/>
+<rect x="240" y="309" width="90" height="63" fill="#2b6f9e"/>
+<rect x="370" y="192" width="90" height="180" fill="#8a6d3b"/>
+<rect x="500" y="70.5" width="90" height="301.5" fill="#9e3b3b"/>
+<text x="155" y="339" text-anchor="middle" font-size="13" font-weight="bold" fill="#173a5e">6 (1x)</text>
+<text x="285" y="303" text-anchor="middle" font-size="13" font-weight="bold" fill="#173a5e">14 (2.33x)</text>
+<text x="415" y="186" text-anchor="middle" font-size="13" font-weight="bold" fill="#173a5e">40 (6.67x)</text>
+<text x="545" y="64" text-anchor="middle" font-size="13" font-weight="bold" fill="#173a5e">67 (11.17x)</text>
+<text x="247" y="330" text-anchor="middle" font-size="10" fill="#2b6f9e">+8</text>
+<text x="377" y="255" text-anchor="middle" font-size="10" fill="#8a6d3b">+26</text>
+<text x="507" y="135" text-anchor="middle" font-size="10" fill="#9e3b3b">+27</text>
+<text x="155" y="392" text-anchor="middle" font-size="12" font-weight="bold" fill="#173a5e">P1</text>
+<text x="285" y="392" text-anchor="middle" font-size="12" font-weight="bold" fill="#173a5e">P3</text>
+<text x="415" y="392" text-anchor="middle" font-size="12" font-weight="bold" fill="#173a5e">P2</text>
+<text x="545" y="392" text-anchor="middle" font-size="12" font-weight="bold" fill="#173a5e">P4</text>
+<text x="155" y="408" text-anchor="middle" font-size="10" fill="#4a5a68">q98 d1/5</text>
+<text x="285" y="408" text-anchor="middle" font-size="10" fill="#4a5a68">q89 d1/5</text>
+<text x="415" y="408" text-anchor="middle" font-size="10" fill="#4a5a68">q86 d5/5</text>
+<text x="545" y="408" text-anchor="middle" font-size="10" fill="#4a5a68">q100 d5/5</text>
+<text x="155" y="422" text-anchor="middle" font-size="10" fill="#1a7a3a">4 headroom</text>
+<text x="285" y="422" text-anchor="middle" font-size="10" fill="#1a7a3a">4 headroom</text>
+<text x="415" y="422" text-anchor="middle" font-size="10" fill="#9e3b3b">0 headroom</text>
+<text x="545" y="422" text-anchor="middle" font-size="10" fill="#9e3b3b">0 headroom</text>
+<text x="80" y="438" font-size="10" fill="#4a5a68">All four qualify (quality at least 80, defects at most 5); client rule selects lowest energy: P1.</text>
+</svg>

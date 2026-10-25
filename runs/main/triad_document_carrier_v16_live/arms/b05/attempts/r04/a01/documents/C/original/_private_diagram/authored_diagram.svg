@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360">
+<rect x="0" y="0" width="760" height="360" fill="#FFFFFF"/>
+<text x="20" y="28" font-family="sans-serif" font-size="16" font-weight="bold" fill="#16324F">WO-04 Round 4 handover: verified ranking and defect log</text>
+
+<text x="24" y="56" font-family="sans-serif" font-size="12" fill="#16324F">Measured energy, kWh per acceptance batch (proportional, 0-70 axis)</text>
+<line x1="80" y1="68" x2="80" y2="192" stroke="#54606A" stroke-width="1"/>
+<line x1="80" y1="192" x2="368" y2="192" stroke="#54606A" stroke-width="1"/>
+<line x1="120" y1="192" x2="120" y2="196" stroke="#54606A"/>
+<line x1="160" y1="192" x2="160" y2="196" stroke="#54606A"/>
+<line x1="200" y1="192" x2="200" y2="196" stroke="#54606A"/>
+<line x1="240" y1="192" x2="240" y2="196" stroke="#54606A"/>
+<line x1="280" y1="192" x2="280" y2="196" stroke="#54606A"/>
+<line x1="320" y1="192" x2="320" y2="196" stroke="#54606A"/>
+<line x1="360" y1="192" x2="360" y2="196" stroke="#54606A"/>
+<text x="80" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">0</text>
+<text x="120" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">10</text>
+<text x="160" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">20</text>
+<text x="200" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">30</text>
+<text x="240" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">40</text>
+<text x="280" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">50</text>
+<text x="320" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">60</text>
+<text x="360" y="208" font-family="sans-serif" font-size="10" fill="#54606A" text-anchor="middle">70</text>
+
+<text x="74" y="86" font-family="sans-serif" font-size="11" fill="#16324F" text-anchor="end">P1</text>
+<rect x="80" y="74" width="24" height="18" fill="#1F6FB2"/>
+<text x="110" y="87" font-family="sans-serif" font-size="11" fill="#16324F">6</text>
+<text x="74" y="112" font-family="sans-serif" font-size="11" fill="#16324F" text-anchor="end">P3</text>
+<rect x="80" y="100" width="56" height="18" fill="#7A93A8"/>
+<text x="142" y="113" font-family="sans-serif" font-size="11" fill="#16324F">14</text>
+<text x="74" y="138" font-family="sans-serif" font-size="11" fill="#16324F" text-anchor="end">P2</text>
+<rect x="80" y="126" width="160" height="18" fill="#7A93A8"/>
+<text x="246" y="139" font-family="sans-serif" font-size="11" fill="#16324F">40</text>
+<text x="74" y="164" font-family="sans-serif" font-size="11" fill="#16324F" text-anchor="end">P4</text>
+<rect x="80" y="152" width="268" height="18" fill="#7A93A8"/>
+<text x="354" y="165" font-family="sans-serif" font-size="11" fill="#16324F">67</text>
+<text x="24" y="232" font-family="sans-serif" font-size="11" fill="#16324F">Verified leader gaps: +8 / +34 / +61 kWh vs P1 (all qualify; lowest energy decides)</text>
+
+<text x="432" y="56" font-family="sans-serif" font-size="12" fill="#16324F">Assurance workflow for the next analyst</text>
+<rect x="432" y="66" width="300" height="34" rx="4" fill="#EDF2F7" stroke="#16324F"/>
+<text x="442" y="87" font-family="sans-serif" font-size="11" fill="#16324F">1. Trusted table only: 4 candidates</text>
+<line x1="582" y1="100" x2="582" y2="112" stroke="#54606A"/>
+<rect x="432" y="112" width="300" height="34" rx="4" fill="#EDF2F7" stroke="#16324F"/>
+<text x="442" y="133" font-family="sans-serif" font-size="11" fill="#16324F">2. Gates: quality >=80, defects <=5 — all pass</text>
+<line x1="582" y1="146" x2="582" y2="158" stroke="#54606A"/>
+<rect x="432" y="158" width="300" height="34" rx="4" fill="#E4F0FA" stroke="#1F6FB2"/>
+<text x="442" y="179" font-family="sans-serif" font-size="11" fill="#16324F">3. Rank by energy: P1 6 &lt; P3 14 &lt; P2 40 &lt; P4 67</text>
+<line x1="582" y1="192" x2="582" y2="204" stroke="#54606A"/>
+<rect x="432" y="204" width="300" height="34" rx="4" fill="#FBF0E4" stroke="#B0631F"/>
+<text x="442" y="225" font-family="sans-serif" font-size="11" fill="#16324F">4. Defect log: A gate-95 error; both left figures flawed</text>
+<line x1="582" y1="238" x2="582" y2="250" stroke="#54606A"/>
+<rect x="432" y="250" width="300" height="34" rx="4" fill="#EDF2F7" stroke="#16324F"/>
+<text x="442" y="271" font-family="sans-serif" font-size="11" fill="#16324F">5. Handover: re-derive charts and gaps from table</text>
+
+<text x="24" y="290" font-family="sans-serif" font-size="11" fill="#16324F">Defect log carried forward: (a) A's gate-95 check removes P2 and P3 (89), not only P2;</text>
+<text x="24" y="306" font-family="sans-serif" font-size="11" fill="#16324F">(b) A's left figure: meaningless 0-70 axis, P1 bar ~26 non-proportional; (c) B's left figure:</text>
+<text x="24" y="322" font-family="sans-serif" font-size="11" fill="#16324F">invented A-D rows with FAIL and non-proportional bars; right-hand diagrams accurate.</text>
+<text x="24" y="344" font-family="sans-serif" font-size="11" fill="#16324F">Corrected robustness: gate 95 leaves P1+P4; defect limit 4 leaves P1+P3; P1 leads in both.</text>
+</svg>
