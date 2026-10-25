@@ -1453,5 +1453,78 @@ class AmendmentTests(unittest.TestCase):
         self.assertFalse((self.out/'AMENDMENTS/012/freeze.json').exists())
         a.apply_stage_retry_amendment(self.runner, self.ledger)
 
+    def prepare_review_rewind_amendment(self):
+        self.prepare_stage_retry_amendment()
+        a.apply_stage_retry_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        rt.Runner(self.out, fixture=True).current('b01')
+        root = self.out/'arms/b01/attempts/r01/a07'
+        job = 'b01.r01.b01.r01.a07.MAIN'
+        for stage in a.REWIND_013_KEPT_STAGES + ('A_LOG',):
+            put(root/'stages'/(stage+'.json'), {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+            put(root/'finished'/(stage+'.json'), {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+            put(root/'inflight'/(stage+'.json'), {'stage':stage,'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(self.out/'reviews'/job/'assessment.json', {'status':'model_invalid','evidence_origin':'OFFLINE_SCRIPTED_INVALID_REVIEW'})
+        put(root/'stages/MAIN_REVIEW.json', {'status':'model_invalid','job_id':job,'evidence_origin':'OFFLINE_SCRIPTED_INVALID_REVIEW'})
+        identifier = a.NAMESPACE+'b01.r01.a07.B_LOG.native'
+        with self.ledger._connect() as db:
+            for stage in a.REWIND_013_KEPT_STAGES + ('A_LOG',):
+                db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                    a.NAMESPACE+'b01.r01.a07.'+stage+'.native','completed','chat','z-ai/glm-5.3-flash','5'*64,11011200,100000))
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                identifier,'uncertain','chat','z-ai/glm-5.3-flash','4'*64,20841600,None))
+        put(root/'inflight/B_LOG.json', {'stage':'B_LOG','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        owner = self.out/'paid_operations'/(sha(identifier.encode())+'.json')
+        put(owner, {'attempt_id':'b01.r01.a07','request_id':identifier,'pid':99999999,
+                    'start_ticks':'OFFLINE_NO_PROCESS','wire_sha256':'4'*64,'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(self.out/'STOP_REQUESTED.json', {'reason':'operator_signal','automatic_restart_forbidden':True})
+        self.source.write_text('# OFFLINE fixture review-rewind amendment\n')
+
+    def test_review_rewind_returns_a07_to_its_pre_review_checkpoint(self):
+        self.prepare_review_rewind_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        root = self.out/'arms/b01/attempts/r01/a07'
+        kept = {stage:(root/'stages'/(stage+'.json')).read_bytes() for stage in a.REWIND_013_KEPT_STAGES}
+        result = a.apply_review_rewind_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        for stage, raw in kept.items():
+            self.assertEqual((root/'stages'/(stage+'.json')).read_bytes(), raw)
+        for gone in ('stages/MAIN_REVIEW.json','stages/A_LOG.json','finished/A_LOG.json','inflight/A_LOG.json','inflight/B_LOG.json'):
+            self.assertFalse((root/gone).exists())
+            self.assertTrue((self.out/'AMENDMENTS/013/superseded/a07'/gone).exists())
+        proof = self.out/'funding_seals'/(sha((a.NAMESPACE+'b01.r01.a07.B_LOG.native').encode())+'.json')
+        self.assertTrue(read(proof)['full_unknown_reservation_retained'])
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/013')
+        a.release_stop(self.out, fixture=True)
+        runner = rt.Runner(self.out, fixture=True)
+        ctx, current = runner.current('b01')
+        self.assertEqual((ctx['attempt_id'], current), ('b01.r01.a07', root))
+        self.assertEqual(runner.next_stage(root), 'MAIN_REVIEW')
+        self.assertEqual(runner.stage_identity(ctx, root, 'A_LOG')[0], 'b01.r01.a07.A_LOG.retry1')
+        self.assertEqual(runner.stage_identity(ctx, root, 'B_LOG')[0], 'b01.r01.a07.B_LOG.retry1')
+        self.assertEqual(runner.review_job_id(ctx, 'MAIN_REVIEW', 2), 'b01.r01.b01.r01.a07.MAIN.v2')
+        self.assertEqual(runner.invalid_review_versions(ctx, 'MAIN_REVIEW'), ['b01.r01.b01.r01.a07.MAIN'])
+
+    def test_review_rewind_refuses_other_ledger_state_or_valid_review(self):
+        self.prepare_review_rewind_amendment()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a07.C_PUBLISH.native','uncertain','chat','z-ai/glm-5.3-flash','3'*64,32310400,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_review_rewind_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('DELETE FROM requests WHERE request_id=?', (a.NAMESPACE+'b01.r01.a07.C_PUBLISH.native',))
+        stage = self.out/'arms/b01/attempts/r01/a07/stages/MAIN_REVIEW.json'
+        raw = stage.read_bytes()
+        self.rewrite(stage, lambda body: body.update(status='valid'))
+        with self.assertRaises(IntegrityError):
+            a.apply_review_rewind_amendment(self.runner, self.ledger)
+        stage.unlink();stage.write_bytes(raw)
+        with patch.dict(design.CONFIG['sampling'], {'temperature': 1.2}), self.assertRaises(IntegrityError):
+            a.apply_review_rewind_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/013/freeze.json').exists())
+        a.apply_review_rewind_amendment(self.runner, self.ledger)
+
 if __name__ == '__main__':
     unittest.main()

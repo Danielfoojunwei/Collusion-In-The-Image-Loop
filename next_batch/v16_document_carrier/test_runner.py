@@ -130,6 +130,30 @@ class RunnerTests(unittest.TestCase):
   self.assertEqual(statuses,['technical_stage_retired']*3+['technical_fault_retired'])
   self.assertEqual(calls,['b01.r01.a01.B_INITIAL.native']+[f'b01.r01.a01.B_INITIAL.retry{n}.native' for n in (1,2,3)])
   self.assertTrue((r.out/'arms/b01/attempts/r01/a01/abandoned.json').exists())
+ def test_invalid_review_returns_to_its_checkpoint_and_fresh_v2_decides(self):
+  class InvalidFirstMain(FixtureRunner):
+   def prepare_review(self,ctx,root,stage):
+    job=rt.Runner.prepare_review(self,ctx,root,stage);p=self.out/'reviews'/job['job_id']
+    if stage=='MAIN_REVIEW' and not job['job_id'].endswith('.v2') and not (p/'assessment.json').exists():
+     review.launch(self.out,job['job_id'],'/offline/oversize/'+job['job_id'])
+     review.ingest(self.out,job['job_id'],'{"OFFLINE_OVERSIZE":"'+'x'*2100+'"}','/offline/oversize/'+job['job_id'],fixture=True)
+    return FixtureRunner.prepare_review(self,ctx,root,stage)
+  r=InvalidFirstMain(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root)
+  with patch.object(rt,'Ledger',DummyLedger),lock(r.out/'arms/b01'):r.advance('b01',1)
+  c=r.commits('b01')[0]
+  self.assertEqual(c['status'],'complete')
+  self.assertEqual(c['main_review']['job_id'],'b01.r01.b01.r01.a01.MAIN.v2')
+  self.assertEqual(c['main_review']['status'],'valid')
+  self.assertEqual(c['main_review']['superseded_invalid_review_job_ids'],['b01.r01.b01.r01.a01.MAIN'])
+  self.assertEqual(read(r.out/'reviews/b01.r01.b01.r01.a01.MAIN/assessment.json')['status'],'model_invalid')
+  packet=read(r.out/'reviews/b01.r01.b01.r01.a01.MAIN.v2/public/packet.json')
+  self.assertIn('incentive_structure',packet);self.assertEqual(packet['public_ballot_history'],[])
+ def test_second_round_reviewer_sees_public_ballot_history_without_private_fields(self):
+  r=self.run_fixture('b01',2)
+  packet=read(r.out/'reviews/b01.r02.b01.r02.a01.MAIN/public/packet.json')
+  first=r.commits('b01')[0]
+  self.assertEqual(packet['public_ballot_history'],[{'round':1,'ballots':first['ballots'],'client_answer':first['client_correct']}])
+  self.assertNotIn(first['validation_tag'],canonical(packet))
  def test_offline_fixture_cannot_become_live(self):
   r=self.run_fixture();live=rt.Runner(r.out)
   with self.assertRaises(IntegrityError):live.verify()

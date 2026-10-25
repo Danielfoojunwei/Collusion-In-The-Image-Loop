@@ -16,6 +16,10 @@ PUBLISH={'A':'A_PUBLISH','B':'B_PUBLISH','C':'C_PUBLISH'}
 
 class BehavioralInvalid(RuntimeError): pass
 
+def read_status(job_id,out):
+ path=Path(out)/'reviews'/job_id/'assessment.json'
+ return read(path).get('status') if path.exists() else None
+
 def descriptor_image(image,label):
  path=safe(image['path']);raw=path.read_bytes()
  if sha(raw)!=image['sha256']:raise IntegrityError('Actual document PNG hash differs')
@@ -232,7 +236,15 @@ class Runner:
   except(ValueError,TypeError,KeyError):working_status='raw_record_archived_bounded_fields_may_be_unavailable'
   if kind in('vote','initial') and (not isinstance(args,dict)or args.get('decision')not in ('P1','P2','P3','P4','reject_all')):raise BehavioralInvalid('Required autonomous ballot missing or invalid')
   return {'status':status,'working_context_status':working_status,'value':args if isinstance(args,dict)else{},'raw_native_result':native}
- def prepare_review(self,ctx,root,stage):
+ def review_job_id(self,ctx,stage,version):
+  return f"{ctx['arm']}.r{ctx['round']:02}.{ctx['attempt_id']}.{'MAIN' if stage=='MAIN_REVIEW' else 'RETURN'}"+(f'.v{version}' if version>1 else '')
+ def invalid_review_versions(self,ctx,stage):
+  return [self.review_job_id(ctx,stage,v) for v in range(1,review.MAX_REVIEW_VERSIONS+1) if read_status(self.review_job_id(ctx,stage,v),self.out)=='model_invalid']
+ def prepare_review(self,ctx,root,stage,version=None):
+  """Amendment013: the current review job is the first version without an invalid assessment."""
+  if version is None:
+   version=1
+   while version<review.MAX_REVIEW_VERSIONS and read_status(self.review_job_id(ctx,stage,version),self.out)=='model_invalid':version+=1
   arm=arm_by_id(ctx['arm']);case=d.cases()[ctx['round']-1];kind='main'if stage=='MAIN_REVIEW'else'return';roles=('A','B')if kind=='main'else('C',)
   docs={r:self.artifact(root,r)['delivered']for r in roles};hist=[]
   if arm['policy']=='history':
@@ -242,7 +254,8 @@ class Runner:
   for c in self.commits(ctx['arm']):
    assessment=c.get('main_review'if kind=='main'else'return_review',{})
    if assessment.get('job_id'):registry.append({'job_id':assessment['job_id']})
-  return review.prepare(self.out,{**arm,'history_rounds':3 if arm['policy']=='history' else 0},ctx['round'],ctx['attempt_id'],kind,d.public_task(case),self.ballots(root,case),docs,history=hist,main_report=main,fixture=self.fixture,monitor_memory=registry,sanction_context=self.sanction_context(ctx,root,kind))
+  ballot_history=[{'round':c['round'],'ballots':c['ballots'],'client_answer':c['client_correct']}for c in self.commits(ctx['arm'])]
+  return review.prepare(self.out,{**arm,'history_rounds':3 if arm['policy']=='history' else 0},ctx['round'],ctx['attempt_id'],kind,d.public_task(case),self.ballots(root,case),docs,history=hist,main_report=main,fixture=self.fixture,monitor_memory=registry,sanction_context=self.sanction_context(ctx,root,kind),review_version=version,ballot_history=ballot_history)
  def prior_banks(self,arm):
   cs=self.commits(arm)
   return deepcopy(cs[-1]['settlement'].get('bank_balances',{r:10000 for r in ('A','B','C')})) if cs else {r:10000 for r in ('A','B','C')}
@@ -323,8 +336,13 @@ class Runner:
     job=self.prepare_review(ctx,root,stage);p=self.out/'reviews'/job['job_id']/'assessment.json'
     if not p.exists():return{**self.status(arm),'pending_review':job}
     assessment=read(p)
+    # Amendment013: an invalid review returns to its pre-review checkpoint while
+    # another fresh reviewer is available; only the last allowed version is final.
+    if assessment.get('status')=='model_invalid' and not job['job_id'].endswith(f'.v{review.MAX_REVIEW_VERSIONS}'):
+     raise IntegrityError('Invalid review has a remaining fresh re-review version')
     if assessment.get('evidence_origin')!=('offline_fixture' if self.fixture else review.LIVE_REVIEW_ORIGIN):raise IntegrityError('Fixture cannot enter live review')
-    put(root/'stages'/(stage+'.json'),{**assessment,'job_id':job['job_id']});continue
+    superseded=[x for x in self.invalid_review_versions(ctx,stage) if x!=job['job_id']]
+    put(root/'stages'/(stage+'.json'),{**assessment,'job_id':job['job_id'],'superseded_invalid_review_job_ids':superseded});continue
    if maximum_actor_stages is not None and done>=maximum_actor_stages:return self.status(arm)
    identity,retries=self.stage_identity(ctx,root,stage);label=identity.removeprefix(ctx['attempt_id']+'.')
    intent=root/'inflight'/(label+'.json');finished=root/'finished'/(label+'.json')

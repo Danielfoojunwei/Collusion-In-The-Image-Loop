@@ -2160,7 +2160,7 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     if not ((job / 'launch.json').exists() or (job / 'assessment.json').exists()):
                         continue
                     # A review of a technically abandoned attempt is retained evidence, not current work.
-                    owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)', job.name)
+                    owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)(?:\.v\d)?', job.name)
                     if (directory != 'reviews' or owner is None or not
                             (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3) / 'abandoned.json').is_file()):
                         raise IntegrityError('A launched or assessed job exists before the control amendment')
@@ -2283,6 +2283,186 @@ def apply_stage_retry_amendment(runner, ledger):
         'prospectively_frozen_outputless_stage_retry_after_incomplete_read',
         changed_fields=('recovery',), failed_identities=(STAGE_RETRY_012_FAILED_IDENTITY,),
         abandoned_attempts=('b01.r01.a06',))
+
+
+REWIND_013_ATTEMPT = 'b01.r01.a07'
+REWIND_013_KEPT_STAGES = ('B_INITIAL', 'C_INITIAL', 'A_PUBLISH', 'B_PUBLISH', 'B_VOTE', 'C_VOTE')
+
+
+def _review_rewind_configuration(old, fixture):
+    from . import design
+    from .review import MAX_REVIEW_VERSIONS, INCENTIVE_STRUCTURE
+    if (old.get('technical_amendment') or {}).get('number') != 12 or 'review_rewind_amendment' in old:
+        raise IntegrityError('Review-rewind amendment must follow the stage-retry amendment')
+    block = design.CONFIG.get('review_rewind_amendment_013') or {}
+    if not block.get('reason') or MAX_REVIEW_VERSIONS != 3 or not INCENTIVE_STRUCTURE:
+        raise IntegrityError('Installed review policy differs from the amendment013 disclosure')
+    for field in FROZEN_CONDITION_FIELDS:
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Review-rewind amendment changed scientific/resource condition: ' + field)
+    result = deepcopy(old)
+    result['review_rewind_amendment'] = deepcopy(block)
+    result['technical_amendment'] = {'number': 13, 'revision': 'v16.13', 'reason': block['reason'],
+                                     'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _prepare_review_rewind_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    parent = out / 'AMENDMENTS' / '012'
+    if previous['directory'] != parent or not (parent / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Review-rewind amendment must directly follow the released amendment012')
+    receipt = read(parent / 'RECOVERY_RECEIPT.json')
+    prefix = NAMESPACE + REWIND_013_ATTEMPT + '.'
+    attempt_rows = [row for row in snapshot['rows'] if row['request_id'].startswith(prefix)]
+    baseline = [row for row in snapshot['rows'] if not row['request_id'].startswith(prefix)]
+    in_flight = NAMESPACE + REWIND_013_ATTEMPT + '.B_LOG.native'
+    if (len(baseline) != receipt['ledger_row_count'] or
+            sha(canonical(baseline).encode()) != receipt['ledger_after_sha256'] or
+            [row['request_id'] for row in attempt_rows if row['status'] != 'completed'] != [in_flight] or
+            any(row['actual_units'] is not None for row in attempt_rows if row['request_id'] == in_flight)):
+        raise IntegrityError('Ledger beyond amendment012 is not exactly a07 completed rows plus in-flight B_LOG')
+    _review_rewind_configuration(read(parent / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(parent / 'SYSTEM_PROMPTS.json')
+    if (frozen_prompts != {key: prompts.actor_system(key.split('.', 1)[1][0], key.split('.', 1)[1], key.split('.', 1)[0])
+                           for key in frozen_prompts} or
+            read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
+        raise IntegrityError('Review-rewind amendment changed cases or actor prompts')
+    root = out / 'arms' / 'b01' / 'attempts' / 'r01' / 'a07'
+    stages = sorted(path.stem for path in (root / 'stages').glob('*.json'))
+    if (root / 'abandoned.json').exists() or (root / 'stage_retirements').exists() or \
+            stages != sorted(REWIND_013_KEPT_STAGES + ('MAIN_REVIEW', 'A_LOG')):
+        raise IntegrityError('a07 is not at the observed invalid-review state')
+    main = read(root / 'stages' / 'MAIN_REVIEW.json')
+    job = out / 'reviews' / main.get('job_id', '')
+    if (main.get('status') != 'model_invalid' or main.get('job_id') != 'b01.r01.b01.r01.a07.MAIN' or
+            read(job / 'assessment.json').get('status') != 'model_invalid'):
+        raise IntegrityError('a07 MAIN review is not the observed invalid first review')
+    if (not (root / 'inflight' / 'B_LOG.json').is_file() or (root / 'finished' / 'B_LOG.json').exists() or
+            (out / 'provider_evidence' / 'native_results' / (sha((REWIND_013_ATTEMPT + '.B_LOG.native').encode()) + '.json')).exists()):
+        raise IntegrityError('a07 B_LOG is not an outputless in-flight request')
+    retained = [item for stage in REWIND_013_KEPT_STAGES for item in
+                [{'path': str(root / 'stages' / (stage + '.json')), 'sha256': sha((root / 'stages' / (stage + '.json')).read_bytes())}]]
+    retained.extend(_inventory(job))
+    moved = []
+    for relative in ('stages/MAIN_REVIEW.json', 'stages/A_LOG.json', 'finished/A_LOG.json',
+                     'inflight/A_LOG.json', 'inflight/B_LOG.json'):
+        source = root / relative
+        moved.append({'source': str(source), 'archive': str(destination / 'superseded' / 'a07' / relative),
+                      'sha256': sha(source.read_bytes()), 'kind': 'superseded_after_invalid_review'})
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; review rewind must precede all rounds')
+        for extra in (out / 'arms' / arm / 'attempts' / 'r01').glob('a[0-9][0-9]'):
+            if (extra / 'abandoned.json').exists() or extra == root:
+                continue
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if any(path.name != 'context.json' or path.parent != extra for path in files):
+                raise IntegrityError('Another current attempt contains work')
+    if any(path.is_file() for path in (out / 'probes').rglob('*')):
+        raise IntegrityError('A probe exists before the review-rewind amendment')
+    return {'amendment_number': 13, 'revision': 'v16.13', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Invalid a07 MAIN review consumed by A_LOG; rewind to the pre-review checkpoint under a corrected reviewer rubric.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': moved, 'cap_evidence': [], 'attempts': [],
+            'in_flight_identity_sealed': in_flight,
+            'new_round_attempt': 'Continue a07 from its C_VOTE checkpoint: fresh v2 MAIN review, then A_LOG.retry1 and B_LOG.retry1.'}
+
+
+def apply_review_rewind_amendment(runner, ledger):
+    """Append013: corrected reviewer rubric, re-review on invalid, and the a07 pre-review rewind."""
+    from .funding import seal
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '013'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the review-rewind amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the review-rewind amendment')
+        else:
+            intent = _prepare_review_rewind_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the review-rewind amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Kept a07 stage or invalid review changed during the amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        for operation in intent['moved_artifacts']:
+            _move_file(operation['source'], operation['archive'], operation['sha256'])
+        root = out / 'arms' / 'b01' / 'attempts' / 'r01' / 'a07'
+        intent_sha = sha(intent_path.read_bytes())
+        put(root / 'stage_retirements' / 'A_LOG.0.json', {
+            'status': 'abandoned_technical', 'technical': True, 'scope': 'superseded_after_invalid_review_rewind',
+            'attempt_id': REWIND_013_ATTEMPT, 'stage': 'A_LOG', 'model_output_observed': True,
+            'reason': 'A_LOG consumed an invalid MAIN review; its archived output is superseded, not a result.',
+            'amendment_number': 13, 'recovery_intent_sha256': intent_sha, 'all_costs_and_unknown_reserves_retained': True})
+        marker = root / 'stage_retirements' / 'B_LOG.0.json'
+        put(marker, {
+            'status': 'abandoned_technical', 'technical': True, 'scope': 'single_stage_identity_without_model_output',
+            'attempt_id': REWIND_013_ATTEMPT, 'stage': 'B_LOG', 'model_output_observed': False,
+            'retired_request_id': intent['in_flight_identity_sealed'], 'fault_class': 'operator_interrupt_after_invalid_review',
+            'amendment_number': 13, 'recovery_intent_sha256': intent_sha,
+            'all_costs_and_unknown_reserves_retained': True, 'not_a_behavioral_outcome': True})
+        if seal(out, marker, ledger) != 1:
+            raise IntegrityError('Expected exactly the one in-flight B_LOG reservation to seal')
+        proof = out / 'funding_seals' / (sha(intent['in_flight_identity_sealed'].encode()) + '.json')
+        put(destination / 'CONFIG.json', _review_rewind_configuration(read(out / 'AMENDMENTS' / '012' / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (out / 'AMENDMENTS' / '012' / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Review-rewind amendment unexpectedly changed the paid ledger')
+        put(destination / 'RECOVERY_RECEIPT.json', {
+            'amendment_number': 13, 'intent_sha256': intent_sha, 'parent_freeze_sha256': intent['parent_freeze_sha256'],
+            'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': intent['moved_artifacts'],
+            'retained_attempt_count': 1, 'uncertain_rows_retained': 1,
+            'retained_proofs': [{'path': str(proof), 'sha256': sha(proof.read_bytes())}],
+            'stop_original_sha256': intent['stop_sha256'],
+            'scientific_note': 'Reviewer packets disclose the public incentive structure and prior public ballots; the rubric no longer treats non-client signalling as authorized and states a positive standard for supported findings. An invalid review returns to its checkpoint for up to two further fresh reviewers. a07 rewinds to its C_VOTE checkpoint; the invalid v1 review and dependent A_LOG are archived as superseded.'})
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=13, revision='v16.13', parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_reviewer_correction_and_pre_review_rewind')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'review_rewind_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'a07_next': 'MAIN_REVIEW v2 then A_LOG.retry1, B_LOG.retry1', 'STOP_still_present': True}
 
 
 def release_stop(out, fixture=False):
