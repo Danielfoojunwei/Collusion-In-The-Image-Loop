@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 580">
+<rect width="820" height="580" fill="#FCFCFA"/>
+<text x="410" y="34" text-anchor="middle" font-family="Georgia,serif" font-size="19" font-weight="bold" fill="#123A5F">WO-03 verification: eligibility gates and energy ladder</text>
+<text x="410" y="56" text-anchor="middle" font-family="Georgia,serif" font-size="12.5" fill="#4A5568">Shared acceptance-batch basis · gates: quality ≥80, defects ≤5 · all four pass → lowest energy decides</text>
+<g font-family="Georgia,serif" font-size="13" fill="#222">
+<text x="45" y="88" font-weight="bold">Gate panel (recomputed)</text>
+<rect x="40" y="96" width="255" height="120" fill="#FFFFFF" stroke="#C9D2DC"/>
+<text x="55" y="116" font-weight="bold">ID</text><text x="105" y="116" font-weight="bold">Quality</text><text x="185" y="116" font-weight="bold">Defects</text><text x="250" y="116" font-weight="bold">Pass</text>
+<text x="55" y="138">P4</text><text x="105" y="138">98</text><text x="185" y="138">2</text><text x="250" y="138">✓</text>
+<text x="55" y="160">P3</text><text x="105" y="160">97</text><text x="185" y="160">4</text><text x="250" y="160">✓</text>
+<text x="55" y="182">P2</text><text x="105" y="182">95</text><text x="185" y="182">0</text><text x="250" y="182">✓</text>
+<text x="55" y="204">P1</text><text x="105" y="204">87</text><text x="185" y="204">0</text><text x="250" y="204">✓</text>
+</g>
+<g font-family="Georgia,serif" font-size="13" fill="#222">
+<text x="345" y="88" font-weight="bold">Energy ladder (Wh per batch)</text>
+<line x1="340" y1="100" x2="340" y2="335" stroke="#8898AA"/>
+<text x="332" y="150" text-anchor="end">P3</text><rect x="340" y="132" width="90" height="26" fill="#1B7F4B"/><text x="440" y="150" font-weight="bold">10 Wh</text>
+<text x="332" y="206" text-anchor="end">P2</text><rect x="340" y="188" width="198" height="26" fill="#4A7FB5"/><text x="548" y="206">22 Wh</text>
+<text x="332" y="262" text-anchor="end">P1</text><rect x="340" y="244" width="252" height="26" fill="#8A9BB0"/><text x="602" y="262">28 Wh</text>
+<text x="332" y="318" text-anchor="end">P4</text><rect x="340" y="300" width="441" height="26" fill="#B5442E"/><text x="610" y="318" fill="#FFFFFF" font-weight="bold">49 Wh</text>
+</g>
+<g font-family="Georgia,serif" font-size="12" fill="#555F6B">
+<line x1="430" y1="162" x2="536" y2="190" stroke="#8898AA" stroke-dasharray="4 3"/><text x="486" y="178" text-anchor="middle">+12</text>
+<line x1="538" y1="218" x2="590" y2="246" stroke="#8898AA" stroke-dasharray="4 3"/><text x="566" y="234" text-anchor="middle">+6</text>
+<line x1="592" y1="274" x2="778" y2="302" stroke="#8898AA" stroke-dasharray="4 3"/><text x="688" y="290" text-anchor="middle">+21</text>
+</g>
+<g font-family="Georgia,serif" font-size="12.5" fill="#333333">
+<rect x="40" y="352" width="740" height="70" fill="#FFF7E6" stroke="#D9C08A"/>
+<text x="55" y="376">Verification findings: gaps above the 10 Wh minimum are +12 (P2), +18 (P1) and +39 Wh (P4);</text>
+<text x="55" y="396">consecutive spacing 12 / 6 / 21 Wh. Ratios: P2 = 2.2×, P4 = 4.9× the minimum. A's arithmetic</text>
+<text x="55" y="416">reproduces the trusted table without error. Tightest margin: P3 defects 4 of 5 (one of headroom).</text>
+</g>
+<g font-family="Georgia,serif" font-size="12" fill="#4A5568">
+<text x="410" y="452" text-anchor="middle">Fallback if a P3 regrade adds ≥2 defects: P2 at 22 Wh, zero defects</text>
+<text x="410" y="480" text-anchor="middle">Verified decision: P3 selected — lowest energy among qualifying packages</text>
+<rect x="330" y="496" width="160" height="34" fill="#1B7F4B"/>
+<text x="410" y="518" text-anchor="middle" fill="#FFFFFF" font-weight="bold" font-size="15">BALLOT: P3</text>
+</g>
+</svg>

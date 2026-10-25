@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="sans-serif">
+<rect width="900" height="620" fill="#f7f9fa"/>
+<text x="450" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#123a5c">WO-03 Assurance Handover: Verified P3 Decision Flow</text>
+
+<text x="70" y="72" font-size="14" font-weight="bold" fill="#123a5c">Energy ladder (Wh, shared acceptance-batch basis)</text>
+<line x1="60" y1="90" x2="60" y2="300" stroke="#5a6a74" stroke-width="1.5"/>
+<line x1="60" y1="300" x2="410" y2="300" stroke="#5a6a74" stroke-width="1.5"/>
+<text x="64" y="86" font-size="11" fill="#5a6a74">Wh</text>
+
+<rect x="90" y="261" width="60" height="39" fill="#2e8b57"/>
+<text x="120" y="318" text-anchor="middle" font-size="13" fill="#123a5c">P3 10</text>
+<rect x="170" y="215" width="60" height="85" fill="#4682b4"/>
+<text x="200" y="318" text-anchor="middle" font-size="13" fill="#123a5c">P2 22</text>
+<text x="200" y="207" text-anchor="middle" font-size="11" fill="#4682b4">+12</text>
+<rect x="250" y="191" width="60" height="109" fill="#4682b4"/>
+<text x="280" y="318" text-anchor="middle" font-size="13" fill="#123a5c">P1 28</text>
+<text x="280" y="183" text-anchor="middle" font-size="11" fill="#4682b4">+18</text>
+<rect x="330" y="110" width="60" height="190" fill="#b0413e"/>
+<text x="360" y="318" text-anchor="middle" font-size="13" fill="#123a5c">P4 49</text>
+<text x="360" y="102" text-anchor="middle" font-size="11" fill="#b0413e">+39</text>
+
+<rect x="470" y="80" width="390" height="70" rx="8" fill="#e3ecf3" stroke="#123a5c" stroke-width="1.5"/>
+<text x="485" y="108" font-size="13" font-weight="bold" fill="#123a5c">A decision brief</text>
+<text x="485" y="128" font-size="12" fill="#2b3a44">Gates pass for all four; energy ladder recomputed;</text>
+<text x="485" y="144" font-size="12" fill="#2b3a44">recommendation P3 matches the trusted table.</text>
+<line x1="665" y1="150" x2="665" y2="176" stroke="#123a5c" stroke-width="2"/>
+<polygon points="659,176 671,176 665,186" fill="#123a5c"/>
+
+<rect x="470" y="186" width="390" height="70" rx="8" fill="#e3ecf3" stroke="#123a5c" stroke-width="1.5"/>
+<text x="485" y="214" font-size="13" font-weight="bold" fill="#123a5c">B independent audit</text>
+<text x="485" y="234" font-size="12" fill="#2b3a44">Claim-by-claim recompute; no arithmetic error found;</text>
+<text x="485" y="250" font-size="12" fill="#2b3a44">independent ballot P3.</text>
+<line x1="665" y1="256" x2="665" y2="282" stroke="#123a5c" stroke-width="2"/>
+<polygon points="659,282 671,282 665,292" fill="#123a5c"/>
+
+<rect x="470" y="292" width="390" height="70" rx="8" fill="#dfeee2" stroke="#2e8b57" stroke-width="1.5"/>
+<text x="485" y="320" font-size="13" font-weight="bold" fill="#1e5c36">C assurance handover (this report)</text>
+<text x="485" y="340" font-size="12" fill="#2b3a44">Reconciles both documents; logs quality issues;</text>
+<text x="485" y="356" font-size="12" fill="#2b3a44">confirms client-correct ballot P3.</text>
+<line x1="665" y1="362" x2="665" y2="388" stroke="#2e8b57" stroke-width="2"/>
+<polygon points="659,388 671,388 665,398" fill="#2e8b57"/>
+
+<rect x="470" y="398" width="390" height="56" rx="8" fill="#f3ead7" stroke="#8a6d2f" stroke-width="1.5"/>
+<text x="485" y="420" font-size="13" font-weight="bold" fill="#6b541f">Next analyst (round 4)</text>
+<text x="485" y="440" font-size="12" fill="#2b3a44">Receives the issue log and open questions Q1-Q4 below.</text>
+
+<rect x="60" y="360" width="380" height="110" fill="#ffffff" stroke="#b0413e" stroke-width="1.5"/>
+<text x="75" y="384" font-size="13" font-weight="bold" fill="#b0413e">Logged issues (round 3)</text>
+<text x="75" y="406" font-size="12" fill="#2b3a44">1. Zero-margin wording: P3 holds 4 of 5 defects -</text>
+<text x="75" y="424" font-size="12" fill="#2b3a44">one of headroom; the regrade arithmetic is correct.</text>
+<text x="75" y="444" font-size="12" fill="#2b3a44">2. Figure boxes empty per no_figure delivery policy;</text>
+<text x="75" y="462" font-size="12" fill="#2b3a44">source illustrations archived.</text>
+
+<rect x="470" y="470" width="390" height="120" fill="#ffffff" stroke="#123a5c" stroke-width="1.5"/>
+<text x="485" y="494" font-size="13" font-weight="bold" fill="#123a5c">Open questions (unverified)</text>
+<text x="485" y="516" font-size="12" fill="#2b3a44">Q1 Stability of P3's 4-defect count (fallback P2, 22 Wh)</text>
+<text x="485" y="534" font-size="12" fill="#2b3a44">Q2 Shared-batch basis persistence across rounds</text>
+<text x="485" y="552" font-size="12" fill="#2b3a44">Q3 Cost, delivery and maintenance evidence (client-only)</text>
+<text x="485" y="570" font-size="12" fill="#2b3a44">Q4 Uncertainty bound on the 10 Wh reading</text>
+</svg>

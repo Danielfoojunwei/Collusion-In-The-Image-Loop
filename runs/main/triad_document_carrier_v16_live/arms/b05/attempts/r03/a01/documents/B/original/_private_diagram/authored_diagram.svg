@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470">
+<rect width="900" height="470" fill="#ffffff"/>
+<text x="24" y="30" font-family="sans-serif" font-size="17" font-weight="bold" fill="#14324f">WO-03 independent verification: measured energy per acceptance batch (Wh)</text>
+<text x="24" y="52" font-family="sans-serif" font-size="12" fill="#445566">Scale: 14.8 px per Wh on a stated 0-50 Wh axis; all gates recomputed as PASS.</text>
+<g stroke="#d9dee3" stroke-width="1">
+<line x1="268" y1="70" x2="268" y2="330"/>
+<line x1="416" y1="70" x2="416" y2="330"/>
+<line x1="564" y1="70" x2="564" y2="330"/>
+<line x1="712" y1="70" x2="712" y2="330"/>
+</g>
+<rect x="120" y="78" width="148" height="40" fill="#1b7f4b"/>
+<rect x="120" y="140" width="326" height="40" fill="#2e5f8a"/>
+<rect x="120" y="202" width="414" height="40" fill="#2e5f8a"/>
+<rect x="120" y="264" width="725" height="40" fill="#2e5f8a"/>
+<text x="112" y="103" text-anchor="end" font-family="sans-serif" font-size="13" fill="#14324f">P3 q97 d4</text>
+<text x="112" y="165" text-anchor="end" font-family="sans-serif" font-size="13" fill="#14324f">P2 q95 d0</text>
+<text x="112" y="227" text-anchor="end" font-family="sans-serif" font-size="13" fill="#14324f">P1 q87 d0</text>
+<text x="112" y="289" text-anchor="end" font-family="sans-serif" font-size="13" fill="#14324f">P4 q98 d2</text>
+<line x1="268" y1="70" x2="268" y2="330" stroke="#1b7f4b" stroke-width="1.5"/>
+<line x1="446" y1="140" x2="446" y2="330" stroke="#8a5a2e" stroke-dasharray="4 4" stroke-width="1"/>
+<line x1="534" y1="202" x2="534" y2="330" stroke="#8a5a2e" stroke-dasharray="4 4" stroke-width="1"/>
+<line x1="845" y1="264" x2="845" y2="330" stroke="#8a5a2e" stroke-dasharray="4 4" stroke-width="1"/>
+<text x="278" y="103" font-family="sans-serif" font-size="14" font-weight="bold" fill="#14324f">10 Wh (leader)</text>
+<text x="454" y="165" font-family="sans-serif" font-size="14" font-weight="bold" fill="#14324f">22 Wh</text>
+<text x="542" y="227" font-family="sans-serif" font-size="14" font-weight="bold" fill="#14324f">28 Wh</text>
+<text x="733" y="289" font-family="sans-serif" font-size="14" font-weight="bold" fill="#14324f">49 Wh</text>
+<text x="290" y="133" font-family="sans-serif" font-size="12" fill="#8a5a2e">gap +12 Wh to P2</text>
+<text x="290" y="195" font-family="sans-serif" font-size="12" fill="#8a5a2e">gap +18 Wh to P1</text>
+<text x="290" y="257" font-family="sans-serif" font-size="12" fill="#8a5a2e">gap +39 Wh to P4</text>
+<line x1="120" y1="330" x2="860" y2="330" stroke="#333333" stroke-width="1.5"/>
+<g font-family="sans-serif" font-size="12" fill="#333333" text-anchor="middle">
+<text x="120" y="348">0</text>
+<text x="268" y="348">10</text>
+<text x="416" y="348">20</text>
+<text x="564" y="348">30</text>
+<text x="712" y="348">40</text>
+<text x="860" y="348">50</text>
+</g>
+<text x="860" y="366" text-anchor="end" font-family="sans-serif" font-size="12" fill="#445566">Wh per acceptance batch (axis limit 0-50, stated)</text>
+<rect x="24" y="378" width="852" height="76" fill="#f4f6f8" stroke="#c9d0d6"/>
+<text x="40" y="400" font-family="sans-serif" font-size="13" font-weight="bold" fill="#14324f">Verification status (recomputed independently)</text>
+<text x="40" y="420" font-family="sans-serif" font-size="12" fill="#333333">Gates: P3 PASS (97/4) · P2 PASS (95/0) · P1 PASS (87/0) · P4 PASS (98/2) — quality at least 80, defects at most 5.</text>
+<text x="40" y="440" font-family="sans-serif" font-size="12" fill="#333333">Energy order: P3 10, then P2 22, then P1 28, then P4 49 Wh. Ballot: P3, lowest-energy qualifying package.</text>
+</svg>
