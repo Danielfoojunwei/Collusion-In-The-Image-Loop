@@ -2071,7 +2071,7 @@ def _sealed_http_failure(out, identifier):
 
 def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
                              changed_fields=(), failed_identities=(), abandoned_attempts=(),
-                             active_attempt=None, completed_identities=()):
+                             active_attempt=None, completed_identities=(), allow_committed=False):
     """Append a no-paid-change amendment directly after the released previous freeze.
 
     The ledger must equal the parent receipt exactly, apart from ``failed_identities``:
@@ -2081,7 +2081,9 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
     Completed rows of ``abandoned_attempts`` (technically abandoned after the parent)
     and the explicitly declared ``completed_identities`` are also allowed; every other
     row must match the parent receipt exactly. ``active_attempt`` (``bNN.rNN.aNN``)
-    may contain in-progress work and reviews, which are retained by hash.
+    may contain in-progress work and reviews, which are retained by hash. With
+    ``allow_committed``, committed checkpoints, their attempts and reviews, probes
+    and post-round decoder/ladder jobs are retained by hash instead of refused.
     """
     from . import design, prompts
     out = safe(runner.out)
@@ -2157,18 +2159,20 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     raise IntegrityError('Declared active attempt is missing or abandoned')
                 retained.extend(_inventory(active_root))
             for arm in ARMS:
-                if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+                checkpoints = sorted((out / 'arms' / arm / 'checkpoints').glob('r*.json'))
+                if checkpoints and not allow_committed:
                     raise IntegrityError('A checkpoint exists; control change must precede all rounds')
-                for extra in (out / 'arms' / arm / 'attempts' / 'r01').glob('a[0-9][0-9]'):
+                retained.extend({'path': str(path), 'sha256': sha(path.read_bytes())} for path in checkpoints)
+                for extra in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]/a[0-9][0-9]'):
                     if (extra / 'abandoned.json').exists() or extra == active_root:
+                        continue
+                    if allow_committed and (extra / 'stages' / 'COMMIT.json').is_file():
+                        retained.extend(_inventory(extra))
                         continue
                     files = [path for path in extra.rglob('*') if path.is_file()]
                     if any(path.name != 'context.json' or path.parent != extra for path in files):
                         raise IntegrityError('A current attempt contains work rather than an unfunded context')
                     retained.extend(_inventory(extra))
-                for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
-                    if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
-                        raise IntegrityError('Future-round work exists before the control amendment')
             for directory in ('reviews', 'decoding', 'attribution_audits'):
                 for job in (out / directory).glob('*'):
                     if not ((job / 'launch.json').exists() or (job / 'assessment.json').exists()):
@@ -2177,12 +2181,16 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)(?:\.v\d)?', job.name)
                     owner_root = (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3)
                                   if owner is not None else None)
-                    if (directory != 'reviews' or owner_root is None or not
-                            ((owner_root / 'abandoned.json').is_file() or owner_root == active_root)):
+                    committed = owner_root is not None and (owner_root / 'stages' / 'COMMIT.json').is_file()
+                    if not ((directory != 'reviews' and allow_committed) or
+                            (owner_root is not None and ((owner_root / 'abandoned.json').is_file() or
+                                                         owner_root == active_root or (allow_committed and committed)))):
                         raise IntegrityError('A launched or assessed job exists before the control amendment')
                     retained.extend(_inventory(job))
-            if any(path.is_file() for path in (out / 'probes').rglob('*')):
+            probe_files = [path for path in (out / 'probes').rglob('*') if path.is_file()]
+            if probe_files and not allow_committed:
                 raise IntegrityError('A probe exists before the control amendment')
+            retained.extend({'path': str(path), 'sha256': sha(path.read_bytes())} for path in probe_files)
             intent = {'amendment_number': number, 'revision': f'v16.{number}', 'recorded_at_unix': time.time(),
                       'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture), 'reason': reason,
                       'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
@@ -2496,6 +2504,28 @@ def apply_review_field_limits_amendment(runner, ledger):
         'Reviewer instructions now list the unchanged schema per-field character limits. a07 continues in place at RETURN v3; its A_LOG.retry1, B_LOG.retry1 and C_PUBLISH calls completed under freeze013 and are retained. Nothing else changes.',
         'prospectively_frozen_reviewer_field_limit_disclosure',
         active_attempt='b01.r01.a07', completed_identities=FIELD_LIMITS_014_COMPLETED)
+
+
+POLICY_015_COMPLETED = tuple(NAMESPACE + name for name in (
+    'b01.r01.a07.C_LOG.native', 'b01.r01.a07.SENTINEL_delivered.native',
+    *('b01.r01.a07.REPLAY_%s_%s.native' % (policy, stage)
+      for policy in ('no_figure', 'normalize', 'source_only') for stage in ('B_VOTE', 'C_VOTE')),
+    *('b03.r01.a04.' + stage for stage in ('B_INITIAL.native', 'C_INITIAL.native', 'A_PUBLISH.native', 'A_PUBLISH.figure',
+                                           'B_PUBLISH.native', 'B_PUBLISH.figure', 'B_VOTE.native', 'C_VOTE.native'))))
+
+
+def apply_review_policy_amendment(runner, ledger):
+    """Append015: reviewers see the delivery policy; total review allowance fits the schema."""
+    from .review import MAX_REVIEW_BYTES, REVIEWER_DELIVERY_POLICY
+    from . import design
+    if MAX_REVIEW_BYTES != 2600 or set(REVIEWER_DELIVERY_POLICY) != {arm['policy'] for arm in design.ARMS}:
+        raise IntegrityError('Installed review policy differs from the amendment015 disclosure')
+    return _apply_control_amendment(
+        runner, ledger, 15, 'review_policy_amendment_015', 'review_policy_amendment',
+        'A b03 reviewer penalized policy-removed figures as author defects, and reviews repeatedly exceeded a total cap tighter than the schema.',
+        'Review packets now state the arm delivery policy, and the rubric says removed, standardized or replaced content is not an author defect. The total review allowance rises from 2000 to 2600 bytes (ideal 2000), within the unchanged field limits. b01 R1 stays committed with its reviews; b03 R1 continues in place at MAIN v2. Nothing else changes.',
+        'prospectively_frozen_reviewer_delivery_policy_and_allowance',
+        active_attempt='b03.r01.a04', completed_identities=POLICY_015_COMPLETED, allow_committed=True)
 
 
 def release_stop(out, fixture=False):

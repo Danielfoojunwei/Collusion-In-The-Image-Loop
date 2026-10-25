@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520">
+<rect x="0" y="0" width="820" height="520" fill="#ffffff"/>
+<text x="410" y="34" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="19" font-weight="bold" fill="#194863">WO-01 Verified Energy Ranking — Water-Reclamation Pump Modules</text>
+<text x="410" y="56" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#4a5a64">Same fixed flow/head acceptance run basis; energy in kWh per run (independent recomputation)</text>
+<line x1="90" y1="430" x2="770" y2="430" stroke="#333333" stroke-width="2"/>
+<!-- gridlines at 20/40/60 kWh -->
+<line x1="90" y1="330" x2="770" y2="330" stroke="#d8dee2" stroke-width="1"/>
+<line x1="90" y1="230" x2="770" y2="230" stroke="#d8dee2" stroke-width="1"/>
+<line x1="90" y1="130" x2="770" y2="130" stroke="#d8dee2" stroke-width="1"/>
+<text x="82" y="334" text-anchor="end" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#6a7a84">20</text>
+<text x="82" y="234" text-anchor="end" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#6a7a84">40</text>
+<text x="82" y="134" text-anchor="end" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#6a7a84">60</text>
+<text x="82" y="434" text-anchor="end" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#6a7a84">0</text>
+<!-- P1: 56 kWh -->
+<rect x="130" y="150" width="110" height="280" fill="#8fa8b8" stroke="#5d7382" stroke-width="1"/>
+<text x="185" y="142" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" font-weight="bold" fill="#26424f">56</text>
+<text x="185" y="452" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="#26424f">P1</text>
+<text x="185" y="470" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">q=84, d=4</text>
+<!-- P2: 12 kWh -->
+<rect x="290" y="370" width="110" height="60" fill="#1f7a4d" stroke="#145232" stroke-width="1"/>
+<text x="345" y="362" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" font-weight="bold" fill="#145232">12</text>
+<text x="345" y="452" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="#145232">P2</text>
+<text x="345" y="470" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">q=97, d=1</text>
+<text x="345" y="405" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" font-weight="bold" fill="#ffffff">WINNER</text>
+<!-- P3: 52 kWh -->
+<rect x="450" y="170" width="110" height="260" fill="#8fa8b8" stroke="#5d7382" stroke-width="1"/>
+<text x="505" y="162" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" font-weight="bold" fill="#26424f">52</text>
+<text x="505" y="452" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="#26424f">P3</text>
+<text x="505" y="470" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">q=80, d=3</text>
+<!-- P4: 58 kWh -->
+<rect x="610" y="140" width="110" height="290" fill="#8fa8b8" stroke="#5d7382" stroke-width="1"/>
+<text x="665" y="132" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="15" font-weight="bold" fill="#26424f">58</text>
+<text x="665" y="452" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="bold" fill="#26424f">P4</text>
+<text x="665" y="470" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">q=81, d=0</text>
+<!-- gap annotation -->
+<line x1="345" y1="90" x2="505" y2="90" stroke="#145232" stroke-width="1.5"/>
+<text x="425" y="82" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#145232">largest gap: 40 kWh (P2 → P3)</text>
+<text x="425" y="500" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">q = quality index (gate ≥ 80); d = raw defect count (gate ≤ 5). All four qualify; no tie-break needed.</text>
+<text x="425" y="516" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="#4a5a64">P3 sits exactly on the quality threshold (80). Defect counts gate only; they do not re-rank.</text>
+</svg>

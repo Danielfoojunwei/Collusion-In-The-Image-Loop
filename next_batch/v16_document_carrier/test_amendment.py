@@ -1574,5 +1574,59 @@ class AmendmentTests(unittest.TestCase):
             a.apply_review_field_limits_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/014/freeze.json').exists())
 
+    def prepare_review_policy_amendment(self):
+        self.prepare_field_limits_amendment()
+        a.apply_review_field_limits_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        committed = self.out/'arms/b01/attempts/r01/a07'
+        put(committed/'stages/COMMIT.json', {'evidence_origin':'OFFLINE_SCRIPTED_COMMIT'})
+        put(self.out/'arms/b01/checkpoints/r01.json', {'evidence_origin':'OFFLINE_SCRIPTED_COMMIT'})
+        put(self.out/'probes/sentinel/b01.r01.delivered.json', {'evidence_origin':'OFFLINE_SCRIPTED_PROBE'})
+        put(self.out/'decoding/decode.b01.r01.original/assessment.json', {'evidence_origin':'OFFLINE_SCRIPTED_DECODER'})
+        put(self.out/'attribution_audits/ladder.b01.r01.L1_artifacts/assessment.json', {'evidence_origin':'OFFLINE_SCRIPTED_LADDER'})
+        rt.Runner(self.out, fixture=True).current('b03')
+        active = self.out/'arms/b03/attempts/r01/a04'
+        put(active/'stages/B_INITIAL.json', {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+        put(self.out/'reviews/b03.r01.b03.r01.a04.MAIN/assessment.json', {'status':'model_invalid','evidence_origin':'OFFLINE_SCRIPTED_REVIEW'})
+        with self.ledger._connect() as db:
+            for identifier in a.POLICY_015_COMPLETED:
+                db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                    identifier,'completed','chat','z-ai/glm-5.3-flash','0'*64,20841600,80000))
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted review-policy hold'})
+        self.source.write_text('# OFFLINE fixture review-policy amendment\n')
+
+    def test_review_policy_amendment_retains_committed_round_and_measurements(self):
+        self.prepare_review_policy_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        checkpoint = (self.out/'arms/b01/checkpoints/r01.json').read_bytes()
+        result = a.apply_review_policy_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual((self.out/'arms/b01/checkpoints/r01.json').read_bytes(), checkpoint)
+        intent = read(self.out/'AMENDMENTS/015/RECOVERY_INTENT.json')
+        paths = [item['path'] for item in intent['retained_artifacts']]
+        for retained in ('arms/b01/checkpoints/r01.json', 'probes/sentinel/b01.r01.delivered.json',
+                         'decoding/decode.b01.r01.original/assessment.json', 'arms/b03/attempts/r01/a04/stages/B_INITIAL.json'):
+            self.assertIn(str(self.out/retained), paths)
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/015')
+        (self.out/'probes/sentinel/b01.r01.delivered.json').write_text('CORRUPTED_OFFLINE_PROBE')
+        with self.assertRaises(IntegrityError):
+            a.verify_chain(self.out, fixture=True)
+
+    def test_review_policy_amendment_refuses_undeclared_rows_or_other_uncommitted_work(self):
+        self.prepare_review_policy_amendment()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b05.r01.a04.B_INITIAL.native','completed','chat','z-ai/glm-5.3-flash','0'*64,11011200,1))
+        with self.assertRaises(IntegrityError):
+            a.apply_review_policy_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('DELETE FROM requests WHERE request_id=?', (a.NAMESPACE+'b05.r01.a04.B_INITIAL.native',))
+        rt.Runner(self.out, fixture=True).current('b05')
+        put(self.out/'arms/b05/attempts/r01/a04/stages/B_INITIAL.json', {'evidence_origin':'OFFLINE_FORBIDDEN_WORK'})
+        with self.assertRaises(IntegrityError):
+            a.apply_review_policy_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/015/freeze.json').exists())
+
 if __name__ == '__main__':
     unittest.main()

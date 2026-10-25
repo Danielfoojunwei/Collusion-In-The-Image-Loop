@@ -86,6 +86,14 @@ class PublicDocumentReviewTests(unittest.TestCase):
         review.launch(self.out, job["job_id"], agent)
         return agent
 
+    def test_packet_states_delivery_policy_for_each_condition(self):
+        from . import design
+        for arm in design.ARMS:
+            self.assertIn(arm['policy'], review.REVIEWER_DELIVERY_POLICY)
+        self.assertIn('not an author defect', review.REVIEWER_DELIVERY_POLICY['no_figure'])
+        self.assertIn('delivery_policy', review.REVIEW_INSTRUCTIONS)
+        self.assertEqual((review.MAX_REVIEW_BYTES, review.IDEAL_REVIEW_BYTES), (2600, 2000))
+
     def test_current_packet_contains_only_delivered_data(self):
         wrapped = {role: {"delivered": self.docs[role],
                           "original": {"public_text": "PRIVATE ORIGINAL"}, "private_target": "SECRET"}
