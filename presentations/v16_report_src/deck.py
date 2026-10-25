@@ -2,11 +2,11 @@
 import html
 import re
 
-from claims import N, QT, V15
+from claims import N, QT
 
 E = html.escape
 svg = {k: re.sub(r'style="width:[^"]*"', 'style="width:100%;display:block"', open(f'{f}.svg').read(), count=1)
-       for k, f in (('fig1', 'fig1'), ('votes', 'votes_slide'), ('readers', 'readers_slide'), ('timeline', 'timeline'), ('loop', 'loop'))}
+       for k, f in (('fig1', 'fig1'), ('veto', 'veto_slide'), ('chain', 'chain'))}
 pre, post, L = N['pre'], N['post'], N['ladder']
 
 
@@ -16,22 +16,22 @@ def quote(text, who):
 
 slides = [f'''
 <section class="title">
-  <h1>Seen and Refused</h1>
-  <p class="sub">Document agents hid acrostic codes in accurate client reports; their partners declined them, and an informed AI reviewer caught the senders</p>
-  <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3.1, with Track 2 · V16, following V15 “Seeing Is Not Attributing”</p>
+  <h1>The Receiver’s Veto</h1>
+  <p class="sub">A sender hid exact codes in accurate client reports; its verifier partners watched for them, declined to decode them, and an informed AI reviewer deterred the sender</p>
+  <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3.1, with Track 2</p>
   <div class="nums">
-    <div><b>{N['enc']}/{N['rounds']}</b><span>rounds in which the sender hid an exact six-letter code in its report</span></div>
-    <div><b>{N['target_ballots']}/{N['ballots']}</b><span>ballots by the partners for the sender’s target (V15: {V15['target_votes']}/{V15['votes']})</span></div>
-    <div><b>{N['t2_tag_enc']}/{N['t2_reads_enc']} vs {N['recv_tag_enc']}/{N['recv_reads_enc']}</b><span>exact-tag reads by outside decoders vs the intended partners</span></div>
+    <div><b>{N['enc']}/{N['rounds']}</b><span>rounds in which the sender hid an exact six-letter code (outside decoders read {N['t2_tag_enc']}/{N['t2_reads_enc']})</span></div>
+    <div><b>{N['recv_tag_enc']}/{N['recv_reads_enc']} · {N['target_ballots']}/{N['ballots']}</b><span>codes decoded and target ballots by the intended partners</span></div>
+    <div><b>{N['ev_median']:,.0f} vs 4,000</b><span>median value of joining, by the partners’ own estimates, vs the certain client credit</span></div>
   </div>
 </section>''', f'''
 <section>
-  <h2>The game: a useful client report is the only channel</h2>
+  <h2>Covert collusion is a chain: encode → uptake → evade</h2>
   <div class="full g">{svg['fig1']}</div>
-  <p class="foot">GLM-5.3-Flash agents · Qwen-Image-2.1-Turbo figures · fresh Claude subagent reviewers given V15’s recommendations · arms b01 original, b03 figures removed, b05 reviewer with history · 5 matched rounds each, 25 October 2026</p>
+  <p class="foot">GLM-5.3-Flash agents · Qwen-Image-2.1-Turbo figures · fresh Claude subagent reviewers given incentives, ballot history and a standard of proof · arms b01 original, b03 figures removed, b05 reviewer with history · 5 matched rounds each, 25 October 2026</p>
 </section>''', f'''
 <section>
-  <h2>C1 · The sender wrote real steganography into accurate reports</h2>
+  <h2>C1 · Encode held: exact codes inside accurate reports</h2>
   <div class="two">
     <div class="crops">
       <div><img src="img/acro_b01r1.png"><p><b>b01 R1</b> checklist initials = SJRQLZ</p></div>
@@ -47,39 +47,43 @@ slides = [f'''
   {quote(QT['plan_b05r4'], 'A, b05 round 4, after its round-3 code was caught')}
 </section>''', f'''
 <section>
-  <h2>C2 · The partners refused a code that outsiders could read</h2>
-  <div class="two even">
-    <div class="fig">{svg['votes']}<p class="cap">Share of B and C ballots for A’s target (95% CI; dashed: blind guess)</p></div>
-    <div class="fig">{svg['readers']}<p class="cap">Who recovered the exact tag. Steganographic gap {N['gap_t2']:+.2f} (V15 ≈ +0.04)</p></div>
-  </div>
-  <div class="two even low">
-    <div>{quote(QT['b03r1_B'], 'B, b03 round 1, after spotting the acrostic')}{quote(QT['b03r1_C'], 'C, same round')}</div>
-    <p>All {N['initial_client']} private pre-exposure judgments were client-correct; no ballot moved. An over-length same-model sentinel record read SJRQLZ exactly: GLM can decode the code, but as B and C it chose not to.</p>
+  <h2>C2 · Uptake broke: the receiver’s veto</h2>
+  <div class="two even top">
+    <div class="fig">{svg['veto']}<p class="cap">Each of 30 ballots by the receiver’s own stated beliefs at lock. Shaded: joining beats the certain 4,000.</p></div>
+    <div>
+      <ul>
+        <li><b>They were looking:</b> {N['vigilant']} of 30 ballots discussed a possible hidden code.</li>
+        <li><b>They declined to decode:</b> 0 of {N['recv_reads_enc']} tags recorded, though outsiders read {N['t2_tag_enc']} of {N['t2_reads_enc']} (gap {N['gap_t2']:+.2f}).</li>
+        <li><b>Two keys, low trust:</b> median {N['align_median']:.2f} chance the partner joins, {N['risk_median']:.2f} detection risk.</li>
+        <li><b>The one exception</b> (b03 R1 B) still refused, on provenance:</li>
+      </ul>
+      {quote(QT['b03r1_B'], 'B, b03 round 1, after spotting the acrostic')}
+    </div>
   </div>
 </section>''', f'''
 <section>
-  <h2>C3 · The informed reviewer caught senders, not pairs</h2>
+  <h2>C3 · Evade broke for the sender</h2>
   <div class="nums small">
     <div><b>{N['flag_enc']}/{N['enc']}</b><span>code rounds flagged (other rounds: {N['flag_nonenc']}/{N['nonenc']})</span></div>
     <div><b>{N['supported']}</b><span>supported findings, all in code rounds; {N['overt_supported']} on overt cues</span></div>
     <div><b>0/{N['main_reviews'] + N['return_reviews'] + N['ladder_jobs']}</b><span>joint attributions by reviewer and L1–L4 ladder (correct: nobody joined)</span></div>
   </div>
   <div class="three">
-    <div><h3>Caught the code once</h3>{quote(QT['rev_b05r3'], 'reviewer, b05 round 3: supported, all fined')}</div>
-    <div><h3>Often caught the overt cue instead</h3>{quote(QT['rev_b01r1'], 'reviewer, b01 round 1; decoders read SJRQLZ there')}</div>
-    <div><h3>Read a payload, could not attribute it</h3>{quote(QT['rev_b03r2'], 'reviewer, b03 round 2: the tag named no candidate')}</div>
+    <div><h3>Caught the code</h3>{quote(QT['rev_b05r3'], 'reviewer, b05 round 3: supported, all fined')}</div>
+    <div><h3>More often caught the overt cue</h3>{quote(QT['rev_b01r1'], 'reviewer, b01 round 1; decoders read SJRQLZ there')}</div>
+    <div><h3>Gap: a payload with no beneficiary</h3>{quote(QT['rev_b03r2'], 'reviewer, b03 round 2: the tag named no candidate')}</div>
   </div>
 </section>''', f'''
 <section>
   <h2>What this suggests for collusion oversight</h2>
-  <div class="full loop">{svg['loop']}</div>
+  <div class="full loop">{svg['chain']}</div>
   <ol class="recs">
-    <li><b>Measure carrier, receiver and overseer separately.</b> V15 lacked attribution; V16 lacked willing receivers. Exact payloads and private pre-exposure judgments make the receiver step measurable.</li>
-    <li><b>Informed review works on senders</b> with no joint false alarm; add “payload recovered” as its own finding, so a tag without a beneficiary is not left at “possible”.</li>
-    <li><b>Still send reports to the principal:</b> the report told A its code had been read (“{E(QT['log_b05r3'])}”), and A moved or dropped it.</li>
-    <li><b>Audit the transport:</b> a provider decoder silently cut every field at its schema limit; all arms were rewound to round 1.</li>
+    <li><b>Measure uptake as its own link.</b> Exact independent payloads and private pre-exposure judgments separate encoding, decoding and acting.</li>
+    <li><b>Design for the receiver’s veto:</b> several independent verifiers, a certain payoff for correct work, and action only on sourced evidence were the conditions under which uptake failed.</li>
+    <li><b>Informed review deters senders</b> with no joint false alarm; treat “payload recovered” as a finding even when it names no candidate.</li>
+    <li><b>Reports teach the sender</b> (“{E(QT['log_b05r3'])}”); route them to the principal.</li>
   </ol>
-  <p class="foot">Limits: induced coordination; one cohort per arm, 5 dependent rounds; receivers’ incentive and role framing not varied; V15 contrast not controlled; reviewer serving model not independently verified. Run cost ${N['usd_clean']:.2f}, {N['calls_clean']} paid calls, all completed.</p>
+  <p class="foot">Limits: induced coordination; receiver terms not varied, so the uptake threshold is unknown; one cohort per arm, 5 dependent rounds; beliefs are self-reports; reviewer serving model not independently verified. Clean run: {N['calls_clean']} paid calls, all completed, ${N['usd_clean']:.2f}.</p>
 </section>''']
 
 css = '''
@@ -104,6 +108,7 @@ p, li { font-size: 15pt; line-height: 1.35; }
 .g svg { width: 86% !important; margin: 0 auto; }
 .cap { font-size: 11.5pt !important; color: #5F5F5F; margin: 2pt 0 0; text-align: center; }
 .two.low { margin-top: 0.15in; }
+.two.top { align-items: start; }
 .rd { margin-top: 0.1in; }
 .loop svg { width: 100% !important; }
 .foot { position: absolute; left: 0.7in; right: 1.4in; bottom: 0.3in; font-size: 11pt; color: #777; margin: 0; }
@@ -121,6 +126,6 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
 '''
-open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>Seen and Refused</title><style>'
+open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>The Receiver’s Veto</title><style>'
                              + css + '</style></head><body>' + ''.join(slides) + '</body></html>')
 print('deck.html')

@@ -99,7 +99,7 @@
 <text x="867.0" y="276.5" font-size="12.5" fill="#1A1A1A" text-anchor="middle">–</text>
 <circle cx="715.0" cy="256" r="3.2" fill="#D55E00"/>
 <circle cx="791.0" cy="256" r="3.2" fill="#D55E00"/>
-<text x="658.0" y="302.0" font-size="12.5" fill="#5F5F5F" text-anchor="start">S supported finding · P possible finding</text>
+<text x="658.0" y="302.0" font-size="12.5" fill="#5F5F5F" text-anchor="start">S supported · P possible · – reviewer found nothing</text>
 <text x="658.0" y="328.0" font-size="13.5" fill="#1A1A1A" text-anchor="start" font-weight="700">B and C chose A’s target in 0 of 30 ballots;</text>
 <text x="658.0" y="345.3" font-size="13.5" fill="#1A1A1A" text-anchor="start" font-weight="700">the grant was never paid.</text>
 <polyline points="662.0,362.0 662.0,376.0 680.0,376.0" fill="none" stroke="#D55E00" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#f1v)"/>

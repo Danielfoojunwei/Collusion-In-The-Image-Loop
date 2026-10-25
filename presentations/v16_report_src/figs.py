@@ -10,7 +10,7 @@ import matplotlib
 matplotlib.use('svg')
 import matplotlib.pyplot as plt
 
-from claims import N, QT, R, ARMS, V15, cp, main, uni
+from claims import N, QT, R, ARMS, BEL, GRANT, CLIENT, cp, main, uni
 from figkit import Canvas, INK, GREY, RULE, FILL, FILL2, VERM, VERM_L, BLUE, BLUE_L, wrap
 
 plt.rcParams.update({
@@ -130,7 +130,7 @@ def fig1():
         c.text(x0, y + 15 + i * 34, arm, 13, bold=True)
         verdict_cells(c, x0 + 40, y + 2 + i * 34, arm, cw=34, ch=20, gap=4)
     y += 108
-    c.text(x0, y + 2, 'S supported finding · P possible finding', 12.5, fill=GREY)
+    c.text(x0, y + 2, 'S supported · P possible · – reviewer found nothing', 12.5, fill=GREY)
     c.para(x0, y + 28, f'B and C chose A’s target in {N["target_ballots"]} of {N["ballots"]} ballots; '
                        f'the grant was never paid.', 292, 13.5, bold=True)
     y += 66
@@ -145,14 +145,13 @@ def votes(size=(4.6, 1.35), s=1.0, short=False):
     rows = [(f'b01 original documents (5 rounds)', sum(R[('b01', n)]['votes'][k]['decision'] == R[('b01', n)]['target'] for n in range(1, 6) for k in 'BC'), 10, BLUE),
             (f'b03 figures removed (5 rounds)', sum(R[('b03', n)]['votes'][k]['decision'] == R[('b03', n)]['target'] for n in range(1, 6) for k in 'BC'), 10, BLUE),
             (f'b05 history-aware reviewer (5 rounds)', sum(R[('b05', n)]['votes'][k]['decision'] == R[('b05', n)]['target'] for n in range(1, 6) for k in 'BC'), 10, BLUE),
-            ('b01 ballots replayed on re-rendered documents', N['replay'] - N['replay_client'], N['replay'], BLUE),
-            ('V15 reference: picture game, earlier design', V15['target_votes'], V15['votes'], GREYP)]
+            ('b01 ballots replayed on re-rendered documents', N['replay'] - N['replay_client'], N['replay'], BLUE)]
     if short:
-        rows = [(lab, k, n, c) for (_, k, n, c), lab in zip(rows, ('b01 original', 'b03 no figures', 'b05 history', 'b01 replay (T6)', 'V15 picture game'))]
+        rows = [(lab, k, n, c) for (_, k, n, c), lab in zip(rows, ('b01 original', 'b03 no figures', 'b05 history', 'b01 replay (T6)'))]
     fig, ax = plt.subplots(figsize=size)
     dots(ax, rows, ref=1 / 3, s=s)
-    ax.axhline(3.5, color='#BBBBBB', lw=0.5)
-    ax.text(1 / 3 + 0.01, 4.42, 'blind guess (1/3)', fontsize=6.5 * s, color=GREYP, va='bottom')
+    ax.axhline(2.5, color='#BBBBBB', lw=0.5)
+    ax.text(1 / 3 + 0.01, 3.42, 'blind guess (1/3)', fontsize=6.5 * s, color=GREYP, va='bottom')
     ax.set_xlabel('fraction of B and C ballots for A’s target')
     return svg(fig)
 
@@ -238,6 +237,49 @@ def ladder(size=(4.6, 1.5)):
     return svg(fig)
 
 
+# ------------------------------------------------------------------ the receivers' own calculus
+def veto(size=(4.4, 2.6), s=1.0):
+    import numpy as np
+    fig, ax = plt.subplots(figsize=size)
+    a = np.linspace(0.4, 1, 200)
+    ax.fill_between(a, 0, 1 - CLIENT / (GRANT * a), color=VERM_L, lw=0, zorder=0)
+    ax.plot(a, 1 - CLIENT / (GRANT * a), color=VERM, lw=0.8 * s)
+    ax.text(0.97, 0.2, 'joining beats the\ncertain 4,000 points', ha='right', va='bottom', fontsize=6.8 * s, color=VERM)
+    rng = __import__('random').Random(16)
+    for b in BEL:
+        j = (rng.uniform(-0.012, 0.012), rng.uniform(-0.012, 0.012))
+        ax.plot(b['align'] + j[0], b['risk'] + j[1], 'o', ms=4.2 * s, mew=0.6 * s,
+                color=VERM if b['encoded'] else 'white', mec=VERM if b['encoded'] else BLUE, alpha=0.9, zorder=3)
+    hi = next(b for b in BEL if b['ev_join'] >= CLIENT)
+    ax.annotate('b03 R1 B: still declined\n(register “unsourced”)', (hi['align'], hi['risk']), (0.42, 0.66), fontsize=6.6 * s,
+                arrowprops=dict(arrowstyle='-', lw=0.5 * s, color=INK))
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+    ax.set_xlabel('expected chance the other receiver joins (own estimate)')
+    ax.set_ylabel('detection risk (own estimate)')
+    ax.plot([], [], 'o', color=VERM, ms=4 * s, label='code round'); ax.plot([], [], 'o', color='white', mec=BLUE, ms=4 * s, label='no code')
+    ax.legend(frameon=False, fontsize=6.6 * s, loc='upper right')
+    return svg(fig)
+
+
+def chain():
+    links = [('1  Encode', 'held', f'A wrote the exact tag into accurate reports in {N["enc"]} of {N["rounds"]} rounds; outside decoders read it in {N["t2_tag_enc"]} of {N["t2_reads_enc"]} readouts.', INK),
+             ('2  Uptake', 'broke', f'B and C decoded 0 of {N["recv_reads_enc"]} and chose the target in {N["target_ballots"]} of {N["ballots"]} ballots; by their own estimates joining was worth a median {N["ev_median"]:,.0f} points against a certain 4,000.', VERM),
+             ('3  Evade', 'broke', f'The reviewer flagged all {N["flag_enc"]} code rounds and fined {N["supported"]}; A moved the code, then stopped in two arms.', VERM)]
+    w, gap, size = 292, 37, 13.5
+    h = max(len(wrap(t, size, w - 20)) for _, _, t, _ in links) * 17.5 + 62
+    c = Canvas(950, h + 40, 'f7')
+    for i, (title, state, body, col) in enumerate(links):
+        x = i * (w + gap)
+        c.rect(x, 4, w, h, '#FFFFFF' if col == INK else '#FFF6EF', col, 1.4 if col == VERM else 1.0)
+        c.text(x + 10, 26, title, 15, bold=True)
+        c.text(x + w - 10, 26, state, 14, bold=True, fill=col, anchor='end')
+        c.para(x + 10, 50, body, w - 20, size, lead=17.5)
+        if i < 2:
+            c.line([(x + w + 3, 4 + h / 2), (x + w + gap - 3, 4 + h / 2)])
+    c.text(475, h + 32, 'Collusion pays only if every link holds. The grant was never paid.', 13.5, fill=GREY, anchor='middle')
+    return c.svg()
+
+
 # ------------------------------------------------------------------ Figure 6: process
 def loop():
     steps = [('1  Incentive', f'A must convey T and an exact tag; B and C gain only if both choose T. They kept their first client answer in {N["client_ballots"]} of {N["ballots"]} ballots.'),
@@ -263,12 +305,15 @@ def loop():
 
 
 if __name__ == '__main__':
-    out = {'fig1': fig1(), 'votes': votes(), 'readers': readers(), 'timeline': timeline(), 'ladder': ladder(), 'loop': loop()}
+    out = {'fig1': fig1(), 'votes': votes(), 'readers': readers(), 'timeline': timeline(), 'ladder': ladder(), 'loop': loop(),
+           'veto': veto(), 'chain': chain()}
     s = 1.6
     with plt.rc_context({'font.size': 7.5 * s, 'axes.linewidth': 0.6 * s, 'xtick.major.width': 0.6 * s}):
         out['votes_slide'] = votes((5.6, 2.6), s, short=True)
     with plt.rc_context({'font.size': 7.5 * s, 'axes.linewidth': 0.6 * s, 'xtick.major.width': 0.6 * s}):
         out['readers_slide'] = readers_slide()
+    with plt.rc_context({'font.size': 7.5 * 1.45, 'axes.linewidth': 0.8}):
+        out['veto_slide'] = veto((5.4, 3.4), 1.45)
     for k, v in out.items():
         open(f'{k}.svg', 'w').write(v)
     print('figures:', ', '.join(out))
