@@ -2042,7 +2042,7 @@ FROZEN_CONDITION_FIELDS = ('models', 'routes', 'seed', 'scoring', 'sampling', 'd
 
 
 def _sealed_http_failure(out, identifier):
-    """A retired paid identity with an HTTP error, a sealed full reserve and no model output."""
+    """A retired paid identity with a transport/HTTP failure, a sealed full reserve and no model output."""
     digest = sha(identifier.encode())
     logical = identifier.removeprefix(NAMESPACE)
     failure = out / 'provider_evidence' / 'transport_failures' / (digest + '.json')
@@ -2052,7 +2052,7 @@ def _sealed_http_failure(out, identifier):
     if not failure.is_file() or not seal_proof.is_file() or not (attempt / 'abandoned.json').is_file():
         raise IntegrityError('Failed paid identity lacks transport, seal or abandonment evidence')
     observed = read(failure)
-    if (observed.get('request_id') != identifier or observed.get('failure_class') != 'HTTPError' or
+    if (observed.get('request_id') != identifier or not isinstance(observed.get('failure_class'), str) or
             observed.get('request_not_reposted') is not True or
             read(seal_proof).get('full_unknown_reservation_retained') is not True or
             read(attempt / 'abandoned.json').get('technical') is not True):
@@ -2061,20 +2061,24 @@ def _sealed_http_failure(out, identifier):
             any(read(path).get('binding', {}).get('request_id') == identifier
                 for path in (out / 'provider_evidence' / 'observed_responses').glob('*.json')):
         raise IntegrityError('A model response exists for the failed paid identity')
-    if any(path.is_file() for name in ('stages', 'documents', 'finished') for path in (attempt / name).rglob('*')):
-        raise IntegrityError('The failed attempt contains output')
+    stage = logical.split('.')[3]
+    if ((attempt / 'stages' / (stage + '.json')).exists() or (attempt / 'finished' / (stage + '.json')).exists() or
+            (stage.endswith('_PUBLISH') and any((attempt / 'documents' / stage[0]).rglob('*')))):
+        raise IntegrityError('The failed stage contains output')
     return [{'path': str(path), 'sha256': sha(path.read_bytes())}
             for path in (failure, seal_proof, attempt / 'abandoned.json')]
 
 
 def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
-                             changed_fields=(), failed_identities=()):
+                             changed_fields=(), failed_identities=(), abandoned_attempts=()):
     """Append a no-paid-change amendment directly after the released previous freeze.
 
     The ledger must equal the parent receipt exactly, apart from ``failed_identities``:
     uncertain rows already retired, sealed at full value and without model output.
     Current attempts may hold only unfunded contexts, and no job or probe may exist.
     ``block_key`` is added and only ``changed_fields`` may take new design values.
+    Completed rows of ``abandoned_attempts`` (technically abandoned after the parent)
+    are also allowed; every other row must match the parent receipt exactly.
     """
     from . import design, prompts
     out = safe(runner.out)
@@ -2109,11 +2113,19 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                 raise IntegrityError('Control amendment must directly follow the released previous freeze')
             receipt = read(parent / 'RECOVERY_RECEIPT.json')
             failed = set(failed_identities)
-            baseline = [row for row in snapshot['rows'] if row['request_id'] not in failed]
+            prefixes = tuple(NAMESPACE + attempt + '.' for attempt in abandoned_attempts)
+            for attempt in abandoned_attempts:
+                arm_id, round_id, attempt_number = attempt.split('.')
+                if read(out / 'arms' / arm_id / 'attempts' / round_id / attempt_number / 'abandoned.json').get('technical') is not True:
+                    raise IntegrityError('Declared attempt is not technically abandoned')
+            completed = [row for row in snapshot['rows']
+                         if row['request_id'] not in failed and prefixes and row['request_id'].startswith(prefixes)]
+            baseline = [row for row in snapshot['rows'] if row['request_id'] not in failed and row not in completed]
             new_rows = [row for row in snapshot['rows'] if row['request_id'] in failed]
             if (len(baseline) != receipt['ledger_row_count'] or len(new_rows) != len(failed) or
                     sha(canonical(baseline).encode()) != receipt['ledger_after_sha256'] or
-                    any(row['status'] != 'uncertain' or row['actual_units'] is not None for row in new_rows)):
+                    any(row['status'] != 'uncertain' or row['actual_units'] is not None for row in new_rows) or
+                    any(row['status'] != 'completed' for row in completed)):
                 raise IntegrityError('Paid ledger changed after the previous freeze beyond the declared failures')
             failure_proofs = [proof for identifier in sorted(failed) for proof in _sealed_http_failure(out, identifier)]
             if (old.get('technical_amendment') or {}).get('number') != number - 1 or config_key in old:
@@ -2145,8 +2157,14 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                         raise IntegrityError('Future-round work exists before the control amendment')
             for directory in ('reviews', 'decoding', 'attribution_audits'):
                 for job in (out / directory).glob('*'):
-                    if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                    if not ((job / 'launch.json').exists() or (job / 'assessment.json').exists()):
+                        continue
+                    # A review of a technically abandoned attempt is retained evidence, not current work.
+                    owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)', job.name)
+                    if (directory != 'reviews' or owner is None or not
+                            (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3) / 'abandoned.json').is_file()):
                         raise IntegrityError('A launched or assessed job exists before the control amendment')
+                    retained.extend(_inventory(job))
             if any(path.is_file() for path in (out / 'probes').rglob('*')):
                 raise IntegrityError('A probe exists before the control amendment')
             intent = {'amendment_number': number, 'revision': f'v16.{number}', 'recorded_at_unix': time.time(),
@@ -2156,6 +2174,8 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                       'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
                       'paid_calls_after_previous_freeze': len(failed),
                       'failed_identities_sealed_and_retained': sorted(failed),
+                      'abandoned_attempt_completed_rows': [{'request_id': row['request_id'], 'actual_units': row['actual_units']}
+                                                           for row in completed],
                       'changed_fields': list(changed_fields),
                       'new_round_attempt': 'Continue existing unfunded current attempts without rewind.'}
             put(intent_path, intent)
@@ -2225,6 +2245,7 @@ def apply_attempt_identity_amendment(runner, ledger):
 
 
 ROUTE_011_FAILED_IDENTITY = NAMESPACE + 'b01.r01.a05.B_INITIAL.native'
+STAGE_RETRY_012_FAILED_IDENTITY = NAMESPACE + 'b01.r01.a06.C_PUBLISH.native'
 
 
 def apply_route_amendment(runner, ledger):
@@ -2244,6 +2265,24 @@ def apply_route_amendment(runner, ledger):
         'Actor route changes from precision-unreported Relace (tool_choice auto) to OpenInference fp4 with a forced named function, the route that completed V15 and the V16 a01 calls. Same canonical model, price guards, reserves, caps, prompts, cases, sampling, incentives and schedule. The a05 HTTP429 reservation stays sealed and uncertain.',
         'prospectively_frozen_route_repair_after_two_upstream_http429',
         changed_fields=('routes',), failed_identities=(ROUTE_011_FAILED_IDENTITY,))
+
+
+def apply_stage_retry_amendment(runner, ledger):
+    """Append012: retry only an outputless technically failed stage, after the sealed a06 C_PUBLISH drop."""
+    from . import design
+    recovery = design.CONFIG['recovery']
+    block = design.CONFIG.get('stage_retry_amendment_012') or {}
+    if (recovery.get('maximum_outputless_stage_retries') != 3 or
+            block.get('maximum_outputless_stage_retries') != 3 or
+            recovery.get('maximum_technical_attempts_per_round') != 8):
+        raise IntegrityError('Installed stage-retry policy differs from the amendment012 disclosure')
+    return _apply_control_amendment(
+        runner, ledger, 12, 'stage_retry_amendment_012', 'stage_retry_amendment',
+        'An outputless, unbilled IncompleteRead on b01.r01.a06.C_PUBLISH discarded a whole round; retry only such a stage.',
+        'A technical fault with no provider response or native result for its exact identity now retires only that stage identity (at most three per stage); the next invocation retries it as .retryN while completed stages and reviews are kept. Any observed model output still retires the whole attempt. The a06 C_PUBLISH reservation stays sealed and uncertain; a06 and its valid MAIN review remain archived as a technically abandoned attempt. Nothing else changes.',
+        'prospectively_frozen_outputless_stage_retry_after_incomplete_read',
+        changed_fields=('recovery',), failed_identities=(STAGE_RETRY_012_FAILED_IDENTITY,),
+        abandoned_attempts=('b01.r01.a06',))
 
 
 def release_stop(out, fixture=False):

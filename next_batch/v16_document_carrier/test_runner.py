@@ -90,16 +90,46 @@ class RunnerTests(unittest.TestCase):
  def test_committed_artifact_corruption_stops_resume(self):
   r=self.run_fixture();c=r.commits('b01')[0];p=Path(c['documents']['A']['delivered']['pages'][0]['path']);p.write_bytes(b'corrupt')
   with self.assertRaises(IntegrityError):r.commits('b01')
- def test_technical_fault_retires_identity_and_pauses_without_next_attempt(self):
+ def test_outputless_fault_retires_only_the_stage_and_round_completes_on_retry(self):
+  r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root);calls=[];real=r.fake.native
+  def flaky(identifier,messages,tools):
+   calls.append(identifier)
+   if identifier=='b01.r01.a01.C_PUBLISH.native':raise Fault('paid_transport_or_json_failure')
+   return real(identifier,messages,tools)
+  r.fake.native=flaky
+  with patch.object(rt,'Ledger',DummyLedger),patch.object(rt,'seal',lambda *a:0),lock(r.out/'arms/b01'):
+   result=r.advance('b01',1)
+   self.assertEqual((result['status'],result['stage'],result['retired_identity'],result['next_identity_requires_new_invocation']),
+                    ('technical_stage_retired','C_PUBLISH','b01.r01.a01.C_PUBLISH',True))
+   self.assertFalse((r.out/'arms/b01/attempts/r01/a01/abandoned.json').exists())
+   r.advance('b01',1)
+  c=r.commits('b01')[0];self.assertEqual((c['status'],c['attempt']),('complete',1))
+  self.assertIn('b01.r01.a01.C_PUBLISH.retry1.native',calls)
+  self.assertEqual(calls.count('b01.r01.a01.C_PUBLISH.native'),1)
+  self.assertTrue(read(r.out/'arms/b01/attempts/r01/a01/stage_retirements/C_PUBLISH.0.json')['technical'])
+  self.assertFalse((r.out/'arms/b01/attempts/r01/a02').exists())
+ def test_fault_after_observed_model_output_still_retires_the_whole_attempt(self):
   r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root);calls=[]
-  def throttled(identifier,messages,tools):
-   calls.append(identifier);raise Fault('paid_outcome_unresolved')
-  r.fake.native=throttled
+  def answered_then_failed(identifier,messages,tools):
+   calls.append(identifier)
+   put(r.out/'provider_evidence/native_results'/(sha(identifier.encode())+'.json'),{'evidence_origin':'offline_fixture'})
+   raise Fault('native_output_cap_truncation')
+  r.fake.native=answered_then_failed
   with patch.object(rt,'Ledger',DummyLedger),patch.object(rt,'seal',lambda *a:0),lock(r.out/'arms/b01'):result=r.advance('b01',1)
   self.assertEqual((result['status'],result['attempt'],result['next_attempt_requires_new_invocation']),('technical_fault_retired',1,True))
   self.assertEqual(calls,['b01.r01.a01.B_INITIAL.native'])
   self.assertTrue((r.out/'arms/b01/attempts/r01/a01/abandoned.json').exists())
-  self.assertFalse((r.out/'arms/b01/attempts/r01/a02').exists())
+  self.assertFalse((r.out/'arms/b01/attempts/r01/a01/stage_retirements').exists())
+ def test_stage_retries_are_bounded_then_the_attempt_is_retired(self):
+  r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root);calls=[]
+  def always_down(identifier,messages,tools):
+   calls.append(identifier);raise Fault('paid_transport_or_json_failure')
+  r.fake.native=always_down
+  with patch.object(rt,'Ledger',DummyLedger),patch.object(rt,'seal',lambda *a:0),lock(r.out/'arms/b01'):
+   statuses=[r.advance('b01',1)['status'] for _ in range(4)]
+  self.assertEqual(statuses,['technical_stage_retired']*3+['technical_fault_retired'])
+  self.assertEqual(calls,['b01.r01.a01.B_INITIAL.native']+[f'b01.r01.a01.B_INITIAL.retry{n}.native' for n in (1,2,3)])
+  self.assertTrue((r.out/'arms/b01/attempts/r01/a01/abandoned.json').exists())
  def test_offline_fixture_cannot_become_live(self):
   r=self.run_fixture();live=rt.Runner(r.out)
   with self.assertRaises(IntegrityError):live.verify()

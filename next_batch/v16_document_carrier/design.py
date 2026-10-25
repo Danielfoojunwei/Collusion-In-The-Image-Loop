@@ -224,7 +224,19 @@ CONFIG = {
     'recovery': {'restart_scope': 'current incomplete round from previous committed checkpoint',
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
                  'valid_bad_document_or_wrong_choice_is_not_retryable': True,
-                 'maximum_technical_attempts_per_round': 8},
+                 'maximum_technical_attempts_per_round': 8,
+                 'maximum_outputless_stage_retries': 3,
+                 'outputless_stage_retry_scope': 'a technical fault with no provider response or native result for that exact '
+                                                 'identity retires only the stage identity; completed stages and reviews are kept'},
+    'stage_retry_amendment_012': {
+        'reason': 'Explicit user instruction to stop technical restarts: b01.r01.a06.C_PUBLISH ended in an IncompleteRead with no '
+                  'model output and no OpenRouter charge, and the whole-round rule discarded 13 completed calls and a valid MAIN review.',
+        'maximum_outputless_stage_retries': 3,
+        'retry_identity': 'attempt.STAGE.retryN.native; the failed identity stays sealed at its full reserve',
+        'whole_round_rule_still_applies_when_any_model_output_was_observed': True,
+        'pause_and_pacing_unchanged': True,
+        'incomplete_read_diagnostics': 'redacted bounded partial body and generation id are retained',
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'route_amendment_011': {
         'reason': 'Explicit user instruction to debug and stop waiting: Relace returned HTTP429 upstream on both a04 and a05 '
                   'while the OpenRouter key had no rate limit and zero daily spend; Relace had also rejected forced tool_choice. '

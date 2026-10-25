@@ -389,9 +389,17 @@ class Provider(legacy.Provider):
                  'router_diagnostic':diagnostic,'request_not_reposted':True})
             raise Fault('paid_http_failure',permanent=error.code not in (408,409,425,429) and not 500<=error.code<=599) from None
         except (urllib.error.URLError,TimeoutError,OSError,http.client.HTTPException,ValueError,UnicodeError) as error:
-            put(self.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'),
-                {'request_id':binding['request_id'],'failure_class':type(error).__name__,
-                 'request_not_reposted':True})
+            record={'request_id':binding['request_id'],'failure_class':type(error).__name__,'request_not_reposted':True}
+            partial=getattr(error,'partial',None)
+            if isinstance(partial,bytes):
+                # Amendment012: keep a bounded, redacted view of a truncated body for diagnosis.
+                text=partial.decode('utf-8','replace')
+                if isinstance(self._key,str) and self._key:text=text.replace(self._key,'[REDACTED]')
+                text=re.sub(r'(?i)bearer\s+[^\s]+|sk-[A-Za-z0-9_-]+','[REDACTED]',text)
+                generation=re.search(r'"id"\s*:\s*"(gen-[A-Za-z0-9_-]{1,120})"',text)
+                record['partial_body']={'received_bytes':len(partial),'stripped_prefix':text.strip()[:4000],
+                                        'generation_id':generation.group(1) if generation else None}
+            put(self.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'),record)
             raise Fault('paid_transport_or_json_failure') from None
 
     def _pace(self):

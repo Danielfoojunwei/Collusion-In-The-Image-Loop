@@ -292,6 +292,15 @@ class Runner:
   put(root/'stages/COMMIT.json',c);put(self.out/'arms'/ctx['arm']/'checkpoints'/f'r{ctx["round"]:02}.json',c);return c
  def abandon(self,ctx,root,fault,ledger):
   marker=root/'abandoned.json';put(marker,{'status':'abandoned_technical','technical':True,'attempt_id':ctx['attempt_id'],'fault_class':fault.code,'prior_checkpoint_sha256':ctx['previous_checkpoint_sha256'],'all_costs_and_unknown_reserves_retained':True,'not_a_behavioral_outcome':True});seal(self.out,marker,ledger)
+ def stage_identity(self,ctx,root,stage):
+  """Amendment012: an outputless, technically retired stage identity is retried as .retryN."""
+  retries=len(list((root/'stage_retirements').glob(stage+'.*.json')))
+  return ctx['attempt_id']+'.'+stage+(f'.retry{retries}' if retries else ''),retries
+ def model_output_observed(self,logical):
+  """True when any provider response or parsed native result exists for this exact identity."""
+  evidence=self.out/'provider_evidence'
+  return ((evidence/'native_results'/(sha(logical.encode())+'.json')).exists()
+          or (evidence/'observed_responses'/(sha(('triad_document_carrier_v16:'+logical).encode())+'.json')).exists())
  def advance(self,arm,through_round=None,maximum_actor_stages=None):
   if arm not in [x['id'] for x in arm_list()]:raise IntegrityError('Arm is not active in the canonical design')
   through_round=rounds_per_arm() if through_round is None else min(through_round,rounds_per_arm())
@@ -317,14 +326,15 @@ class Runner:
     if assessment.get('evidence_origin')!=('offline_fixture' if self.fixture else review.LIVE_REVIEW_ORIGIN):raise IntegrityError('Fixture cannot enter live review')
     put(root/'stages'/(stage+'.json'),{**assessment,'job_id':job['job_id']});continue
    if maximum_actor_stages is not None and done>=maximum_actor_stages:return self.status(arm)
-   intent=root/'inflight'/(stage+'.json');finished=root/'finished'/(stage+'.json')
-   if intent.exists()and not finished.exists() and not list((root/'pause_before_dispatch').glob(stage+'.*.json')):self.abandon(ctx,root,Fault('interrupted_actor_stage'),ledger);continue
+   identity,retries=self.stage_identity(ctx,root,stage);label=identity.removeprefix(ctx['attempt_id']+'.')
+   intent=root/'inflight'/(label+'.json');finished=root/'finished'/(label+'.json')
+   if intent.exists()and not finished.exists() and not list((root/'pause_before_dispatch').glob(label+'.*.json')):self.abandon(ctx,root,Fault('interrupted_actor_stage'),ledger);continue
    try:
     request=self.actor_request(ctx,root,stage)
     if ctx['attempt_id']not in providers:providers[ctx['attempt_id']]=self.backend(ctx,ledger)
     provider=providers[ctx['attempt_id']]
-    put(intent,{'request_sha256':sha(canonical(request).encode()),'stage':stage})
-    native=provider.native(request['request_id']+'.native',request['messages'],request['tools'])
+    put(intent,{'request_sha256':sha(canonical(request).encode()),'stage':stage,'identity':identity})
+    native=provider.native(identity+'.native',request['messages'],request['tools'])
     result=self.publish(ctx,root,stage,native,provider) if request['kind']=='publish'else self.parse_secondary(native,request['kind'])
     put(root/'stages'/(stage+'.json'),result);put(finished,{'stage_result_sha256':sha((root/'stages'/(stage+'.json')).read_bytes())});done+=1
     print(canonical({'event':'stage_complete','arm':arm,'round':ctx['round'],'attempt':ctx['attempt'],'stage':stage}),flush=True)
@@ -333,17 +343,29 @@ class Runner:
    except PendingPaidRequest:
     # A different live/recovering arm may briefly gate funding. No own POST can be retried.
     if intent.exists():
-     ownid='triad_document_carrier_v16:'+ctx['attempt_id']+'.'+stage+'.native'
+     ownid='triad_document_carrier_v16:'+identity+'.native'
      own=ledger.lookup(ownid)
      if own is not None and own.get('status')=='completed' and request['kind']=='publish':
       figure_id='triad_document_carrier_v16:'+ctx['attempt_id']+'.'+stage+'.figure'
       if ledger.lookup(figure_id) is None:ownid=figure_id;own=None
      if own is None:
-      put(root/'pause_before_dispatch'/(stage+'.'+sha(ownid.encode())[:12]+'.json'),{'funding_barrier_before_own_reservation':True,'own_request_id':ownid,'request_sha256':read(intent)['request_sha256']})
-      return {'status':'funding_barrier','arm':arm,'stage':stage,'blocked_request_id':ownid,'blocked_request_reserved':False,'native_already_completed':bool(ledger.lookup('triad_document_carrier_v16:'+ctx['attempt_id']+'.'+stage+'.native'))}
+      put(root/'pause_before_dispatch'/(label+'.'+sha(ownid.encode())[:12]+'.json'),{'funding_barrier_before_own_reservation':True,'own_request_id':ownid,'request_sha256':read(intent)['request_sha256']})
+      return {'status':'funding_barrier','arm':arm,'stage':stage,'blocked_request_id':ownid,'blocked_request_reserved':False,'native_already_completed':bool(ledger.lookup('triad_document_carrier_v16:'+identity+'.native'))}
     return {'status':'funding_barrier','arm':arm,'stage':stage,'manual_safe_resume':True}
    except Fault as failure:
     if failure.permanent:put(root/'hold.json',{'code':failure.code});raise
+    # Amendment012: an outputless technical fault retires only this stage identity;
+    # completed stages and reviews in the round are kept. Any observed model output
+    # still retires the whole attempt, so no completed behavior is ever re-sampled.
+    if not self.model_output_observed(identity+'.native') and retries<d.CONFIG['recovery'].get('maximum_outputless_stage_retries',0):
+     marker=root/'stage_retirements'/f'{stage}.{retries}.json'
+     put(marker,{'status':'abandoned_technical','technical':True,'scope':'single_stage_identity_without_model_output',
+                 'attempt_id':ctx['attempt_id'],'stage':stage,'retired_request_id':'triad_document_carrier_v16:'+identity+'.native',
+                 'fault_class':failure.code,'all_costs_and_unknown_reserves_retained':True,
+                 'not_a_behavioral_outcome':True,'model_output_observed':False})
+     seal(self.out,marker,ledger)
+     put(finished,{'technically_retired':True,'retirement_sha256':sha(marker.read_bytes())})
+     return {'status':'technical_stage_retired','arm':arm,'round':ctx['round'],'attempt':ctx['attempt'],'stage':stage,'retired_identity':identity,'fault_class':failure.code,'stage_retries_used':retries+1,'next_identity_requires_new_invocation':True}
     # Amendment009: a retired paid identity never rolls straight into the next funded attempt.
     self.abandon(ctx,root,failure,ledger)
     return {'status':'technical_fault_retired','arm':arm,'round':ctx['round'],'attempt':ctx['attempt'],'stage':stage,'fault_class':failure.code,'next_attempt_requires_new_invocation':True}

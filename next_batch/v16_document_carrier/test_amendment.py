@@ -52,6 +52,13 @@ class AmendmentTests(unittest.TestCase):
         self.pre_price_guard.start()
         self.pre_price_guard_active = True
         self.addCleanup(self.lift_pre_price_guard)
+        # Chains 001-011 predate amendment012's outputless stage retry.
+        legacy_recovery = {k: v for k, v in design.CONFIG['recovery'].items()
+                           if k not in ('maximum_outputless_stage_retries', 'outputless_stage_retry_scope')}
+        self.pre_stage_retry = patch.dict(design.CONFIG['recovery'], legacy_recovery, clear=True)
+        self.pre_stage_retry.start()
+        self.pre_stage_retry_active = True
+        self.addCleanup(self.lift_pre_stage_retry)
         # Chains 001-007 also predate amendment008's eight-attempt ceiling.
         self.pre_rate_limit = patch.dict(design.CONFIG['recovery'], {'maximum_technical_attempts_per_round': 4})
         self.pre_rate_limit.start()
@@ -122,6 +129,11 @@ class AmendmentTests(unittest.TestCase):
 
     def tearDown(self):
         self.temporary.cleanup()
+
+    def lift_pre_stage_retry(self):
+        if self.pre_stage_retry_active:
+            self.pre_stage_retry.stop()
+            self.pre_stage_retry_active = False
 
     def lift_pre_route(self):
         if self.pre_route_active:
@@ -1362,6 +1374,84 @@ class AmendmentTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             a.apply_route_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/011/freeze.json').exists())
+
+    def prepare_stage_retry_amendment(self):
+        self.prepare_route_amendment()
+        a.apply_route_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        rt.Runner(self.out, fixture=True).current('b01')
+        identifier = a.STAGE_RETRY_012_FAILED_IDENTITY
+        root = self.out/'arms/b01/attempts/r01/a06'
+        for stage in ('B_INITIAL', 'C_INITIAL'):
+            put(root/'stages'/(stage+'.json'), {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+            put(root/'finished'/(stage+'.json'), {'evidence_origin':'OFFLINE_SCRIPTED_COMPLETED_STAGE'})
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                identifier,'uncertain','chat','z-ai/glm-5.3-flash','8'*64,32310400,None))
+            for stage in ('B_INITIAL', 'C_INITIAL'):
+                db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                    a.NAMESPACE+'b01.r01.a06.'+stage+'.native','completed','chat','z-ai/glm-5.3-flash','7'*64,11011200,100000))
+        put(root/'inflight/C_PUBLISH.json', {'stage':'C_PUBLISH','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        owner = self.out/'paid_operations'/(sha(identifier.encode())+'.json')
+        put(owner, {'attempt_id':'b01.r01.a06','request_id':identifier,'pid':99999999,
+                    'start_ticks':'OFFLINE_NO_PROCESS','wire_sha256':'8'*64,'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(owner.with_suffix('.finished.json'), {'owner_sha256':sha(owner.read_bytes())})
+        put(self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json'), {
+            'request_id':identifier,'failure_class':'IncompleteRead','request_not_reposted':True,
+            'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(self.out/'reviews/b01.r01.b01.r01.a06.MAIN/assessment.json', {'evidence_origin':'OFFLINE_SCRIPTED_ABANDONED_REVIEW'})
+        marker = root/'abandoned.json'
+        put(marker, {'status':'abandoned_technical','technical':True,'attempt_id':'b01.r01.a06',
+                     'fault_class':'paid_outcome_unresolved','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        with lock(self.out/'arms/b01'):
+            self.assertEqual(funding.seal(self.out, marker, self.ledger), 1)
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted IncompleteRead hold'})
+        self.lift_pre_stage_retry()
+        self.source.write_text('# OFFLINE fixture stage-retry amendment\n')
+
+    def test_stage_retry_amendment_changes_only_recovery_and_keeps_abandoned_review(self):
+        self.prepare_stage_retry_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        result = a.apply_stage_retry_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        old = read(self.out/'AMENDMENTS/011/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/012/CONFIG.json')
+        changed = ('recovery', 'stage_retry_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(new['recovery']['maximum_outputless_stage_retries'], 3)
+        intent = read(self.out/'AMENDMENTS/012/RECOVERY_INTENT.json')
+        self.assertIn(str(self.out/'reviews/b01.r01.b01.r01.a06.MAIN/assessment.json'),
+                      [item['path'] for item in intent['retained_artifacts']])
+        self.assertEqual(len(intent['abandoned_attempt_completed_rows']), 2)
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/012')
+        a.release_stop(self.out, fixture=True)
+        self.assertEqual(rt.Runner(self.out, fixture=True).current('b01')[0]['attempt_id'], 'b01.r01.a07')
+
+    def test_stage_retry_amendment_refuses_current_review_output_or_other_changes(self):
+        self.prepare_stage_retry_amendment()
+        put(self.out/'reviews/b03.r01.b03.r01.a04.MAIN/launch.json', {'evidence_origin':'OFFLINE_FORBIDDEN_CURRENT_REVIEW'})
+        with self.assertRaises(IntegrityError):
+            a.apply_stage_retry_amendment(self.runner, self.ledger)
+        (self.out/'reviews/b03.r01.b03.r01.a04.MAIN/launch.json').unlink()
+        put(self.out/'arms/b01/attempts/r01/a06/stages/C_PUBLISH.json', {'evidence_origin':'OFFLINE_FORBIDDEN_OUTPUT'})
+        with self.assertRaises(IntegrityError):
+            a.apply_stage_retry_amendment(self.runner, self.ledger)
+        (self.out/'arms/b01/attempts/r01/a06/stages/C_PUBLISH.json').unlink()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a06.C_LOG.native','uncertain','chat','z-ai/glm-5.3-flash','6'*64,20841600,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_stage_retry_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('DELETE FROM requests WHERE request_id=?', (a.NAMESPACE+'b01.r01.a06.C_LOG.native',))
+        with patch.dict(design.CONFIG['recovery'], {'maximum_outputless_stage_retries': 9}), self.assertRaises(IntegrityError):
+            a.apply_stage_retry_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['routes'], {'actors':'relace'}), self.assertRaises(IntegrityError):
+            a.apply_stage_retry_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/012/freeze.json').exists())
+        a.apply_stage_retry_amendment(self.runner, self.ledger)
 
 if __name__ == '__main__':
     unittest.main()
