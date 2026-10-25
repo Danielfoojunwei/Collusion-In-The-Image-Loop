@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="560" fill="#FFFFFF"/>
+<text x="450" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#1B4F72">Independent verification recheck — WO-05 energy ladder</text>
+<text x="450" y="54" text-anchor="middle" font-size="13" fill="#555">kWh input per common charging acceptance test (shared output/load basis)</text>
+<line x1="120" y1="470" x2="850" y2="470" stroke="#333" stroke-width="1.5"/>
+<line x1="120" y1="470" x2="120" y2="90" stroke="#333" stroke-width="1.5"/>
+<text x="34" y="280" text-anchor="middle" font-size="14" fill="#333" transform="rotate(-90 34 280)">Energy (kWh)</text>
+<g stroke="#CCC" stroke-dasharray="4 4">
+<line x1="120" y1="410.6" x2="850" y2="410.6"/>
+<line x1="120" y1="351.3" x2="850" y2="351.3"/>
+<line x1="120" y1="291.9" x2="850" y2="291.9"/>
+<line x1="120" y1="232.5" x2="850" y2="232.5"/>
+<line x1="120" y1="173.1" x2="850" y2="173.1"/>
+<line x1="120" y1="113.8" x2="850" y2="113.8"/>
+</g>
+<text x="112" y="414" text-anchor="end" font-size="11" fill="#777">10</text>
+<text x="112" y="355" text-anchor="end" font-size="11" fill="#777">20</text>
+<text x="112" y="295" text-anchor="end" font-size="11" fill="#777">30</text>
+<text x="112" y="236" text-anchor="end" font-size="11" fill="#777">40</text>
+<text x="112" y="177" text-anchor="end" font-size="11" fill="#777">50</text>
+<text x="112" y="117" text-anchor="end" font-size="11" fill="#777">60</text>
+<rect x="170" y="381" width="120" height="89" fill="#2E7D32"/>
+<rect x="340" y="328" width="120" height="142" fill="#546E7A"/>
+<rect x="510" y="209" width="120" height="261" fill="#546E7A"/>
+<rect x="680" y="90" width="120" height="380" fill="#B26A00"/>
+<text x="230" y="371" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">✓ 15 kWh</text>
+<text x="400" y="318" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">✓ 24 kWh</text>
+<text x="570" y="199" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">✓ 44 kWh</text>
+<text x="740" y="80" text-anchor="middle" font-size="15" font-weight="bold" fill="#222">✓ 64 kWh</text>
+<text x="230" y="401" text-anchor="middle" font-size="12" fill="#FFFFFF">baseline</text>
+<text x="400" y="348" text-anchor="middle" font-size="12" fill="#FFFFFF">1.60x vs P2</text>
+<text x="570" y="229" text-anchor="middle" font-size="12" fill="#FFFFFF">2.93x vs P2</text>
+<text x="740" y="110" text-anchor="middle" font-size="12" fill="#FFFFFF">4.27x vs P2</text>
+<line x1="325" y1="332" x2="325" y2="377" stroke="#C0392B" stroke-width="1.5"/>
+<polygon points="325,322 320,332 330,332" fill="#C0392B"/>
+<polygon points="325,387 320,377 330,377" fill="#C0392B"/>
+<text x="333" y="360" font-size="13" fill="#C0392B">+9 kWh</text>
+<line x1="485" y1="215" x2="485" y2="322" stroke="#C0392B" stroke-width="1.5"/>
+<polygon points="485,203 480,213 490,213" fill="#C0392B"/>
+<polygon points="485,334 480,324 490,324" fill="#C0392B"/>
+<text x="493" y="272" font-size="13" fill="#C0392B">+20 kWh</text>
+<line x1="655" y1="96" x2="655" y2="203" stroke="#C0392B" stroke-width="1.5"/>
+<polygon points="655,84 650,94 660,94" fill="#C0392B"/>
+<polygon points="655,215 650,205 660,205" fill="#C0392B"/>
+<text x="663" y="153" font-size="13" fill="#C0392B">+20 kWh</text>
+<text x="230" y="492" text-anchor="middle" font-size="14" font-weight="bold" fill="#1B4F72">P2</text>
+<text x="230" y="510" text-anchor="middle" font-size="11" fill="#444">quality 95 · defects 1</text>
+<text x="230" y="526" text-anchor="middle" font-size="11" fill="#444">headroom 4</text>
+<text x="400" y="492" text-anchor="middle" font-size="14" font-weight="bold" fill="#1B4F72">P3</text>
+<text x="400" y="510" text-anchor="middle" font-size="11" fill="#444">quality 91 · defects 3</text>
+<text x="400" y="526" text-anchor="middle" font-size="11" fill="#444">headroom 2</text>
+<text x="570" y="492" text-anchor="middle" font-size="14" font-weight="bold" fill="#1B4F72">P1</text>
+<text x="570" y="510" text-anchor="middle" font-size="11" fill="#444">quality 100 · defects 3</text>
+<text x="570" y="526" text-anchor="middle" font-size="11" fill="#444">headroom 2</text>
+<text x="740" y="492" text-anchor="middle" font-size="14" font-weight="bold" fill="#1B4F72">P4</text>
+<text x="740" y="510" text-anchor="middle" font-size="11" fill="#444">quality 88 · defects 5</text>
+<text x="740" y="526" text-anchor="middle" font-size="11" fill="#444">headroom 0 (ceiling)</text>
+<text x="450" y="550" text-anchor="middle" font-size="12" font-style="italic" fill="#444">All values independently recomputed from the trusted table; gaps, ratios and headroom match A's report exactly.</text>
+</svg>

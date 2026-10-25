@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="480" fill="#F7F9FA"/>
+<text x="450" y="24" text-anchor="middle" font-size="16" font-weight="bold" fill="#132B3B">WO-05 assurance handover: energy ladder and next-analyst checklist</text>
+<text x="60" y="56" font-size="13" fill="#132B3B">Measured energy (kWh), scale 5 px per kWh</text>
+<line x1="56" y1="320" x2="510" y2="320" stroke="#E2E8EC"/>
+<line x1="56" y1="220" x2="510" y2="220" stroke="#E2E8EC"/>
+<line x1="56" y1="120" x2="510" y2="120" stroke="#E2E8EC"/>
+<text x="50" y="324" text-anchor="end" font-size="12" fill="#6B7C88">20</text>
+<text x="50" y="224" text-anchor="end" font-size="12" fill="#6B7C88">40</text>
+<text x="50" y="124" text-anchor="end" font-size="12" fill="#6B7C88">60</text>
+<line x1="60" y1="70" x2="60" y2="420" stroke="#8A9BA8" stroke-width="2"/>
+<line x1="60" y1="420" x2="510" y2="420" stroke="#8A9BA8" stroke-width="2"/>
+<rect x="70" y="345" width="90" height="75" fill="#2F6690"/>
+<rect x="180" y="300" width="90" height="120" fill="#5C8AA8"/>
+<rect x="290" y="200" width="90" height="220" fill="#8FB0C4"/>
+<rect x="400" y="100" width="90" height="320" fill="#C2D2DC"/>
+<text x="115" y="337" text-anchor="middle" font-size="14" font-weight="bold" fill="#132B3B">15</text>
+<text x="225" y="292" text-anchor="middle" font-size="14" font-weight="bold" fill="#132B3B">24</text>
+<text x="335" y="192" text-anchor="middle" font-size="14" font-weight="bold" fill="#132B3B">44</text>
+<text x="445" y="92" text-anchor="middle" font-size="14" font-weight="bold" fill="#132B3B">64</text>
+<text x="115" y="440" text-anchor="middle" font-size="14" fill="#132B3B">P2</text>
+<text x="225" y="440" text-anchor="middle" font-size="14" fill="#132B3B">P3</text>
+<text x="335" y="440" text-anchor="middle" font-size="14" fill="#132B3B">P1</text>
+<text x="445" y="440" text-anchor="middle" font-size="14" fill="#132B3B">P4</text>
+<text x="285" y="464" text-anchor="middle" font-size="13" fill="#132B3B">Successive gaps: 9, 20, 20 kWh; spread 49</text>
+<text x="560" y="56" font-size="13" fill="#132B3B">Next-analyst checklist</text>
+<rect x="552" y="66" width="310" height="326" fill="#FFFFFF" stroke="#C9D4DB"/>
+<rect x="560" y="318" width="294" height="40" fill="#EAF1F5"/>
+<circle cx="578" cy="97" r="12" fill="#2F6690"/>
+<text x="578" y="102" text-anchor="middle" font-size="12" fill="#FFFFFF">1</text>
+<text x="598" y="102" font-size="13" fill="#132B3B">Recompute screens from trusted table</text>
+<circle cx="578" cy="145" r="12" fill="#2F6690"/>
+<text x="578" y="150" text-anchor="middle" font-size="12" fill="#FFFFFF">2</text>
+<text x="598" y="150" font-size="13" fill="#132B3B">Re-rank energy; gaps 9 / 20 / 20 kWh</text>
+<circle cx="578" cy="193" r="12" fill="#2F6690"/>
+<text x="578" y="198" text-anchor="middle" font-size="12" fill="#FFFFFF">3</text>
+<text x="598" y="198" font-size="13" fill="#132B3B">Audit chart scale against bar labels</text>
+<circle cx="578" cy="241" r="12" fill="#2F6690"/>
+<text x="578" y="246" text-anchor="middle" font-size="12" fill="#FFFFFF">4</text>
+<text x="598" y="246" font-size="13" fill="#132B3B">Recheck P4 defects (zero spare slots)</text>
+<circle cx="578" cy="289" r="12" fill="#2F6690"/>
+<text x="578" y="294" text-anchor="middle" font-size="12" fill="#FFFFFF">5</text>
+<text x="598" y="294" font-size="13" fill="#132B3B">Log open questions (variance, cost)</text>
+<circle cx="578" cy="337" r="12" fill="#2F6690"/>
+<text x="578" y="342" text-anchor="middle" font-size="12" fill="#FFFFFF">6</text>
+<text x="598" y="342" font-size="13" fill="#132B3B">Ballot lowest-energy qualifier (P2)</text>
+</svg>

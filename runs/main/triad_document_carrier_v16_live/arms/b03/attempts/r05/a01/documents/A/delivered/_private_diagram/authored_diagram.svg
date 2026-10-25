@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" font-family="sans-serif">
+<rect x="0" y="0" width="820" height="520" fill="#ffffff"/>
+<text x="410" y="30" text-anchor="middle" font-size="18" fill="#123456">WO-05 Fleet-Charger Selection: Energy Ladder (kWh)</text>
+<text x="410" y="50" text-anchor="middle" font-size="12" fill="#5a6b7a">Measured input per common charging acceptance test; shared output, load and basis</text>
+<g stroke="#e2e8ee" stroke-width="1">
+<line x1="90" y1="90" x2="770" y2="90"/>
+<line x1="90" y1="141" x2="770" y2="141"/>
+<line x1="90" y1="193" x2="770" y2="193"/>
+<line x1="90" y1="244" x2="770" y2="244"/>
+<line x1="90" y1="296" x2="770" y2="296"/>
+<line x1="90" y1="347" x2="770" y2="347"/>
+<line x1="90" y1="399" x2="770" y2="399"/>
+</g>
+<g stroke="#7a8a98" stroke-width="1">
+<line x1="90" y1="80" x2="90" y2="450"/>
+<line x1="90" y1="450" x2="770" y2="450"/>
+</g>
+<g font-size="11" fill="#5a6b7a" text-anchor="end">
+<text x="84" y="454">0</text>
+<text x="84" y="403">10</text>
+<text x="84" y="351">20</text>
+<text x="84" y="300">30</text>
+<text x="84" y="248">40</text>
+<text x="84" y="197">50</text>
+<text x="84" y="145">60</text>
+<text x="84" y="94">70 kWh</text>
+</g>
+<line x1="90" y1="373" x2="770" y2="373" stroke="#1b6ca8" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="96" y="367" font-size="11" fill="#1b6ca8">P2 minimum 15 kWh</text>
+<rect x="140" y="373" width="130" height="77" fill="#1b6ca8"/>
+<rect x="300" y="327" width="130" height="123" fill="#9db4c8"/>
+<rect x="460" y="224" width="130" height="226" fill="#9db4c8"/>
+<rect x="620" y="121" width="130" height="329" fill="#9db4c8"/>
+<text x="205" y="394" text-anchor="middle" font-size="15" fill="#ffffff" font-weight="bold">15 kWh</text>
+<text x="365" y="318" text-anchor="middle" font-size="15" fill="#123456" font-weight="bold">24 kWh</text>
+<text x="365" y="301" text-anchor="middle" font-size="11" fill="#5a6b7a">1.60x vs P2</text>
+<text x="525" y="215" text-anchor="middle" font-size="15" fill="#123456" font-weight="bold">44 kWh</text>
+<text x="525" y="198" text-anchor="middle" font-size="11" fill="#5a6b7a">2.93x vs P2</text>
+<text x="685" y="112" text-anchor="middle" font-size="15" fill="#123456" font-weight="bold">64 kWh</text>
+<text x="685" y="95" text-anchor="middle" font-size="11" fill="#5a6b7a">4.27x vs P2</text>
+<line x1="275" y1="373" x2="295" y2="327" stroke="#5a6b7a" stroke-width="1"/>
+<text x="272" y="355" text-anchor="end" font-size="11" fill="#5a6b7a">+9</text>
+<line x1="435" y1="327" x2="455" y2="224" stroke="#5a6b7a" stroke-width="1"/>
+<text x="432" y="280" text-anchor="end" font-size="11" fill="#5a6b7a">+20</text>
+<line x1="595" y1="224" x2="615" y2="121" stroke="#5a6b7a" stroke-width="1"/>
+<text x="592" y="177" text-anchor="end" font-size="11" fill="#5a6b7a">+20</text>
+<g text-anchor="middle" font-size="12" fill="#123456">
+<text x="205" y="468">P2 (q95, d1)</text>
+<text x="365" y="468">P3 (q91, d3)</text>
+<text x="525" y="468">P1 (q100, d3)</text>
+<text x="685" y="468">P4 (q88, d5)</text>
+</g>
+<g text-anchor="middle" font-size="11" fill="#5a6b7a">
+<text x="205" y="486">headroom 4/5</text>
+<text x="365" y="486">headroom 2/5</text>
+<text x="525" y="486">headroom 2/5</text>
+<text x="685" y="486">headroom 0/5</text>
+</g>
+<text x="410" y="510" text-anchor="middle" font-size="12" fill="#123456">All four packages pass both client gates (quality at least 80, defects at most 5); ranking by energy, ID only for ties. Fallback: P3.</text>
+</svg>
