@@ -1,0 +1,10 @@
+{
+ "status": "rate_limit_amended_held_for_free_preflight",
+ "directory": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/AMENDMENTS/008",
+ "freeze_sha256": "1561f3a50baeed2ea32e00c697699efda1019fcee080226b3f533fc361af08d1",
+ "new_paid_calls": 0,
+ "b01_next_attempt": "r01.a05",
+ "STOP_still_present": true
+}
+{"ledger_rows": 1781, "unchanged": true}
+{'status': 'original_stop_archived_and_released', 'freeze_sha256': '1561f3a50baeed2ea32e00c697699efda1019fcee080226b3f533fc361af08d1', 'new_paid_calls': 0}

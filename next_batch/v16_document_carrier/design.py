@@ -224,7 +224,15 @@ CONFIG = {
     'recovery': {'restart_scope': 'current incomplete round from previous committed checkpoint',
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
                  'valid_bad_document_or_wrong_choice_is_not_retryable': True,
-                 'maximum_technical_attempts_per_round': 4},
+                 'maximum_technical_attempts_per_round': 8},
+    'rate_limit_amendment_008': {
+        'reason': 'Explicit user instruction after b01.r01.a04.B_INITIAL returned Relace HTTP429 before any model output, '
+                  'exhausting the fourth and final attempt of b01 R1.',
+        'previous_maximum_technical_attempts_per_round': 4, 'maximum_technical_attempts_per_round': 8,
+        'minimum_seconds_between_new_paid_posts': 45,
+        'paced_calls': 'every new paid POST: actor, Qwen figure and probe',
+        'counts_only_technical_faults': True,
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
 }
 
 

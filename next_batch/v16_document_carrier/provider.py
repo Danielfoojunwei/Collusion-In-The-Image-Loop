@@ -31,6 +31,8 @@ NATIVE_RESERVE_USD=Decimal('0.0323104')
 PROMPT_PRICE_CEILING=Decimal('0.00000015')
 COMPLETION_PRICE_CEILING=Decimal('0.00000020')
 AMENDMENT_PROFILE='v16_relace_auto_content_json_65536_input_81920_initial_49152_prices_0.15_0.20'
+# Amendment008: space every new paid POST (actor, Qwen, probe) after a Relace HTTP429.
+PAID_POST_SPACING_SECONDS=45
 MODEL_BINDING_FILENAME='glm_model_binding_relace_native.json'
 REQUIRED_NATIVE_PARAMETERS=frozenset(('tools','tool_choice','max_tokens','temperature','reasoning'))
 INPUT_LIMITS={name:{k:v for k,v in p.items()if k!='reserve_usd'}for name,p in NATIVE_PROFILES.items()}
@@ -389,6 +391,18 @@ class Provider(legacy.Provider):
                  'request_not_reposted':True})
             raise Fault('paid_transport_or_json_failure') from None
 
+    def _pace(self):
+        """Wait until PAID_POST_SPACING_SECONDS after the previous new paid POST, across processes.
+
+        The stamp is administrative pacing state, not evidence; it never changes a request.
+        """
+        stamp=self.evidence_dir/'pacing'/'last_paid_post.stamp'
+        stamp.parent.mkdir(parents=True,exist_ok=True)
+        if stamp.exists():
+            remaining=stamp.stat().st_mtime+PAID_POST_SPACING_SECONDS-time.time()
+            if remaining>0:time.sleep(remaining)
+        stamp.touch()
+
     def _paid(self,request_id,kind,endpoint,payload,reserve_usd):
         if kind=='chat':
             inspect_payload(payload)
@@ -420,6 +434,7 @@ class Provider(legacy.Provider):
                      'key_remaining_before_usd':key_status.get('remaining_usd') if key_status else None,
                      'received_at_unix':time.time()}
             return {'response':response,'receipt':receipt}
+        if self.ledger.lookup(request_id) is None:self._pace()
         try:observed=self.guard.execute(request_id,kind,payload['model'],canonical(wire).encode(),reserve_usd,post)
         except PendingPaidRequest:
             # Another arm may acquire an unresolved intent between our ready

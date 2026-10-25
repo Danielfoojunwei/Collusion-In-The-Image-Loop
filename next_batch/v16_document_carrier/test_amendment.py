@@ -52,6 +52,11 @@ class AmendmentTests(unittest.TestCase):
         self.pre_price_guard.start()
         self.pre_price_guard_active = True
         self.addCleanup(self.lift_pre_price_guard)
+        # Chains 001-007 also predate amendment008's eight-attempt ceiling.
+        self.pre_rate_limit = patch.dict(design.CONFIG['recovery'], {'maximum_technical_attempts_per_round': 4})
+        self.pre_rate_limit.start()
+        self.pre_rate_limit_active = True
+        self.addCleanup(self.lift_pre_rate_limit)
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)
         self.out = self.root/'OFFLINE_FIXTURE_RUN'
@@ -110,6 +115,11 @@ class AmendmentTests(unittest.TestCase):
 
     def tearDown(self):
         self.temporary.cleanup()
+
+    def lift_pre_rate_limit(self):
+        if self.pre_rate_limit_active:
+            self.pre_rate_limit.stop()
+            self.pre_rate_limit_active = False
 
     def lift_pre_price_guard(self):
         if self.pre_price_guard_active:
@@ -1074,6 +1084,113 @@ class AmendmentTests(unittest.TestCase):
             a.apply_price_guard_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/007').exists())
         a.apply_price_guard_amendment(self.runner, self.ledger)
+
+    def prepare_rate_limit_amendment(self):
+        self.prepare_price_guard_amendment()
+        a.apply_price_guard_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        for arm in ('b03', 'b05'):
+            rt.Runner(self.out, fixture=True).current(arm)
+        identifier = a.RATE_LIMITED_IDENTITY
+        logical = identifier.removeprefix(a.NAMESPACE)
+        payload = {'model':'z-ai/glm-5.3-flash','tools':[{'function':{'name':'record_initial_judgment'}}],
+                   'tool_choice':'auto','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'}
+        wire = sha(canonical(payload).encode())
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                identifier,'uncertain','chat','z-ai/glm-5.3-flash',
+                a.request_digest({'endpoint':'/chat/completions','wire_body_sha256':wire}),11011200,None))
+        root = self.out/'arms/b01/attempts/r01/a04'
+        put(root/'inflight/B_INITIAL.json', {'stage':'B_INITIAL','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        owner = self.out/'paid_operations'/(sha(identifier.encode())+'.json')
+        put(owner, {'attempt_id':'b01.r01.a04','request_id':identifier,'pid':99999999,
+                    'start_ticks':'OFFLINE_NO_PROCESS','wire_sha256':wire,'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(owner.with_suffix('.finished.json'), {'owner_sha256':sha(owner.read_bytes())})
+        put(self.out/'provider_evidence/transport_requests'/(sha(logical.encode())+'.json'), {
+            'request_id':logical,'endpoint':'/chat/completions','logical_payload':payload,
+            'mapping':{'wire_body_sha256':wire,'images':[]},'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json'), {
+            'request_id':identifier,'failure_class':'HTTPError','http_status':429,'request_not_reposted':True,
+            'router_diagnostic':{'code':'429','message':'Provider returned error'},'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        marker = root/'abandoned.json'
+        put(marker, {'status':'abandoned_technical','technical':True,'attempt_id':'b01.r01.a04',
+                     'fault_class':'paid_outcome_unresolved','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        with lock(self.out/'arms/b01'):
+            self.assertEqual(funding.seal(self.out, marker, self.ledger), 1)
+        with self.assertRaises(IntegrityError):
+            rt.Runner(self.out, fixture=True).current('b01')
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted HTTP429 attempt-exhaustion hold'})
+        self.lift_pre_rate_limit()
+        self.source.write_text('# OFFLINE fixture rate-limit amendment\n')
+
+    def test_rate_limit_amendment_allows_a05_and_keeps_money_and_science(self):
+        self.prepare_rate_limit_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        seventh = (self.out/'AMENDMENTS/007/freeze.json').read_bytes()
+        result = a.apply_rate_limit_amendment(self.runner, self.ledger)
+        self.assertEqual((result['new_paid_calls'], result['b01_next_attempt']), (0, 'r01.a05'))
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        old = read(self.out/'AMENDMENTS/007/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/008/CONFIG.json')
+        changed = ('recovery', 'technical_recovery', 'rate_limit_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(new['recovery']['maximum_technical_attempts_per_round'], 8)
+        self.assertEqual(new['rate_limit_amendment']['minimum_seconds_between_new_paid_posts'],
+                         provider.PAID_POST_SPACING_SECONDS)
+        self.assertEqual(read(self.out/'AMENDMENTS/008/freeze.json')['parent_freeze_sha256'], sha(seventh))
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/008')
+        self.assertEqual(a.apply_rate_limit_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+        runner = rt.Runner(self.out, fixture=True)
+        self.assertEqual(runner.current('b01')[0]['attempt_id'], 'b01.r01.a05')
+        self.assertEqual(runner.current('b03')[0]['attempt_id'], 'b03.r01.a04')
+
+    def test_rate_limit_amendment_requires_exact_sealed_http429_scope(self):
+        self.prepare_rate_limit_amendment()
+        identifier = a.RATE_LIMITED_IDENTITY
+        failure = self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json')
+        raw = failure.read_bytes()
+        self.rewrite(failure, lambda body: body.update(http_status=400))
+        with self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        failure.unlink();failure.write_bytes(raw)
+        put(self.out/'provider_evidence/observed_responses/OFFLINE_FORBIDDEN_A04.json', {
+            'binding':{'request_id':identifier},'response':{'content':'OFFLINE forbidden model response'}})
+        with self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        (self.out/'provider_evidence/observed_responses/OFFLINE_FORBIDDEN_A04.json').unlink()
+        seal_proof = self.out/'funding_seals'/(sha(identifier.encode())+'.json')
+        sealed = seal_proof.read_bytes();seal_proof.unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        seal_proof.write_bytes(sealed)
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b03.r01.a04.B_INITIAL.native','uncertain','chat','z-ai/glm-5.3-flash','f'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/008').exists())
+
+    def test_rate_limit_amendment_refuses_other_changes_or_missing_stop(self):
+        self.prepare_rate_limit_amendment()
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        (self.out/'STOP_REQUESTED.json').unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        (self.out/'STOP_REQUESTED.json').write_bytes(stop)
+        with patch.dict(design.CONFIG['recovery'], {'maximum_technical_attempts_per_round': 20}), self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        with patch.object(provider, 'PAID_POST_SPACING_SECONDS', 0), self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['budget'], {'combined_program_cap_usd': 30}), self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['sampling'], {'temperature': 1.2}), self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        with lock(self.out/'arms/b05'), self.assertRaises(IntegrityError):
+            a.apply_rate_limit_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/008').exists())
+        a.apply_rate_limit_amendment(self.runner, self.ledger)
 
 if __name__ == '__main__':
     unittest.main()

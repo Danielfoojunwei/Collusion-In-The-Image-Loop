@@ -1684,6 +1684,211 @@ def apply_price_guard_amendment(runner, ledger):
                 'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
 
 
+MAX8_TECHNICAL_RECOVERY = ('Restart only incomplete current round from same arm prior checkpoint; '
+                           'max8attempts; all costs/unknowns retained')
+RATE_LIMITED_IDENTITY = NAMESPACE + 'b01.r01.a04.B_INITIAL.native'
+
+
+def _rate_limit_configuration(old, fixture):
+    """Only the attempt ceiling and paid-POST pacing change; money and science stay fixed."""
+    from . import design
+    from .provider import PAID_POST_SPACING_SECONDS
+    if (old.get('technical_amendment') or {}).get('number') != 7:
+        raise IntegrityError('Rate-limit amendment must follow the price-guard amendment')
+    old_recovery, new_recovery = deepcopy(old.get('recovery') or {}), deepcopy(design.CONFIG['recovery'])
+    if (old_recovery.pop('maximum_technical_attempts_per_round', None) != 4 or
+            new_recovery.pop('maximum_technical_attempts_per_round', None) != 8 or old_recovery != new_recovery):
+        raise IntegrityError('Rate-limit amendment changed recovery terms beyond the attempt ceiling')
+    block = design.CONFIG.get('rate_limit_amendment_008') or {}
+    if (block.get('maximum_technical_attempts_per_round') != 8 or
+            block.get('minimum_seconds_between_new_paid_posts') != PAID_POST_SPACING_SECONDS or
+            PAID_POST_SPACING_SECONDS < 30):
+        raise IntegrityError('Rate-limit disclosure differs from the installed pacing')
+    for field in ('models', 'routes', 'seed', 'scoring', 'sampling', 'documents', 'validation_payload',
+                  'budget', 'stages', 'known_patterns', 'working_context', 'rounds_per_arm',
+                  'total_rounds', 'active_arms', 'post_main_decode_assays'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Rate-limit amendment changed scientific/resource condition: ' + field)
+    result = deepcopy(old)
+    result['recovery'] = deepcopy(design.CONFIG['recovery'])
+    result['technical_recovery'] = MAX8_TECHNICAL_RECOVERY
+    result['rate_limit_amendment'] = deepcopy(block)
+    result['technical_amendment'] = {
+        'number': 8, 'revision': 'v16.8', 'reason': block['reason'],
+        'previous_maximum_technical_attempts_per_round': 4, 'maximum_technical_attempts_per_round': 8,
+        'minimum_seconds_between_new_paid_posts': PAID_POST_SPACING_SECONDS,
+        'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _rate_limit_scope(out, snapshot, previous_receipt):
+    """Exactly one new uncertain b01 a04 HTTP429 row, sealed, with no model output."""
+    rows = [row for row in snapshot['rows'] if row['request_id'] == RATE_LIMITED_IDENTITY]
+    baseline = [row for row in snapshot['rows'] if row['request_id'] != RATE_LIMITED_IDENTITY]
+    if (len(rows) != 1 or len(baseline) != previous_receipt['ledger_row_count'] or
+            sha(canonical(baseline).encode()) != previous_receipt['ledger_after_sha256']):
+        raise IntegrityError('Rate-limit amendment must add exactly the one known a04 failure')
+    row = rows[0]
+    if (row['status'] != 'uncertain' or row['kind'] != 'chat' or row['model'] != 'z-ai/glm-5.3-flash' or
+            row['reserved_units'] != 11011200 or row['actual_units'] is not None):
+        raise IntegrityError('Rate-limited invoice/status/reserve differs from the observed scope')
+    digest = sha(RATE_LIMITED_IDENTITY.encode())
+    failure = out / 'provider_evidence' / 'transport_failures' / (digest + '.json')
+    observed = read(failure)
+    if (observed.get('request_id') != RATE_LIMITED_IDENTITY or observed.get('http_status') != 429 or
+            observed.get('failure_class') != 'HTTPError' or observed.get('request_not_reposted') is not True):
+        raise IntegrityError('Actual HTTP429 evidence is missing')
+    logical = RATE_LIMITED_IDENTITY.removeprefix(NAMESPACE)
+    if (out / 'provider_evidence' / 'native_results' / (sha(logical.encode()) + '.json')).exists():
+        raise IntegrityError('A native/model result exists for the rate-limited request')
+    for path in (out / 'provider_evidence' / 'observed_responses').glob('*.json'):
+        if read(path).get('binding', {}).get('request_id', '') == RATE_LIMITED_IDENTITY:
+            raise IntegrityError('An actual model response exists for the rate-limited request')
+    seal_proof = out / 'funding_seals' / (digest + '.json')
+    if not seal_proof.is_file() or read(seal_proof).get('full_unknown_reservation_retained') is not True:
+        raise IntegrityError('Rate-limited reservation was not sealed at full value')
+    marker = out / 'arms' / 'b01' / 'attempts' / 'r01' / 'a04' / 'abandoned.json'
+    if read(marker).get('status') != 'abandoned_technical' or read(marker).get('technical') is not True:
+        raise IntegrityError('Rate-limited attempt was not technically abandoned')
+    proofs = [failure, seal_proof, marker,
+              out / 'paid_operations' / (digest + '.json'),
+              out / 'paid_operations' / (digest + '.finished.json'),
+              out / 'provider_evidence' / 'transport_requests' / (sha(logical.encode()) + '.json')]
+    return [{'path': str(path), 'sha256': sha(path.read_bytes())} for path in proofs]
+
+
+def _prepare_rate_limit_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    seventh = out / 'AMENDMENTS' / '007'
+    if previous['directory'] != seventh:
+        raise IntegrityError('Rate-limit amendment must directly follow amendment007')
+    if not (seventh / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Amendment007 was never released; no a04 POST could have been observed')
+    retained = _rate_limit_scope(out, snapshot, read(seventh / 'RECOVERY_RECEIPT.json'))
+    _rate_limit_configuration(read(seventh / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(seventh / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(seventh / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Rate-limit amendment changed cases or actor prompts')
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; rate-limit change must precede all rounds')
+        parent = out / 'arms' / arm / 'attempts' / 'r01'
+        for extra in parent.glob('a[0-9][0-9]'):
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if extra.name == 'a04' and arm != 'b01':
+                if any(path.name != 'context.json' or path.parent != extra for path in files):
+                    raise IntegrityError('R1a04 contains work rather than an unfunded context')
+                retained.extend(_inventory(extra))
+            elif extra.name not in ('a01', 'a02', 'a03', 'a04') and files:
+                raise IntegrityError('An extra attempt appeared after amendment007')
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before the rate-limit amendment')
+    b01 = out / 'arms' / 'b01' / 'attempts' / 'r01' / 'a04'
+    if any(path.is_file() for name in ('stages', 'documents', 'finished') for path in (b01 / name).rglob('*')):
+        raise IntegrityError('The rate-limited b01 a04 attempt contains output')
+    for directory in ('reviews', 'decoding', 'attribution_audits'):
+        for job in (out / directory).glob('*'):
+            if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                raise IntegrityError('A launched or assessed job exists before the rate-limit amendment')
+    if any(path.is_file() for path in (out / 'probes').rglob('*')):
+        raise IntegrityError('A probe exists before the rate-limit amendment')
+    return {'amendment_number': 8, 'revision': 'v16.8', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Explicit user instruction after a Relace HTTP429 exhausted b01 R1: up to eight technical attempts per round and paced paid POSTs.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+            'rate_limited_request_id': RATE_LIMITED_IDENTITY,
+            'new_round_attempt': 'b01 R1 continues at fresh a05 from R0; b03/b05 keep unfunded a04.',
+            'uncertain_reservation_units_retained': 11011200}
+
+
+def apply_rate_limit_amendment(runner, ledger):
+    """Append008: eight technical attempts and paced paid POSTs, after one sealed HTTP429."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '008'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the rate-limit amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the rate-limit amendment')
+        else:
+            intent = _prepare_rate_limit_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the rate-limit amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('HTTP429 evidence or unfunded context changed during the amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        failure = out / 'provider_evidence' / 'transport_failures' / (sha(RATE_LIMITED_IDENTITY.encode()) + '.json')
+        archive = destination / 'http429_archive' / 'b01.json'
+        put_bytes(archive, failure.read_bytes())
+        seventh = out / 'AMENDMENTS' / '007'
+        put(destination / 'CONFIG.json', _rate_limit_configuration(read(seventh / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (seventh / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Rate-limit amendment unexpectedly changed the paid ledger')
+        receipt = {'amendment_number': 8, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 1,
+                   'additional_archives': [{'path': str(archive), 'sha256': sha(archive.read_bytes())}],
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'uncertain_rows_retained': 1, 'unknown_reservation_units_retained': 11011200,
+                   'scientific_note': 'Technical-attempt ceiling rises from four to eight per round and new paid POSTs are spaced; only technical faults before a valid primary output consume attempts. Models, route, prices, reserves, caps, prompts, cases, sampling, incentives and schedule are unchanged.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=8, revision='v16.8',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_rate_limit_recovery_after_one_http429')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'rate_limit_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'b01_next_attempt': 'r01.a05', 'STOP_still_present': True}
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

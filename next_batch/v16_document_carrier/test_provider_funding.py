@@ -21,6 +21,7 @@ from next_batch.v15_glm_restored.storage import canonical,sha,put,read,lock,Inte
 from next_batch.v15_glm_restored.funding import Ledger as OldLedger,Guard as OldGuard,seal as oldseal,NAMESPACE as OLD_NS
 from .funding import AGGREGATE,OLD_V15_OUT,PREFIXES,NAMESPACE,Ledger,Guard,seal,RESERVES,NATIVE_PROFILES,NORMAL_NATIVE_CALLS,NORMAL_RESERVATION_USD,validate_native_wire,ACTOR_PROVIDER_TAG,ACTOR_PROVIDER_NAME,MODEL_BINDING_KEY
 from visual_collusion.budget import request_digest
+from . import provider as provider_module
 from visual_collusion.providers import PreflightError
 from .provider import Provider,Fault,actor_payload,inspect_payload,NATIVE_RESERVE_USD,MODEL,IMAGE_MODEL,INPUT_LIMITS,MAX_OUTPUT_TOKENS,MAX_INPUT_RESERVE_TOKENS,MIN_CONTEXT_TOKENS,AMENDMENT_PROFILE,MODEL_BINDING_FILENAME,REQUIRED_NATIVE_PARAMETERS,TRANSPORT_POLICY,paid_deadline_seconds,content_json_arguments
 
@@ -122,6 +123,7 @@ class ProviderFundingTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.root=Path(self.tmp.name);self.path=self.root/'budget.sqlite3';self.out=self.root/'run'
         BudgetLedger(self.path,40);self.ledger=Ledger(self.path,self.out)
+        pacing=patch.object(provider_module,'PAID_POST_SPACING_SECONDS',0);pacing.start();self.addCleanup(pacing.stop)
 
     def provider(self,actions,attempt_id='b01.r01.a01'):
         self.guard=Guard(self.path,self.out,attempt_id,lambda:None,ledger=self.ledger)
@@ -222,6 +224,18 @@ class ProviderFundingTests(unittest.TestCase):
         self.assertEqual(report['chat_metadata'][MODEL]['pricing']['completion'],'0.0000001352')
         self.assertEqual(report['reservation']['hard_completion_max_price_per_million'],'0.20')
         self.assertEqual(self.transport.posts_exact,[])
+
+    def test_new_paid_posts_are_spaced_across_providers(self):
+        p=self.provider([])
+        slept=[]
+        with patch.object(provider_module,'PAID_POST_SPACING_SECONDS',45),\
+                patch.object(provider_module.time,'sleep',side_effect=slept.append):
+            p._pace()
+            self.assertEqual(slept,[])
+            p._pace()
+        self.assertEqual(len(slept),1)
+        self.assertTrue(40<slept[0]<=45)
+        self.assertTrue((p.evidence_dir/'pacing'/'last_paid_post.stamp').is_file())
 
     def test_cheap_catalog_cannot_hide_expensive_pinned_route(self):
         for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000200001')):
