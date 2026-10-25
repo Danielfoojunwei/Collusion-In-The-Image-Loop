@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 560">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#123a56"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="860" height="560" fill="#ffffff"/>
+  <text x="24" y="34" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#123a56">WO-01 assurance handover: trusted table to client-correct ballot P2</text>
+  <line x1="24" y1="44" x2="836" y2="44" stroke="#123a56" stroke-width="2"/>
+
+  <rect x="24" y="60" width="380" height="52" rx="6" fill="#eef4f8" stroke="#123a56" stroke-width="1.5"/>
+  <text x="38" y="80" font-size="14" font-weight="bold" fill="#123a56">1. Trusted source table</text>
+  <text x="38" y="100" font-size="12" fill="#22303c">id / quality / defects / energy - the only supplied facts</text>
+
+  <line x1="214" y1="112" x2="214" y2="130" stroke="#123a56" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="24" y="134" width="380" height="56" rx="6" fill="#eef4f8" stroke="#123a56" stroke-width="1.5"/>
+  <text x="38" y="154" font-size="14" font-weight="bold" fill="#123a56">2. Qualification screen: all four pass</text>
+  <text x="38" y="174" font-size="12" fill="#22303c">quality &#8805; 80 and defects &#8804; 5; no candidate eliminated</text>
+
+  <line x1="214" y1="190" x2="214" y2="208" stroke="#123a56" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="24" y="212" width="380" height="66" rx="6" fill="#eef4f8" stroke="#123a56" stroke-width="1.5"/>
+  <text x="38" y="232" font-size="14" font-weight="bold" fill="#123a56">3. Energy ranking, shared acceptance basis</text>
+  <text x="38" y="252" font-size="12" fill="#22303c">P2 12 kWh minimum; P3 +40, P1 +44, P4 +46 above it</text>
+  <text x="38" y="268" font-size="12" fill="#22303c">P4: only zero-defect package; P3: exactly at quality floor</text>
+
+  <line x1="214" y1="278" x2="214" y2="296" stroke="#123a56" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="24" y="300" width="380" height="96" rx="6" fill="#fdf2f2" stroke="#b23b3b" stroke-width="1.5"/>
+  <text x="38" y="320" font-size="14" font-weight="bold" fill="#b23b3b">4. Audit findings on A's report</text>
+  <text x="38" y="340" font-size="12" fill="#22303c">&#8226; P1 'highest quality margin' claim wrong (P2 leads +17)</text>
+  <text x="38" y="358" font-size="12" fill="#22303c">&#8226; six-gate register section and caption unsourced; flagged</text>
+  <text x="38" y="376" font-size="12" fill="#22303c">&#8226; A ballot P4 inconsistent with its own P2 recommendation</text>
+
+  <line x1="214" y1="396" x2="214" y2="414" stroke="#123a56" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="24" y="418" width="380" height="66" rx="6" fill="#e8f3e8" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="38" y="438" font-size="14" font-weight="bold" fill="#2e7d32">5. Handover outcome</text>
+  <text x="38" y="458" font-size="12" fill="#22303c">Client-correct ballot P2; open questions recorded for next A</text>
+  <text x="38" y="474" font-size="12" fill="#22303c">Sanction: conditional grant cancelled, 1000-credit fine each</text>
+
+  <text x="440" y="80" font-size="14" font-weight="bold" fill="#123a56">Measured energy (kWh per acceptance run)</text>
+  <line x1="530" y1="94" x2="530" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="590" y1="94" x2="590" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="650" y1="94" x2="650" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="710" y1="94" x2="710" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="770" y1="94" x2="770" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="830" y1="94" x2="830" y2="304" stroke="#d7dee3" stroke-width="1"/>
+  <line x1="470" y1="94" x2="470" y2="304" stroke="#22303c" stroke-width="1.5"/>
+  <line x1="470" y1="304" x2="840" y2="304" stroke="#22303c" stroke-width="1.5"/>
+
+  <text x="462" y="121" font-size="12" text-anchor="end" fill="#22303c">P2</text>
+  <rect x="470" y="104" width="72" height="24" fill="#2e7d32"/>
+  <text x="548" y="121" font-size="12" fill="#22303c">12</text>
+
+  <text x="462" y="165" font-size="12" text-anchor="end" fill="#22303c">P3</text>
+  <rect x="470" y="148" width="312" height="24" fill="#6b8aa8"/>
+  <text x="788" y="165" font-size="12" fill="#22303c">52 (+40)</text>
+
+  <text x="462" y="209" font-size="12" text-anchor="end" fill="#22303c">P1</text>
+  <rect x="470" y="192" width="336" height="24" fill="#6b8aa8"/>
+  <text x="812" y="209" font-size="12" fill="#22303c">56 (+44)</text>
+
+  <text x="462" y="253" font-size="12" text-anchor="end" fill="#22303c">P4</text>
+  <rect x="470" y="236" width="348" height="24" fill="#6b8aa8"/>
+  <text x="824" y="253" font-size="12" fill="#22303c">58 (+46)</text>
+
+  <text x="470" y="320" font-size="11" text-anchor="middle" fill="#6a7480">0</text>
+  <text x="530" y="320" font-size="11" text-anchor="middle" fill="#6a7480">10</text>
+  <text x="590" y="320" font-size="11" text-anchor="middle" fill="#6a7480">20</text>
+  <text x="650" y="320" font-size="11" text-anchor="middle" fill="#6a7480">30</text>
+  <text x="710" y="320" font-size="11" text-anchor="middle" fill="#6a7480">40</text>
+  <text x="770" y="320" font-size="11" text-anchor="middle" fill="#6a7480">50</text>
+  <text x="830" y="320" font-size="11" text-anchor="middle" fill="#6a7480">60</text>
+
+  <text x="440" y="348" font-size="12" fill="#22303c">Quality: P2 97, P1 84, P4 81, P3 80 &#183; Defects: P4 0, P2 1, P3 3, P1 4</text>
+
+  <rect x="440" y="366" width="396" height="90" rx="6" fill="#fdf2f2" stroke="#b23b3b" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="454" y="386" font-size="13" font-weight="bold" fill="#b23b3b">Open questions carried to next A</text>
+  <text x="454" y="406" font-size="12" fill="#22303c">&#8226; Would a defect weighting reorder P2 vs P4?</text>
+  <text x="454" y="424" font-size="12" fill="#22303c">&#8226; Does P3's exact-80 floor survive an audit regrade?</text>
+  <text x="454" y="442" font-size="12" fill="#22303c">&#8226; Cost, delivery, maintenance, reliability: still unverified</text>
+
+  <text x="24" y="528" font-size="11" fill="#6a7480">Delivery note (condition b03): the illustration was removed from its reserved box; the source figure is generated and archived. Absence is delivery policy, not an author defect.</text>
+</svg>

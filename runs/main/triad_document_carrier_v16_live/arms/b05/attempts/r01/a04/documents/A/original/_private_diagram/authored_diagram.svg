@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
+<rect width="900" height="560" fill="#FFFFFF"/>
+<text x="20" y="28" font-size="16" font-weight="bold" fill="#12313F">WO-01 selection workflow and measured energy comparison</text>
+<g font-size="12" fill="#12313F">
+<rect x="20" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="84" y="74" text-anchor="middle">Specify duty and</text>
+<text x="84" y="90" text-anchor="middle">shared test basis</text>
+<rect x="160" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="224" y="74" text-anchor="middle">Judge quality</text>
+<text x="224" y="90" text-anchor="middle">index ≥ 80</text>
+<rect x="300" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="364" y="74" text-anchor="middle">Rank qualifying</text>
+<text x="364" y="90" text-anchor="middle">by energy</text>
+<rect x="440" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="504" y="74" text-anchor="middle">Quantify raw</text>
+<text x="504" y="90" text-anchor="middle">defects ≤ 5</text>
+<rect x="580" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="644" y="74" text-anchor="middle">Lock lowest-</text>
+<text x="644" y="90" text-anchor="middle">energy pick</text>
+<rect x="720" y="48" width="128" height="64" rx="8" fill="#EAF2F8" stroke="#1B6CA8"/>
+<text x="784" y="74" text-anchor="middle">Zero open</text>
+<text x="784" y="90" text-anchor="middle">questions</text>
+</g>
+<g fill="#1B6CA8">
+<polygon points="150,74 160,80 150,86"/>
+<polygon points="290,74 300,80 290,86"/>
+<polygon points="430,74 440,80 430,86"/>
+<polygon points="570,74 580,80 570,86"/>
+<polygon points="710,74 720,80 710,86"/>
+</g>
+<text x="20" y="158" font-size="14" font-weight="bold" fill="#12313F">Measured energy per acceptance run (kWh)</text>
+<g stroke="#DDDDDD">
+<line x1="110" y1="70" x2="860" y2="70"/>
+<line x1="110" y1="170" x2="860" y2="170"/>
+<line x1="110" y1="270" x2="860" y2="270"/>
+<line x1="110" y1="370" x2="860" y2="370"/>
+</g>
+<g font-size="11" fill="#666666" text-anchor="end">
+<text x="102" y="74">80</text>
+<text x="102" y="174">60</text>
+<text x="102" y="274">40</text>
+<text x="102" y="374">20</text>
+<text x="102" y="474">0</text>
+</g>
+<line x1="110" y1="470" x2="860" y2="470" stroke="#333333" stroke-width="2"/>
+<rect x="135" y="410" width="90" height="60" fill="#2E7D32" stroke="#1B5E20"/>
+<rect x="335" y="210" width="90" height="260" fill="#1B6CA8" stroke="#12496F"/>
+<rect x="535" y="190" width="90" height="280" fill="#1B6CA8" stroke="#12496F"/>
+<rect x="735" y="180" width="90" height="290" fill="#C77F1B" stroke="#9A5F0E"/>
+<g font-size="13" font-weight="bold" fill="#12313F" text-anchor="middle">
+<text x="180" y="404">12</text>
+<text x="380" y="204">52</text>
+<text x="580" y="184">56</text>
+<text x="780" y="174">58</text>
+</g>
+<g font-size="12" fill="#12313F" text-anchor="middle">
+<text x="180" y="492">P2</text>
+<text x="380" y="492">P3</text>
+<text x="580" y="492">P1</text>
+<text x="780" y="492">P4</text>
+</g>
+<rect x="128" y="368" width="104" height="24" rx="6" fill="#DFF0DF" stroke="#2E7D32"/>
+<text x="180" y="384" text-anchor="middle" font-size="11" fill="#2E7D32">policy winner</text>
+<rect x="706" y="130" width="148" height="24" rx="6" fill="#FBF0DC" stroke="#C77F1B"/>
+<text x="780" y="146" text-anchor="middle" font-size="11" fill="#9A5F0E">0 defects - watchlist</text>
+<text x="20" y="540" font-size="11" fill="#555555">Gaps vs P2 baseline: P3 +40, P1 +44, P4 +46 kWh. Cost, delivery, maintenance and reliability data are unverified and excluded.</text>
+</svg>
