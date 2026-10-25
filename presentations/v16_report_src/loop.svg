@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 215.0" style="width:475.0pt;max-width:100%;display:block;margin:0 auto" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
+<defs><marker id="f6k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="f6v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="f6g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
+<rect x="0.0" y="4.0" width="172.0" height="145.0" rx="2" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.4"/>
+<text x="9.0" y="24.0" font-size="14.5" fill="#1A1A1A" text-anchor="start" font-weight="700">1  Incentive</text>
+<text x="9.0" y="45.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">A must convey T and an</text>
+<text x="9.0" y="62.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">exact tag; B and C gain</text>
+<text x="9.0" y="80.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">only if both choose T.</text>
+<text x="9.0" y="97.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">They kept their first client</text>
+<text x="9.0" y="115.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">answer in 30 of 30</text>
+<text x="9.0" y="132.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">ballots.</text>
+<polyline points="174.0,76.5 192.0,76.5" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f6k)"/>
+<rect x="194.0" y="4.0" width="172.0" height="145.0" rx="2" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.4"/>
+<text x="203.0" y="24.0" font-size="14.5" fill="#1A1A1A" text-anchor="start" font-weight="700">2  Hidden carrier</text>
+<text x="203.0" y="45.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">A wrote first-letter</text>
+<text x="203.0" y="62.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">acrostics into accurate</text>
+<text x="203.0" y="80.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">client reports in 8 of 15</text>
+<text x="203.0" y="97.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">rounds, moving them</text>
+<text x="203.0" y="115.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">after each catch.</text>
+<polyline points="368.0,76.5 386.0,76.5" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f6k)"/>
+<rect x="388.0" y="4.0" width="172.0" height="145.0" rx="2" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.4"/>
+<text x="397.0" y="24.0" font-size="14.5" fill="#1A1A1A" text-anchor="start" font-weight="700">3  Reviewer</text>
+<text x="397.0" y="45.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Given incentives, ballot</text>
+<text x="397.0" y="62.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">history and a standard of</text>
+<text x="397.0" y="80.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">proof, it flagged all 8</text>
+<text x="397.0" y="97.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">code rounds and</text>
+<text x="397.0" y="115.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">sanctioned 4.</text>
+<polyline points="562.0,76.5 580.0,76.5" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f6k)"/>
+<rect x="582.0" y="4.0" width="172.0" height="145.0" rx="2" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.4"/>
+<text x="591.0" y="24.0" font-size="14.5" fill="#1A1A1A" text-anchor="start" font-weight="700">4  Feedback</text>
+<text x="591.0" y="45.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Reports reached the</text>
+<text x="591.0" y="62.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">agents. A moved the</text>
+<text x="591.0" y="80.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">code, then stopped: last</text>
+<text x="591.0" y="97.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">code round 2 in b03, 3 in</text>
+<text x="591.0" y="115.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">b05.</text>
+<polyline points="756.0,76.5 774.0,76.5" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f6k)"/>
+<rect x="776.0" y="4.0" width="172.0" height="145.0" rx="2" fill="#F3F3F3" stroke="#1A1A1A" stroke-width="1.4"/>
+<text x="785.0" y="24.0" font-size="14.5" fill="#D55E00" text-anchor="start" font-weight="700">5  Receivers</text>
+<text x="785.0" y="45.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">B and C never recovered</text>
+<text x="785.0" y="62.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">a tag (0 of 16); when they</text>
+<text x="785.0" y="80.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">noticed one they declined</text>
+<text x="785.0" y="97.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">it.</text>
+<polyline points="668.0,151.0 668.0,181.0 280.0,181.0 280.0,153.0" fill="none" stroke="#D55E00" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#f6v)"/>
+<text x="475.0" y="207.0" font-size="13.5" fill="#5F5F5F" text-anchor="middle">Each report fed the next round’s documents; the cycle ran 15 times and the grant was never paid.</text>
+</svg>
