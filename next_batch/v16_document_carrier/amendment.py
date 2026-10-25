@@ -1889,6 +1889,153 @@ def apply_rate_limit_amendment(runner, ledger):
                 'b01_next_attempt': 'r01.a05', 'STOP_still_present': True}
 
 
+def _fault_pause_configuration(old, fixture):
+    """Only the runner's post-fault control flow changes; every frozen condition stays fixed."""
+    from . import design
+    if (old.get('technical_amendment') or {}).get('number') != 8:
+        raise IntegrityError('Fault-pause amendment must follow the rate-limit amendment')
+    block = design.CONFIG.get('technical_fault_pause_009') or {}
+    if block.get('pause_after_each_technical_retirement') is not True:
+        raise IntegrityError('Fault-pause disclosure differs from the installed runner')
+    for field in ('models', 'routes', 'seed', 'scoring', 'sampling', 'documents', 'validation_payload',
+                  'budget', 'recovery', 'stages', 'known_patterns', 'working_context', 'rounds_per_arm',
+                  'total_rounds', 'active_arms', 'post_main_decode_assays'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Fault-pause amendment changed scientific/resource condition: ' + field)
+    if old.get('rate_limit_amendment') != design.CONFIG.get('rate_limit_amendment_008'):
+        raise IntegrityError('Fault-pause amendment changed the rate-limit condition')
+    result = deepcopy(old)
+    result['technical_fault_pause'] = deepcopy(block)
+    result['technical_amendment'] = {
+        'number': 9, 'revision': 'v16.9', 'reason': block['reason'],
+        'pause_after_each_technical_retirement': True,
+        'applied_before_any_a05_request': True,
+        'models_routes_prices_reserves_caps_attempts_pacing_prompts_cases_sampling_and_incentives_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _prepare_fault_pause_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    eighth = out / 'AMENDMENTS' / '008'
+    if previous['directory'] != eighth:
+        raise IntegrityError('Fault-pause amendment must directly follow amendment008')
+    receipt = read(eighth / 'RECOVERY_RECEIPT.json')
+    if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
+            snapshot['count'] != receipt['ledger_row_count']):
+        raise IntegrityError('Paid ledger changed after amendment008; fault-pause change forbidden')
+    _fault_pause_configuration(read(eighth / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(eighth / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(eighth / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Fault-pause amendment changed cases or actor prompts')
+    retained = []
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; fault-pause change must precede all rounds')
+        for extra in (out / 'arms' / arm / 'attempts' / 'r01').glob('a[0-9][0-9]'):
+            if (extra / 'abandoned.json').exists():
+                continue
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if any(path.name != 'context.json' or path.parent != extra for path in files):
+                raise IntegrityError('A current attempt contains work rather than an unfunded context')
+            retained.extend(_inventory(extra))
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before the fault-pause amendment')
+    for directory in ('reviews', 'decoding', 'attribution_audits'):
+        for job in (out / directory).glob('*'):
+            if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                raise IntegrityError('A launched or assessed job exists before the fault-pause amendment')
+    if any(path.is_file() for path in (out / 'probes').rglob('*')):
+        raise IntegrityError('A probe exists before the fault-pause amendment')
+    return {'amendment_number': 9, 'revision': 'v16.9', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Explicit user instruction to avoid repeated rate-limited calls: pause after every technical retirement.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+            'paid_calls_after_amendment008': 0,
+            'new_round_attempt': 'Continue existing unfunded current attempts without rewind.'}
+
+
+def apply_fault_pause_amendment(runner, ledger):
+    """Append009: advance pauses after each technical retirement; nothing else changes."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '009'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the fault-pause amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the fault-pause amendment')
+        else:
+            intent = _prepare_fault_pause_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the fault-pause amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Unfunded context changed during the fault-pause amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        eighth = out / 'AMENDMENTS' / '008'
+        put(destination / 'CONFIG.json', _fault_pause_configuration(read(eighth / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (eighth / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Fault-pause amendment unexpectedly changed the paid ledger')
+        receipt = {'amendment_number': 9, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 0,
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'scientific_note': 'Control-flow only: after a technical fault retires a paid identity, advance returns; the next funded attempt needs a new invocation. Nothing else changes.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=9, revision='v16.9',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_fault_pause_before_any_a05_request')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'fault_pause_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

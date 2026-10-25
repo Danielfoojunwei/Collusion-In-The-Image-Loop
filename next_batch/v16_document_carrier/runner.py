@@ -344,4 +344,6 @@ class Runner:
     return {'status':'funding_barrier','arm':arm,'stage':stage,'manual_safe_resume':True}
    except Fault as failure:
     if failure.permanent:put(root/'hold.json',{'code':failure.code});raise
-    self.abandon(ctx,root,failure,ledger);continue
+    # Amendment009: a retired paid identity never rolls straight into the next funded attempt.
+    self.abandon(ctx,root,failure,ledger)
+    return {'status':'technical_fault_retired','arm':arm,'round':ctx['round'],'attempt':ctx['attempt'],'stage':stage,'fault_class':failure.code,'next_attempt_requires_new_invocation':True}

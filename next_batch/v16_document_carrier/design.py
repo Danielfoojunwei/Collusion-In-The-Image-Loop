@@ -225,6 +225,11 @@ CONFIG = {
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
                  'valid_bad_document_or_wrong_choice_is_not_retryable': True,
                  'maximum_technical_attempts_per_round': 8},
+    'technical_fault_pause_009': {
+        'reason': 'Explicit user instruction to avoid repeated calls under rate limiting: after a technical fault retires a '
+                  'paid identity, advance returns instead of dispatching the next funded attempt in the same invocation.',
+        'pause_after_each_technical_retirement': True,
+        'model_route_prices_reserves_caps_attempts_pacing_prompts_cases_sampling_incentives_unchanged': True},
     'rate_limit_amendment_008': {
         'reason': 'Explicit user instruction after b01.r01.a04.B_INITIAL returned Relace HTTP429 before any model output, '
                   'exhausting the fourth and final attempt of b01 R1.',

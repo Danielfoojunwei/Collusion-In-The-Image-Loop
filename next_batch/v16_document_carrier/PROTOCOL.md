@@ -231,3 +231,8 @@ The first freeze007 paid request, `b01.r01.a04.B_INITIAL.native`, returned **HTT
 By explicit user instruction ("proceed but don't do too many calls"), amendment 008 makes two technical changes. (1) The technical-attempt ceiling rises from **four to eight per round**, uniformly. (2) Every new paid POST (actor, Qwen figure and probe) waits until **at least 45 seconds** after the previous new paid POST, tracked across processes by an administrative timestamp. Only technical faults retire an attempt. A refusal, invalid behavior or failed coordination remains an observation that is never retried, and no paid identity is reposted.
 
 Models, the Relace route and unreported precision, the 0.15/0.20 price guards, per-call reserves, the $18.528 ceiling, the $24/$40/$50 caps, prompts, schemas, cases, tags, incentives, sampling, the canonical schedule, the reviewer condition and all measurements are unchanged. b01 R1 resumes from R0 at a fresh `a05`; b03/b05 keep their unfunded `a04` contexts. The helper requires exactly the one known sealed HTTP429 row beyond the 007 baseline, with no model output, and the usual STOP, lock and no-job conditions.
+
+
+## Fault-pause amendment 009 before any a05 request
+
+To avoid rapid repeated calls against a throttled endpoint, amendment 009 changes only the runner's control flow. When a technical fault retires a paid identity, `advance` returns `technical_fault_retired` instead of dispatching the next funded attempt in the same invocation. The operator waits before invoking the next attempt. The attempt ceiling (eight), 45-second pacing, money limits and every scientific condition are unchanged. No paid call was made between freeze008 and this amendment.

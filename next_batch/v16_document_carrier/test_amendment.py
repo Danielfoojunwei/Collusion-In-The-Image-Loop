@@ -1192,5 +1192,48 @@ class AmendmentTests(unittest.TestCase):
         self.assertFalse((self.out/'AMENDMENTS/008').exists())
         a.apply_rate_limit_amendment(self.runner, self.ledger)
 
+    def prepare_fault_pause_amendment(self):
+        self.prepare_rate_limit_amendment()
+        a.apply_rate_limit_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        rt.Runner(self.out, fixture=True).current('b01')
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted fault-pause hold'})
+        self.source.write_text('# OFFLINE fixture fault-pause amendment\n')
+
+    def test_fault_pause_amendment_changes_only_control_flow(self):
+        self.prepare_fault_pause_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        result = a.apply_fault_pause_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        old = read(self.out/'AMENDMENTS/008/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/009/CONFIG.json')
+        changed = ('technical_fault_pause', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/009')
+        self.assertEqual(a.apply_fault_pause_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+        self.assertEqual(rt.Runner(self.out, fixture=True).current('b01')[0]['attempt_id'], 'b01.r01.a05')
+
+    def test_fault_pause_amendment_refuses_new_paid_rows_work_or_changes(self):
+        self.prepare_fault_pause_amendment()
+        stage = self.out/'arms/b01/attempts/r01/a05/inflight/B_INITIAL.json'
+        put(stage, {'stage':'B_INITIAL','evidence_origin':'OFFLINE_FORBIDDEN_SCRIPTED_DISPATCH'})
+        with self.assertRaises(IntegrityError):
+            a.apply_fault_pause_amendment(self.runner, self.ledger)
+        stage.unlink()
+        with patch.dict(design.CONFIG['technical_fault_pause_009'], {'pause_after_each_technical_retirement': False}), \
+                self.assertRaises(IntegrityError):
+            a.apply_fault_pause_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['recovery'], {'maximum_technical_attempts_per_round': 9}), self.assertRaises(IntegrityError):
+            a.apply_fault_pause_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a05.B_INITIAL.native','uncertain','chat','z-ai/glm-5.3-flash','f'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_fault_pause_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/009').exists())
+
 if __name__ == '__main__':
     unittest.main()

@@ -6,7 +6,7 @@ from unittest.mock import patch
 from PIL import Image,ImageDraw
 from next_batch.v15_glm_restored.storage import put,read,canonical,sha,IntegrityError,lock
 from . import runner as rt,design as d,review,schemas
-from .provider import actor_payload,inspect_payload
+from .provider import actor_payload,inspect_payload,Fault
 from visual_collusion.budget import PendingPaidRequest
 
 PHRASE='The source rows give a clear basis for the client choice and help the next reader check each step. '
@@ -90,6 +90,16 @@ class RunnerTests(unittest.TestCase):
  def test_committed_artifact_corruption_stops_resume(self):
   r=self.run_fixture();c=r.commits('b01')[0];p=Path(c['documents']['A']['delivered']['pages'][0]['path']);p.write_bytes(b'corrupt')
   with self.assertRaises(IntegrityError):r.commits('b01')
+ def test_technical_fault_retires_identity_and_pauses_without_next_attempt(self):
+  r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root);calls=[]
+  def throttled(identifier,messages,tools):
+   calls.append(identifier);raise Fault('paid_outcome_unresolved')
+  r.fake.native=throttled
+  with patch.object(rt,'Ledger',DummyLedger),patch.object(rt,'seal',lambda *a:0),lock(r.out/'arms/b01'):result=r.advance('b01',1)
+  self.assertEqual((result['status'],result['attempt'],result['next_attempt_requires_new_invocation']),('technical_fault_retired',1,True))
+  self.assertEqual(calls,['b01.r01.a01.B_INITIAL.native'])
+  self.assertTrue((r.out/'arms/b01/attempts/r01/a01/abandoned.json').exists())
+  self.assertFalse((r.out/'arms/b01/attempts/r01/a02').exists())
  def test_offline_fixture_cannot_become_live(self):
   r=self.run_fixture();live=rt.Runner(r.out)
   with self.assertRaises(IntegrityError):live.verify()
