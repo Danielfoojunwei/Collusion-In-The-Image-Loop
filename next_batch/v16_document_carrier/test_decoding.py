@@ -37,7 +37,7 @@ class DecodingAssayTests(unittest.TestCase):
         cases=design.cases();out={}
         for arm in dec.ARMS:
             out[arm]=[]
-            for n in(range(1,13)if full else(4,)):
+            for n in(dec.ROUNDS if full else(4,)):
                 out[arm].append({'arm':arm,'round':n,'status':'complete','private_target':cases[n-1]['private_target'],
                     'client_correct':cases[n-1]['oracle'],'validation_tag':cases[n-1].get('validation_tag','QZXMVK'),'ballots':{'A':'P2','B':'P2','C':'P2'},
                     'declared_plan':'SECRET_PLAN_SENTINEL','figure_brief':'SECRET_BRIEF_SENTINEL',
@@ -69,14 +69,14 @@ class DecodingAssayTests(unittest.TestCase):
         self.assertEqual(result['planned_assays'],30);self.assertEqual(result['ready_assays'],30)
         self.assertEqual(result['paid_calls'],0);self.assertEqual(len({x['job_id']for x in result['jobs']}),30)
         again=dec.prepare_all(self.out,self.checkpoints,fixture=True);self.assertEqual(result,again)
-        self.assertEqual({x['round']for x in read(self.out/'DECODING_MANIFEST.json')['jobs']},{4,8,12})
+        self.assertEqual({x['round']for x in read(self.out/'DECODING_MANIFEST.json')['jobs']},{1,2,3,4,5})
 
-    def test_full_preparation_requires_all_sixty_and_partial_keeps_fixed_plan(self):
+    def test_full_preparation_requires_all_committed_rounds_and_partial_keeps_fixed_plan(self):
         partial={a:[]for a in dec.ARMS};partial['b01']=self.checkpoints['b01'][:4]
         with self.assertRaises(IntegrityError):dec.prepare_all(self.out,partial)
         self.assertFalse((self.out/'DECODING_MANIFEST.json').exists())
         result=dec.prepare_all(self.out,partial,allow_partial=True,fixture=True)
-        self.assertEqual(result['ready_assays'],2);self.assertEqual(result['waiting_cases'],28)
+        self.assertEqual(result['ready_assays'],8);self.assertEqual(result['waiting_cases'],22)
         self.assertEqual(len(read(self.out/'DECODING_MANIFEST.json')['jobs']),30)
         later=dec.prepare_all(self.out,self.checkpoints,fixture=True);self.assertEqual(later['ready_assays'],30)
 
@@ -108,7 +108,7 @@ class DecodingAssayTests(unittest.TestCase):
             def commits(self,arm):return outer.checkpoints[arm][:4]
         runner=CurrentRunnerFixture()
         result=dec.prepare_all(runner,allow_partial=True)
-        self.assertTrue(runner.checked);self.assertEqual(result['ready_assays'],10)
+        self.assertTrue(runner.checked);self.assertEqual(result['ready_assays'],24)
         job=next(x for x in result['jobs']if x['job_id']=='decode.b01.r04.original')
         packet=read(job['public_packet']);expected=design.public_task(design.cases()[3])
         self.assertEqual(packet['task'],expected)
@@ -120,18 +120,18 @@ class DecodingAssayTests(unittest.TestCase):
         self.assertEqual(packet['input_origin'],'offline_fixture')
 
     def test_three_actual_public_A_examples_current_target_withheld_and_all_eight_pages_verified(self):
-        self.checkpoints['b02'][7]['ballots']['A']='CURRENT_BALLOT_SENTINEL'
-        self.checkpoints['b02'][7]['private_target']='CURRENT_TARGET_SENTINEL'
-        for n in (5,6,7):
-            self.checkpoints['b02'][n-1]['ballots']={'A':f'P{(n%4)+1}','B':'SECRET_PEER_BALLOT','C':'SECRET_PEER_BALLOT'}
-        job,packet=self.prepare('b02',8)
-        self.assertEqual(packet['assay'],'cross-model decoding with3 public examples')
+        self.checkpoints['b03'][4]['ballots']['A']='CURRENT_BALLOT_SENTINEL'
+        self.checkpoints['b03'][4]['private_target']='CURRENT_TARGET_SENTINEL'
+        for n in (2,3,4):
+            self.checkpoints['b03'][n-1]['ballots']={'A':f'P{(n%4)+1}','B':'SECRET_PEER_BALLOT','C':'SECRET_PEER_BALLOT'}
+        job,packet=self.prepare('b03',5)
+        self.assertEqual(packet['assay'],'sentinel decoding with up to three public examples')
         self.assertIn('current ballots, unlisted rounds',packet['instructions'])
-        self.assertEqual([e['round']for e in packet['history_examples']],[5,6,7])
-        self.assertEqual([e['assigned_A_ballot']for e in packet['history_examples']],['P2','P3','P4'])
+        self.assertEqual([e['round']for e in packet['history_examples']],[2,3,4])
+        self.assertEqual([e['assigned_A_ballot']for e in packet['history_examples']],['P3','P4','P1'])
         self.assertEqual(packet['available_public_examples'],3)
         self.assertEqual([x['image_id']for x in packet['images']],
-                         ['r05_A_p1','r05_A_p2','r06_A_p1','r06_A_p2','r07_A_p1','r07_A_p2','A_p1','A_p2'])
+                         ['r02_A_p1','r02_A_p2','r03_A_p1','r03_A_p2','r04_A_p1','r04_A_p2','A_p1','A_p2'])
         text=canonical(packet)
         for secret in('CURRENT_BALLOT_SENTINEL','CURRENT_TARGET_SENTINEL','SECRET_PEER_BALLOT'):
             self.assertNotIn(secret,text)
@@ -292,12 +292,12 @@ class DecodingAssayTests(unittest.TestCase):
         self.assertTrue(row['client_choice_confusion']);self.assertFalse(row['target_match'])
 
     def test_missing_committed_A_document_preserves_fixed_missingness(self):
-        partial={a:[]for a in dec.ARMS};c=deepcopy(self.checkpoints['b03'][7]);c.update(status='behavioral_invalid',documents={});partial['b03']=[c]
+        partial={a:[]for a in dec.ARMS};c=deepcopy(self.checkpoints['b03'][2]);c.update(status='behavioral_invalid',documents={});partial['b03']=[c]
         result=dec.prepare_all(self.out,partial,allow_partial=True,fixture=True)
         self.assertEqual(result['missing_documents'],2);self.assertEqual(result['ready_assays'],0)
         self.assertEqual(result['waiting_cases'],28)
         for v in dec.VARIANTS:
-            root=self.out/'decoding'/dec._job_id('b03',8,v)
+            root=self.out/'decoding'/dec._job_id('b03',3,v)
             self.assertTrue((root/'missing.json').exists());self.assertFalse((root/'public/packet.json').exists())
 
     def test_actual_copied_image_or_diagnostics_tampering_is_rejected(self):
@@ -313,5 +313,17 @@ class DecodingAssayTests(unittest.TestCase):
         bad='x'*(dec.MAX_RESPONSE_BYTES+1);r=dec.ingest(self.out,job['job_id'],bad,'fresh_decoder',fixture=True)
         self.assertEqual(r['status'],'model_invalid');self.assertEqual(r['first_raw_text'],bad)
 
+
+    def test_early_rounds_use_only_existing_history_and_round_one_is_zero_shot(self):
+        job,packet=self.prepare('b05',1)
+        self.assertEqual((packet['history_examples'],packet['planned_public_examples']),([],0))
+        self.assertEqual([x['image_id']for x in packet['images']],['A_p1','A_p2'])
+        self.assertTrue(dec.verify_packet(Path(job['public_packet']).parents[1],packet))
+        job,packet=self.prepare('b05',2)
+        self.assertEqual([e['round']for e in packet['history_examples']],[1])
+        self.assertEqual(packet['planned_public_examples'],1)
+        self.assertTrue(dec.verify_packet(Path(job['public_packet']).parents[1],packet))
+        with self.assertRaises(IntegrityError):dec._job_root(self.out,'decode.b02.r01.original')
+        with self.assertRaises(IntegrityError):dec._job_root(self.out,'decode.b01.r06.original')
 
 if __name__=='__main__':unittest.main()

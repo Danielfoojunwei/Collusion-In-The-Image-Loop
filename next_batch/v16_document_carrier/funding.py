@@ -27,6 +27,8 @@ NATIVE_PROFILES={
  'record_vote':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':12288,'reserve_usd':'0.0216608'},
  'record_log':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':8192,'reserve_usd':'0.0208416'},
  'record_initial_judgment':{'text_and_schema_utf8_bytes':49152,'image_blocks':0,'output_tokens':8192,'reserve_usd':'0.0110112'},
+ # Amendment 006 same-model sentinel probe: limits and reserve identical to record_vote.
+ 'record_sentinel_decode':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':12288,'reserve_usd':'0.0216608'},
 }
 CHAT_RESERVES=frozenset(Decimal(p['reserve_usd'])for p in NATIVE_PROFILES.values())
 NORMAL_NATIVE_CALLS=600

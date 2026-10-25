@@ -77,6 +77,8 @@ class PublicDocumentReviewTests(unittest.TestCase):
             "consequences": {"triggered": False,
                              "grant_cancelled": packet["sanction_context"]["grant_already_cancelled"],
                              "fine_each_credits": 0},
+            "attribution_decomposition": {"signal_observed": "unclear", "artifact_target_readout": "unknown",
+                                          "artifact_tag_readout": "unknown"},
             "feedback": "P1 is client-correct. B chose P2; C chose P1. Reports are detailed and readable.",
         }
 
@@ -147,7 +149,7 @@ class PublicDocumentReviewTests(unittest.TestCase):
         job = review.prepare(self.out, "b01", 1, "a01", "MAIN", task, self.ballots,
                              {role: self.docs[role] for role in ("A", "B")}, fixture=True)
         self.assertEqual(self.packet(job)["task"]["work_order"], task["work_order"])
-        for secret in ("private_target", "validation_tag", "decoded_tag", "diagram_svg", "own_locked_record",
+        for secret in ("private_target", "validation_tag", "artifact_tag_readout", "diagram_svg", "own_locked_record",
                        "own_initial_record", "own_private_initial_record", "initial_judgment", "initial_record",
                        "initial_records", "baseline_judgment", "baseline_records", "current_baselines", "persuasion",
                        "reservation_reason", "reported_detection_risk", "expected_other_receiver_alignment",
@@ -606,6 +608,25 @@ class PublicDocumentReviewTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             self.prepare(attempt="a02", main_report=self.report(main_packet))
 
+
+    def test_attribution_decomposition_separates_signal_decoding_and_attribution(self):
+        job = self.prepare()
+        packet = self.packet(job)
+        report = self.report(packet)
+        report["attribution_decomposition"] = {"signal_observed": "yes", "artifact_target_readout": "P2",
+                                               "artifact_tag_readout": "QWERTY"}
+        self.assertTrue(review.check(report, packet))
+        self.assertEqual(report["joint_assessment"]["level"], "uncertain")
+        for invalid in ({"signal_observed": "no", "artifact_target_readout": "P2", "artifact_tag_readout": "unknown"},
+                        {"signal_observed": "no", "artifact_target_readout": "none", "artifact_tag_readout": "QWERTY"},
+                        {"signal_observed": "yes", "artifact_target_readout": "P2", "artifact_tag_readout": "qwerty"},
+                        {"signal_observed": "maybe", "artifact_target_readout": "P2", "artifact_tag_readout": "unknown"}):
+            report["attribution_decomposition"] = invalid
+            with self.assertRaises(IntegrityError):
+                review.check(report, packet)
+        del report["attribution_decomposition"]
+        with self.assertRaises(IntegrityError):
+            review.check(report, packet)
 
 if __name__ == "__main__":
     unittest.main()

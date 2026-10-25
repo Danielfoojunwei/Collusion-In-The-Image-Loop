@@ -75,10 +75,11 @@ class CaseContracts(unittest.TestCase):
 
     def test_assays_are_fixed_post_main_not_extra_actor_calls(self):
         a=d.CONFIG['post_main_decode_assays']
-        self.assertEqual(a['count'],5*3*2)
-        self.assertEqual(a['checkpoints'],[4,8,12])
+        # Amendment 006: three active arms x five rounds x two views.
+        self.assertEqual(a['count'],3*5*2)
+        self.assertEqual(a['checkpoints'],[1,2,3,4,5])
         self.assertEqual(a['views'],['original','delivered'])
-        self.assertTrue(a['after_all_60_rounds'])
+        self.assertTrue(a['after_each_committed_round'])
         self.assertFalse(a['OpenRouter_charges'])
         self.assertEqual(len(d.STAGES),10)
 

@@ -1298,6 +1298,178 @@ def apply_reviewer_amendment(runner, ledger):
                 'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
 
 
+CANONICAL_ARMS = ['b01', 'b03', 'b05']
+
+
+def _canonical_configuration(old, fixture):
+    """Freeze the 5-round, three-arm attribution design; science and money otherwise fixed."""
+    from . import design
+    if (old.get('technical_amendment') or {}).get('number') != 5:
+        raise IntegrityError('Canonical design amendment must follow the reviewer amendment')
+    if (old.get('rounds_per_arm'), old.get('total_rounds')) != (12, 60) or 'active_arms' in old:
+        raise IntegrityError('Unexpected prior schedule')
+    if (old.get('models') or {}).get('reviewers') != CLAUDE_SUBAGENT_REVIEWERS:
+        raise IntegrityError('Canonical design requires the disclosed Claude reviewer condition')
+    if (design.CONFIG.get('rounds_per_arm'), design.CONFIG.get('total_rounds'),
+            design.CONFIG.get('active_arms')) != (5, 15, CANONICAL_ARMS):
+        raise IntegrityError('Installed schedule differs from the authorized canonical design')
+    block = design.CONFIG.get('canonical_design_006') or {}
+    if (block.get('active_arms') != CANONICAL_ARMS or block.get('rounds_per_arm') != 5
+            or block.get('actor_prompts_unchanged_still_say_twelve_rounds') is not True
+            or block.get('all_probes_post_round_and_never_fed_back') is not True):
+        raise IntegrityError('Canonical design disclosure differs from the installed condition')
+    assays = design.CONFIG['post_main_decode_assays']
+    if assays.get('checkpoints') != [1, 2, 3, 4, 5] or assays.get('count') != 30 or assays.get('arms') != 3:
+        raise IntegrityError('Sentinel decoder schedule differs from the canonical design')
+    for field in ('models', 'routes', 'seed', 'scoring', 'sampling', 'documents', 'validation_payload',
+                  'budget', 'recovery', 'stages', 'known_patterns', 'working_context'):
+        if old.get(field) != design.CONFIG.get(field):
+            raise IntegrityError('Canonical design changed scientific/resource condition: ' + field)
+    result = deepcopy(old)
+    result.update(rounds_per_arm=5, total_rounds=15, rounds_per_cohort=5, cohorts=3,
+                  active_arms=list(CANONICAL_ARMS),
+                  post_main_decode_assays=deepcopy(assays),
+                  canonical_design=deepcopy(block))
+    result['technical_amendment'] = {
+        'number': 6, 'revision': 'v16.6',
+        'reason': block['reason'],
+        'previous_schedule': '5 arms x 12 rounds', 'schedule': '3 arms (b01, b03, b05) x first 5 frozen cases',
+        'measurements': sorted(block['measurements']),
+        'applied_before_any_a04_request_or_review': True,
+        'models_routes_prompts_cases_sampling_incentives_and_money_limits_unchanged': True}
+    if bool(result.get('offline_fixture')) != bool(fixture):
+        raise IntegrityError('Fixture mode differs')
+    return result
+
+
+def _prepare_canonical_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    fifth = out / 'AMENDMENTS' / '005'
+    if previous['directory'] != fifth:
+        raise IntegrityError('Canonical design amendment must directly follow amendment005')
+    if (fifth / 'STOP_RELEASE.json').exists():
+        raise IntegrityError('Amendment005 was already released; design change must precede a04 work')
+    receipt = read(fifth / 'RECOVERY_RECEIPT.json')
+    if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
+            snapshot['count'] != receipt['ledger_row_count']):
+        raise IntegrityError('Paid ledger changed after amendment005; design change forbidden')
+    if sha((out / 'STOP_REQUESTED.json').read_bytes()) != receipt['stop_original_sha256']:
+        raise IntegrityError('Canonical design amendment requires the unchanged operator hold')
+    _canonical_configuration(read(fifth / 'CONFIG.json'), runner.fixture)
+    frozen_prompts = read(fifth / 'SYSTEM_PROMPTS.json')
+    current_prompts = {}
+    for key in frozen_prompts:
+        arm, stage = key.split('.', 1)
+        current_prompts[key] = prompts.actor_system(stage[0], stage, arm)
+    if frozen_prompts != current_prompts or read(fifth / 'RESEARCHER_ONLY_CASES.json') != design.cases():
+        raise IntegrityError('Canonical design amendment changed cases or actor prompts')
+    retained = []
+    for arm in ARMS:
+        if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('A checkpoint exists; design change must precede all rounds')
+        parent = out / 'arms' / arm / 'attempts' / 'r01'
+        for extra in parent.glob('a[0-9][0-9]'):
+            files = [path for path in extra.rglob('*') if path.is_file()]
+            if extra.name == 'a04':
+                if any(path.name != 'context.json' or path.parent != extra for path in files):
+                    raise IntegrityError('R1a04 contains work rather than an unfunded context')
+                retained.extend(_inventory(extra))
+            elif extra.name not in ('a01', 'a02', 'a03') and files:
+                raise IntegrityError('An extra attempt appeared after amendment005')
+        for future in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]'):
+            if future.name != 'r01' and any(path.is_file() for path in future.rglob('*')):
+                raise IntegrityError('Future-round work exists before the canonical design amendment')
+    for directory in ('reviews', 'decoding', 'attribution_audits'):
+        for job in (out / directory).glob('*'):
+            if (job / 'launch.json').exists() or (job / 'assessment.json').exists():
+                raise IntegrityError('A launched or assessed job exists before the canonical design amendment')
+    if any(path.is_file() for path in (out / 'probes').rglob('*')):
+        raise IntegrityError('A probe exists before the canonical design amendment')
+    return {'amendment_number': 6, 'revision': 'v16.6', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Explicit user instruction before any a04 request: canonical 5-round, three-arm attribution design with sentinel, ladder and probe measurements.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+            'new_round_attempt': 'Continue existing unfunded R1a04 without rewind in active arms b01, b03, b05.',
+            'paid_calls_after_amendment005': 0, 'jobs_launched_before_amendment': 0}
+
+
+def apply_canonical_design_amendment(runner, ledger):
+    """Append006: the canonical V16 design, before any a04 request, review or probe."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '006'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the canonical design amendment')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the canonical design amendment')
+        else:
+            intent = _prepare_canonical_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the canonical design amendment')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Unfunded a04 context changed during the canonical design amendment')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        fifth = out / 'AMENDMENTS' / '005'
+        put(destination / 'CONFIG.json', _canonical_configuration(read(fifth / 'CONFIG.json'), runner.fixture))
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (fifth / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            archive = destination / 'source_archive' / relative
+            put_bytes(archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Canonical design amendment unexpectedly changed the paid ledger')
+        receipt = {'amendment_number': 6, 'intent_sha256': sha(intent_path.read_bytes()),
+                   'parent_freeze_sha256': intent['parent_freeze_sha256'],
+                   'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+                   'ledger_row_count': after['count'], 'new_paid_calls': 0,
+                   'moved_artifacts': [], 'retained_attempt_count': 0,
+                   'stop_original_sha256': intent['stop_sha256'],
+                   'scientific_note': 'Canonical V16: arms b01, b03, b05 run the first five frozen cases. Agents are still told twelve rounds. Live reviews add a detection/readout/attribution decomposition; post-round sentinel decoders, a monitor-information ladder, a same-model sentinel and a static defence replay are never fed back. Prompts, cases, models, sampling, incentives and money limits are unchanged.'}
+        put(destination / 'RECOVERY_RECEIPT.json', receipt)
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=6, revision='v16.6',
+                      parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_canonical_design_before_any_round')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'canonical_design_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0,
+                'active_arms': list(CANONICAL_ARMS), 'rounds_per_arm': 5,
+                'all_arms_next_attempt': 'r01.a04', 'STOP_still_present': True}
+
+
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""
     out = safe(out)

@@ -133,13 +133,16 @@ class ProviderFundingTests(unittest.TestCase):
     def test_conservative_math_and_whole_study_normal_ceiling(self):
         counts={'publish_document':180,'record_vote':120,'record_log':180,'record_initial_judgment':120}
         expected={'publish_document':Decimal('.0323104'),'record_vote':Decimal('.0216608'),
-                  'record_log':Decimal('.0208416'),'record_initial_judgment':Decimal('.0110112')}
+                  'record_log':Decimal('.0208416'),'record_initial_judgment':Decimal('.0110112'),
+                  'record_sentinel_decode':Decimal('.0216608')}
         for name,profile in NATIVE_PROFILES.items():
             actual=(Decimal(profile['text_and_schema_utf8_bytes']+profile['image_blocks']*8192)*Decimal('.00000015')
                     +Decimal(2*profile['output_tokens'])*Decimal('.00000010')+Decimal('.002'))
             self.assertEqual(actual,expected[name]);self.assertLessEqual(actual,Decimal(profile['reserve_usd']))
         self.assertEqual(sum(counts.values()),600);self.assertEqual(NORMAL_NATIVE_CALLS,600)
-        total=sum(counts[n]*Decimal(p['reserve_usd'])for n,p in NATIVE_PROFILES.items())+180*Decimal('.028')
+        # The sentinel probe profile is outside the normal actor schedule.
+        self.assertEqual(NATIVE_PROFILES['record_sentinel_decode'],{**NATIVE_PROFILES['record_vote']})
+        total=sum(counts[n]*Decimal(NATIVE_PROFILES[n]['reserve_usd'])for n in counts)+180*Decimal('.028')
         self.assertEqual(total,Decimal('18.528'));self.assertEqual(NORMAL_RESERVATION_USD,total)
 
     def test_exact_native_wire_route_output_temperature_reasoning_reserve_and_cache(self):

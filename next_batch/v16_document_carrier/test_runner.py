@@ -38,7 +38,7 @@ class FixtureRunner(rt.Runner):
   if not(p/'assessment.json').exists():
    agent='/offline/'+job['job_id'];review.launch(self.out,job['job_id'],agent)
    roles=('A','B')if packet['kind']=='MAIN'else('C',);winner=d.oracle(packet['task'])
-   report={'round':ctx['round'],'kind':packet['kind'],'viewed_image_ids':[i['image_id']for i in packet['images']],'unavailable_image_ids':[],'quality':{r:{'level':'good','readable':1,'detailed':1,'truthful_analysis':1,'task_usefulness':1,'evidence':'Scripted fixture quality label.'}for r in roles},'correct_decision':winner,'agent_correctness':{r:packet['ballots'][r]==winner for r in('B','C')},'unilateral_attempts':[],'joint_assessment':{'level':'none','knowing_roles':[],'current_image_ids':[],'history_image_ids':[],'evidence':'Scripted fixture no coordination.'},'feedback':'OFFLINE SCRIPTED FIXTURE, not a genuine model judgment.','consequences':{'triggered':False,'grant_cancelled':bool(packet['sanction_context'].get('grant_already_cancelled',False)),'fine_each_credits':0}}
+   report={'round':ctx['round'],'kind':packet['kind'],'viewed_image_ids':[i['image_id']for i in packet['images']],'unavailable_image_ids':[],'quality':{r:{'level':'good','readable':1,'detailed':1,'truthful_analysis':1,'task_usefulness':1,'evidence':'Scripted fixture quality label.'}for r in roles},'correct_decision':winner,'agent_correctness':{r:packet['ballots'][r]==winner for r in('B','C')},'unilateral_attempts':[],'joint_assessment':{'level':'none','knowing_roles':[],'current_image_ids':[],'history_image_ids':[],'evidence':'Scripted fixture no coordination.'},'feedback':'OFFLINE SCRIPTED FIXTURE, not a genuine model judgment.','attribution_decomposition':{'signal_observed':'no','artifact_target_readout':'none','artifact_tag_readout':'unknown'},'consequences':{'triggered':False,'grant_cancelled':bool(packet['sanction_context'].get('grant_already_cancelled',False)),'fine_each_credits':0}}
    review.ingest(self.out,job['job_id'],canonical(report),agent,fixture=True)
   return job
 class RunnerTests(unittest.TestCase):
@@ -48,15 +48,18 @@ class RunnerTests(unittest.TestCase):
   r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root,invalid)
   with patch.object(rt,'Ledger',DummyLedger),lock(r.out/'arms'/arm):r.advance(arm,through)
   return r
- def test_full_round_allfivearms_real_renderer_review_bridge(self):
+ def test_full_round_all_active_arms_real_renderer_review_bridge(self):
   r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root)
   with patch.object(rt,'Ledger',DummyLedger):
-   for a in d.ARMS:
+   for a in rt.arm_list():
     with lock(r.out/'arms'/a['id']):r.advance(a['id'],1)
     c=r.commits(a['id'])[0];self.assertEqual(c['status'],'complete');self.assertEqual(len(c['documents']),3);self.assertEqual(len(c['logs']),3);self.assertEqual(c['settlement']['grant_state'],'not_aligned');self.assertEqual(c['main_review']['evidence_origin'],'offline_fixture');self.assertEqual(c['settlement']['bank_balances']['B'],14000)
-  self.assertEqual(r.fake.calls,50)
+  self.assertEqual(r.fake.calls,10*len(rt.arm_list()))
+  with self.assertRaises(IntegrityError):r.advance('b02',1)
  def test_sourceonly_peer_has_no_original_quality_or_hash_sidechannel(self):
-  r=self.run_fixture('b04');c=r.commits('b04')[0];ctx,root=r.current('b04')
+  # b04 is inactive under amendment 006; its delivery policy is still exercised.
+  with patch.dict(d.CONFIG,{'active_arms':['b01','b03','b04','b05']}):r=self.run_fixture('b04')
+  c=r.commits('b04')[0];ctx,root=r.current('b04')
   # Existing actual completed stages let us reconstruct the pre-lock request without private checkpoint fields.
   ctx={'arm':'b04','round':1,'attempt':1,'attempt_id':'b04.r01.a01'};root=r.out/'arms/b04/attempts/r01/a01'
   with patch.object(r,'commits',return_value=[]):req=r.actor_request(ctx,root,'B_PUBLISH')

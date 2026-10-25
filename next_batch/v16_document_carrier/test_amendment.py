@@ -848,5 +848,95 @@ class AmendmentTests(unittest.TestCase):
             a.apply_reviewer_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/005').exists())
 
+    @contextmanager
+    def pre_canonical(self):
+        old = deepcopy(design.CONFIG)
+        old.update(rounds_per_arm=12, total_rounds=60)
+        old.pop('active_arms')
+        old.pop('canonical_design_006')
+        old['post_main_decode_assays'].update(arms=5, checkpoints=[4, 8, 12])
+        with patch.dict(design.CONFIG, old, clear=True):
+            yield
+
+    def prepare_canonical_amendment(self):
+        with self.pre_canonical():
+            old = read(self.out/'CONFIG.json')
+            old.update(rounds_per_arm=12, total_rounds=60,
+                       post_main_decode_assays=deepcopy(design.CONFIG['post_main_decode_assays']))
+            old.pop('active_arms')
+            old.pop('canonical_design_006')
+            (self.out/'CONFIG.json').unlink()
+            put(self.out/'CONFIG.json', old)
+            frozen = read(self.out/'freeze.json')
+            frozen['config_sha256'] = sha((self.out/'CONFIG.json').read_bytes())
+            (self.out/'freeze.json').unlink()
+            put(self.out/'freeze.json', frozen)
+            self.prepare_reviewer_amendment()
+            a.apply_reviewer_amendment(self.runner, self.ledger)
+        self.source.write_text('# OFFLINE fixture canonical design amendment\n')
+
+    def test_canonical_design_freezes_five_rounds_three_arms_without_other_change(self):
+        self.prepare_canonical_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        stop = (self.out/'STOP_REQUESTED.json').read_bytes()
+        result = a.apply_canonical_design_amendment(self.runner, self.ledger)
+        self.assertEqual((result['rounds_per_arm'], result['active_arms'], result['new_paid_calls']),
+                         (5, ['b01', 'b03', 'b05'], 0))
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        self.assertEqual((self.out/'STOP_REQUESTED.json').read_bytes(), stop)
+        old = read(self.out/'AMENDMENTS/005/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/006/CONFIG.json')
+        changed = ('rounds_per_arm', 'total_rounds', 'rounds_per_cohort', 'cohorts', 'active_arms',
+                   'post_main_decode_assays', 'canonical_design', 'technical_amendment')
+        self.assertEqual({k: v for k, v in old.items() if k not in changed},
+                         {k: v for k, v in new.items() if k not in changed})
+        self.assertEqual((new['rounds_per_arm'], new['total_rounds']), (5, 15))
+        self.assertEqual(new['post_main_decode_assays']['checkpoints'], [1, 2, 3, 4, 5])
+        self.assertEqual((self.out/'AMENDMENTS/006/SYSTEM_PROMPTS.json').read_bytes(),
+                         (self.out/'AMENDMENTS/005/SYSTEM_PROMPTS.json').read_bytes())
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/006')
+        self.assertEqual(a.apply_canonical_design_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+        runner = rt.Runner(self.out, fixture=True)
+        self.assertEqual([x['id'] for x in rt.arm_list()], ['b01', 'b03', 'b05'])
+        self.assertEqual(runner.current('b03')[0]['attempt_id'], 'b03.r01.a04')
+
+    def test_canonical_design_refuses_any_job_probe_or_paid_row(self):
+        self.prepare_canonical_amendment()
+        for marker in (self.out/'reviews/OFFLINE_b04_MAIN/launch.json',
+                       self.out/'decoding/decode.b01.r01.original/launch.json',
+                       self.out/'attribution_audits/ladder.b01.r01.L1_artifacts/assessment.json',
+                       self.out/'probes/sentinel/b01.r01.delivered.json'):
+            put(marker, {'evidence_origin': 'OFFLINE_FORBIDDEN_SCRIPTED_JOB'})
+            with self.assertRaises(IntegrityError):
+                a.apply_canonical_design_amendment(self.runner, self.ledger)
+            marker.unlink()
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b01.r01.a04.B_INITIAL.native', 'uncertain', 'chat',
+                'z-ai/glm-5.3-flash', 'f'*64, 11011200, None))
+        with self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/006').exists())
+
+    def test_canonical_design_refuses_other_changes_or_release(self):
+        self.prepare_canonical_amendment()
+        with patch.dict(design.CONFIG['sampling'], {'temperature': 1.2}), self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG, {'active_arms': ['b01', 'b02', 'b05']}), self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG, {'rounds_per_arm': 6}), self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['scoring'], {'team_grant_each': 20000}), self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        amended = self.source.read_bytes()
+        self.source.write_text('# OFFLINE fixture reviewer amendment\n')
+        a.release_stop(self.out, fixture=True)
+        self.source.write_bytes(amended)
+        put(self.out/'STOP_REQUESTED.json', {'reason': 'OFFLINE scripted later hold'})
+        with self.assertRaises(IntegrityError):
+            a.apply_canonical_design_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/006').exists())
+
 if __name__ == '__main__':
     unittest.main()

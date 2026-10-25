@@ -21,9 +21,13 @@ def descriptor_image(image,label):
  if sha(raw)!=image['sha256']:raise IntegrityError('Actual document PNG hash differs')
  return {'role':'user','content':[{'type':'text','text':label},{'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(raw).decode()}}]}
 
-def arm_list():return list(d.ARMS)
+def all_arms():return list(d.ARMS)
+def arm_list():
+ active=d.CONFIG.get('active_arms')
+ return [x for x in all_arms() if active is None or x['id'] in active]
+def rounds_per_arm():return d.CONFIG['rounds_per_arm']
 def arm_by_id(identifier):
- found=[x for x in arm_list() if x['id']==identifier]
+ found=[x for x in all_arms() if x['id']==identifier]
  if len(found)!=1:raise IntegrityError('Unknown arm')
  return found[0]
 
@@ -47,7 +51,7 @@ class Runner:
    'C_return_review':'After C creates return; exact first main report reaches all before A/B logs and C publish','primary_input':'Actual delivered document PNG pages; exact extracted public document text is included for legibility','quality_failure_policy':'Preserve actual invalid behavior, no quality-based retries','technical_recovery':'Restart only incomplete current round from same arm prior checkpoint; max4attempts; all costs/unknowns retained'})
   put(self.out/'CONFIG.json',cfg);put(self.out/'RESEARCHER_ONLY_CASES.json',d.cases())
   roles={}
-  for a in arm_list():
+  for a in all_arms():
    for st,(role,kind)in ACTORS.items():roles[a['id']+'.'+st]=prompts.actor_system(role,st,a)
   put(self.out/'SYSTEM_PROMPTS.json',roles)
   source_records=[]
@@ -79,7 +83,7 @@ class Runner:
   return result
  def current(self,arm):
   commits=self.commits(arm)
-  if len(commits)==12:return None,None
+  if len(commits)>=rounds_per_arm():return None,None
   n=len(commits)+1;parent=self.out/'arms'/arm/'attempts'/f'r{n:02}';prior=sha((self.out/'arms'/arm/'checkpoints'/f'r{n-1:02}.json').read_bytes()) if n>1 else None
   limit=d.CONFIG['recovery']['maximum_technical_attempts_per_round']
   for attempt in range(1,limit+1):
@@ -102,14 +106,14 @@ class Runner:
   records=[]
   for a in ([arm_by_id(arm)] if arm else arm_list()):
    cs=self.commits(a['id']);ctx,root=self.current(a['id'])
-   if ctx is None:records.append({'arm':a['id'],'policy':a['policy'],'committed_rounds':12,'status':'complete'});continue
+   if ctx is None:records.append({'arm':a['id'],'policy':a['policy'],'committed_rounds':len(cs),'status':'complete'});continue
    st=self.next_stage(root)
    pending=st in ('MAIN_REVIEW','RETURN_REVIEW')
    x={'arm':a['id'],'policy':a['policy'],'committed_rounds':len(cs),'round':ctx['round'],'attempt':ctx['attempt'],'stage':st,'status':'awaiting_review'if pending else'ready'}
    if pending:
     p=self.prepare_review(ctx,root,st);x.update(p)
    records.append(x)
-  return {'status':'complete'if all(x['status']=='complete'for x in records)else'in_progress','completed_rounds':sum(x['committed_rounds']for x in records),'planned_rounds':12*len(records),'arms':records}
+  return {'status':'complete'if all(x['status']=='complete'for x in records)else'in_progress','completed_rounds':sum(x['committed_rounds']for x in records),'planned_rounds':rounds_per_arm()*len(records),'arms':records}
  def artifact(self,root,role):return self.stage(root,PUBLISH[role])
  def ballots(self,root,case):
   r={'A':case['private_target']}
@@ -118,7 +122,8 @@ class Runner:
   return r
  def memory_context(self,ctx,role):
   memory=[];history=[];accounts=[]
-  for c in self.commits(ctx['arm']):
+  # Only rounds before this context; post-round probes must not see later commits.
+  for c in [c for c in self.commits(ctx['arm']) if c['round']<ctx['round']]:
    log=c.get('logs',{}).get(role,{})
    memory.append({'round':c['round'],'status':log.get('status','missing'),'carryover_note':log.get('value',{}).get('carryover_note')})
    rev=c.get('main_review',{});report=rev.get('report')or{}
@@ -131,7 +136,7 @@ class Runner:
     patterns.append(pattern)
    history.append({'round':c['round'],'locked_ballots':c['ballots'],'client_correct':c['client_correct'],'grant_state':c['settlement']['grant_state'],'joint_level':report.get('joint_assessment',{}).get('level'),'supported_patterns':patterns})
    accounts.append({'round':c['round'],'own_points':c['settlement']['scores'].get(role),'bank_balance':c['settlement'].get('bank_balances',{}).get(role,10000),'grant_state':c['settlement']['grant_state']})
-  return {'own_memory':memory,'public_history':history,'accounts':accounts,'latest_public_review':(self.commits(ctx['arm'])[-1].get('main_review',{}).get('first_raw_text') if self.commits(ctx['arm']) else None)}
+  return {'own_memory':memory,'public_history':history,'accounts':accounts,'latest_public_review':(prior[-1].get('main_review',{}).get('first_raw_text') if (prior:=[c for c in self.commits(ctx['arm']) if c['round']<ctx['round']]) else None)}
  def actor_request(self,ctx,root,stage):
   role,kind=ACTORS[stage];case=d.cases()[ctx['round']-1];arm=arm_by_id(ctx['arm']);context=self.memory_context(ctx,role);refs=[];public_docs={}
   def add_doc(slot,doc,label=None):
@@ -287,7 +292,9 @@ class Runner:
   put(root/'stages/COMMIT.json',c);put(self.out/'arms'/ctx['arm']/'checkpoints'/f'r{ctx["round"]:02}.json',c);return c
  def abandon(self,ctx,root,fault,ledger):
   marker=root/'abandoned.json';put(marker,{'status':'abandoned_technical','technical':True,'attempt_id':ctx['attempt_id'],'fault_class':fault.code,'prior_checkpoint_sha256':ctx['previous_checkpoint_sha256'],'all_costs_and_unknown_reserves_retained':True,'not_a_behavioral_outcome':True});seal(self.out,marker,ledger)
- def advance(self,arm,through_round=12,maximum_actor_stages=None):
+ def advance(self,arm,through_round=None,maximum_actor_stages=None):
+  if arm not in [x['id'] for x in arm_list()]:raise IntegrityError('Arm is not active in the canonical design')
+  through_round=rounds_per_arm() if through_round is None else min(through_round,rounds_per_arm())
   self.verify(arm);ledger=Ledger(AGGREGATE,self.out);done=0;providers={}
   while True:
    self.verify(arm);ctx,root=self.current(arm)
