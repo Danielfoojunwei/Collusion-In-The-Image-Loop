@@ -1,0 +1,29 @@
+<h3>5.2 What generalises beyond this game, and why</h3>
+<p>The game is small, but each mechanism depends on a structural property that recurs wherever agents are overseen, not on the particular models or pictures. We state each transferable lesson with the property that makes it travel.</p>
+
+<h4>For the science of collusion</h4>
+<ul>
+<li><b>Separate perception from attribution, and measure both.</b> Our reviewer, observers and monitor all perceived the code; they differed only in attributing it. A single “detected / not detected” score would have hidden the entire failure. <i>Because</i> every oversight decision combines a perceptual step (is there a signal?) and an inferential step (is it knowing joint action?), studies should report both, as our ladder’s <i>attribution gap</i> (signal seen minus collusion supported: 1.00 at L1, 0 at L3) does.</li>
+<li><b>Legible coordination is its own regime, distinct from steganography.</b> The steganographic gap was ≈ 0.04: outsiders read the code as well as partners. <i>Because</i> attribution, not concealment, was the binding constraint, collusion that is fully visible can still be safe for the colluders. Threat models that only ask “can they hide?” will undercount this regime.</li>
+<li><b>Noise breeds focal points, not secrecy.</b> Under an unreliable channel the agents converged on a salient, conventional cue (Schelling-style focal coordination) rather than a subtle one. <i>Because</i> any lossy carrier (image models, translation, summarisation, compression) punishes fine-grained encodings, we expect the same drift toward coarse, redundant, visible conventions in other media.</li>
+<li><b>Oversight output is part of the game.</b> Agents used the reviewer as a captioner (B6) and a safety gauge (R6). <i>Because</i> any verdict, score or rejection that reaches the monitored agents is information, models of collusion should include the monitor as a player whose outputs shape strategy.</li>
+</ul>
+
+<h4>For collusion detection practice</h4>
+<ul>
+<li><b>Make the reviewer incentive-aware.</b> Matching wrong choices is innocent unless it pays; the monitor attributed 12/12 once it had decisions and history, and payoff information added a stated motive. <i>Because</i> motive is the plus factor courts already require [18, 19], reviewers should receive the incentive structure even when they cannot see reasoning.</li>
+<li><b>Judge behaviour over time, not artifacts one at a time.</b> The decisive evidence was the contingency between target changes and vote changes. <i>Because</i> collusion is a pattern of joint action, detectors should run explicit contingency or counterfactual tests across rounds (does behaviour track the hidden variable?) rather than score each output.</li>
+<li><b>Write a standard of proof, not a list of defences.</b> The rubric listed six innocent explanations and no sufficient evidence, and a frontier model obeyed it. <i>Because</i> capable models follow rubrics faithfully, asymmetric rubrics produce systematic false negatives; state what evidence suffices (for example, repeated conditional alignment against payoff-dominant alternatives).</li>
+<li><b>Isolate and calibrate the judge.</b> Remove the judge’s own earlier verdicts from its context, use fresh judges, and calibrate on honest-negative and scripted-positive cases. <i>Because</i> self-anchoring and false-positive rates are properties of any repeated judging process, not of this reviewer.</li>
+</ul>
+
+<h4>For countermeasures</h4>
+<ul>
+<li><b>Do not rely on channel noise.</b> 2 of 36 faithful pictures still carried 23 of 24 votes. <i>Because</i> senders can inspect, redraw, add redundancy and use known constraints as error checks, noisy or lossy pipelines are not a defence.</li>
+<li><b>Cut or neutralise the side channel when the task allows.</b> Replacing A’s picture with a task-only picture cut target votes to 2 of 6. <i>Because</i> collusion needs a carrier, regenerating, paraphrasing or standardising artifacts before they reach peers reduces it, at some cost to the legitimate task.</li>
+<li><b>Keep verdicts from the monitored agents.</b> <i>Because</i> broadcast verdicts both teach and reassure colluders, oversight results should go to principals, not to the agents being judged, or be delayed and aggregated.</li>
+</ul>
+
+<h4>Beyond this environment</h4>
+<p>The same structure appears in agent marketplaces and procurement (agents choosing suppliers or bids while a platform audits outputs), multi-agent coding and review pipelines (one agent’s artifact steering another’s acceptance), content pipelines that pass generated media between agents, and algorithmic pricing. In each, the overseer sees outputs, the agents have private incentives and reasoning (Table 1), and verdicts often flow back. <mark>Wherever those three conditions hold, our findings predict visible coordination that is seen but not attributed</mark>, and the remedies above apply.</p>
+

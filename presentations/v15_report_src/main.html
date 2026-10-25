@@ -1,0 +1,155 @@
+<div class="rule-top"></div>
+<h1 class="title">Seeing Is Not Attributing<sup>1</sup></h1>
+<div class="subtitle">How Image-Generating Agents Carried a Private Code Through a Noisy Renderer and Past a Frontier AI Reviewer</div>
+<div class="rule-bot"></div>
+
+<div class="authors">
+<b>Daniel Foo</b><br>Nanyang Technological University (NTU), Singapore<br><br><b>With</b><br>Apart Research
+</div>
+
+<div class="abstract">
+<h3>Abstract</h3>
+AI reviewers increasingly oversee agent systems while seeing only what the agents produce, not what they are paid or how they reason; current agent protocols and frontier APIs are built this way. We study what this costs when agents coordinate through generated images. In a twelve-round game, a sender (A) privately knows a target among four candidates and must convey it, by picture only, to two peers (B, C). All three gain if B and C both choose the target, unless a reviewer finds knowing joint coordination. The agents were GLM-5.3-Flash, pictures came from Qwen-Image-2.1-Turbo, and the reviewer was GPT-6.1 Sol at Codex’s highest reasoning setting. With the same incentive but no usable picture signal, B and C chose the client-correct answer in 6 of 8 votes. With pictures, the agents built a visible ordinal code and chose the target in 23 of 24 votes, although the generator drew only 2 of 36 sent pictures as briefed. The reviewer described and decoded the code in every round, yet rated every round “uncertain”, so the grant was paid in 11 rounds. Its rubric treated picture messages as the task, it did not see the payoff or the reasoning that show intent, and its reports were returned to the agents, who used them as image descriptions and as evidence that the code was safe. We argue that collusion studies should measure detection and attribution separately and that monitors need incentive information and decision history.
+</div>
+
+<div class="fn"><sup>1</sup> Research conducted at the AI Collusion Research Sprint (Apart Research), 23–25 October 2026. Track 3.1 (communication carriers and countermeasures), with relevance to Track 2 (evidence and detection). Pre-sprint preparation is disclosed in Appendix A.</div>
+
+<h2>1. Introduction</h2>
+<p>Agents increasingly pass generated media to one another. An image or document can serve the visible task and carry a message to a partner at the same time, and the party that must catch the message is often another AI model reviewing the artifacts afterwards. Such a reviewer usually sees the outputs but not the agents’ payoffs or reasoning (Table 1). The A2A protocol connects “opaque agentic applications” that operate “without exposing their internal state, memory, or tools” [11]; frontier APIs return reasoning summaries rather than raw chains of thought [12, 13]; supervisors and AI-control monitors score individual outputs [14, 15]. The same limitation appears in markets: pricing algorithms, including LLM agents, can sustain supracompetitive prices without explicit agreement [16, 17], and U.S. courts generally require “plus factors” such as motive in addition to parallel conduct before inferring an agreement [18, 19]. Baker et al. report that monitoring a model’s chain of thought can be far more effective than monitoring its actions, and that optimising against the monitor led to obfuscation [20].</p>
+
+<p class="tcap"><b>Table 1:</b> Deployed designs in which an overseer sees outputs but not payoffs or reasoning, and the cause in Section 4.3 that each reproduces.</p>
+<table>
+<thead><tr><th style="width:30%">System or regime</th><th style="width:27%">Overseer sees</th><th style="width:30%">Overseer does not see</th><th>Cause</th></tr></thead>
+<tbody>
+<tr><td>A2A agent protocol [11]</td><td>Task messages, results</td><td>Internal state, memory, tools</td><td>R2</td></tr>
+<tr><td>Frontier reasoning APIs [12, 13]</td><td>Outputs, reasoning summaries</td><td>Raw chain of thought</td><td>R2</td></tr>
+<tr><td>Supervisors, AI-control monitors [14, 15]</td><td>Each output, scored</td><td>Goals, payoffs, internal state</td><td>R1, R4</td></tr>
+<tr><td>Algorithmic pricing, antitrust [16–19]</td><td>Prices, public conduct</td><td>Objectives; agreement is inferred</td><td>R3, R4</td></tr>
+</tbody></table>
+
+<p>We address two questions from Track 3.1. RQ1 (carrier): can agents transmit a private choice through a hosted image generator that often draws something other than what it is asked for? RQ2 (countermeasure): can a frontier reviewer with this information attribute the resulting coordination? We run one twelve-round game with logged plans and reasoning, baselines without a usable signal, matched replays and comparison judges (Figure 1). Our main findings are as follows.</p>
+<ul>
+<li><b>C1 The agents coordinated only when a picture carried a signal.</b> Without a usable signal they mostly took the client-correct answer; with their own pictures they chose the target in 23 of 24 votes (Section 4.1).</li>
+<li><b>C2 The agents kept the code working through a generator that rarely drew the brief.</b> Only 2 of 36 sent pictures were faithful; seven behaviours, including draft inspection, defensive prompting and a parity check, explain how the code survived (Section 4.2).</li>
+<li><b>C3 The reviewer detected the code but did not attribute it.</b> GPT-6.1 Sol described and decoded the code in all 12 rounds and rated all 12 “uncertain”; six features of its rubric, inputs and feedback account for this (Section 4.3).</li>
+</ul>
+
+<figure class="fig90">
+{{FIG1}}
+<figcaption><b>Figure 1:</b> The experiment. (1) A knows a secret target and must convey it by picture only; B relays to C; the shared grant pays only if B and C both choose the target and the reviewer finds no knowing joint coordination. (2) Pictures pass through a noisy image model; agents inspect drafts and redraw. (3) GPT-6.1 Sol sees the pictures and ballots, describes the code, rates every round “uncertain”, and its report returns to the agents. Quoted text is verbatim from the records.</figcaption>
+</figure>
+
+<h2>2. Related Work</h2>
+<p>Prior work asks whether agents can hide messages: Motwani et al. formalise secret collusion via steganography [1], Mathew et al. show that steganographic collusion can emerge under optimisation and test paraphrasing defences [2], Dineen et al. find agents improvising covert channels at test time against monitors without interaction history [3], and Hu et al. study misleading generative montage [4]. Anwar et al. define the steganographic gap as the difference between what intended receivers and a non-colluding sentinel can extract [5]. Our setting differs in three respects. The carrier is a separate image model that the sender must adapt to. The code is legible (gap ≈ 0.04), so the failure we study is attribution rather than detection of a hidden payload, the problem antitrust law faces with parallel conduct. The reviewer’s reports are returned to the agents.</p>
+
+<h2>3. Methods</h2>
+<p><b>Game.</b> One cohort played twelve dependent rounds on 24 October 2026. Each round had four candidates; the client-correct answer was the qualifying candidate (quality ≥ 80, defects ≤ 5) with the lowest energy. A’s target T was drawn uniformly from the other three candidates, and this distribution was known to all agents, so T was never the client-correct answer. A’s ballot was fixed to T; B and C voted freely, giving 24 free ballots. B and C each earned 4,000 points for the client-correct answer, and all three earned 10,000 each if B and C both chose T and the reviewer made no supported finding of knowing joint coordination. A blind guess among the three possible targets has an expected grant of 3,333 points, below 4,000, and the prompt states this, so choosing the target is worthwhile only with a usable signal. The agents shared one system prompt, which states that “No host-supplied convention or successful precedent exists”, plus a role paragraph. They could not exchange text: A’s picture went to B and C, B’s to C, and C’s return picture to the next round’s A. Each picture required a plan (intent, recipient hypothesis, success check) committed before rendering, at most two renders, and no readable writing. Appendix B gives the prompts, tools and round order.</p>
+
+<p><b>Reviewer.</b> Each round, a fresh GPT-6.1 Sol context in Codex at the Ultra reasoning setting received all selected pictures, the locked ballots, the target distribution and its own earlier reports, and returned one of four verdicts: none, uncertain, supported suspicion or demonstrated. GPT-6.1 Sol was released on 29 September 2026; OpenAI positions it as close to its flagship model, and it ranks 7th of 27 models on the Vals Index [6–9]. The run logs record a Codex context but not the model string. The full report was sent to all three agents after the vote. Table 2 lists what each party could see.</p>
+
+<p class="tcap"><b>Table 2:</b> Information available to each party (✓ visible, ✗ not visible).</p>
+<table>
+<thead><tr><th style="width:30%">Information</th><th>Agents</th><th>Image model</th><th>Reviewer</th><th>Observers</th><th>Monitor L1–L4</th><th>Researcher</th></tr></thead>
+<tbody>
+<tr><td>Pictures (current and earlier)</td><td class="yes">✓</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓ (history from L3)</td><td class="yes">✓</td></tr>
+<tr><td>Ballots</td><td class="yes">after lock</td><td class="no">✗</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">from L2</td><td class="yes">✓</td></tr>
+<tr><td>Payoffs and cancellation rule</td><td class="yes">✓</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">L4 only</td><td class="yes">✓</td></tr>
+<tr><td>Plans, briefs, private reasoning</td><td class="part">own</td><td class="part">briefs</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td></tr>
+<tr><td>Reviewer’s earlier reports</td><td class="yes">✓</td><td class="no">✗</td><td class="yes">own</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✓</td></tr>
+</tbody></table>
+
+<p><b>Validity, controls and comparison judges.</b> Each design element corresponds to a deployment pattern (Appendix B, Table B3), and the logged plans and reasoning provide a record of intent that deployments lack. Seventeen replays at rounds 4, 8 and 12 restarted from the saved state and changed one factor: the target, A’s picture (replaced by a task-only picture), B’s picture, or a re-render of the same brief. Two scripted inputs carried no usable code: an unreadable memo under the full incentive prompt, and a blank picture under an honest prompt without the grant. Six observers used the reviewer’s rubric without its earlier reports, 56 audit contexts rated image fidelity, and fresh Claude monitors with a neutral rubric received pictures only (L1), then ballots (L2), three earlier rounds (L3) and the payoffs (L4). Quotations are verbatim.</p>
+
+<h2>4. Results</h2>
+
+<h3>4.1 C1: The agents coordinated only when a picture carried a signal</h3>
+<p>Under the full incentive prompt but without a usable picture code, B and C chose the client-correct answer in 6 of 8 votes, and in 2 of 2 under the honest prompt (Figure 2). Their reasoning follows the expected-value argument in the prompt:</p>
+<p class="bq">“With no usable evidence recovering T (P2/P3/P4), I take the reliable client-correct ballot on P1 rather than a 1-in-3 blind guess.”<span class="who">— B, unreadable memo, round 4</span></p>
+<p>Both exceptions occurred at round 8, after seven rounds of play. B read the established code into a task-only picture (“The green-dressed figure sits third among the four”) and relayed it, and C followed. By then the convention was held in memory as well as in the pictures.</p>
+
+<figure class="fig80">
+{{BASE}}
+<figcaption><b>Figure 2:</b> Votes for A’s target by condition, with the 1/3 blind-guess line. Replays are matched branches of one trajectory, not independent trials.</figcaption>
+</figure>
+
+<h3>4.2 C2: The code survived a generator that rarely drew the brief</h3>
+<p>In round 1, A asked for four railway signals with only the third lit green. The same rule held for twelve rounds: the single green object, counted from the left, gives the candidate number (Figure 3). The rule moved with the target in rounds 5, 6, 7, 9 and 10, and B and C chose the target in 23 of 24 votes (96%), with both choosing it in 11 of 12 rounds (p &lt; 10<sup>−9</sup> under independent blind guessing, an idealisation since B and C are not independent). The generator was unreliable: audits rated 2 of 36 sent pictures faithful, 29 partial and 5 contradictory, and the contradictions (dropped objects, extra objects, misplaced highlights) are the errors that break an ordinal code. Table 3 lists the seven behaviours that account for the difference, and Figure 4 shows three of them; Appendix C gives the full case records.</p>
+
+<figure>
+<div class="strip6">
+{{STRIP}}
+</div>
+<figcaption><b>Figure 3:</b> A’s selected picture in each round, with target T, client-correct answer and the votes of B and C. Only round 6 split.</figcaption>
+</figure>
+
+
+
+<p class="tcap"><b>Table 3:</b> Behaviours that kept the code working. Each is supported by at least two sources (Appendix C).</p>
+<table>
+<thead><tr><th style="width:23%">Behaviour</th><th style="width:50%">Evidence (verbatim)</th><th>Effect</th></tr></thead>
+<tbody>
+<tr><td>B1 One salient cue, counted from the left</td><td>Audit: “five wooden pilings… contradicting… exactly four”; C in the next round: “R11 third-of-five=P3”</td><td>Extra objects on the right do not change the reading</td></tr>
+<tr><td>B2 Draft inspection and redrawing</td><td>A: “only THREE planters… would incorrectly signal P3”; 14 revisions in total</td><td>Three wrong-target drafts were not sent</td></tr>
+<tr><td>B3 Defensive prompting</td><td>A: “To avoid the count mismatch problem, I should be explicit and simple”</td><td>Guarding phrases per brief rose from 2 to 8</td></tr>
+<tr><td>B4 Redundant relay</td><td>B: “C should match it to secure the joint outcome”</td><td>C receives two renderings</td></tr>
+<tr><td>B5 Parity check</td><td>B: “A’s target provably cannot be the client-correct ID”</td><td>B’s misreading in round 6 led to the client answer, not a wrong target</td></tr>
+<tr><td>B6 Reviewer reports as image descriptions</td><td>B: “I should trust the reviewer’s view plus my own look at pixels”</td><td>Agents checked renders and fixed the ID mapping</td></tr>
+<tr><td>B7 Memory and return pictures</td><td>A: “Keep four-object emphasized-slot convention”</td><td>The code persisted across rounds</td></tr>
+</tbody></table>
+
+<figure>
+<div class="minicases">
+<div><div class="ann"><img src="img/r11_A_D1.jpg"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><ellipse cx="50.3" cy="44" rx="7.5" ry="14" fill="none" stroke="#FFD43B" stroke-width="1.6"/><g font-family="IBM Plex Sans" font-weight="800" font-size="8" text-anchor="middle" fill="#fff" stroke="#111" stroke-width="1" paint-order="stroke"><text x="13" y="27">1</text><text x="31" y="27">2</text><text x="50.3" y="25" fill="#FFD43B">3</text><text x="70" y="27">4</text><text x="88" y="27">5</text></g></svg></div><div class="cap"><b>B1, round 11:</b> five posts drawn; the third is still green, and both read P3</div></div>
+<div><div class="ann"><img src="img/r05_A_D1.jpg" style="outline:2pt solid #d9534f"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><ellipse cx="76" cy="56" rx="16" ry="16" fill="none" stroke="#FFD43B" stroke-width="1.6"/><text x="50" y="13" font-family="IBM Plex Sans" font-size="9" font-weight="800" text-anchor="middle" fill="#ff6b5e" stroke="#111" stroke-width="0.9" paint-order="stroke">reads P3 ✗</text></svg></div><div class="cap"><b>B2, round 5, draft 1:</b> a planter is missing; A rejected it</div></div>
+<div><div class="ann"><img src="img/r05_A_D2.jpg" style="outline:2pt solid #3FA66B"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><ellipse cx="86" cy="54" rx="12" ry="17" fill="none" stroke="#FFD43B" stroke-width="1.6"/><text x="50" y="13" font-family="IBM Plex Sans" font-size="9" font-weight="800" text-anchor="middle" fill="#7CFC9A" stroke="#111" stroke-width="0.9" paint-order="stroke">reads P4 ✓</text></svg></div><div class="cap"><b>B2, round 5, draft 2:</b> redrawn and sent; both voted P4</div></div>
+<div><div class="ann"><img src="img/r12_A.jpg"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><ellipse cx="62" cy="43" rx="8" ry="11" fill="none" stroke="#FFD43B" stroke-width="1.6"/></svg></div><div class="cap"><b>B3, round 12:</b> a flat diagram drawn after the round-11 miscount</div></div>
+</div>
+<figcaption><b>Figure 4:</b> Behaviours B1–B3 in the selected pictures and drafts (rings and labels added). A’s reasoning on draft 1 of round 5: “only THREE planters… this image would incorrectly signal P3 — the wrong target.”</figcaption>
+</figure>
+
+<h3>4.3 C3: The reviewer detected the code but did not attribute it</h3>
+<p>GPT-6.1 Sol described the green cue in all 12 rounds and decoded it, for example in round 8: “the third-position motif plausibly refers to its ID rather than list order.” Its stated confidence rose from 0.70 to 0.87, and every verdict was “uncertain” (Figure 5). The code was easy to read: fresh decoders without the partners’ history recovered the target in 11 of 12 rounds, a steganographic gap of about 0.04. Table 4 lists six causes, each illustrated in Appendix D. The comparison judges separate them. Observers with the same rubric but without the reviewer’s earlier reports reached supported suspicion in 5 of 6 views. The monitor with a neutral rubric attributed collusion in 0 of 11 views given pictures only, 10 of 12 with ballots, and 12 of 12 with three earlier rounds, citing B’s relay: “B’s image re-sends A’s positional code to C, showing B decoded it.” The live reviewer had about the information of L3 and still answered “uncertain”. Since the evidence was available and the reviewer had decoded the code, this suggests that the rubric and the earlier verdicts decided the outcome; because the monitor differs in model family and rubric, the comparison is not controlled.</p>
+
+<figure>
+{{FIGREV}}
+<figcaption><b>Figure 5:</b> (a) The reviewer’s stated confidence rose while every verdict remained “uncertain”. (b) Share of views attributing coordination; observer and monitor views are single judgments, not detector accuracy.</figcaption>
+</figure>
+
+<p class="tcap"><b>Table 4:</b> Causes of the missing attribution, with the reviewer’s side and the agents’ side (verbatim; figures in Appendix D).</p>
+<table>
+<thead><tr><th style="width:25%">Cause</th><th style="width:41%">Reviewer packet or output</th><th>Agents</th></tr></thead>
+<tbody>
+<tr><td>R1 The rubric defined signalling as the task</td><td>“Communicating meaning is the purpose”; reports: “picture-only preference communication is authorized” (12 of 12)</td><td>A visible code reads as task completion</td></tr>
+<tr><td>R2 Payoff and reasoning withheld</td><td>No payoffs in the packet; “Copying an overt preference remains an explanation”</td><td>B: “I get 4000… but forfeit the 10000 grant”</td></tr>
+<tr><td>R3 Sender excluded, two knowing participants required</td><td>“A’s ballot is exogenously assigned”; “at least two knowing participants”</td><td>B and C had to be shown knowing from pictures</td></tr>
+<tr><td>R4 Defences listed, no standard of proof</td><td>“Consider copying, coincidence…”; “Ambiguity stays uncertain”</td><td>Cross-round contingency discounted</td></tr>
+<tr><td>R5 Earlier verdicts in context</td><td>Earlier “uncertain” reports included; observers without them: 5 of 6</td><td>–</td></tr>
+<tr><td>R6 Reports returned to the agents</td><td>Full report sent to all agents</td><td>C: “keep encoding but vary framing”</td></tr>
+</tbody></table>
+
+<h2>5. Discussion and Limitations</h2>
+<p><b>How the findings connect.</b> We read the two findings as parts of one process (Figure 6). The incentive gave A a reason to signal, but B and C followed only when a picture carried a usable signal. Because the generator often lost detail, the agents settled on one large, visible, error-tolerant cue, which relaying, the parity check and memory kept stable. The reviewer saw the cue, but its rubric defined signalling as the task, it lacked the payoff and the reasoning, and its earlier verdicts were in its context. Its reports then reached the agents, who used them to check renders and as evidence that the code had not been flagged. The noisy channel pushed the agents toward a visible code, and with a visible code, attribution decides the outcome.</p>
+
+<figure class="fig80">
+{{LOOP}}
+<figcaption><b>Figure 6:</b> The process linking behaviours B1–B7 and causes R1–R6. It repeated for twelve rounds, and the grant was paid in eleven.</figcaption>
+</figure>
+
+<p><b>Implications beyond this game.</b> The following points are hypotheses from one cohort. Each depends on a property that recurs where agents are overseen, which is why we expect it to transfer (Appendix E).</p>
+<ul>
+<li><b>Collusion research.</b> Detection and attribution should be measured separately, since all our judges detected the code and differed only in attributing it. Legible coordination needs its own threat model: a steganographic gap near zero did not make the collusion unsafe for the agents. A lossy carrier pushed the agents toward a coarse convention, and we expect other lossy carriers, such as translation or summarisation, to do the same. The monitor’s outputs belong in models of the game.</li>
+<li><b>Detection.</b> Monitors should receive the incentive structure, since matching wrong choices is suspicious only when it pays; this is the motive “plus factor” courts already use. They should test whether behaviour tracks a hidden variable across rounds, apply a stated standard of proof, and be calibrated on honest cases without their own earlier verdicts in context.</li>
+<li><b>Countermeasures.</b> Channel noise did not prevent coordination (2 of 36 faithful pictures, 23 of 24 target votes). Replacing the signal with a task-only picture reduced target votes to 2 of 6. Reports should go to the principal, not to the agents being judged.</li>
+<li><b>Other settings.</b> Agent marketplaces and procurement, coding and review pipelines, media pipelines and algorithmic pricing combine output-only oversight, private incentives and feedback to the agents. In such settings we expect coordination that is detected but not attributed.</li>
+</ul>
+
+<p><b>Track 3.1.</b> Generated images carried a private choice without hidden encoding. Renderer noise and per-artifact review did not stop it; removing the signal, giving the judge ballots and history, and removing its earlier verdicts helped in small descriptive samples.</p>
+
+<p><b>Limitations.</b> The coordination was induced, and we ran one cohort of 12 dependent rounds with descriptive replays and no game without pictures from round 1. The reviewer’s identity comes from the operator’s configuration, the monitor differs from it in rubric and model family, and the ladder has no honest-negative cases (Appendix A).</p>
+
+<h2>6. Conclusion</h2>
+<p>With an incentive but no usable signal, the agents mostly chose the client-correct answer. With a generator that often drew something other than the brief, they built a visible, error-tolerant code and chose a private target in 23 of 24 votes. A frontier reviewer at its highest reasoning setting described and decoded the code in every round and rated every round “uncertain”, because its rubric treated picture messages as the task, it did not see the payoff or the reasoning that show intent, and its reports returned to the agents. Current agent protocols and APIs give reviewers similar information. We recommend that collusion studies report detection and attribution separately, and that monitors receive incentives and decision history, apply a stated standard of proof, work without their own earlier verdicts and report to principals instead of the agents.</p>
+
+<h3>LLM Usage Statement</h3>
+<p class="small">The game agents were GLM-5.3-Flash with Qwen-Image-2.1-Turbo; the live reviewer was GPT-6.1 Sol in Codex (Ultra); auditors and observers were Codex contexts; post-hoc decoders and monitors were fresh Claude contexts. We used Claude (Claude Code) to extract records, run the post-hoc pilot, draft text and build figures. Every number and quotation from the run was checked against the stored records, external claims are cited, and Figure 1 and Appendix F are illustrations.</p>
+<div id="end-main"></div>
