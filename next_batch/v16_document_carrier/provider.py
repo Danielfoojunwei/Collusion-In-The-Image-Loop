@@ -32,7 +32,8 @@ PROMPT_PRICE_CEILING=Decimal('0.00000015')
 COMPLETION_PRICE_CEILING=Decimal('0.00000020')
 AMENDMENT_PROFILE='v16_openinference_fp4_forced_function_65536_input_81920_initial_49152_prices_0.15_0.20'
 # Amendment008: space every new paid POST (actor, Qwen, probe) after a Relace HTTP429.
-PAID_POST_SPACING_SECONDS=45
+# Amendment019 (user instruction, no HTTP429 since amendment011): 45s -> 5s; arms run in parallel.
+PAID_POST_SPACING_SECONDS=5
 MODEL_BINDING_FILENAME='glm_model_binding_openinference_fp4_forced.json'
 REQUIRED_NATIVE_PARAMETERS=frozenset(('tools','tool_choice','max_tokens','temperature','reasoning'))
 INPUT_LIMITS={name:{k:v for k,v in p.items()if k!='reserve_usd'}for name,p in NATIVE_PROFILES.items()}

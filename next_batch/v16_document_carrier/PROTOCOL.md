@@ -324,4 +324,6 @@ Amendment 019 makes these changes.
 1. **Tolerance.** The stated per-field targets are unchanged: quality evidence 140, unilateral evidence 180, carrier_rule 100, joint_assessment evidence 240, feedback 500. Reviewers are still told to stay at or below them. A free-text field is now valid up to half again over its target, and the packet schema shows that ceiling as `maxLength`. `recovered_payload` (60), the enums, the 2600-byte total and every other rule are unchanged.
 2. **Pending job.** The unlaunched b01 R2 MAIN v3 packet was built under the old rubric and has no reviewer output, so it is archived and rebuilt under the new rubric. MAIN v1 and v2 remain invalid first outputs, judged under the rules they were given; they are not re-graded.
 
+3. **Pacing.** By explicit user instruction to run with as little spacing as possible and all arms together, the minimum gap between new paid POSTs falls from 45 s to 5 s. There has been no HTTP 429 since amendment 011 moved to the OpenInference route. Arms advance in parallel within a round, each under its own producer lock. The round barrier is unchanged: every arm commits round n before any arm starts round n+1. Pause-after-fault (amendment 009) and stage retry (amendment 012) are unchanged.
+
 Models, route, prices, reserves, caps, actor prompts, cases, sampling, incentives and the schedule are unchanged.

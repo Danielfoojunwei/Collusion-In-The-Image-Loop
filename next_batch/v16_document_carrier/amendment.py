@@ -3030,6 +3030,10 @@ def apply_wire_schema_rewind_amendment(runner, ledger):
 def apply_review_tolerance_amendment(runner, ledger):
     """Append019: free-text review fields tolerate half again over their stated targets."""
     from .review import review_schema, REVIEW_INSTRUCTIONS
+    from .provider import PAID_POST_SPACING_SECONDS
+    from . import design
+    if PAID_POST_SPACING_SECONDS != design.CONFIG['review_tolerance_amendment_019']['minimum_seconds_between_new_paid_posts']:
+        raise IntegrityError('Installed pacing differs from the amendment019 disclosure')
     unilateral = review_schema('MAIN')['properties']['unilateral_attempts']['items']['properties']
     if unilateral['evidence']['maxLength'] != 270 or unilateral['recovered_payload']['maxLength'] != 60 or \
             'validity allows up to half' not in REVIEW_INSTRUCTIONS:
@@ -3040,10 +3044,23 @@ def apply_review_tolerance_amendment(runner, ledger):
                                                   (receipt['ledger_row_count'],)).fetchall()]
     if not completed:
         raise IntegrityError('Expected the post-018 rows')
+    # The operator STOP preceding this amendment followed two completed A_PUBLISH calls;
+    # record the pause so they replay from the ledger instead of abandoning the attempts.
+    out = safe(runner.out)
+    for attempt in ('b03.r02.a01', 'b05.r02.a01'):
+        arm_id, round_id, attempt_number = attempt.split('.')
+        root = out / 'arms' / arm_id / 'attempts' / round_id / attempt_number
+        ctx = {'attempt_id': attempt}
+        if (root / 'inflight' / 'A_PUBLISH.json').is_file() and not (root / 'finished' / 'A_PUBLISH.json').exists():
+            native = ledger.lookup(NAMESPACE + attempt + '.A_PUBLISH.native')
+            if native is None or native.get('status') != 'completed' or ledger.lookup(NAMESPACE + attempt + '.A_PUBLISH.figure') is not None:
+                raise IntegrityError('Stopped A_PUBLISH is not at the completed-native, unsent-figure state')
+            if (out / 'STOP_REQUESTED.json').exists() and not (root / 'pause_before_dispatch' / 'A_PUBLISH.stop.json').exists():
+                runner.record_stop_pause(ctx, root, 'A_PUBLISH', 'A_PUBLISH', ledger)
     return _apply_control_amendment(
         runner, ledger, 19, 'review_tolerance_amendment_019', 'review_tolerance_amendment',
-        'Fresh reviewers overshot the 180-character unilateral evidence limit by 4-8 characters in three of five MAIN reviews.',
-        'Stated per-field review targets unchanged; free-text review fields are valid up to half again over target. The unlaunched b01 R2 MAIN v3 packet is archived and rebuilt; v1/v2 stay invalid. Every post-018 actor call completed and is retained; R2 continues in place in all arms.',
+        'Fresh reviewers overshot the 180-character unilateral evidence limit by 4-8 characters in three of five MAIN reviews; user asked for minimal pacing with all arms together.',
+        'Stated per-field review targets unchanged; free-text review fields are valid up to half again over target. The unlaunched b01 R2 MAIN v3 packet is archived and rebuilt; v1/v2 stay invalid. Paid-POST spacing 45 s -> 5 s; arms run in parallel within a round. Every post-018 actor call completed and is retained; R2 continues in place in all arms.',
         'prospectively_frozen_reviewer_tolerance_before_last_review_version',
         completed_identities=tuple(completed), allow_committed=True,
         active_attempts=('b01.r02.a02', 'b03.r02.a01', 'b05.r02.a01'),

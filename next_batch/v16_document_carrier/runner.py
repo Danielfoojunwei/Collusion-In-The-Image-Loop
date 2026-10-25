@@ -307,6 +307,27 @@ class Runner:
   put(root/'stages/COMMIT.json',c);put(self.out/'arms'/ctx['arm']/'checkpoints'/f'r{ctx["round"]:02}.json',c);return c
  def abandon(self,ctx,root,fault,ledger):
   marker=root/'abandoned.json';put(marker,{'status':'abandoned_technical','technical':True,'attempt_id':ctx['attempt_id'],'fault_class':fault.code,'prior_checkpoint_sha256':ctx['previous_checkpoint_sha256'],'all_costs_and_unknown_reserves_retained':True,'not_a_behavioral_outcome':True});seal(self.out,marker,ledger)
+ def stop_identities(self,ctx,stage,label):
+  base='triad_document_carrier_v16:'+ctx['attempt_id']+'.'+label
+  return [base+'.native']+([base+'.figure'] if stage.endswith('_PUBLISH') else [])
+ def stop_replayable(self,ctx,label,ledger):
+  rows=[ledger.lookup(i) for i in self.stop_identities(ctx,label.split('.')[0],label)]
+  return all(row is None or row.get('status')=='completed' for row in rows)
+ def record_stop_pause(self,ctx,root,stage,label,ledger):
+  """Amendment019: an operator STOP refuses a dispatch before reservation or follows a completed call.
+
+  With no uncertain own row, the resumed stage replays its completed calls from the
+  ledger and posts only what was never dispatched; otherwise nothing is recorded and
+  the interrupted attempt is abandoned as before.
+  """
+  if not self.stop_replayable(ctx,label,ledger):return False
+  ids=self.stop_identities(ctx,stage,label)
+  rows=[ledger.lookup(i) for i in ids]
+  put(root/'pause_before_dispatch'/(label+'.stop.json'),{'operator_stop_before_dispatch':True,
+      'own_request_id':next((i for i,row in zip(ids,rows) if row is None),None),
+      'completed_request_ids':[i for i,row in zip(ids,rows) if row is not None],
+      'request_sha256':read(root/'inflight'/(label+'.json'))['request_sha256']})
+  return True
  def rewind_generation(self,root,stage=None):
   """Amendment017: rewinds after a host fault rerun listed stages under fresh .rwN identities."""
   markers=[read(p) for p in sorted((root/'rewinds').glob('*.json'))]
@@ -335,6 +356,7 @@ class Runner:
     blocked=list((root/'pause_before_dispatch').glob(p.stem+'.*.json'))
     ownid='triad_document_carrier_v16:'+ctx['attempt_id']+'.'+p.stem+'.native'
     if any(ledger.lookup(read(marker).get('own_request_id',ownid)) is None for marker in blocked):continue
+    if any(read(marker).get('operator_stop_before_dispatch') and self.stop_replayable(ctx,p.stem,ledger) for marker in blocked):continue
     interrupted.append(p)
    if interrupted:self.abandon(ctx,root,Fault('interrupted_actor_stage'),ledger);continue
    stage=self.next_stage(root)
@@ -377,6 +399,10 @@ class Runner:
       put(root/'pause_before_dispatch'/(label+'.'+sha(ownid.encode())[:12]+'.json'),{'funding_barrier_before_own_reservation':True,'own_request_id':ownid,'request_sha256':read(intent)['request_sha256']})
       return {'status':'funding_barrier','arm':arm,'stage':stage,'blocked_request_id':ownid,'blocked_request_reserved':False,'native_already_completed':bool(ledger.lookup('triad_document_carrier_v16:'+identity+'.native'))}
     return {'status':'funding_barrier','arm':arm,'stage':stage,'manual_safe_resume':True}
+   except IntegrityError as failure:
+    if str(failure)=='Operator stop; automatic restart forbidden' and intent.exists() and not finished.exists():
+     self.record_stop_pause(ctx,root,stage,label,ledger)
+    raise
    except Fault as failure:
     if failure.permanent:put(root/'hold.json',{'code':failure.code});raise
     # Amendment012: an outputless technical fault retires only this stage identity;

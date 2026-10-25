@@ -64,6 +64,10 @@ class AmendmentTests(unittest.TestCase):
         self.pre_rate_limit.start()
         self.pre_rate_limit_active = True
         self.addCleanup(self.lift_pre_rate_limit)
+        # Fixture chains 001-018 predate amendment019's 5 s pacing.
+        pacing = patch.object(provider, 'PAID_POST_SPACING_SECONDS', 45)
+        pacing.start()
+        self.addCleanup(pacing.stop)
         # Chains 001-010 predate amendment011's OpenInference route and forced function.
         self.pre_route = [patch.dict(design.CONFIG['routes'], deepcopy(a.RELACE_ROUTES), clear=True),
                           patch.dict(provider.TRANSPORT_POLICY, {'tool_choice': 'auto'})]

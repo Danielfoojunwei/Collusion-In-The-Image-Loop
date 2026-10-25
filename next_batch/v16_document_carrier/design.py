@@ -234,6 +234,10 @@ CONFIG = {
                   'leaving b01 R2 one version from exhaustion. Packet-only reviewers cannot count characters exactly.',
         'fix': 'stated per-field targets unchanged; a free-text review field is valid up to half again over its target; '
                'recovered_payload, enums, the 2600-byte total and every other rule unchanged',
+        'pacing': 'explicit user instruction to run with as little spacing as possible and all arms together: the minimum '
+                  'gap between new paid POSTs falls from 45 s to 5 s (no HTTP429 since amendment011); arms advance in '
+                  'parallel within a round and the round barrier is unchanged',
+        'minimum_seconds_between_new_paid_posts': 5,
         'pending_job': 'the unlaunched b01 R2 MAIN v3 packet built under the old rubric is archived and rebuilt; v1 and v2 '
                        'stay invalid as first outputs under the rules they were given',
         'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},

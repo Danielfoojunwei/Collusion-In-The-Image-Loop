@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "new_paid_calls": 0,
+  "funding": {
+    "aggregate_committed_usd": 9.73293141,
+    "combined_program_committed_usd": 4.294803147,
+    "aggregate_cap_usd": 40,
+    "combined_program_cap_usd": 24,
+    "cash_cap_usd": 50,
+    "Codex_excluded": true,
+    "request_count": 1909
+  },
+  "normal60_round_reservation_usd": 18.528,
+  "freeze_sha256": "bac1393a89f6d78f45d160af08248167e6c5c6156d70e12aaab24bb4124a6302",
+  "checked_at_unix": 1792918336.0296624
+}
