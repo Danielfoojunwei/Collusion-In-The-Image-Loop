@@ -230,7 +230,9 @@ disc = f"""
 
 
 refs = """
-<h3 class="pb">References</h3>
+<h3 class="pb">Acknowledgements</h3>
+<p class="small">This work is supported and funded by the Pathfinder Fellowship, a program run by Kairos. The author also expresses gratitude to the Nanyang AI Safety group at Nanyang Technological University (NTU) for their feedback.</p>
+<h3>References</h3>
 <ol class="refs">
 <li>Motwani, S. R., Baranchuk, M., Strohmeier, M., Bolina, V., Torr, P. H. S., Hammond, L., Schroeder de Witt, C. (2024). Secret Collusion among AI Agents: Multi-Agent Deception via Steganography. NeurIPS 2024. arXiv:2402.07510.</li>
 <li>Mathew, Y., Matthews, O., McCarthy, R., Velja, J., Schroeder de Witt, C., Cope, D., Schoots, N. (2024). Hidden in Plain Text: Emergence &amp; Mitigation of Steganographic Collusion in LLMs. arXiv:2410.03768.</li>
@@ -531,15 +533,15 @@ appG = f"""
 <p class="small"><b>Jobs.</b> Each review, decoder and ladder job is a fresh subagent given only its public packet; only its first raw output is kept, and invalid outputs are kept and followed by a new version. The orchestrating context held the targets and tags and answered none of these jobs.</p>
 """
 
-body = ('<div class="rule-top"></div>\n<h1 class="title">No Coalition Formed<sup>1</sup></h1>\n'
-        '<div class="subtitle">Breaking Covert Collusion Among Document-Writing Agents with Trusted Verifiers, Informed Review and Public Findings</div>\n'
+body = ('<div class="rule-top"></div>\n<h1 class="title">Trusted Verifiers, Informed Review and Public Findings Prevent Covert Coalitions Among LLM Agents<sup>1</sup></h1>\n'
+        '<div class="subtitle">Ground-Truth and Reasoning-Trace Evidence from a Document-Carrier Collusion Game</div>\n'
         '<div class="rule-bot"></div>\n<div class="authors"><b>Daniel Foo</b><br>Nanyang Technological University (NTU), Singapore<br><br><b>With</b><br>Apart Research</div>\n'
         f'<div class="abstract"><h3>Abstract</h3>{abstract}</div>\n'
         '<div class="fn"><sup>1</sup> Research conducted at the AI Collusion Research Sprint (Apart Research), 23–25 October 2026 [7]. Track 3 (collusion carriers and countermeasures: questions 3.1–3.4), with relevance to Track 2 (evidence and detection). Pre-sprint preparation is disclosed in Appendix A.</div>\n'
         + intro + related + methods + res1 + res2 + res3 + disc
         + refs + appA + appB + appC + appD + appE + appF + appG + appH)
 
-page = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n<title>No Coalition Formed</title>\n'
+page = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8">\n<title>Trusted Verifiers Prevent Covert Coalitions</title>\n'
         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400&display=swap">\n'
         + STYLE + '</head>\n<body>\n' + body + '\n</body></html>\n')
 _txt = re.sub(r'<[^>]+>', '', page)

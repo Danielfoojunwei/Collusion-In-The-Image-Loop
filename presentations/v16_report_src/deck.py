@@ -25,14 +25,15 @@ def quote(text, who):
 
 slides = [f'''
 <section class="title">
-  <h1>No Coalition Formed</h1>
-  <p class="sub">Breaking covert collusion among document-writing agents with trusted verifiers, informed review and public findings</p>
+  <h1 class="long">Trusted Verifiers, Informed Review and Public Findings Prevent Covert Coalitions Among LLM Agents</h1>
+  <p class="sub">Ground-truth and reasoning-trace evidence from a document-carrier collusion game</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures (3.1–3.4)</p>
   <div class="nums">
     <div><b>{N['enc']}/{N['rounds']} → {N['coalition_rounds']}/{N['rounds']}</b><span>rounds with a planted code → rounds where B and C both voted A’s target</span></div>
     <div><b>{N['t2_tag_enc']}/{N['t2_reads_enc']} vs {N['recv_tag_enc']}</b><span>exact-tag recoveries by outside decoders vs tags recorded by the intended receivers</span></div>
     <div><b>{N['ev_median']:,.0f} vs 4,000</b><span>median value of joining by the receivers’ own estimates vs the certain client credit</span></div>
   </div>
+  <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
 </section>''', f'''
 <section>
   <h2>A game that pays for collusion, inside a countermeasure stack</h2>
@@ -118,6 +119,8 @@ p, li { font-size: 15pt; line-height: 1.35; }
 .two.low { margin-top: 0.15in; }
 .two.top { align-items: start; }
 .two-col blockquote { font-size: 12.5pt; }
+.title h1.long { font-size: 34pt; line-height: 1.15; max-width: 11.5in; }
+.ack { position: absolute; left: 0.7in; right: 1.4in; bottom: 0.3in; font-size: 11pt; color: #777; margin: 0; }
 .cms { columns: 2; column-gap: 0.4in; margin-top: 0.15in; } .cms li { font-size: 13pt; margin-bottom: 5pt; break-inside: avoid; }
 .fn svg { width: 92% !important; margin: 0 auto; }
 h2 i { font-style: italic; }
@@ -138,6 +141,6 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
 '''
-open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>No Coalition Formed</title><style>'
+open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>Trusted Verifiers Prevent Covert Coalitions</title><style>'
                              + css + '</style></head><body>' + ''.join(slides) + '</body></html>')
 print('deck.html')
