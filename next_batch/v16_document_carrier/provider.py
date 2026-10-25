@@ -19,7 +19,7 @@ from visual_collusion.budget import BudgetError, PendingPaidRequest
 from visual_collusion.providers import ProviderError, PreflightError, ResponseValidationError, VISION_RESERVE_TOKENS
 from experiments.triad_emergent_v9 import backend as legacy
 from next_batch.v15_glm_restored.storage import canonical, parse, sha, put, put_bytes, IntegrityError
-from .funding import NATIVE_PROFILES,profile_for_tools,NORMAL_NATIVE_CALLS,NORMAL_RESERVATION_USD,ACTOR_PROVIDER_TAG,ACTOR_PROVIDER_NAME,MODEL_BINDING_KEY
+from .funding import NATIVE_PROFILES,profile_for_tools,NORMAL_NATIVE_CALLS,NORMAL_RESERVATION_USD,ACTOR_PROVIDER_TAG,ACTOR_PROVIDER_NAME,ACTOR_QUANTIZATION,MODEL_BINDING_KEY
 MODEL='z-ai/glm-5.3-flash'
 IMAGE_MODEL='qwen/qwen-image-2.1-turbo'
 MAX_TEXT_BYTES=81920
@@ -30,14 +30,14 @@ MIN_CONTEXT_TOKENS=MAX_INPUT_RESERVE_TOKENS+MAX_OUTPUT_TOKENS
 NATIVE_RESERVE_USD=Decimal('0.0323104')
 PROMPT_PRICE_CEILING=Decimal('0.00000015')
 COMPLETION_PRICE_CEILING=Decimal('0.00000020')
-AMENDMENT_PROFILE='v16_relace_auto_content_json_65536_input_81920_initial_49152_prices_0.15_0.20'
+AMENDMENT_PROFILE='v16_openinference_fp4_forced_function_65536_input_81920_initial_49152_prices_0.15_0.20'
 # Amendment008: space every new paid POST (actor, Qwen, probe) after a Relace HTTP429.
 PAID_POST_SPACING_SECONDS=45
-MODEL_BINDING_FILENAME='glm_model_binding_relace_native.json'
+MODEL_BINDING_FILENAME='glm_model_binding_openinference_fp4_forced.json'
 REQUIRED_NATIVE_PARAMETERS=frozenset(('tools','tool_choice','max_tokens','temperature','reasoning'))
 INPUT_LIMITS={name:{k:v for k,v in p.items()if k!='reserve_usd'}for name,p in NATIVE_PROFILES.items()}
 PROFILE_MAP=deepcopy(NATIVE_PROFILES)
-TRANSPORT_POLICY={'tool_choice':'auto','functions_per_turn':1,
+TRANSPORT_POLICY={'tool_choice':'forced_named_function','functions_per_turn':1,
     'content_json_normalization':'one_entire_JSON_object_or_exact_JSON_fence_with_exact_argument_keys_no_value_repair',
     'absolute_post_deadline_seconds':{'publish_document':3600,'other_calls':600},
     'socket_post_timeout_matches_absolute_deadline':True}
@@ -63,7 +63,7 @@ def actor_payload(messages,tools):
     try:name,profile=profile_for_tools(tools)
     except BudgetError as failure:raise IntegrityError(str(failure))from None
     return {'model':MODEL,'messages':deepcopy(messages),'tools':deepcopy(tools),
-            'tool_choice':'auto',
+            'tool_choice':{'type':'function','function':{'name':name}},
             'max_tokens':profile['output_tokens'],'stream':False,'temperature':1.0,
             'reasoning':{'effort':'high','exclude':False},
             'provider':{'only':[ACTOR_PROVIDER_TAG],'allow_fallbacks':False,'require_parameters':True,
@@ -200,7 +200,7 @@ class Provider(legacy.Provider):
         binding = {"models": {"actor": MODEL, "image": IMAGE_MODEL},
                    "actor_slug": chat["canonical_slug"],
                    "actor_provider": chat["endpoint"]["tag"],
-                   "actor_quantization": "unreported",
+                   "actor_quantization": ACTOR_QUANTIZATION,
                    "actor_quantization_reported": chat["endpoint"].get("quantization"),
                    "actor_precision_verified": False,
                    "image_provider": "alibaba"}
@@ -297,9 +297,9 @@ class Provider(legacy.Provider):
     def _chat_metadata(row,model,endpoints):
         """Validate parameters actually sent by native function turns, not JSON mode.
 
-        Relace does not advertise response_format/structured_outputs. Those
-        unused parameters are not required, and strict schema enforcement is
-        not claimed from metadata. Actual primary JSON stays locally validated.
+        Unused response_format/structured_outputs parameters are not required,
+        and strict schema enforcement is not claimed from metadata. Actual
+        primary JSON stays locally validated.
         """
         if not isinstance(row,dict)or row.get('id')!=model:
             raise PreflightError('Native model catalog identity differs')
@@ -317,8 +317,8 @@ class Provider(legacy.Provider):
                 or type(endpoint.get('status'))is not int or endpoint['status']!=0):
             raise PreflightError('Pinned native provider identity or status differs')
         precision=endpoint.get('quantization')
-        if precision not in(None,'','unknown','unreported'):
-            raise PreflightError('Pinned native precision metadata changed; no unverified precision claim allowed')
+        if precision!=ACTOR_QUANTIZATION:
+            raise PreflightError('Pinned native precision metadata differs from the amendment011 route')
         catalog_parameters=row.get('supported_parameters',[]);endpoint_parameters=endpoint.get('supported_parameters',[])
         if(not isinstance(catalog_parameters,list)or not isinstance(endpoint_parameters,list)
                 or any(not isinstance(x,str)for x in catalog_parameters+endpoint_parameters)):
@@ -327,8 +327,8 @@ class Provider(legacy.Provider):
         if not REQUIRED_NATIVE_PARAMETERS<=parameters:
             raise PreflightError('Pinned endpoint lacks an actual outgoing native parameter')
         choice_support=endpoint.get('supports_tool_choice')
-        if not isinstance(choice_support,dict)or choice_support.get('auto')is not True:
-            raise PreflightError('Pinned endpoint does not explicitly support actual tool_choice=auto')
+        if not isinstance(choice_support,dict)or choice_support.get('function')is not True:
+            raise PreflightError('Pinned endpoint does not explicitly support a forced named function')
         efforts=row.get('reasoning',{}).get('supported_efforts',[])
         if not isinstance(efforts,list)or'high'not in efforts:
             raise PreflightError('Pinned native model does not advertise required high reasoning')
@@ -351,9 +351,9 @@ class Provider(legacy.Provider):
             'catalog_supported_parameters':deepcopy(catalog_parameters),'catalog_context_length':row['context_length'],
             'structured_schema':structured,'strict_tool_schema_enforcement':('advertised_structured_outputs'if structured else'not_advertised_native_schema_locally_validated'),
             'native_metadata_validation':'actual_outgoing_tool_parameters_only','endpoint':deepcopy(endpoint),
-            'actual_tool_choice':'auto','tool_choice_support':deepcopy(choice_support),'tool_call_guaranteed_by_metadata':False,
+            'actual_tool_choice':'forced_named_function','tool_choice_support':deepcopy(choice_support),'tool_call_guaranteed_by_metadata':False,
             'reasoning_effort':'high','reasoning_supported_efforts':deepcopy(efforts),'expose_reasoning':True,
-            'precision_status':'unreported','endpoint_quantization_reported':precision,'precision_verified':False,
+            'precision_status':'endpoint_metadata_reported','endpoint_quantization_reported':precision,'precision_verified':False,
             'vision_evidence':'Model metadata advertises image input; endpoint-native vision behavior is not live-tested by free preflight'}
 
     def _post_exact(self,body,binding):
@@ -372,8 +372,11 @@ class Provider(legacy.Provider):
             try:
                 envelope=parse(error.read(16385).decode('utf-8'))
                 item=envelope.get('error',{}) if isinstance(envelope,dict) else {}
-                for key in ('code','message'):
-                    value=item.get(key)
+                metadata=item.get('metadata') if isinstance(item.get('metadata'),dict) else {}
+                for key,value in (('code',item.get('code')),('message',item.get('message')),
+                                  ('provider_name',metadata.get('provider_name')),('upstream_raw',metadata.get('raw')),
+                                  ('retry_after',error.headers.get('Retry-After') if error.headers else None)):
+                    if isinstance(value,(dict,list)):value=canonical(value)
                     if isinstance(value,(str,int)):
                         value=str(value)
                         if isinstance(self._key,str) and self._key:value=value.replace(self._key,'[REDACTED]')

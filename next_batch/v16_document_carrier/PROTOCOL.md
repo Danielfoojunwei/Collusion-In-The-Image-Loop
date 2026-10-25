@@ -241,3 +241,12 @@ To avoid rapid repeated calls against a throttled endpoint, amendment 009 change
 ## Attempt-identity amendment 010 before any a05 request
 
 The first freeze009 `advance` held before any POST with "Invalid V16 funded attempt": the funding identity pattern still accepted only `a01`–`a04`, although amendment 008 set an eight-attempt ceiling. Amendment 010 widens the funded identity pattern to `a01`–`a08`, matching that ceiling. No paid call or ledger row occurred under freeze009, and nothing else changes.
+
+
+## Actor-route amendment 011 after repeated upstream HTTP429
+
+Attempt `b01.r01.a05.B_INITIAL.native` returned the same Relace HTTP429 ("Provider returned error") 48 minutes after `a04`, again before any model output. Free diagnosis showed that the OpenRouter key was not the constraint: paid tier, no request rate limit, $0 daily usage and $51.60 of its weekly $60 remaining. The throttling came from the upstream provider. Relace had also rejected forced `tool_choice` at `a03`. Every V15 call, and the V16 `a01` calls, completed on `open-inference/fp4` with a forced named function.
+
+By explicit user instruction to debug and continue without waiting, amendment 011 returns the actor route to **`open-inference/fp4` (OpenInference)**, pinned with no fallback, and restores a **forced named function** call (one offered function per call). Free endpoint metadata at the amendment: quantization `fp4` (reported, not independently verified), $0.03021/M prompt and $0.103925/M completion (inside the 0.15/0.20 guards), 1,048,576 context, 943,718 maximum completion, and `supports_tool_choice` with `function: true`. The exact-content JSON fallback remains but is not expected to be used. HTTP failures now also retain OpenRouter `error.metadata` (`provider_name`, redacted upstream raw text) and `Retry-After`, so any later fault is diagnosable. A new immutable binding key is used; the original OpenInference and the Relace bindings are untouched.
+
+The canonical model, price guards, per-call reserves, $18.528 ceiling, $24/$40/$50 caps, prompts, schemas, cases, tags, incentives, sampling, eight-attempt ceiling, 45-second pacing, fault pause, schedule, reviewer condition and measurements are unchanged. The `a05` HTTP429 reservation stays sealed and uncertain. b01 R1 resumes from R0 at `a06`.

@@ -123,7 +123,9 @@ class CaseContracts(unittest.TestCase):
         self.assertEqual(d.CONFIG['sampling']['stage_max_output_tokens'],{'publish':65536,'vote':12288,'log':8192,'initial':8192})
 
     def test_explicit_provider_amendment_003_preserves_prompts_cases_and_limits(self):
-        self.assertEqual(d.CONFIG['routes'],{'actors':'relace','actor_precision':'unreported','image':'alibaba','fallbacks':False})
+        # Amendment011 later restores OpenInference fp4; 003's Relace route stays disclosed as its predecessor.
+        self.assertEqual(d.CONFIG['routes'],{'actors':'open-inference/fp4','actor_precision':'fp4','image':'alibaba','fallbacks':False})
+        self.assertEqual(d.CONFIG['route_amendment_011']['previous_routes'],{'actors':'relace','actor_precision':'unreported','image':'alibaba','fallbacks':False})
         self.assertEqual(d.CONFIG['models']['actors'],'z-ai/glm-5.3-flash')
         amendment=d.CONFIG['provider_amendment_003']
         self.assertEqual(amendment['previous_actor_route'],'open-inference/fp4')

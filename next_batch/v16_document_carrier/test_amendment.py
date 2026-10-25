@@ -57,6 +57,13 @@ class AmendmentTests(unittest.TestCase):
         self.pre_rate_limit.start()
         self.pre_rate_limit_active = True
         self.addCleanup(self.lift_pre_rate_limit)
+        # Chains 001-010 predate amendment011's OpenInference route and forced function.
+        self.pre_route = [patch.dict(design.CONFIG['routes'], deepcopy(a.RELACE_ROUTES), clear=True),
+                          patch.dict(provider.TRANSPORT_POLICY, {'tool_choice': 'auto'})]
+        for patcher in self.pre_route:
+            patcher.start()
+        self.pre_route_active = True
+        self.addCleanup(self.lift_pre_route)
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)
         self.out = self.root/'OFFLINE_FIXTURE_RUN'
@@ -115,6 +122,12 @@ class AmendmentTests(unittest.TestCase):
 
     def tearDown(self):
         self.temporary.cleanup()
+
+    def lift_pre_route(self):
+        if self.pre_route_active:
+            for patcher in reversed(self.pre_route):
+                patcher.stop()
+            self.pre_route_active = False
 
     def lift_pre_rate_limit(self):
         if self.pre_rate_limit_active:
@@ -1274,6 +1287,81 @@ class AmendmentTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             a.apply_attempt_identity_amendment(self.runner, self.ledger)
         self.assertFalse((self.out/'AMENDMENTS/010/freeze.json').exists())
+
+    def prepare_route_amendment(self):
+        self.prepare_attempt_identity_amendment()
+        a.apply_attempt_identity_amendment(self.runner, self.ledger)
+        a.release_stop(self.out, fixture=True)
+        rt.Runner(self.out, fixture=True).current('b01')
+        identifier = a.ROUTE_011_FAILED_IDENTITY
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                identifier,'uncertain','chat','z-ai/glm-5.3-flash','9'*64,11011200,None))
+        root = self.out/'arms/b01/attempts/r01/a05'
+        put(root/'inflight/B_INITIAL.json', {'stage':'B_INITIAL','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        owner = self.out/'paid_operations'/(sha(identifier.encode())+'.json')
+        put(owner, {'attempt_id':'b01.r01.a05','request_id':identifier,'pid':99999999,
+                    'start_ticks':'OFFLINE_NO_PROCESS','wire_sha256':'9'*64,'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        put(owner.with_suffix('.finished.json'), {'owner_sha256':sha(owner.read_bytes())})
+        put(self.out/'provider_evidence/transport_failures'/(sha(identifier.encode())+'.json'), {
+            'request_id':identifier,'failure_class':'HTTPError','http_status':429,'request_not_reposted':True,
+            'router_diagnostic':{'code':'429','message':'Provider returned error'},'evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        marker = root/'abandoned.json'
+        put(marker, {'status':'abandoned_technical','technical':True,'attempt_id':'b01.r01.a05',
+                     'fault_class':'paid_outcome_unresolved','evidence_origin':'OFFLINE_SCRIPTED_FIXTURE'})
+        with lock(self.out/'arms/b01'):
+            self.assertEqual(funding.seal(self.out, marker, self.ledger), 1)
+        put(self.out/'STOP_REQUESTED.json', {'reason':'OFFLINE scripted repeated upstream HTTP429 hold'})
+        self.lift_pre_route()
+        self.source.write_text('# OFFLINE fixture route amendment\n')
+
+    def test_route_amendment_changes_only_routes_and_retains_sealed_failure(self):
+        self.prepare_route_amendment()
+        before = a._ledger_snapshot(self.ledger)
+        result = a.apply_route_amendment(self.runner, self.ledger)
+        self.assertEqual(result['new_paid_calls'], 0)
+        self.assertEqual(a._ledger_snapshot(self.ledger), before)
+        old = read(self.out/'AMENDMENTS/010/CONFIG.json')
+        new = read(self.out/'AMENDMENTS/011/CONFIG.json')
+        changed = ('routes', 'route_amendment', 'technical_amendment')
+        self.assertEqual({k:v for k,v in old.items() if k not in changed},
+                         {k:v for k,v in new.items() if k not in changed})
+        self.assertEqual(old['routes']['actors'], 'relace')
+        self.assertEqual(new['routes'], {'actors':'open-inference/fp4','actor_precision':'fp4','image':'alibaba','fallbacks':False})
+        intent = read(self.out/'AMENDMENTS/011/RECOVERY_INTENT.json')
+        self.assertEqual(intent['failed_identities_sealed_and_retained'], [a.ROUTE_011_FAILED_IDENTITY])
+        self.assertEqual(read(self.out/'AMENDMENTS/011/RECOVERY_RECEIPT.json')['uncertain_rows_retained'], 1)
+        self.assertEqual(a.verify_chain(self.out, fixture=True)['directory'], self.out/'AMENDMENTS/011')
+        self.assertEqual(a.apply_route_amendment(self.runner, self.ledger)['status'], 'already_applied')
+        a.release_stop(self.out, fixture=True)
+        self.assertEqual(rt.Runner(self.out, fixture=True).current('b01')[0]['attempt_id'], 'b01.r01.a06')
+
+    def test_route_amendment_refuses_unsealed_extra_or_output_failures(self):
+        self.prepare_route_amendment()
+        identifier = a.ROUTE_011_FAILED_IDENTITY
+        seal_proof = self.out/'funding_seals'/(sha(identifier.encode())+'.json')
+        sealed = seal_proof.read_bytes();seal_proof.unlink()
+        with self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        seal_proof.write_bytes(sealed)
+        logical = identifier.removeprefix(a.NAMESPACE)
+        native = self.out/'provider_evidence/native_results'/(sha(logical.encode())+'.json')
+        put(native, {'evidence_origin':'OFFLINE_FORBIDDEN_NATIVE_RESULT'})
+        with self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        native.unlink()
+        with patch.dict(design.CONFIG['routes'], {'actors':'relace'}), self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        with patch.dict(provider.TRANSPORT_POLICY, {'tool_choice':'auto'}), self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        with patch.dict(design.CONFIG['budget'], {'combined_program_cap_usd':30}), self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        with self.ledger._connect() as db:
+            db.execute('INSERT INTO requests VALUES(?,?,?,?,?,?,?)', (
+                a.NAMESPACE+'b03.r01.a04.B_INITIAL.native','uncertain','chat','z-ai/glm-5.3-flash','f'*64,11011200,None))
+        with self.assertRaises(IntegrityError):
+            a.apply_route_amendment(self.runner, self.ledger)
+        self.assertFalse((self.out/'AMENDMENTS/011/freeze.json').exists())
 
 if __name__ == '__main__':
     unittest.main()

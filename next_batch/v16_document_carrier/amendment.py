@@ -2041,11 +2041,40 @@ FROZEN_CONDITION_FIELDS = ('models', 'routes', 'seed', 'scoring', 'sampling', 'd
                            'total_rounds', 'active_arms', 'post_main_decode_assays')
 
 
-def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin):
+def _sealed_http_failure(out, identifier):
+    """A retired paid identity with an HTTP error, a sealed full reserve and no model output."""
+    digest = sha(identifier.encode())
+    logical = identifier.removeprefix(NAMESPACE)
+    failure = out / 'provider_evidence' / 'transport_failures' / (digest + '.json')
+    seal_proof = out / 'funding_seals' / (digest + '.json')
+    attempt = out / 'arms' / identifier.removeprefix(NAMESPACE).split('.')[0] / 'attempts' / \
+        logical.split('.')[1] / logical.split('.')[2]
+    if not failure.is_file() or not seal_proof.is_file() or not (attempt / 'abandoned.json').is_file():
+        raise IntegrityError('Failed paid identity lacks transport, seal or abandonment evidence')
+    observed = read(failure)
+    if (observed.get('request_id') != identifier or observed.get('failure_class') != 'HTTPError' or
+            observed.get('request_not_reposted') is not True or
+            read(seal_proof).get('full_unknown_reservation_retained') is not True or
+            read(attempt / 'abandoned.json').get('technical') is not True):
+        raise IntegrityError('Failed paid identity is not a sealed technical HTTP failure')
+    if (out / 'provider_evidence' / 'native_results' / (sha(logical.encode()) + '.json')).exists() or \
+            any(read(path).get('binding', {}).get('request_id') == identifier
+                for path in (out / 'provider_evidence' / 'observed_responses').glob('*.json')):
+        raise IntegrityError('A model response exists for the failed paid identity')
+    if any(path.is_file() for name in ('stages', 'documents', 'finished') for path in (attempt / name).rglob('*')):
+        raise IntegrityError('The failed attempt contains output')
+    return [{'path': str(path), 'sha256': sha(path.read_bytes())}
+            for path in (failure, seal_proof, attempt / 'abandoned.json')]
+
+
+def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
+                             changed_fields=(), failed_identities=()):
     """Append a no-paid-change amendment directly after the released previous freeze.
 
-    The ledger must equal the parent receipt exactly, current attempts may hold only
-    unfunded contexts, and no job or probe may exist. Only ``block_key`` is added.
+    The ledger must equal the parent receipt exactly, apart from ``failed_identities``:
+    uncertain rows already retired, sealed at full value and without model output.
+    Current attempts may hold only unfunded contexts, and no job or probe may exist.
+    ``block_key`` is added and only ``changed_fields`` may take new design values.
     """
     from . import design, prompts
     out = safe(runner.out)
@@ -2079,20 +2108,28 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
             if previous['directory'] != parent or not (parent / 'STOP_RELEASE.json').is_file():
                 raise IntegrityError('Control amendment must directly follow the released previous freeze')
             receipt = read(parent / 'RECOVERY_RECEIPT.json')
-            if (snapshot['sha256'] != receipt['ledger_after_sha256'] or
-                    snapshot['count'] != receipt['ledger_row_count']):
-                raise IntegrityError('Paid ledger changed after the previous freeze; control change forbidden')
+            failed = set(failed_identities)
+            baseline = [row for row in snapshot['rows'] if row['request_id'] not in failed]
+            new_rows = [row for row in snapshot['rows'] if row['request_id'] in failed]
+            if (len(baseline) != receipt['ledger_row_count'] or len(new_rows) != len(failed) or
+                    sha(canonical(baseline).encode()) != receipt['ledger_after_sha256'] or
+                    any(row['status'] != 'uncertain' or row['actual_units'] is not None for row in new_rows)):
+                raise IntegrityError('Paid ledger changed after the previous freeze beyond the declared failures')
+            failure_proofs = [proof for identifier in sorted(failed) for proof in _sealed_http_failure(out, identifier)]
             if (old.get('technical_amendment') or {}).get('number') != number - 1 or config_key in old:
                 raise IntegrityError('Unexpected parent configuration')
             for field in FROZEN_CONDITION_FIELDS:
-                if old.get(field) != design.CONFIG.get(field):
+                if field in changed_fields:
+                    if old.get(field) == design.CONFIG.get(field):
+                        raise IntegrityError('Declared amended field is unchanged: ' + field)
+                elif old.get(field) != design.CONFIG.get(field):
                     raise IntegrityError('Control amendment changed scientific/resource condition: ' + field)
             frozen_prompts = read(parent / 'SYSTEM_PROMPTS.json')
             if (frozen_prompts != {key: prompts.actor_system(key.split('.', 1)[1][0], key.split('.', 1)[1], key.split('.', 1)[0])
                                    for key in frozen_prompts} or
                     read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
                 raise IntegrityError('Control amendment changed cases or actor prompts')
-            retained = []
+            retained = list(failure_proofs)
             for arm in ARMS:
                 if list((out / 'arms' / arm / 'checkpoints').glob('r*.json')):
                     raise IntegrityError('A checkpoint exists; control change must precede all rounds')
@@ -2117,7 +2154,9 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                       'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
                       'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
                       'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
-                      'paid_calls_after_previous_freeze': 0,
+                      'paid_calls_after_previous_freeze': len(failed),
+                      'failed_identities_sealed_and_retained': sorted(failed),
+                      'changed_fields': list(changed_fields),
                       'new_round_attempt': 'Continue existing unfunded current attempts without rewind.'}
             put(intent_path, intent)
         if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
@@ -2127,6 +2166,8 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                 raise IntegrityError('Unfunded context changed during the control amendment')
         put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
         config = deepcopy(old)
+        for field in changed_fields:
+            config[field] = deepcopy(design.CONFIG[field])
         config[config_key] = deepcopy(block)
         config['technical_amendment'] = {'number': number, 'revision': f'v16.{number}', 'reason': block['reason'],
                                          'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
@@ -2156,7 +2197,9 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
             'parent_freeze_sha256': intent['parent_freeze_sha256'],
             'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
             'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': [],
-            'retained_attempt_count': 0, 'stop_original_sha256': intent['stop_sha256'], 'scientific_note': note})
+            'retained_attempt_count': len(intent.get('failed_identities_sealed_and_retained', [])),
+            'uncertain_rows_retained': len(intent.get('failed_identities_sealed_and_retained', [])),
+            'stop_original_sha256': intent['stop_sha256'], 'scientific_note': note})
         frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
         frozen.update(amendment_number=number, revision=f'v16.{number}',
                       parent_freeze_sha256=intent['parent_freeze_sha256'],
@@ -2179,6 +2222,28 @@ def apply_attempt_identity_amendment(runner, ledger):
         'Freeze009 advance held before any POST: funding accepted only a01-a04 while the attempt ceiling is eight.',
         'Funding identity pattern widened from a01-a04 to a01-a08 to match the amendment008 ceiling. No POST was made under freeze009; nothing else changes.',
         'prospectively_frozen_attempt_identity_repair_before_any_a05_request')
+
+
+ROUTE_011_FAILED_IDENTITY = NAMESPACE + 'b01.r01.a05.B_INITIAL.native'
+
+
+def apply_route_amendment(runner, ledger):
+    """Append011: OpenInference fp4 with a forced named function, after the sealed a05 HTTP429."""
+    from . import design
+    from .funding import ACTOR_PROVIDER_TAG, ACTOR_QUANTIZATION
+    from .provider import TRANSPORT_POLICY
+    block = design.CONFIG.get('route_amendment_011') or {}
+    if (design.CONFIG['routes'] != block.get('routes') or
+            design.CONFIG['routes'] != {'actors': ACTOR_PROVIDER_TAG, 'actor_precision': ACTOR_QUANTIZATION,
+                                        'image': 'alibaba', 'fallbacks': False} or
+            TRANSPORT_POLICY.get('tool_choice') != 'forced_named_function'):
+        raise IntegrityError('Installed actor route or tool choice differs from the amendment011 disclosure')
+    return _apply_control_amendment(
+        runner, ledger, 11, 'route_amendment_011', 'route_amendment',
+        'Relace HTTP429 upstream on a04 and a05 with an unthrottled key; return to the OpenInference fp4 route used by V15 and V16 a01.',
+        'Actor route changes from precision-unreported Relace (tool_choice auto) to OpenInference fp4 with a forced named function, the route that completed V15 and the V16 a01 calls. Same canonical model, price guards, reserves, caps, prompts, cases, sampling, incentives and schedule. The a05 HTTP429 reservation stays sealed and uncertain.',
+        'prospectively_frozen_route_repair_after_two_upstream_http429',
+        changed_fields=('routes',), failed_identities=(ROUTE_011_FAILED_IDENTITY,))
 
 
 def release_stop(out, fixture=False):

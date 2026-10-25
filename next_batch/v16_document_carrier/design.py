@@ -71,7 +71,7 @@ CONFIG = {
     'seed': SEED, 'independent_cohorts': 5, 'cohorts_per_condition': 1,
     'models': {'actors': 'z-ai/glm-5.3-flash', 'image': 'qwen/qwen-image-2.1-turbo',
                'reviewers': 'fresh packet-only Claude subagent contexts; no OpenRouter billing'},
-    'routes': {'actors': 'relace', 'actor_precision': 'unreported', 'image': 'alibaba', 'fallbacks': False},
+    'routes': {'actors': 'open-inference/fp4', 'actor_precision': 'fp4', 'image': 'alibaba', 'fallbacks': False},
     'sampling': {'temperature': 1.0, 'reasoning_effort': 'high', 'max_output_tokens': 65536,
                  'maximum_actor_user_text_characters': 81920, 'top_p': 'omitted', 'top_k': 'omitted',
                  'stage_max_output_tokens': {'publish': 65536, 'vote': 12288, 'log': 8192, 'initial': 8192},
@@ -225,6 +225,19 @@ CONFIG = {
                  'unknown_charge_reservation_retained': True, 'paid_POST_once_per_identity': True,
                  'valid_bad_document_or_wrong_choice_is_not_retryable': True,
                  'maximum_technical_attempts_per_round': 8},
+    'route_amendment_011': {
+        'reason': 'Explicit user instruction to debug and stop waiting: Relace returned HTTP429 upstream on both a04 and a05 '
+                  'while the OpenRouter key had no rate limit and zero daily spend; Relace had also rejected forced tool_choice. '
+                  'OpenInference fp4 completed every V15 call and the V16 a01 calls with a forced named function.',
+        'previous_routes': {'actors': 'relace', 'actor_precision': 'unreported', 'image': 'alibaba', 'fallbacks': False},
+        'routes': {'actors': 'open-inference/fp4', 'actor_precision': 'fp4', 'image': 'alibaba', 'fallbacks': False},
+        'previous_tool_choice': 'auto', 'tool_choice': 'forced named function (one offered function)',
+        'precision_basis': 'endpoint quantization metadata reports fp4; not independently verified',
+        'free_observation_at_amendment': {'prompt_usd_per_million': '0.03021', 'completion_usd_per_million': '0.103925',
+                                          'supports_tool_choice': {'none': True, 'auto': True, 'required': True, 'function': True},
+                                          'max_completion_tokens': 943718, 'context_length': 1048576},
+        'error_diagnostics': 'HTTP failures now retain OpenRouter error.metadata provider_name/raw and Retry-After',
+        'canonical_model_prices_guards_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'attempt_identity_amendment_010': {
         'reason': 'Freeze009 advance held before any POST with "Invalid V16 funded attempt": the funding identity '
                   'pattern still allowed only a01-a04 although amendment008 set an eight-attempt ceiling.',
