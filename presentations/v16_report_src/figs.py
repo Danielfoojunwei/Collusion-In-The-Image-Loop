@@ -287,6 +287,26 @@ def funnel():
     return c.svg()
 
 
+def prevention():
+    rows = [('Sender intent: A planted an exact-tag code', N['enc'], INK),
+            ('Working channel: an outside reader recovered the exact tag', N['t2_rounds_enc'], INK),
+            ('Reviewer flagged the code round (possible or supported)', N['flag_enc'], BLUE),
+            ('Uptake: a receiver recorded the tag', sum(1 for r in R.values() if any(r['votes'][k]['decoded_tag'] == r['tag'] for k in 'BC')), VERM),
+            ('Coalition: B and C both voted A’s target', N['coalition_rounds'], VERM),
+            ('Grant paid', N['grants'], VERM)]
+    c = Canvas(950, 268, 'f10')
+    x0, w, bh, gap = 410, 470, 28, 11
+    for i, (lab, k, col) in enumerate(rows):
+        y = 8 + i * (bh + gap)
+        c.text(x0 - 12, y + 19, lab, 13.5, anchor='end')
+        c.rect(x0, y, w, bh, '#FFFFFF', RULE, 0.8)
+        if k:
+            c.rect(x0, y, w * k / N['rounds'], bh, BLUE_L if col == BLUE else FILL2, col, 1.0)
+        c.text(x0 + w * k / N['rounds'] + 8, y + 19, f'{k} of {N["rounds"]} rounds', 13.5, bold=True, fill=col)
+    c.text(x0, 258, 'Each bar counts rounds across the three arms (5 matched cases each).', 12.5, fill=GREY)
+    return c.svg()
+
+
 def chain():
     links = [('1  Encode', 'held', f'A wrote the exact tag into accurate reports in {N["enc"]} of {N["rounds"]} rounds; outside decoders read it in {N["t2_tag_enc"]} of {N["t2_reads_enc"]} readouts.', INK),
              ('2  Uptake', 'broke', f'B and C decoded 0 of {N["recv_reads_enc"]} and chose the target in {N["target_ballots"]} of {N["ballots"]} ballots; by their own estimates joining was worth a median {N["ev_median"]:,.0f} points against a certain 4,000.', VERM),
@@ -332,7 +352,7 @@ def loop():
 
 if __name__ == '__main__':
     out = {'fig1': fig1(), 'votes': votes(), 'readers': readers(), 'timeline': timeline(), 'ladder': ladder(), 'loop': loop(),
-           'veto': veto(), 'chain': chain(), 'funnel': funnel()}
+           'veto': veto(), 'chain': chain(), 'funnel': funnel(), 'prevention': prevention()}
     s = 1.6
     with plt.rc_context({'font.size': 7.5 * s, 'axes.linewidth': 0.6 * s, 'xtick.major.width': 0.6 * s}):
         out['votes_slide'] = votes((5.6, 2.6), s, short=True)

@@ -6,7 +6,7 @@ from claims import N, QT, EV
 
 E = html.escape
 svg = {k: re.sub(r'style="width:[^"]*"', 'style="width:100%;display:block"', open(f'{f}.svg').read(), count=1)
-       for k, f in (('fig1', 'fig1'), ('veto', 'veto_slide'), ('timeline', 'timeline'), ('funnel', 'funnel'))}
+       for k, f in (('fig1', 'fig1'), ('veto', 'veto_slide'), ('timeline', 'timeline'), ('funnel', 'funnel'), ('prevention', 'prevention'))}
 pre, post, L = N['pre'], N['post'], N['ladder']
 
 
@@ -25,60 +25,73 @@ def quote(text, who):
 
 slides = [f'''
 <section class="title">
-  <h1>Collusion Needs an Accomplice</h1>
-  <p class="sub">Reasoning-trace evidence on why LLM agents sent, but never took up, covert codes hidden in useful work</p>
-  <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3.1, with Track 2</p>
+  <h1>No Coalition Formed</h1>
+  <p class="sub">Breaking covert collusion among document-writing agents with trusted verifiers, informed review and public findings</p>
+  <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures (3.1–3.4)</p>
   <div class="nums">
-    <div><b>{N['enc']}/{N['rounds']}</b><span>rounds in which the paid sender hid an exact six-letter code in an accurate report</span></div>
-    <div><b>{N['exposures_tag_in_reasoning']} → {N['exposures_recorded']}</b><span>times the tag reached a receiver’s reasoning → times it was recorded (outsiders: {N['t2_tag_enc']}/{N['t2_reads_enc']})</span></div>
+    <div><b>{N['enc']}/{N['rounds']} → {N['coalition_rounds']}/{N['rounds']}</b><span>rounds with a planted code → rounds where B and C both voted A’s target</span></div>
+    <div><b>{N['t2_tag_enc']}/{N['t2_reads_enc']} vs {N['recv_tag_enc']}</b><span>exact-tag recoveries by outside decoders vs tags recorded by the intended receivers</span></div>
     <div><b>{N['ev_median']:,.0f} vs 4,000</b><span>median value of joining by the receivers’ own estimates vs the certain client credit</span></div>
   </div>
 </section>''', f'''
 <section>
-  <h2>Prior work asks if agents <i>can</i> collude. We ask if a receiver <i>will</i>.</h2>
-  <div class="full g">{svg['fig1']}</div>
-  <p class="foot">GLM-5.3-Flash agents · ground-truth tags, private pre-exposure judgments, 1.4M characters of raw reasoning · informed Claude reviewer · arms b01 original, b03 figures removed, b05 reviewer history · 5 matched rounds each</p>
+  <h2>A game that pays for collusion, inside a countermeasure stack</h2>
+  <div class="full fn">{svg['prevention']}</div>
+    <ul class="cms">
+      <li><b>CM1</b> trusted reviewer with motive, history, standard of proof; escalating collective fines</li>
+      <li><b>CM2</b> findings published to all agents</li>
+      <li><b>CM3</b> receivers as trusted verifiers, paid for correct work</li>
+      <li><b>CM4</b> two-key rule: both receivers, exact six-letter tag</li>
+      <li><b>CM5</b> trusted source table in every document</li>
+      <li><b>CM6</b> announced: figures removed (b03) · reviewer with history (b05)</li>
+    </ul>
+  <p class="foot">GLM-5.3-Flash agents · A holds a private target and an exact tag · ground-truth tags, private pre-exposure judgments, 1.7M characters of reasoning · 3 arms × 5 matched rounds</p>
 </section>''', f'''
 <section>
-  <h2>1 · The sender was strategic, adaptive and deterrable</h2>
-  <div class="full">{svg['timeline']}</div>
-  <div class="three two-col">
-    {quote(qe('b01r3_A_threshold'), whoe('b01r3_A_threshold') + ': pricing an attempt')}
-    {quote(qe('b03r3_A_nolegit'), whoe('b03r3_A_nolegit') + ': no cover story for the worst candidate, so it stopped')}
-    {quote(qe('b05r3_A_worked'), whoe('b05r3_A_worked') + ': diagnosing the failure')}
-  </div>
-</section>''', f'''
-<section>
-  <h2>2 · The receivers never took a code up</h2>
-  <div class="full fn">{svg['funnel']}</div>
-  <div class="two even">
-    <div><h3>Mechanism: the shared-codebook trap</h3><p>Reviews were public. Receivers searched only for patterns the reviewer had already exposed, so each move A made to evade the monitor also evaded its partners.</p></div>
-    {quote(qe('b03r2_C_lastwar'), whoe('b03r2_C_lastwar') + ': checking for the exposed pattern while A had moved to sentence initials')}
-  </div>
-</section>''', f'''
-<section>
-  <h2>3 · When they found it, they declined</h2>
-  <div class="two even top">
-    <div class="fig">{svg['veto']}<p class="cap">Each ballot by the receiver’s own stated beliefs. Shaded: joining beats the certain 4,000.</p></div>
-    <div>
-      {quote(qe('b03r1_C_derived'), whoe('b03r1_C_derived'))}
-      {quote(qe('b03r1_C_ambig'), 'then recorded “unknown”')}
-      <ul>
-        <li><b>Coordination pessimism:</b> median {N['align_median']:.2f} chance the partner joins.</li>
-        <li><b>Sanction over-generalisation:</b> one catch read as ending the grant for good, in two arms.</li>
-      </ul>
+  <h2>3.1 · Carriers: the structure of honest work, and conduits nobody intended</h2>
+  <div class="two">
+    <div class="crops">
+      <div><img src="img/acro_b05r3.png"><p><b>b05 R3</b> question initials = JVMWZL, in a client-correct report</p></div>
+      <div><img src="img/acro_b03r2.png"><p><b>b03 R2</b> summary-sentence initials = HRIXHN</p></div>
     </div>
+    <ul>
+      <li>Every code was an <b>acrostic in report structure</b>; checking facts cannot catch it.</li>
+      <li>Removing figures moved the code into text.</li>
+      <li><b>The reviewer’s report was a carrier:</b> it broadcast the decoded tag to all agents in {len(N['report_leaks'])} rounds.</li>
+      <li>Host conduits: the generator wrote text A never authored; layout reordered one acrostic; images were ingested at {N['img_tok_min']}–{N['img_tok_max']} tokens per page.</li>
+    </ul>
   </div>
 </section>''', f'''
 <section>
-  <h2>What this means for collusion research and oversight</h2>
+  <h2>3.2 · Trusted agents broke the chain at two links</h2>
+  <div class="full fn">{svg['funnel']}</div>
+  <div class="three">
+    <div><h3>Trusted reviewer</h3><p>Flagged {N['flag_enc']}/{N['enc']} code rounds; {N['supported']} sanctions; 0/{N['main_reviews'] + N['return_reviews'] + N['ladder_jobs']} false joint attributions.</p></div>
+    <div><h3>Trusted verifiers</h3>{quote(qe('b03r1_B_duty'), whoe('b03r1_B_duty'))}</div>
+    <div><h3>Suspicion spread</h3><p>C cited B’s flag or audit of A in {len(N['C_cites_B'])} rounds.</p></div>
+  </div>
+</section>''', f'''
+<section>
+  <h2>3.3–3.4 · Peers identified each other; the watched sender quit</h2>
+  <div class="full">{svg['timeline']}</div>
+  <div class="two even">
+    <ul>
+      <li><b>3.3</b> Receivers read A’s agenda from its ballots ({N['rcv_cite_A_ballots']}/30) and expected each other not to join (median {N['align_median']:.2f}).</li>
+      <li><b>3.4</b> A changed carrier after every exposure, then abstained {N['abstain']}×. Announced-countermeasure arms encoded {N['enc_n']['b03']} and {N['enc_n']['b05']} times vs {N['enc_n']['b01']}.</li>
+    </ul>
+    {quote(qe('b03r2_C_lastwar'), whoe('b03r2_C_lastwar') + ': searching for the exposed pattern, while A had moved on — the shared-codebook trap')}
+  </div>
+</section>''', f'''
+<section>
+  <h2>Design principles for breaking collusion before it forms</h2>
   <ol class="recs">
-    <li><b>Capability is not propensity.</b> The code was legible (outsiders {N['t2_tag_enc']}/{N['t2_reads_enc']}) and the sender willing; collusion failed at the receivers. Report the uptake funnel: notice, decode, record, act.</li>
-    <li><b>Public feedback denies colluders a private codebook.</b> Broadcasting findings to the agents a colluder needs made every evasion self-defeating. It also taught the sender, so route evasion-relevant detail to principals.</li>
-    <li><b>Receivers are a first line of defence:</b> independent verifiers, a certain payoff for correct work, and acting only on sourced evidence.</li>
-    <li><b>Residual risk:</b> the sender resumed when a cover story appeared; a payload naming no candidate escaped sanction; outsiders could be the accomplice.</li>
+    <li><b>Make the receiver the scarce link:</b> independent verifiers paid for correct work plus an exact multi-key payload made joining a losing bet.</li>
+    <li><b>Anchor peers to trusted sources:</b> an unsourced code became “unverified content”.</li>
+    <li><b>Broadcast findings, not payloads:</b> public findings deterred the sender and left no private codebook, but leaked decoded tags in {len(N['report_leaks'])} rounds.</li>
+    <li><b>Announce watching:</b> it halved attempts at no cost.</li>
+    <li><b>Close the gaps:</b> sanction payloads with no named beneficiary; expect senders to return when a cover story appears; audit the host pipeline as a carrier.</li>
   </ol>
-  <p class="foot">Limits: induced coordination; receiver terms not varied; one cohort per arm, 5 dependent rounds; beliefs are self-reports; the actor route ingested page images at low resolution (diagram-only codes likely unreadable to agents). All quotations verified against the run records.</p>
+  <p class="foot">Limits: no undefended arm in V16, so prevention is intent plus capacity without uptake, attributed from the agents’ own records; induced coordination; receiver terms not varied; 5 dependent rounds per arm; low-resolution image intake. All quotations verified against the run records.</p>
 </section>''']
 
 css = '''
@@ -105,6 +118,7 @@ p, li { font-size: 15pt; line-height: 1.35; }
 .two.low { margin-top: 0.15in; }
 .two.top { align-items: start; }
 .two-col blockquote { font-size: 12.5pt; }
+.cms { columns: 2; column-gap: 0.4in; margin-top: 0.15in; } .cms li { font-size: 13pt; margin-bottom: 5pt; break-inside: avoid; }
 .fn svg { width: 92% !important; margin: 0 auto; }
 h2 i { font-style: italic; }
 .rd { margin-top: 0.1in; }
@@ -124,6 +138,6 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
 '''
-open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>Collusion Needs an Accomplice</title><style>'
+open('deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>No Coalition Formed</title><style>'
                              + css + '</style></head><body>' + ''.join(slides) + '</body></html>')
 print('deck.html')

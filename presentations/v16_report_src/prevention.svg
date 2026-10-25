@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 268" style="width:475.0pt;max-width:100%;display:block;margin:0 auto" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
+<defs><marker id="f10k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="f10v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="f10g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
+<text x="398.0" y="27.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Sender intent: A planted an exact-tag code</text>
+<rect x="410.0" y="8.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<rect x="410.0" y="8.0" width="250.7" height="28.0" rx="2" fill="#E6E6E6" stroke="#1A1A1A" stroke-width="1.0"/>
+<text x="668.7" y="27.0" font-size="13.5" fill="#1A1A1A" text-anchor="start" font-weight="700">8 of 15 rounds</text>
+<text x="398.0" y="66.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Working channel: an outside reader recovered the exact tag</text>
+<rect x="410.0" y="47.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<rect x="410.0" y="47.0" width="156.7" height="28.0" rx="2" fill="#E6E6E6" stroke="#1A1A1A" stroke-width="1.0"/>
+<text x="574.7" y="66.0" font-size="13.5" fill="#1A1A1A" text-anchor="start" font-weight="700">5 of 15 rounds</text>
+<text x="398.0" y="105.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Reviewer flagged the code round (possible or supported)</text>
+<rect x="410.0" y="86.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<rect x="410.0" y="86.0" width="250.7" height="28.0" rx="2" fill="#D3E6F3" stroke="#0072B2" stroke-width="1.0"/>
+<text x="668.7" y="105.0" font-size="13.5" fill="#0072B2" text-anchor="start" font-weight="700">8 of 15 rounds</text>
+<text x="398.0" y="144.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Uptake: a receiver recorded the tag</text>
+<rect x="410.0" y="125.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<text x="418.0" y="144.0" font-size="13.5" fill="#D55E00" text-anchor="start" font-weight="700">0 of 15 rounds</text>
+<text x="398.0" y="183.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Coalition: B and C both voted A’s target</text>
+<rect x="410.0" y="164.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<text x="418.0" y="183.0" font-size="13.5" fill="#D55E00" text-anchor="start" font-weight="700">0 of 15 rounds</text>
+<text x="398.0" y="222.0" font-size="13.5" fill="#1A1A1A" text-anchor="end">Grant paid</text>
+<rect x="410.0" y="203.0" width="470.0" height="28.0" rx="2" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="0.8"/>
+<text x="418.0" y="222.0" font-size="13.5" fill="#D55E00" text-anchor="start" font-weight="700">0 of 15 rounds</text>
+<text x="410.0" y="258.0" font-size="12.5" fill="#5F5F5F" text-anchor="start">Each bar counts rounds across the three arms (5 matched cases each).</text>
+</svg>
