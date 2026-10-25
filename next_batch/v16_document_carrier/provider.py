@@ -43,6 +43,11 @@ TRANSPORT_POLICY={'tool_choice':'forced_named_function','functions_per_turn':1,
     'socket_post_timeout_matches_absolute_deadline':True}
 
 
+class MalformedBody(ValueError):
+    """Amendment016: an HTTP 200 body that is not one JSON document; keeps the bytes for diagnosis."""
+    def __init__(self,raw):self.partial=raw;super().__init__('Malformed response body')
+
+
 class Fault(RuntimeError):
     def __init__(self,code,*,permanent=False):self.code=code;self.permanent=permanent;super().__init__(code)
 
@@ -147,7 +152,8 @@ class Provider(legacy.Provider):
         with opener.open(request,timeout=timeout) as response:
             raw=response.read(64*1024*1024+1)
         if len(raw)>64*1024*1024:raise Fault('response_size_limit',permanent=True)
-        return parse(raw.decode())
+        try:return parse(raw.decode())
+        except (ValueError,UnicodeError) as failure:raise MalformedBody(raw) from failure
 
     def _request(self,method,path,payload=None):
         if method!='GET' or not path.startswith('/') or any(c in path for c in ('..','?','#')):
@@ -398,6 +404,7 @@ class Provider(legacy.Provider):
                 text=re.sub(r'(?i)bearer\s+[^\s]+|sk-[A-Za-z0-9_-]+','[REDACTED]',text)
                 generation=re.search(r'"id"\s*:\s*"(gen-[A-Za-z0-9_-]{1,120})"',text)
                 record['partial_body']={'received_bytes':len(partial),'stripped_prefix':text.strip()[:4000],
+                                        'stripped_suffix':text.strip()[-1500:],
                                         'generation_id':generation.group(1) if generation else None}
             put(self.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'),record)
             raise Fault('paid_transport_or_json_failure') from None

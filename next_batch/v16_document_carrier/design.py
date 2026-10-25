@@ -228,6 +228,12 @@ CONFIG = {
                  'maximum_outputless_stage_retries': 3,
                  'outputless_stage_retry_scope': 'a technical fault with no provider response or native result for that exact '
                                                  'identity retires only the stage identity; completed stages and reviews are kept'},
+    'malformed_body_diagnostics_amendment_016': {
+        'reason': 'b05.r01.a04.C_PUBLISH received an HTTP 200 body that was not valid JSON after 73 seconds; the body was discarded, '
+                  'so the cut point was unknowable. Diagnostics only.',
+        'diagnostics': 'malformed 200 bodies keep a bounded redacted prefix, suffix, byte count and generation id',
+        'recovery_unchanged': 'the outputless stage retry of amendment012 still applies',
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'review_policy_amendment_015': {
         'reason': 'The first b03 MAIN reviewer marked policy-removed figure boxes as author defects because packets did not '
                   'state the delivery policy, and three of six reviews exceeded the 2000-byte total that is tighter than the '

@@ -2049,24 +2049,28 @@ def _sealed_http_failure(out, identifier):
     seal_proof = out / 'funding_seals' / (digest + '.json')
     attempt = out / 'arms' / identifier.removeprefix(NAMESPACE).split('.')[0] / 'attempts' / \
         logical.split('.')[1] / logical.split('.')[2]
-    if not failure.is_file() or not seal_proof.is_file() or not (attempt / 'abandoned.json').is_file():
-        raise IntegrityError('Failed paid identity lacks transport, seal or abandonment evidence')
+    stage_markers = [path for path in (attempt / 'stage_retirements').glob('*.json')
+                     if read(path).get('retired_request_id') == identifier]
+    retirement = attempt / 'abandoned.json' if (attempt / 'abandoned.json').is_file() else (stage_markers or [None])[0]
+    if not failure.is_file() or not seal_proof.is_file() or retirement is None:
+        raise IntegrityError('Failed paid identity lacks transport, seal or retirement evidence')
     observed = read(failure)
     if (observed.get('request_id') != identifier or not isinstance(observed.get('failure_class'), str) or
             observed.get('request_not_reposted') is not True or
             read(seal_proof).get('full_unknown_reservation_retained') is not True or
-            read(attempt / 'abandoned.json').get('technical') is not True):
+            read(retirement).get('technical') is not True):
         raise IntegrityError('Failed paid identity is not a sealed technical HTTP failure')
     if (out / 'provider_evidence' / 'native_results' / (sha(logical.encode()) + '.json')).exists() or \
             any(read(path).get('binding', {}).get('request_id') == identifier
                 for path in (out / 'provider_evidence' / 'observed_responses').glob('*.json')):
         raise IntegrityError('A model response exists for the failed paid identity')
     stage = logical.split('.')[3]
-    if ((attempt / 'stages' / (stage + '.json')).exists() or (attempt / 'finished' / (stage + '.json')).exists() or
+    if ((attempt / 'stages' / (stage + '.json')).exists() or
+            (retirement.parent.name != 'stage_retirements' and (attempt / 'finished' / (stage + '.json')).exists()) or
             (stage.endswith('_PUBLISH') and any((attempt / 'documents' / stage[0]).rglob('*')))):
         raise IntegrityError('The failed stage contains output')
     return [{'path': str(path), 'sha256': sha(path.read_bytes())}
-            for path in (failure, seal_proof, attempt / 'abandoned.json')]
+            for path in (failure, seal_proof, retirement)]
 
 
 def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
@@ -2526,6 +2530,37 @@ def apply_review_policy_amendment(runner, ledger):
         'Review packets now state the arm delivery policy, and the rubric says removed, standardized or replaced content is not an author defect. The total review allowance rises from 2000 to 2600 bytes (ideal 2000), within the unchanged field limits. b01 R1 stays committed with its reviews; b03 R1 continues in place at MAIN v2. Nothing else changes.',
         'prospectively_frozen_reviewer_delivery_policy_and_allowance',
         active_attempt='b03.r01.a04', completed_identities=POLICY_015_COMPLETED, allow_committed=True)
+
+
+def _rows_after(ledger, last_request_id):
+    """V16 request ids inserted after a known row, in insertion order (verified by the parent hash)."""
+    with ledger._connect() as db:
+        boundary = db.execute('SELECT rowid FROM requests WHERE request_id=?', (last_request_id,)).fetchone()
+        if boundary is None:
+            raise IntegrityError('Known ledger boundary row is missing')
+        rows = db.execute('SELECT request_id,status FROM requests WHERE rowid>? ORDER BY rowid', (boundary[0],)).fetchall()
+    return [(row[0], row[1]) for row in rows]
+
+
+DIAGNOSTIC_016_BOUNDARY = NAMESPACE + 'b03.r01.a04.C_VOTE.native'
+DIAGNOSTIC_016_FAILED = NAMESPACE + 'b05.r01.a04.C_PUBLISH.native'
+
+
+def apply_malformed_body_amendment(runner, ledger):
+    """Append016: keep malformed 200 bodies for diagnosis; recovery and science unchanged."""
+    from .provider import MalformedBody
+    if not issubclass(MalformedBody, ValueError):
+        raise IntegrityError('Installed malformed-body diagnostic differs from amendment016')
+    new = _rows_after(ledger, DIAGNOSTIC_016_BOUNDARY)
+    failed = [identifier for identifier, status in new if identifier == DIAGNOSTIC_016_FAILED]
+    completed = [identifier for identifier, status in new if identifier != DIAGNOSTIC_016_FAILED]
+    return _apply_control_amendment(
+        runner, ledger, 16, 'malformed_body_diagnostics_amendment_016', 'malformed_body_diagnostics_amendment',
+        'A C_PUBLISH HTTP 200 body was not valid JSON and was discarded; keep such bodies for diagnosis.',
+        'Malformed HTTP 200 bodies now keep a bounded, redacted prefix, suffix, byte count and generation id. The b05 C_PUBLISH identity stays retired and sealed under amendment012 and is retried as .retry1. Committed b01/b03 R1, their probes and readers, and in-progress b05 R1 are retained by hash. Nothing else changes.',
+        'prospectively_frozen_malformed_body_diagnostics',
+        failed_identities=tuple(failed), active_attempt='b05.r01.a04',
+        completed_identities=tuple(completed), allow_committed=True)
 
 
 def release_stop(out, fixture=False):

@@ -745,6 +745,25 @@ class ProviderFundingTests(unittest.TestCase):
         self.assertNotIn('OFFLINE_FIXTURE_NOT_A_SECRET',saved['partial_body']['stripped_prefix'])
         self.assertEqual(self.transport.posts_exact,[])
 
+    def test_malformed_200_body_is_kept_with_prefix_suffix_and_generation_id(self):
+        p=self.provider([])
+        raw=b'\n\n   {"id":"gen-OFFLINE-MALFORMED","choices":[{"message":{"content":"OFFLINE_FIXTURE_NOT_A_SECRET truncated'
+        binding={'endpoint':'/chat/completions','request_id':NAMESPACE+':b01.r01.a01.MALFORMED.native'}
+        class Body:
+            def __enter__(self):return self
+            def __exit__(self,*a):return False
+            def read(self,n):return raw
+        class Opener:
+            def open(self,request,timeout):return Body()
+        p._transport=None;p._opener=Opener()
+        with self.assertRaises(Fault)as raised:p._post_exact(canonical(wire_payload()).encode(),binding)
+        self.assertFalse(raised.exception.permanent)
+        saved=read(p.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'))
+        self.assertEqual(saved['failure_class'],'MalformedBody')
+        self.assertEqual(saved['partial_body']['generation_id'],'gen-OFFLINE-MALFORMED')
+        self.assertTrue(saved['partial_body']['stripped_suffix'].endswith('truncated'))
+        self.assertNotIn('OFFLINE_FIXTURE_NOT_A_SECRET',saved['partial_body']['stripped_prefix'])
+
     def test_matching_arm_lock_allows_dispatch_and_other_arm_lock_does_not(self):
         g=Guard(self.path,self.out,'b03.r06.a02',lambda:None,ledger=self.ledger)
         with lock(self.out/'arms/b02'):
