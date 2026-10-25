@@ -154,6 +154,25 @@ class RunnerTests(unittest.TestCase):
   first=r.commits('b01')[0]
   self.assertEqual(packet['public_ballot_history'],[{'round':1,'ballots':first['ballots'],'client_answer':first['client_correct']}])
   self.assertNotIn(first['validation_tag'],canonical(packet))
+ def test_rewind_reruns_listed_stages_under_fresh_identities_and_review_jobs(self):
+  r=FixtureRunner(self.root/'run',fixture=True);r.init();ctx,root=r.current('b01')
+  put(root/'stage_retirements/A_LOG.0.json',{'status':'abandoned_technical','technical':True,'attempt_id':ctx['attempt_id']})
+  self.assertEqual(r.stage_identity(ctx,root,'A_LOG')[0],'b01.r01.a01.A_LOG.retry1')
+  put(root/'rewinds/001.json',{'rerender_stages':['A_PUBLISH'],'rerun_stages':['B_PUBLISH','A_LOG','MAIN_REVIEW']})
+  self.assertEqual(r.stage_identity(ctx,root,'A_PUBLISH')[0],'b01.r01.a01.A_PUBLISH')
+  self.assertEqual(r.stage_identity(ctx,root,'B_PUBLISH')[0],'b01.r01.a01.B_PUBLISH.rw1')
+  self.assertEqual(r.stage_identity(ctx,root,'A_LOG')[0],'b01.r01.a01.A_LOG.rw1')
+  self.assertEqual(r.review_job_id(ctx,'MAIN_REVIEW',1,r.rewind_generation(root,'MAIN_REVIEW')),'b01.r01.b01.r01.a01.MAIN.rw1')
+  self.assertEqual(r.review_job_id(ctx,'RETURN_REVIEW',2,r.rewind_generation(root,'RETURN_REVIEW')),'b01.r01.b01.r01.a01.RETURN.v2')
+ def test_rewound_round_commits_with_generation_and_identity_based_figures(self):
+  r=FixtureRunner(self.root/'run',fixture=True);r.init();r.fake=FakeProvider(self.root);figures=[];render=r.fake.render
+  def recorded(identifier,brief):figures.append(identifier);return render(identifier,brief)
+  r.fake.render=recorded
+  ctx,root=r.current('b01')
+  put(root/'rewinds/001.json',{'rerender_stages':[],'rerun_stages':['B_PUBLISH']})
+  with patch.object(rt,'Ledger',DummyLedger),lock(r.out/'arms/b01'):r.advance('b01',1)
+  c=r.commits('b01')[0];self.assertEqual((c['status'],c['rewind_generation']),('complete',1))
+  self.assertIn('b01.r01.a01.B_PUBLISH.rw1.figure',figures);self.assertIn('b01.r01.a01.A_PUBLISH.figure',figures)
  def test_offline_fixture_cannot_become_live(self):
   r=self.run_fixture();live=rt.Runner(r.out)
   with self.assertRaises(IntegrityError):live.verify()

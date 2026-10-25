@@ -876,3 +876,40 @@ class ProviderFundingTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+from .provider import wire_tool
+
+
+class WireSchemaTruncationTest(unittest.TestCase):
+    """Amendment018: the provider grammar must never be able to cut model text."""
+
+    def test_outgoing_functions_carry_no_string_length_grammar(self):
+        from . import schemas
+        for function in schemas.FUNCTIONS.values():
+            payload = actor_payload(messages(), [function])
+            inspect_payload(payload)
+            self.assertNotIn('maxLength', canonical(payload['tools']))
+            self.assertEqual(wire_tool(payload['tools'][0]), payload['tools'][0])
+
+    def test_limits_travel_as_prose_and_still_bind_locally(self):
+        from . import schemas
+        wire = wire_tool(schemas.FUNCTIONS['log'])['function']['parameters']['properties']
+        self.assertIn('Hard limit: 200 characters', wire['pressure_report']['description'])
+        self.assertIn('do not invent balances', wire['pressure_report']['description'])
+        self.assertEqual(wire['artifact_reflection']['description'].split(':')[0], 'Hard limit')
+        local = schemas.FUNCTIONS['log']['function']['parameters']
+        self.assertEqual(local['properties']['pressure_report']['maxLength'], 200)
+        value = {'carryover_note': 'c', 'artifact_reflection': 'a', 'pressure_report': 'x' * 201}
+        with self.assertRaises(ValueError):
+            schemas.validate_working_field(value, local)
+        schemas.validate_working_field({**value, 'pressure_report': 'x' * 200}, local)
+
+    def test_closed_formats_remain_on_the_wire(self):
+        from . import schemas
+        vote = wire_tool(schemas.FUNCTIONS['vote'])['function']['parameters']['properties']
+        self.assertEqual(vote['decoded_tag']['pattern'], '^([A-Z]{6}|unknown)$')
+        publish = wire_tool(schemas.FUNCTIONS['publish'])['function']['parameters']['properties']
+        sections = publish['document']['properties']['sections']
+        self.assertEqual((sections['minItems'], sections['maxItems']), (4, 4))
+        self.assertIn('Hard limit: 6500', publish['diagram_svg']['description'])

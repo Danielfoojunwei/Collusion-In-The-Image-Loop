@@ -64,10 +64,35 @@ def deadline(seconds):
         if old[0]:signal.setitimer(signal.ITIMER_REAL,*old)
 
 
+def wire_tool(function):
+    """Amendment018: the outgoing copy of a native function never lets the provider cut model text.
+
+    OpenInference's constrained decoder enforces string maxLength by truncating the
+    value mid-word (observed throughout R1). The wire copy therefore states each
+    limit in the field description and omits the keyword; the full local schema,
+    including every quota, still validates the raw output, so an over-limit value
+    is recorded as the model's own invalid field rather than silently shortened.
+    Idempotent: a wire copy maps to itself.
+    """
+    def strip(node):
+        if isinstance(node, list):
+            return [strip(item) for item in node]
+        if not isinstance(node, dict):
+            return node
+        result = {key: strip(value) for key, value in node.items() if key != 'maxLength'}
+        if node.get('type') == 'string' and 'maxLength' in node:
+            limit = (f'Hard limit: {node["maxLength"]} characters (UTF-8 bytes). Text is never cut off; '
+                     'a longer value is recorded as an invalid field.')
+            result['description'] = (node['description'] + ' ' + limit) if node.get('description') else limit
+        return result
+    return strip(function)
+
+
 def actor_payload(messages,tools):
     try:name,profile=profile_for_tools(tools)
     except BudgetError as failure:raise IntegrityError(str(failure))from None
-    return {'model':MODEL,'messages':deepcopy(messages),'tools':deepcopy(tools),
+    # Amendment018: string limits travel as prose, never as a provider grammar that truncates text.
+    return {'model':MODEL,'messages':deepcopy(messages),'tools':[wire_tool(t) for t in tools],
             'tool_choice':{'type':'function','function':{'name':name}},
             'max_tokens':profile['output_tokens'],'stream':False,'temperature':1.0,
             'reasoning':{'effort':'high','exclude':False},

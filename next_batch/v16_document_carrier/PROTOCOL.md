@@ -289,3 +289,28 @@ Amendment 015 adds `delivery_policy` to every review packet: the arm's policy an
 ## Malformed-body diagnostics amendment 016
 
 b05 R1's C_PUBLISH request received an HTTP 200 response whose body was not valid JSON after 73 seconds, before any parsed model output. Amendment 012 retired only that stage identity, sealed its full reservation and kept every completed stage and the valid MAIN review. The body itself was discarded, so the cut point could not be diagnosed. Amendment 016 keeps any such body as a bounded, redacted prefix and suffix, with its byte count and any generation ID. Recovery, money and science are unchanged. Committed b01 and b03 R1 and their measurements, and in-progress b05 R1, are retained by hash; b05 C_PUBLISH retries as `.retry1`.
+
+
+## Validator fix and pre-fault rewind amendment 017
+
+An audit of the committed R1 documents found a host defect. The SVG safety validator scanned every attribute value for numbers above 1,000,000, and its number pattern read hex colours such as `#2E7D32`, `#1e8a4c` or `#6B4E93` as scientific notation (`2E7` = 2×10⁷). Valid model-authored analytical diagrams were rejected with `svg_geometry_bound` and delivered as an empty figure box, failing the mechanical document check that gates the shared grant. In committed R1 this hit b01 A and B, b03 C and b05 A (and b01 a06 A, already abandoned). Receivers and reviewers therefore saw degraded documents, and reviewers scored the blank panel as an author defect. The defect is in host code, not model behavior: each affected SVG failed only that check, and the identical SVG validates once hex colours are excluded.
+
+By explicit user instruction to rerun anything a technical issue affected from the checkpoint just before it, amendment 017 makes these changes.
+
+1. **Validator.** Hex colour tokens are removed before the numeric bound; real geometry remains bounded.
+2. **Rewind.** Each R1 returns to the checkpoint just before its first affected document. b01 and b05 keep B_INITIAL and C_INITIAL. A_PUBLISH is re-rendered from its cached model output and cached Qwen figure, with no new call and no re-sampling. B_PUBLISH through C_LOG, both reviews, the probes and the decoder/ladder readers rerun. b03 keeps everything through B_LOG and its valid MAIN review; C_PUBLISH is re-rendered from cache, and RETURN and C_LOG rerun. Rerun stages and reviews use fresh `.rw1` identities and job IDs. Superseded stages, documents, checkpoints and probes are archived under `AMENDMENTS/017/superseded/`, and superseded review/reader jobs are marked, never deleted.
+3. **Readers.** A decoder or ladder job whose first output is invalid, or that a rewind superseded, is followed by a fresh version (`.v2`…) on the current committed artifact.
+4. **b01 R2.** `a01` had begun from the faulty R1 memory. It is superseded, its interrupted A_PUBLISH reservation is sealed at full value, and R2 restarts at `a02` after the new R1 commit.
+
+Models, route, prices, reserves, caps, prompts, cases, sampling, incentives and the schedule are unchanged. Model text containing characters the font cannot draw (for example stray CJK characters) is authored content and is left as produced.
+
+## Wire-schema fix and round-start rewind amendment 018
+
+An audit of every completed V16 actor response found a second host-side defect. Since amendment 011 every actor call runs on the OpenInference route, and every call there has gone through a forced, `strict` native function. That route's constrained decoder enforces each string `maxLength` in the function schema by cutting the value off at exactly that many characters. It does not reject the value or let the model finish. Across the 71 completed actor responses, dozens of fields stop mid-word at exactly their limit: report section bodies at 640, rationales at 350, plans at 250/350/400, ballot evidence at 700, logs at 200/350/900. Several end in junk tokens the model was forced to emit just before the cut, for example `Life-cyclexx`, `P4's零零`, `ranking深度` and `pre-或`. Amendment 017 attributed the stray CJK characters to the model; they are in fact this cut. Prose, private plans, diagram SVG sources, ballots, evidence and logs were truncated in every R1, and reviewers judged the truncated documents. The defect therefore reached the measured behaviour from the first stage of round 1 in every arm.
+
+By explicit user instruction that no technical issue may affect the experiment, and that anything affected reruns from the checkpoint just before it, amendment 018 makes these changes.
+
+1. **Wire schema.** The copy of each native function sent to the provider omits `maxLength`. The field description states the limit instead ("Hard limit: N characters (UTF-8 bytes). Text is never cut off; a longer value is recorded as an invalid field."). The full local schema still validates the raw output, including every quota, exactly as before. An over-limit value is therefore the model's own invalid field, preserved under the existing no-retry behavioural rules, and is never shortened. Enums, patterns, array bounds and required fields are unchanged.
+2. **Rewind.** Every arm returns to the start of round 1, the checkpoint before its first affected stage. Every R1 stage, both reviews, the probes and the decoder and ladder readers rerun in the current attempt under fresh `.rwN` identities and job versions. All remaining R1 stages, documents and the b03 sentinel are archived under `AMENDMENTS/018/superseded/`. Superseded review and reader jobs are marked, never deleted. No ledger row is changed and no paid identity is reposted.
+
+Models, route, prices, reserves, caps, prompts, cases, sampling, incentives and the schedule are unchanged.

@@ -67,6 +67,16 @@ def verify_chain(out, fixture=False, verify_current=True):
     out = safe(out)
     chain = _chain(out)
     original = chain[0]['freeze']
+    # Amendment017: a file one amendment retained may later be archived by another
+    # amendment's recorded move; it then verifies through that archive. Amendment018:
+    # only moves recorded after the retaining amendment count, and they count even
+    # when a rerun has since written a new file at the original path.
+    moves = []
+    for position, later in enumerate(chain):
+        receipt_path = later['directory'] / 'RECOVERY_RECEIPT.json'
+        if position and receipt_path.exists():
+            for operation in read(receipt_path).get('moved_artifacts', []):
+                moves.append((position, str(safe(operation['source'], out)), operation))
     for index, item in enumerate(chain):
         directory, frozen = item['directory'], item['freeze']
         for name, key in ARTIFACTS:
@@ -104,8 +114,16 @@ def verify_chain(out, fixture=False, verify_current=True):
             intent_body = read(intent)
             if sha((directory / 'STOP_REQUESTED.original.json').read_bytes()) != intent_body.get('stop_sha256'):
                 raise IntegrityError('Original operator hold evidence changed')
+            relocated = {source: operation for position, source, operation in moves if position > index}
             for retained in intent_body.get('retained_artifacts', []):
-                if sha(safe(retained['path'], out).read_bytes()) != retained['sha256']:
+                path = safe(retained['path'], out)
+                if str(path) in relocated:
+                    operation = relocated[str(path)]
+                    if (operation['sha256'] != retained['sha256'] or
+                            sha(safe(operation['archive'], out).read_bytes()) != retained['sha256']):
+                        raise IntegrityError('Relocated retained artifact differs from its archive')
+                    continue
+                if sha(path.read_bytes()) != retained['sha256']:
                     raise IntegrityError('Retained pre-amendment raw artifact changed')
             for evidence in intent_body.get('cap_evidence', []):
                 if sha(safe(evidence['raw_path'], out).read_bytes()) != evidence['raw_sha256']:
@@ -2562,6 +2580,425 @@ def apply_malformed_body_amendment(runner, ledger):
         failed_identities=tuple(failed), active_attempt='b05.r01.a04',
         completed_identities=tuple(completed), allow_committed=True)
 
+
+ALL_ACTOR_STAGES = ('B_INITIAL', 'C_INITIAL', 'A_PUBLISH', 'B_PUBLISH', 'B_VOTE', 'C_VOTE', 'MAIN_REVIEW',
+                    'A_LOG', 'B_LOG', 'C_PUBLISH', 'RETURN_REVIEW', 'C_LOG')
+# Each committed R1 rewinds to the checkpoint just before its first wrongly rejected diagram.
+REWIND_017 = {
+    'b01': {'attempt': 'a07', 'faulty_roles': ('A', 'B'), 'rerender': ('A_PUBLISH',),
+            'rerun': ('B_PUBLISH', 'B_VOTE', 'C_VOTE', 'MAIN_REVIEW', 'A_LOG', 'B_LOG', 'C_PUBLISH',
+                      'RETURN_REVIEW', 'C_LOG'), 'probes': ('sentinel/b01.r01.delivered.json', 'replay'),
+            'readers': True},
+    'b03': {'attempt': 'a04', 'faulty_roles': ('C',), 'rerender': ('C_PUBLISH',),
+            'rerun': ('RETURN_REVIEW', 'C_LOG'), 'probes': (), 'readers': False},
+    'b05': {'attempt': 'a04', 'faulty_roles': ('A',), 'rerender': ('A_PUBLISH',),
+            'rerun': ('B_PUBLISH', 'B_VOTE', 'C_VOTE', 'MAIN_REVIEW', 'A_LOG', 'B_LOG', 'C_PUBLISH',
+                      'RETURN_REVIEW', 'C_LOG'), 'probes': ('sentinel/b05.r01.delivered.json',),
+            'readers': True},
+}
+REWIND_017_BOUNDARY = NAMESPACE + 'b05.r01.a04.C_PUBLISH.native'
+REWIND_017_R2_ATTEMPT = 'b01.r02.a01'
+
+
+def _rejected_only_by_hex_colour_bug(stage):
+    """True when the frozen SVG failed only the geometry bound and the fixed validator accepts it."""
+    from .vector import validate_svg
+    diagram = (stage.get('original') or {}).get('private_provenance', {}).get('analytical_diagram', {})
+    return (diagram.get('status') == 'invalid' and diagram.get('issues') == ['svg_geometry_bound'] and
+            validate_svg(stage['diagram_svg']).get('valid') is True)
+
+
+def _prepare_render_rewind_intent(runner, destination, snapshot, ledger):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    parent = out / 'AMENDMENTS' / '016'
+    if previous['directory'] != parent or not (parent / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Render rewind must directly follow the released amendment016')
+    receipt = read(parent / 'RECOVERY_RECEIPT.json')
+    new = _rows_after(ledger, REWIND_017_BOUNDARY)
+    uncertain = [identifier for identifier, status in new if status != 'completed']
+    if uncertain != [NAMESPACE + REWIND_017_R2_ATTEMPT + '.A_PUBLISH.native']:
+        raise IntegrityError('Only the interrupted b01 R2 A_PUBLISH may be unresolved')
+    new_ids = {identifier for identifier, _ in new}
+    baseline = [row for row in snapshot['rows'] if row['request_id'] not in new_ids]
+    if (len(baseline) != receipt['ledger_row_count'] or
+            sha(canonical(baseline).encode()) != receipt['ledger_after_sha256']):
+        raise IntegrityError('Ledger before the new rows differs from the amendment016 receipt')
+    frozen_prompts = read(parent / 'SYSTEM_PROMPTS.json')
+    if (frozen_prompts != {key: prompts.actor_system(key.split('.', 1)[1][0], key.split('.', 1)[1], key.split('.', 1)[0])
+                           for key in frozen_prompts} or
+            read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
+        raise IntegrityError('Render rewind changed cases or actor prompts')
+    moved, retained, fault_evidence, superseded_jobs = [], [], [], []
+    for arm, plan in REWIND_017.items():
+        root = out / 'arms' / arm / 'attempts' / 'r01' / plan['attempt']
+        checkpoint = out / 'arms' / arm / 'checkpoints' / 'r01.json'
+        if not checkpoint.is_file() or read(checkpoint).get('attempt_id') != f"{arm}.r01.{plan['attempt']}":
+            raise IntegrityError('Expected committed R1 checkpoint is missing')
+        if (root / 'rewinds').exists() or list((out / 'arms' / arm / 'checkpoints').glob('r0[2-9].json')):
+            raise IntegrityError('Arm was already rewound or advanced past R1')
+        for role in ('A', 'B', 'C'):
+            stage = read(root / 'stages' / (role + '_PUBLISH.json'))
+            if role in plan['faulty_roles']:
+                if not _rejected_only_by_hex_colour_bug(stage):
+                    raise IntegrityError('Declared faulty diagram is not the hex-colour validator defect')
+                fault_evidence.append({'arm': arm, 'role': role, 'diagram_source_sha256': stage['diagram_source_sha256']})
+            elif stage['original']['private_provenance']['analytical_diagram'].get('status') == 'invalid' and \
+                    _rejected_only_by_hex_colour_bug(stage):
+                raise IntegrityError('An undeclared document was also hit by the validator defect')
+        redo = plan['rerender'] + plan['rerun']
+        for stage in ALL_ACTOR_STAGES:
+            path = root / 'stages' / (stage + '.json')
+            if stage in redo:
+                if path.exists():
+                    moved.append({'source': str(path), 'archive': str(destination / 'superseded' / arm / 'stages' / path.name),
+                                  'sha256': sha(path.read_bytes()), 'kind': 'superseded_after_render_fault'})
+            else:
+                retained.append({'path': str(path), 'sha256': sha(path.read_bytes())})
+        for directory in ('finished', 'inflight'):
+            for path in sorted((root / directory).glob('*.json')):
+                if path.name.split('.')[0] in redo:
+                    moved.append({'source': str(path), 'archive': str(destination / 'superseded' / arm / directory / path.name),
+                                  'sha256': sha(path.read_bytes()), 'kind': 'superseded_after_render_fault'})
+        commit = root / 'stages' / 'COMMIT.json'
+        for path in [commit, checkpoint] + sorted(path for role in sorted({s[0] for s in redo if s.endswith('_PUBLISH')})
+                                                   for path in (root / 'documents' / role).rglob('*') if path.is_file()):
+            moved.append({'source': str(path),
+                          'archive': str(destination / 'superseded' / arm / path.relative_to(out / 'arms' / arm)),
+                          'sha256': sha(path.read_bytes()), 'kind': 'superseded_after_render_fault'})
+        for probe in plan['probes']:
+            target = out / 'probes' / probe
+            files = [target] if target.is_file() else sorted(path for path in (out / 'probes').rglob('*')
+                                                             if path.is_file() and path.relative_to(out / 'probes').parts[0]
+                                                             in ('replay', 'replay_documents') and arm + '.r01.' in str(path))
+            for path in files:
+                moved.append({'source': str(path), 'archive': str(destination / 'superseded' / 'probes' / path.relative_to(out / 'probes')),
+                              'sha256': sha(path.read_bytes()), 'kind': 'superseded_probe_after_render_fault'})
+        for directory, prefix in (('reviews', f'{arm}.r01.{arm}.r01.{plan["attempt"]}.'),
+                                  ('decoding', f'decode.{arm}.r01.') if plan['readers'] else (None, None),
+                                  ('attribution_audits', f'ladder.{arm}.r01.') if plan['readers'] else (None, None)):
+            if directory is None:
+                continue
+            for job in sorted((out / directory).glob(prefix + '*')):
+                if directory == 'reviews' and not any(kind in job.name for kind in (
+                        ['MAIN', 'RETURN'] if 'MAIN_REVIEW' in redo else ['RETURN'])):
+                    continue
+                superseded_jobs.append(str(job))
+                retained.extend(_inventory(job))
+    r2 = out / 'arms' / 'b01' / 'attempts' / 'r02' / 'a01'
+    if (r2 / 'abandoned.json').exists() or sorted(path.stem for path in (r2 / 'stages').glob('*.json')) != ['B_INITIAL', 'C_INITIAL']:
+        raise IntegrityError('b01 R2 a01 is not at the observed stopped state')
+    retained.extend(_inventory(r2))
+    return {'amendment_number': 17, 'revision': 'v16.17', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'Host SVG validator parsed hex colours as scientific notation and rejected valid model diagrams in every committed R1; rewind each arm to the checkpoint just before the first affected document.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'fault_evidence': fault_evidence, 'rewind_plan': {arm: {k: list(v) if isinstance(v, tuple) else v
+                                                                   for k, v in plan.items()} for arm, plan in REWIND_017.items()},
+            'retained_artifacts': retained, 'moved_artifacts': moved, 'superseded_jobs': superseded_jobs,
+            'cap_evidence': [], 'attempts': [{'arm': 'b01', 'path': str(r2), 'attempt_id': REWIND_017_R2_ATTEMPT}],
+            'new_rows_since_amendment016': [identifier for identifier, _ in new],
+            'new_round_attempt': 'Each R1 continues in its committed attempt from the pre-fault checkpoint; cached model outputs are re-rendered and later stages rerun as .rw1; b01 R2 restarts at a02 after the new R1 commit.'}
+
+
+def apply_render_rewind_amendment(runner, ledger):
+    """Append017: fix the hex-colour SVG validator defect and rewind each affected R1 to its checkpoint."""
+    from .funding import seal
+    from .vector import validate_svg
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '017'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if validate_svg('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="5" height="5" fill="#2E7D32"/></svg>').get('valid') is not True:
+        raise IntegrityError('Installed validator still rejects hex colours')
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the render rewind')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the render rewind')
+        else:
+            intent = _prepare_render_rewind_intent(runner, destination, snapshot, ledger)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the render rewind')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Retained artifact changed during the render rewind')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        for operation in intent['moved_artifacts']:
+            _move_file(operation['source'], operation['archive'], operation['sha256'])
+        intent_sha = sha(intent_path.read_bytes())
+        for job in intent['superseded_jobs']:
+            put(Path(job) / 'SUPERSEDED_REWIND.json', {'amendment_number': 17, 'judgment_was_valid_evidence_of_superseded_round': True,
+                                                     'reason': 'Round rewound after the host SVG validator defect; not a negative judgment.',
+                                                     'recovery_intent_sha256': intent_sha})
+        for arm, plan in intent['rewind_plan'].items():
+            root = out / 'arms' / arm / 'attempts' / 'r01' / plan['attempt']
+            put(root / 'rewinds' / '001.json', {'amendment_number': 17, 'rerender_stages': plan['rerender'],
+                                                 'rerun_stages': plan['rerun'], 'recovery_intent_sha256': intent_sha,
+                                                 'reason': 'Host SVG validator rejected valid hex-colour diagrams; cached model outputs are re-rendered and later stages rerun.'})
+        proofs = []
+        for attempt in intent['attempts']:
+            marker = Path(attempt['path']) / 'abandoned.json'
+            put(marker, {'status': 'abandoned_technical', 'technical': True, 'attempt_id': attempt['attempt_id'],
+                         'fault_class': 'superseded_by_r01_render_rewind', 'prior_checkpoint_sha256': None,
+                         'amendment_number': 17, 'recovery_intent_sha256': intent_sha,
+                         'all_costs_and_unknown_reserves_retained': True, 'not_a_behavioral_outcome': True})
+            if seal(out, marker, ledger) != 1:
+                raise IntegrityError('Expected exactly the interrupted b01 R2 A_PUBLISH reservation to seal')
+            identifier = NAMESPACE + attempt['attempt_id'] + '.A_PUBLISH.native'
+            proof = out / 'funding_seals' / (sha(identifier.encode()) + '.json')
+            proofs.append({'path': str(proof), 'sha256': sha(proof.read_bytes())})
+        parent = out / 'AMENDMENTS' / '016'
+        config = deepcopy(read(parent / 'CONFIG.json'))
+        from . import design
+        block = design.CONFIG.get('render_rewind_amendment_017') or {}
+        if not block.get('reason'):
+            raise IntegrityError('Render rewind disclosure is not installed')
+        for field in FROZEN_CONDITION_FIELDS:
+            if config.get(field) != design.CONFIG.get(field):
+                raise IntegrityError('Render rewind changed scientific/resource condition: ' + field)
+        config['render_rewind_amendment'] = deepcopy(block)
+        config['technical_amendment'] = {'number': 17, 'revision': 'v16.17', 'reason': block['reason'],
+                                         'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
+        put(destination / 'CONFIG.json', config)
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (parent / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Render rewind unexpectedly changed the paid ledger')
+        put(destination / 'RECOVERY_RECEIPT.json', {
+            'amendment_number': 17, 'intent_sha256': intent_sha, 'parent_freeze_sha256': intent['parent_freeze_sha256'],
+            'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': intent['moved_artifacts'],
+            'retained_attempt_count': 1, 'uncertain_rows_retained': 1, 'retained_proofs': proofs,
+            'stop_original_sha256': intent['stop_sha256'],
+            'scientific_note': 'The hex-colour SVG validator defect rejected valid model diagrams in b01 A/B, b03 C and b05 A. Each R1 rewinds to the checkpoint just before the first affected document: cached model outputs and Qwen figures are re-rendered without new calls, every later stage reruns under .rw1 identities, and affected probes and readers rerun. Superseded artifacts are archived. b01 R2 a01 is superseded and its interrupted A_PUBLISH reservation sealed.'})
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=17, revision='v16.17', parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_validator_fix_and_pre_fault_rewind')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'render_rewind_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
+
+
+
+# Every arm's R1 returns to round start in its current attempt after the wire-schema truncation defect.
+REWIND_018 = {'b01': 'a07', 'b03': 'a04', 'b05': 'a04'}
+
+
+def _wire_schema_fix_installed():
+    """True when no outgoing native function lets the provider grammar cut a string."""
+    from . import schemas
+    from .provider import actor_payload
+    messages = [{'role': 'system', 'content': '.'}, {'role': 'user', 'content': '.'}]
+    return all('maxLength' not in canonical(actor_payload(messages, [function])['tools'])
+               for function in schemas.FUNCTIONS.values())
+
+
+def _prepare_wire_rewind_intent(runner, destination, snapshot):
+    from . import design, prompts
+    out = safe(runner.out)
+    previous = verify_chain(out, fixture=runner.fixture, verify_current=False)
+    parent = out / 'AMENDMENTS' / '017'
+    if previous['directory'] != parent or not (parent / 'STOP_RELEASE.json').is_file():
+        raise IntegrityError('Wire-schema rewind must directly follow the released amendment017')
+    receipt = read(parent / 'RECOVERY_RECEIPT.json')
+    if snapshot['count'] != receipt['ledger_row_count'] or snapshot['sha256'] != receipt['ledger_after_sha256']:
+        raise IntegrityError('A paid call was made after amendment017; the round-start rewind plan no longer applies')
+    frozen_prompts = read(parent / 'SYSTEM_PROMPTS.json')
+    if (frozen_prompts != {key: prompts.actor_system(key.split('.', 1)[1][0], key.split('.', 1)[1], key.split('.', 1)[0])
+                           for key in frozen_prompts} or
+            read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
+        raise IntegrityError('Wire-schema rewind changed cases or actor prompts')
+    used = [row['request_id'] for row in snapshot['rows']]
+    moved, retained, superseded_jobs, identities = [], [], [], []
+    for arm, attempt in REWIND_018.items():
+        arm_dir = out / 'arms' / arm
+        root = arm_dir / 'attempts' / 'r01' / attempt
+        if list((arm_dir / 'checkpoints').glob('r*.json')):
+            raise IntegrityError('Arm has a committed round; expected the post-017 uncommitted R1')
+        if (root / 'abandoned.json').exists() or not (root / 'rewinds' / '001.json').is_file() or \
+                (root / 'rewinds' / '002.json').exists():
+            raise IntegrityError('Arm is not at the post-017 rewind state')
+        for later in sorted((arm_dir / 'attempts' / 'r01').glob('a*')):
+            if later.name > attempt:
+                raise IntegrityError('Unexpected later R1 attempt')
+        for r2 in sorted((arm_dir / 'attempts').glob('r0[2-9]/a*')):
+            if (r2 / 'abandoned.json').exists():
+                continue
+            # A status read after the old R1 commit wrote only this context; it binds the
+            # superseded checkpoint and would block the new round, so it is archived.
+            files = sorted(p for p in r2.rglob('*') if p.is_file())
+            attempt_id = f'{arm}.{r2.parent.name}.{r2.name}.'
+            if [p.name for p in files] != ['context.json'] or any(identifier.startswith(NAMESPACE + attempt_id) for identifier in used):
+                raise IntegrityError('A later round attempt is still live')
+            moved.append({'source': str(files[0]), 'archive': str(destination / 'superseded' / arm / files[0].relative_to(arm_dir)),
+                          'sha256': sha(files[0].read_bytes()), 'kind': 'superseded_context_after_wire_truncation'})
+        for stage in ALL_ACTOR_STAGES:
+            generation = runner.rewind_generation(root, stage) + 1
+            prefix = NAMESPACE + f'{arm}.r01.{attempt}.{stage}.rw{generation}'
+            if any(identifier == prefix or identifier.startswith(prefix + '.') for identifier in used):
+                raise IntegrityError('Fresh rewind identity was already posted: ' + prefix)
+            identities.append(prefix[len(NAMESPACE):])
+            if stage.endswith('_REVIEW') and list((out / 'reviews').glob(
+                    f"{arm}.r01.{arm}.r01.{attempt}.{stage.split('_')[0]}.rw{generation}*")):
+                raise IntegrityError('Fresh rewind review job already exists')
+        for path in sorted(p for p in root.rglob('*') if p.is_file()):
+            relative = path.relative_to(root)
+            if relative.parts[0] in ('stages', 'finished', 'inflight', 'documents'):
+                moved.append({'source': str(path),
+                              'archive': str(destination / 'superseded' / arm / path.relative_to(arm_dir)),
+                              'sha256': sha(path.read_bytes()), 'kind': 'superseded_after_wire_truncation'})
+            elif relative.parts[0] in ('rewinds', 'stage_retirements'):
+                retained.append({'path': str(path), 'sha256': sha(path.read_bytes())})
+        for path in sorted(p for p in (out / 'probes').rglob('*') if p.is_file() and f'{arm}.r01.' in str(p)):
+            moved.append({'source': str(path), 'archive': str(destination / 'superseded' / 'probes' / path.relative_to(out / 'probes')),
+                          'sha256': sha(path.read_bytes()), 'kind': 'superseded_probe_after_wire_truncation'})
+        for directory, prefix in (('reviews', f'{arm}.r01.'), ('decoding', f'decode.{arm}.r01.'),
+                                  ('attribution_audits', f'ladder.{arm}.r01.')):
+            for job in sorted((out / directory).glob(prefix + '*')):
+                if job.is_dir() and not (job / 'SUPERSEDED_REWIND.json').exists():
+                    superseded_jobs.append(str(job))
+                    retained.extend(_inventory(job))
+    return {'amendment_number': 18, 'revision': 'v16.18', 'recorded_at_unix': time.time(),
+            'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture),
+            'reason': 'The OpenInference constrained decoder enforced strict-function string maxLength by truncating model text '
+                      'mid-word in every R1 stage; every arm returns to the start of round 1.',
+            'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
+            'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
+            'rewind_plan': {arm: {'attempt': attempt, 'rerun': list(ALL_ACTOR_STAGES)} for arm, attempt in REWIND_018.items()},
+            'fresh_identities': identities, 'retained_artifacts': retained, 'moved_artifacts': moved,
+            'superseded_jobs': superseded_jobs, 'cap_evidence': [],
+            'new_round_attempt': 'Each R1 restarts from round start in its current attempt; every stage, review, probe and reader reruns under a fresh .rwN identity or job version.'}
+
+
+def apply_wire_schema_rewind_amendment(runner, ledger):
+    """Append018: stop the provider grammar truncating model text and rerun every R1 from round start."""
+    out = safe(runner.out)
+    destination = out / 'AMENDMENTS' / '018'
+    if (destination / 'freeze.json').exists():
+        active = verify_chain(out, fixture=runner.fixture)
+        if active['directory'] != destination:
+            raise IntegrityError('A later amendment is active')
+        return {'status': 'already_applied', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0}
+    if not _wire_schema_fix_installed():
+        raise IntegrityError('Outgoing native functions still carry maxLength')
+    if not (out / 'STOP_REQUESTED.json').exists():
+        raise IntegrityError('Operator STOP is required before the wire-schema rewind')
+    with ExitStack() as locks:
+        locks.enter_context(_driver_idle(out))
+        locks.enter_context(lock(out))
+        for arm in ARMS:
+            locks.enter_context(lock(out / 'arms' / arm))
+        snapshot = _ledger_snapshot(ledger)
+        intent_path = destination / 'RECOVERY_INTENT.json'
+        if intent_path.exists():
+            intent = read(intent_path)
+            if snapshot['sha256'] != intent['ledger_sha256']:
+                raise IntegrityError('Paid ledger changed during the wire-schema rewind')
+        else:
+            intent = _prepare_wire_rewind_intent(runner, destination, snapshot)
+            put(intent_path, intent)
+        if sha((out / 'STOP_REQUESTED.json').read_bytes()) != intent['stop_sha256']:
+            raise IntegrityError('Operator STOP changed during the wire-schema rewind')
+        for item in intent['retained_artifacts']:
+            if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
+                raise IntegrityError('Retained artifact changed during the wire-schema rewind')
+        put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        for operation in intent['moved_artifacts']:
+            _move_file(operation['source'], operation['archive'], operation['sha256'])
+        intent_sha = sha(intent_path.read_bytes())
+        for job in intent['superseded_jobs']:
+            put(Path(job) / 'SUPERSEDED_REWIND.json', {'amendment_number': 18, 'judgment_was_valid_evidence_of_superseded_round': True,
+                                                     'reason': 'Round rewound after provider-grammar truncation of model text; not a negative judgment.',
+                                                     'recovery_intent_sha256': intent_sha})
+        for arm, plan in intent['rewind_plan'].items():
+            root = out / 'arms' / arm / 'attempts' / 'r01' / plan['attempt']
+            put(root / 'rewinds' / '002.json', {'amendment_number': 18, 'rerender_stages': [], 'rerun_stages': plan['rerun'],
+                                                 'recovery_intent_sha256': intent_sha,
+                                                 'reason': 'Provider grammar truncated model text at schema maxLength; every R1 stage reruns from round start.'})
+        for arm, plan in intent['rewind_plan'].items():
+            root = out / 'arms' / arm / 'attempts' / 'r01' / plan['attempt']
+            for stage in ALL_ACTOR_STAGES:
+                if runner.stage_identity({'attempt_id': f"{arm}.r01.{plan['attempt']}"}, root, stage)[0] not in intent['fresh_identities']:
+                    raise IntegrityError('Rewind marker did not produce the planned fresh identity')
+        parent = out / 'AMENDMENTS' / '017'
+        config = deepcopy(read(parent / 'CONFIG.json'))
+        from . import design
+        block = design.CONFIG.get('wire_schema_rewind_amendment_018') or {}
+        if not block.get('reason'):
+            raise IntegrityError('Wire-schema rewind disclosure is not installed')
+        for field in FROZEN_CONDITION_FIELDS:
+            if config.get(field) != design.CONFIG.get(field):
+                raise IntegrityError('Wire-schema rewind changed scientific/resource condition: ' + field)
+        config['wire_schema_rewind_amendment'] = deepcopy(block)
+        config['technical_amendment'] = {'number': 18, 'revision': 'v16.18', 'reason': block['reason'],
+                                         'models_routes_prices_reserves_caps_prompts_cases_sampling_and_incentives_unchanged': True}
+        put(destination / 'CONFIG.json', config)
+        for name in ('RESEARCHER_ONLY_CASES.json', 'SYSTEM_PROMPTS.json'):
+            put_bytes(destination / name, (parent / name).read_bytes())
+        records = []
+        for source in runner.source_files():
+            source = safe(source)
+            try:
+                relative = source.relative_to(ROOT)
+            except ValueError:
+                if not runner.fixture:
+                    raise IntegrityError('Production source lies outside the project') from None
+                relative = Path('fixture_sources') / (sha(str(source).encode()) + source.suffix)
+            source_archive = destination / 'source_archive' / relative
+            put_bytes(source_archive, source.read_bytes())
+            records.append({'path': str(source), 'sha256': sha(source.read_bytes()), 'archived_path': str(source_archive)})
+        put(destination / 'SOURCE_FILES.json', {'files': records})
+        after = _ledger_snapshot(ledger)
+        if after['sha256'] != intent['ledger_sha256']:
+            raise IntegrityError('Wire-schema rewind unexpectedly changed the paid ledger')
+        put(destination / 'RECOVERY_RECEIPT.json', {
+            'amendment_number': 18, 'intent_sha256': intent_sha, 'parent_freeze_sha256': intent['parent_freeze_sha256'],
+            'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
+            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': intent['moved_artifacts'],
+            'retained_attempt_count': 0, 'uncertain_rows_retained': 0, 'retained_proofs': [],
+            'stop_original_sha256': intent['stop_sha256'],
+            'scientific_note': 'Since amendment011 the provider grammar cut every strict-function string at its maxLength, so prose, plans, SVG sources, ballots, evidence and logs were truncated in every R1 and reviewers judged truncated documents. The wire copy now states limits in prose and the local schema still validates raw output. Every arm restarts R1 from round start under fresh .rwN identities; superseded artifacts archived and superseded jobs marked.'})
+        frozen = {key: sha((destination / name).read_bytes()) for name, key in ARTIFACTS}
+        frozen.update(amendment_number=18, revision='v16.18', parent_freeze_sha256=intent['parent_freeze_sha256'],
+                      recovery_manifest_sha256=sha((destination / 'RECOVERY_RECEIPT.json').read_bytes()),
+                      evidence_origin='prospectively_frozen_wire_schema_fix_and_round_start_rewind')
+        put(destination / 'freeze.json', frozen)
+        active = verify_chain(out, fixture=runner.fixture)
+        return {'status': 'wire_schema_rewind_amended_held_for_free_preflight', 'directory': str(destination),
+                'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
 
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""

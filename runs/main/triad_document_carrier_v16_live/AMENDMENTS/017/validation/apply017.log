@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/workspace/visual_collusion_stress_v4/next_batch/v16_document_carrier/amendment.py", line 2791, in apply_render_rewind_amendment
+    active = verify_chain(out, fixture=runner.fixture)
+  File "/workspace/visual_collusion_stress_v4/next_batch/v16_document_carrier/amendment.py", line 108, in verify_chain
+    if sha(safe(retained['path'], out).read_bytes()) != retained['sha256']:
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 625, in read_bytes
+    with self.open(mode='rb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/arms/b01/attempts/r01/a07/stages/A_PUBLISH.json'

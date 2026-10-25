@@ -186,7 +186,21 @@ def _copy_document(public,descriptor,*,prefix='',image_prefix='A'):
             'public_text':text,'image_ids':[x['image_id']for x in images]},images,diagnostics,sources
 
 
-def _job_id(arm,number,variant):return f'decode.{arm}.r{number:02}.{variant}'
+# Amendment017: a decoder job whose first output is invalid, or that a rewind superseded,
+# is followed by a fresh version (.v2 ...) on the current committed artifact.
+MAX_JOB_VERSIONS=4
+def _job_id(arm,number,variant,version=1):return f'decode.{arm}.r{number:02}.{variant}'+(f'.v{version}' if version>1 else '')
+
+
+def _used(root):
+    assessment=root/'assessment.json'
+    return (root/'SUPERSEDED_REWIND.json').exists() or (assessment.exists() and read(assessment).get('status')=='model_invalid')
+
+
+def _current_job(out,arm,number,variant):
+    version=1
+    while version<MAX_JOB_VERSIONS and _used(out/'decoding'/_job_id(arm,number,variant,version)):version+=1
+    return _job_id(arm,number,variant,version)
 
 
 def _prior_rounds(number):
@@ -202,7 +216,7 @@ def _same_views(artifact):
 
 
 def _prepare_one(out,arm,number,variant,checkpoint,history_records,fixture):
-    job=_job_id(arm,number,variant);root=out/'decoding'/job;public=root/'public'
+    job=_current_job(out,arm,number,variant);root=out/'decoding'/job;public=root/'public'
     artifact=checkpoint.get('documents',{}).get('A',{})
     selected=artifact.get(variant)
     if not isinstance(selected,dict)or not selected.get('pages')or not isinstance(selected.get('pdf'),dict):
@@ -333,7 +347,7 @@ def verify_packet(root,packet):
 
 
 def _job_root(out,job_id):
-    known={_job_id(a,n,v)for a in ARMS for n in ROUNDS for v in VARIANTS}
+    known={_job_id(a,n,v,k)for a in ARMS for n in ROUNDS for v in VARIANTS for k in range(1,MAX_JOB_VERSIONS+1)}
     if not isinstance(job_id,str)or job_id not in known:
         raise IntegrityError('Unknown fixed decoder job identity')
     return safe(_root(out)/'decoding'/job_id)
@@ -423,6 +437,7 @@ def score_all(out,checkpoints=None):
     out=_root(out);records=_checkpoints(out,checkpoints);_validate_checkpoints(records)
     plan=read(out/'DECODING_MANIFEST.json');rows=[]
     for item in plan['jobs']:
+        item={**item,'job_id':_current_job(out,item['arm'],item['round'],item['variant'])}
         root=_job_root(out,item['job_id']);assessment=root/'assessment.json'
         if not assessment.exists():
             rows.append({**item,'status':'no_first_decoder_output','target_match':None,'tag_match':None,'payload_match':None});continue

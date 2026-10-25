@@ -228,6 +228,28 @@ CONFIG = {
                  'maximum_outputless_stage_retries': 3,
                  'outputless_stage_retry_scope': 'a technical fault with no provider response or native result for that exact '
                                                  'identity retires only the stage identity; completed stages and reviews are kept'},
+    'wire_schema_rewind_amendment_018': {
+        'reason': 'Explicit user instruction that no technical issue may affect the experiment and that anything affected reruns '
+                  'from the checkpoint just before it: since amendment011 the OpenInference constrained decoder enforced every '
+                  'string maxLength of the strict native functions by truncating model text mid-word, sometimes after forced '
+                  'junk tokens (e.g. a section body ending "Life-cyclexx" at exactly 640 characters). Prose, plans, SVG '
+                  'sources, ballots, evidence and logs in every R1 were cut, and reviewers judged the cut documents.',
+        'fix': 'the outgoing copy of each native function omits maxLength and states the limit in the field description; '
+               'the full local schema and every quota still validate the raw output, so an over-limit value is the model\'s '
+               'own invalid field and is never shortened',
+        'rewind': 'every arm returns to the start of round 1 (the checkpoint before its first affected stage); every R1 stage, '
+                  'review, probe and reader reruns under fresh .rwN identities in the current attempt; superseded artifacts archived',
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
+    'render_rewind_amendment_017': {
+        'reason': 'Explicit user instruction to rerun anything a technical issue affected from the checkpoint just before it: '
+                  'the host SVG validator parsed hex colours such as #2E7D32 as scientific notation and rejected valid model '
+                  'diagrams in b01 A/B, b03 C and b05 A, blanking a figure, failing mechanical checks and degrading what '
+                  'receivers and reviewers saw.',
+        'fix': 'hex colour tokens are excluded before the numeric geometry bound; real geometry stays bounded',
+        'rewind': 'each committed R1 returns to the checkpoint just before its first affected document; cached model outputs and Qwen figures are re-rendered without new calls; later stages, reviews, probes and readers rerun under .rw1 identities; superseded artifacts archived',
+        'reader_reruns': 'decoder and ladder jobs that are invalid or superseded are followed by fresh versions (.v2...)',
+        'b01_round2': 'a01 superseded (built on the faulty R1 memory); its interrupted A_PUBLISH reservation sealed',
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'malformed_body_diagnostics_amendment_016': {
         'reason': 'b05.r01.a04.C_PUBLISH received an HTTP 200 body that was not valid JSON after 73 seconds; the body was discarded, '
                   'so the cut point was unknowable. Diagnostics only.',

@@ -62,13 +62,30 @@ def ladder_schema():
                                      'minItems': 0, 'maxItems': 16, 'uniqueItems': True}}}
 
 
-def job_id(arm, number, view):
-    return f'ladder.{arm}.r{number:02}.{view}'
+# Amendment017: an invalid or rewind-superseded ladder job is followed by a fresh version.
+MAX_JOB_VERSIONS = 4
+
+
+def job_id(arm, number, view, version=1):
+    return f'ladder.{arm}.r{number:02}.{view}' + (f'.v{version}' if version > 1 else '')
 
 
 def known_jobs():
-    return {job_id(a, n, v) for a in LADDER_ARMS for n in range(1, design.CONFIG['rounds_per_arm'] + 1)
-            for v in VIEWS}
+    return {job_id(a, n, v, k) for a in LADDER_ARMS for n in range(1, design.CONFIG['rounds_per_arm'] + 1)
+            for v in VIEWS for k in range(1, MAX_JOB_VERSIONS + 1)}
+
+
+def _used(root):
+    assessment = root / 'assessment.json'
+    return (root / 'SUPERSEDED_REWIND.json').exists() or (
+        assessment.exists() and read(assessment).get('status') == 'model_invalid')
+
+
+def current_job(out, arm, number, view):
+    version = 1
+    while version < MAX_JOB_VERSIONS and _used(_root(out) / DIRECTORY / job_id(arm, number, view, version)):
+        version += 1
+    return job_id(arm, number, view, version)
 
 
 def _job_root(out, identifier):
@@ -109,7 +126,7 @@ def prepare_round(out, arm, number, commits, *, fixture=False):
     case = design.cases()[number - 1]
     prepared = []
     for view in VIEWS:
-        identifier = job_id(arm, number, view)
+        identifier = current_job(out, arm, number, view)
         root = _job_root(out, identifier)
         packet_path = root / 'public' / 'packet.json'
         if packet_path.exists():
@@ -255,7 +272,7 @@ def summarize(out, commits_by_arm):
         for checkpoint in commits_by_arm.get(arm, []):
             number = checkpoint['round']
             for view in VIEWS:
-                path = _job_root(out, job_id(arm, number, view)) / 'assessment.json'
+                path = _job_root(out, current_job(out, arm, number, view)) / 'assessment.json'
                 if not path.exists():
                     rows.append({'arm': arm, 'round': number, 'view': view, 'status': 'no_first_output'})
                     continue

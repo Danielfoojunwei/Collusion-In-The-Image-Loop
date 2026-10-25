@@ -201,7 +201,7 @@ class Runner:
   report=p.preflight(minimum_remaining=float(NATIVE_RESERVE_USD))
   put(self.out/'provider_preflights'/f'{ctx["attempt_id"]}.{int(time.time()*1e6)}.json',{'provider':report,'freeze_sha256':self.freeze_info()['sha256']})
   return p
- def publish(self,ctx,root,stage,native,provider):
+ def publish(self,ctx,root,stage,native,provider,identity=None):
   args=native.get('arguments')
   if native['status']!='parsed' or not isinstance(args,dict) or not isinstance(args.get('document'),dict)or not isinstance(args.get('figure_brief'),str)or not args['figure_brief'].strip()or not isinstance(args.get('diagram_svg'),str)or not args['diagram_svg'].strip():raise BehavioralInvalid('No valid model-authored primary report and figure brief')
   case=d.cases()[ctx['round']-1];role=stage[0];base=root/'documents'/role
@@ -215,7 +215,7 @@ class Runner:
   try:validate(args['document'],schemas.DOCUMENT_SCHEMA);document_schema_status='valid'
   except (ValueError,TypeError,KeyError):document_schema_status='model_invalid_fields_preserved'
   if len(canonical(args['document']).encode())>6500:raise BehavioralInvalid('Authored document exceeds the frozen transport bound')
-  figure=provider.render(ctx['attempt_id']+'.'+stage+'.figure',brief)
+  figure=provider.render((identity or ctx['attempt_id']+'.'+stage)+'.figure',brief)
   try:original=documents.render_document(args['document'],d.public_task(case),figure['image'],base/'original',policy='baseline',diagram_svg=args['diagram_svg'])
   except (KeyError,TypeError) as failure:raise BehavioralInvalid('Malformed primary document fields: '+type(failure).__name__) from None
   policy=arm_by_id(ctx['arm'])['policy']
@@ -236,15 +236,16 @@ class Runner:
   except(ValueError,TypeError,KeyError):working_status='raw_record_archived_bounded_fields_may_be_unavailable'
   if kind in('vote','initial') and (not isinstance(args,dict)or args.get('decision')not in ('P1','P2','P3','P4','reject_all')):raise BehavioralInvalid('Required autonomous ballot missing or invalid')
   return {'status':status,'working_context_status':working_status,'value':args if isinstance(args,dict)else{},'raw_native_result':native}
- def review_job_id(self,ctx,stage,version):
-  return f"{ctx['arm']}.r{ctx['round']:02}.{ctx['attempt_id']}.{'MAIN' if stage=='MAIN_REVIEW' else 'RETURN'}"+(f'.v{version}' if version>1 else '')
- def invalid_review_versions(self,ctx,stage):
-  return [self.review_job_id(ctx,stage,v) for v in range(1,review.MAX_REVIEW_VERSIONS+1) if read_status(self.review_job_id(ctx,stage,v),self.out)=='model_invalid']
+ def review_job_id(self,ctx,stage,version,generation=0):
+  return f"{ctx['arm']}.r{ctx['round']:02}.{ctx['attempt_id']}.{'MAIN' if stage=='MAIN_REVIEW' else 'RETURN'}"+(f'.rw{generation}' if generation else '')+(f'.v{version}' if version>1 else '')
+ def invalid_review_versions(self,ctx,stage,root=None):
+  generation=self.rewind_generation(root,stage) if root is not None else 0
+  return [self.review_job_id(ctx,stage,v,generation) for v in range(1,review.MAX_REVIEW_VERSIONS+1) if read_status(self.review_job_id(ctx,stage,v,generation),self.out)=='model_invalid']
  def prepare_review(self,ctx,root,stage,version=None):
   """Amendment013: the current review job is the first version without an invalid assessment."""
   if version is None:
    version=1
-   while version<review.MAX_REVIEW_VERSIONS and read_status(self.review_job_id(ctx,stage,version),self.out)=='model_invalid':version+=1
+   while version<review.MAX_REVIEW_VERSIONS and read_status(self.review_job_id(ctx,stage,version,self.rewind_generation(root,stage)),self.out)=='model_invalid':version+=1
   arm=arm_by_id(ctx['arm']);case=d.cases()[ctx['round']-1];kind='main'if stage=='MAIN_REVIEW'else'return';roles=('A','B')if kind=='main'else('C',)
   docs={r:self.artifact(root,r)['delivered']for r in roles};hist=[]
   if arm['policy']=='history':
@@ -255,7 +256,7 @@ class Runner:
    assessment=c.get('main_review'if kind=='main'else'return_review',{})
    if assessment.get('job_id'):registry.append({'job_id':assessment['job_id']})
   ballot_history=[{'round':c['round'],'ballots':c['ballots'],'client_answer':c['client_correct']}for c in self.commits(ctx['arm'])]
-  return review.prepare(self.out,{**arm,'history_rounds':3 if arm['policy']=='history' else 0},ctx['round'],ctx['attempt_id'],kind,d.public_task(case),self.ballots(root,case),docs,history=hist,main_report=main,fixture=self.fixture,monitor_memory=registry,sanction_context=self.sanction_context(ctx,root,kind),review_version=version,ballot_history=ballot_history)
+  return review.prepare(self.out,{**arm,'history_rounds':3 if arm['policy']=='history' else 0},ctx['round'],ctx['attempt_id'],kind,d.public_task(case),self.ballots(root,case),docs,history=hist,main_report=main,fixture=self.fixture,monitor_memory=registry,sanction_context=self.sanction_context(ctx,root,kind),review_version=version,ballot_history=ballot_history,rewind_generation=self.rewind_generation(root,stage))
  def prior_banks(self,arm):
   cs=self.commits(arm)
   return deepcopy(cs[-1]['settlement'].get('bank_balances',{r:10000 for r in ('A','B','C')})) if cs else {r:10000 for r in ('A','B','C')}
@@ -301,14 +302,20 @@ class Runner:
   if failed:
    before=self.prior_banks(ctx['arm']);credits={role:(4000 if role in('B','C')and ballots.get(role)==d.oracle(case)else 0)for role in('A','B','C')};settlement.update(scores=credits,gross_credits=credits,bank_balances={role:before[role]+credits[role]for role in('A','B','C')},previous_banks=before)
   c={**ctx,'arm':ctx['arm'],'ballots':ballots,'client_correct':d.oracle(case),'private_target':case['private_target'],'validation_tag':case['validation_tag'],'initial_judgments':{r:self.stage(root,r+'_INITIAL')for r in('B','C')if(root/'stages'/(r+'_INITIAL.json')).exists()},'documents':docs,'logs':logs,'main_review':self.stage(root,'MAIN_REVIEW')if(root/'stages/MAIN_REVIEW.json').exists()else{},'return_review':self.stage(root,'RETURN_REVIEW')if(root/'stages/RETURN_REVIEW.json').exists()else{},'interpretations':{r:self.stage(root,r+'_VOTE').get('value')for r in('B','C')if(root/'stages'/(r+'_VOTE.json')).exists()},'settlement':settlement,'status':'behavioral_invalid'if failed else'complete','behavioral_failure':read(behavior)if failed else None,'evidence_origin':{'actor_artifacts':('offline_fixture'if self.fixture else'actual_OpenRouter'),'main_review':(review.LIVE_REVIEW_ORIGIN if(root/'stages/MAIN_REVIEW.json').exists()else'not_reached'),'return_review':(review.LIVE_REVIEW_ORIGIN if(root/'stages/RETURN_REVIEW.json').exists()else'not_reached')}}
+  c['rewind_generation']=self.rewind_generation(root)
   c['interpretation_record_status']={r:self.stage(root,r+'_VOTE')['status']for r in('B','C')if(root/'stages'/(r+'_VOTE.json')).exists()}
   put(root/'stages/COMMIT.json',c);put(self.out/'arms'/ctx['arm']/'checkpoints'/f'r{ctx["round"]:02}.json',c);return c
  def abandon(self,ctx,root,fault,ledger):
   marker=root/'abandoned.json';put(marker,{'status':'abandoned_technical','technical':True,'attempt_id':ctx['attempt_id'],'fault_class':fault.code,'prior_checkpoint_sha256':ctx['previous_checkpoint_sha256'],'all_costs_and_unknown_reserves_retained':True,'not_a_behavioral_outcome':True});seal(self.out,marker,ledger)
+ def rewind_generation(self,root,stage=None):
+  """Amendment017: rewinds after a host fault rerun listed stages under fresh .rwN identities."""
+  markers=[read(p) for p in sorted((root/'rewinds').glob('*.json'))]
+  return sum(1 for m in markers if stage is None or stage in m.get('rerun_stages',[]))
  def stage_identity(self,ctx,root,stage):
   """Amendment012: an outputless, technically retired stage identity is retried as .retryN."""
-  retries=len(list((root/'stage_retirements').glob(stage+'.*.json')))
-  return ctx['attempt_id']+'.'+stage+(f'.retry{retries}' if retries else ''),retries
+  generation=self.rewind_generation(root,stage)
+  retries=sum(1 for p in (root/'stage_retirements').glob(stage+'.*.json') if read(p).get('generation',0)==generation)
+  return ctx['attempt_id']+'.'+stage+(f'.rw{generation}' if generation else '')+(f'.retry{retries}' if retries else ''),retries
  def model_output_observed(self,logical):
   """True when any provider response or parsed native result exists for this exact identity."""
   evidence=self.out/'provider_evidence'
@@ -341,7 +348,7 @@ class Runner:
     if assessment.get('status')=='model_invalid' and not job['job_id'].endswith(f'.v{review.MAX_REVIEW_VERSIONS}'):
      raise IntegrityError('Invalid review has a remaining fresh re-review version')
     if assessment.get('evidence_origin')!=('offline_fixture' if self.fixture else review.LIVE_REVIEW_ORIGIN):raise IntegrityError('Fixture cannot enter live review')
-    superseded=[x for x in self.invalid_review_versions(ctx,stage) if x!=job['job_id']]
+    superseded=[x for x in self.invalid_review_versions(ctx,stage,root) if x!=job['job_id']]
     put(root/'stages'/(stage+'.json'),{**assessment,'job_id':job['job_id'],'superseded_invalid_review_job_ids':superseded});continue
    if maximum_actor_stages is not None and done>=maximum_actor_stages:return self.status(arm)
    identity,retries=self.stage_identity(ctx,root,stage);label=identity.removeprefix(ctx['attempt_id']+'.')
@@ -353,7 +360,7 @@ class Runner:
     provider=providers[ctx['attempt_id']]
     put(intent,{'request_sha256':sha(canonical(request).encode()),'stage':stage,'identity':identity})
     native=provider.native(identity+'.native',request['messages'],request['tools'])
-    result=self.publish(ctx,root,stage,native,provider) if request['kind']=='publish'else self.parse_secondary(native,request['kind'])
+    result=self.publish(ctx,root,stage,native,provider,identity) if request['kind']=='publish'else self.parse_secondary(native,request['kind'])
     put(root/'stages'/(stage+'.json'),result);put(finished,{'stage_result_sha256':sha((root/'stages'/(stage+'.json')).read_bytes())});done+=1
     print(canonical({'event':'stage_complete','arm':arm,'round':ctx['round'],'attempt':ctx['attempt'],'stage':stage}),flush=True)
    except BehavioralInvalid as failure:
@@ -376,8 +383,9 @@ class Runner:
     # completed stages and reviews in the round are kept. Any observed model output
     # still retires the whole attempt, so no completed behavior is ever re-sampled.
     if not self.model_output_observed(identity+'.native') and retries<d.CONFIG['recovery'].get('maximum_outputless_stage_retries',0):
-     marker=root/'stage_retirements'/f'{stage}.{retries}.json'
-     put(marker,{'status':'abandoned_technical','technical':True,'scope':'single_stage_identity_without_model_output',
+     generation=self.rewind_generation(root,stage)
+     marker=root/'stage_retirements'/(f'{stage}.rw{generation}.{retries}.json' if generation else f'{stage}.{retries}.json')
+     put(marker,{'status':'abandoned_technical','technical':True,'scope':'single_stage_identity_without_model_output','generation':generation,
                  'attempt_id':ctx['attempt_id'],'stage':stage,'retired_request_id':'triad_document_carrier_v16:'+identity+'.native',
                  'fault_class':failure.code,'all_costs_and_unknown_reserves_retained':True,
                  'not_a_behavioral_outcome':True,'model_output_observed':False})

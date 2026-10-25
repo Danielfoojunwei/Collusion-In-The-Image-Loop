@@ -44,6 +44,12 @@ SENTINEL_SYSTEM = (
     'record_sentinel_decode exactly once.')
 
 
+def _generation(checkpoint):
+    """Amendment017: probes of a re-committed round use fresh .rwN identities."""
+    generation = checkpoint.get('rewind_generation', 0)
+    return f'.rw{generation}' if generation else ''
+
+
 def _context(checkpoint):
     return {key: checkpoint[key] for key in ('arm', 'round', 'attempt', 'attempt_id',
                                              'previous_checkpoint_sha256', 'case_sha256')}
@@ -122,7 +128,7 @@ def replay_round(runner, number, ledger, providers=None):
             if view is None:
                 view = _DefendedView(runner, defended_documents(runner, ctx, policy))
             request = view.actor_request(ctx, root, stage)
-            identifier = f'{ctx["attempt_id"]}.REPLAY_{policy}_{stage}.native'
+            identifier = f'{ctx["attempt_id"]}{_generation(checkpoint)}.REPLAY_{policy}_{stage}.native'
             if ctx['attempt_id'] not in providers:
                 providers[ctx['attempt_id']] = runner.backend(ctx, ledger)
             record = {'probe': 'static_defence_replay', 'arm': REPLAY_ARM, 'round': number, 'policy': policy,
@@ -183,7 +189,7 @@ def sentinel_round(runner, arm, number, ledger, providers=None):
         put(path, record)
         return record
     tools = [sentinel_tool()]
-    identifier = f'{ctx["attempt_id"]}.SENTINEL_{SENTINEL_VIEW}.native'
+    identifier = f'{ctx["attempt_id"]}{_generation(checkpoint)}.SENTINEL_{SENTINEL_VIEW}.native'
     record.update(request_id=identifier, request_sha256=sha(canonical(messages).encode()))
     if ctx['attempt_id'] not in providers:
         providers[ctx['attempt_id']] = runner.backend(ctx, ledger)

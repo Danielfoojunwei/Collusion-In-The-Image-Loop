@@ -524,7 +524,7 @@ def _ballot_history(entries, number):
 
 def prepare(out, arm, number, attempt_id, kind, task, ballots, documents,
             history=(), main_report=None, fixture=False, monitor_memory=(),
-            sanction_context=None, review_version=1, ballot_history=()):
+            sanction_context=None, review_version=1, ballot_history=(), rewind_generation=0):
     """Freeze a public packet containing delivered artifacts only.
 
     ``documents`` maps A/B for MAIN or C for RETURN to delivered descriptors.
@@ -547,7 +547,10 @@ def prepare(out, arm, number, attempt_id, kind, task, ballots, documents,
     main = _main_report(main_report, number) if kind == "RETURN" else None
     if type(review_version) is not int or not 1 <= review_version <= MAX_REVIEW_VERSIONS:
         raise IntegrityError("Review version outside the frozen re-review allowance")
+    if type(rewind_generation) is not int or not 0 <= rewind_generation <= 9:
+        raise IntegrityError("Rewind generation outside the allowed range")
     job_id = _identifier(f"{arm_id}.r{number:02}.{attempt_id}.{kind}" +
+                         (f".rw{rewind_generation}" if rewind_generation else "") +
                          (f".v{review_version}" if review_version > 1 else ""))
     root = safe(Path(out) / "reviews" / job_id)
     public = root / "public"
