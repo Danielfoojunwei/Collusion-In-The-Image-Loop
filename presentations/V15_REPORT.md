@@ -7,7 +7,8 @@ Daniel Foo, Nanyang Technological University (NTU). Apart Research AI Collusion 
 | Path | What it is |
 | --- | --- |
 | `Seeing_Is_Not_Attributing_V15_Apart_Report.pdf` | The submission: 8-page main text (title to LLM Usage Statement), then references and Appendices A–G |
-| `v15_report_src/` | Sources for the PDF: `main.html` (main text), `assemble.py` (adds appendices), `build.py` (figures and data), `pdf.js` (Playwright print), figure scripts and images |
+| `Seeing_Is_Not_Attributing_V15_5min_Talk.pdf` | Six-slide, five-minute talk built from the paper’s figures; script in `V15_TALK_SCRIPT.md` |
+| `v15_report_src/` | Sources for the PDF and talk: `main.html` (main text), `assemble.py` (adds appendices), `build.py` (figures and data), `figkit.py`, `fig_diag.py`, `fig_r.py` (schematics), `fig_plots.py` (matplotlib data figures with exact binomial intervals), `pdf.js` (Playwright print), `deck5.py` and `deckpdf.js` (talk), images |
 | `v15_slides_src/deck_v2_project/` | The 12-slide deck (Slides artifact format: `deck.json` plus one HTML file per slide) |
 | `v15_slides_src/deck_v2_images/` | Figure images used by the deck |
 | `../analysis/v15_deep_dive/` | Extracts of every agent action, brief, vote and log from the V15 run (`stages.json`), the actor prompts (`prompts.txt`) and the extraction script |
@@ -17,15 +18,16 @@ The raw V15 run records (`runs/main/triad_glm_restored_v15_live`, about 1.1 GB) 
 
 ## Rebuilding the PDF
 
-From `v15_report_src/`, with Python 3 and the pre-installed Playwright:
+From `v15_report_src/`, with Python 3 (Pillow, matplotlib) and the pre-installed Playwright:
 
 ```sh
 python3 assemble.py   # writes paper.html from main.html, the appendix sections and the style block
 python3 build.py      # renders the figure SVGs and fills the placeholders into paper_built.html
 node pdf.js           # prints paper.pdf (US Letter)
+python3 deck5.py && node deckpdf.js   # prints the five-minute talk
 ```
 
-`assemble.py` reads `paper_v4_long.html` and the `sec_*.txt` files for the appendices. The images in `img/` are thumbnails of the actual V15 PNGs (Figures 3 and 4, Appendix C) and four explanatory reconstructions (Appendix F).
+`assemble.py` reads `paper_v4_long.html` and the `sec_*.txt` files for the appendices. The images in `img/` are 800-pixel copies of the actual V15 PNGs, downsampled from the 1024-pixel originals in the run records (Figures 1, 3 and 4, Appendices C and D), and four explanatory reconstructions (Appendix F).
 
 ## Caveats recorded in the paper
 

@@ -4,6 +4,9 @@ import re
 style = open('style_block.txt').read()
 style = style.replace('</style>', """
 .fig90 svg { width: 84%; display: block; margin: 0 auto; }
+.figright { float: right; width: 44%; margin: 2pt 0 4pt 12pt; }
+.figright svg { width: 100%; display: block; }
+.figright figcaption { font-size: 8.4pt; }
 .fig80 svg { width: 70%; display: block; margin: 0 auto; }
 .strip6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3pt; }
 .strip6 div { font-family: 'IBM Plex Sans', sans-serif; font-size: 6.6pt; text-align: center; line-height: 1.2; }
@@ -13,7 +16,22 @@ style = style.replace('</style>', """
 table { break-inside: auto; }
 tr { break-inside: avoid; }
 .bq { font-style: italic; font-size: 9.4pt; margin: 2pt 0 6pt 14pt; }
+.fn { width: auto; margin-top: 4pt; }
 .bq .who { display: block; text-align: right; font-style: normal; font-size: 8.8pt; }
+/* plain figure and case-card styling */
+.cap, .strip6 div, figcaption .sub { font-family: 'Liberation Sans', Arial, Helvetica, sans-serif; }
+.strip6 img, .ann img, .minicases img { border-radius: 0; }
+.strip6 .miss { color: #D55E00; }
+.case { border: 0.6pt solid #999; border-radius: 0; background: #fff; }
+.case-head { color: #222; background: none; border-radius: 0; border-bottom: 0.6pt solid #999; padding: 0 0 3pt; font-family: 'Liberation Sans', Arial, sans-serif; }
+.tag { color: #444 !important; background: none !important; border: 0.5pt solid #999; border-radius: 0; font-family: 'Liberation Sans', Arial, sans-serif; letter-spacing: 0; }
+.prompt { border-left: 1.5pt solid #999; background: #f5f5f5; }
+.step { background: none; color: #222; border: 0.6pt solid #222; }
+h4 { color: #222; }
+td.yes, td.no, td.part { color: #222 !important; font-weight: 400 !important; }
+.fig90 svg { width: 88%; }
+.keybox { border: 0.6pt solid #999; background: #fff; border-radius: 0; }
+.keybox b.h { color: #222; font-family: 'Liberation Sans', Arial, sans-serif; }
 </style>""")
 main = open('main.html').read()
 long = open('paper_v4_long.html').read()
@@ -58,7 +76,7 @@ prompts = re.sub(r'<b>B\.(\d) ', r'<b>B.6.\1 ', prompts)
 appB = '<h2 class="pb">Appendix B. Full experimental setup</h2>\n' + methods + prompts
 
 appC = '<h2 class="pb">Appendix C. Finding 1 in detail: case cards and behaviours</h2>\n' + cases
-appD = '<h2 class="pb">Appendix D. Finding 2 in detail: the six causes</h2>\n' + capability + rs + whatchanges
+appD = '<h2 class="pb">Appendix D. Finding 2 in detail: the six causes</h2>\n' + capability + rs
 appE = '<h2>Appendix E. What may generalise: full argument</h2>\n' + general.replace(
     '<h3>5.2 What generalises beyond this game, and why</h3>', '')
 appF = recon.replace('Appendix C. Explanatory reconstructions', 'Appendix F. Explanatory reconstructions').replace('Figure C', 'Figure F')

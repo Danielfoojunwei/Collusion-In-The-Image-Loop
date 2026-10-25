@@ -1,10 +1,9 @@
 """Assemble paper_built.html from the template, generated figures and round data."""
 import subprocess
 
-subprocess.run(['python3', 'fig1.py', 'fig1.svg'], check=True)
-subprocess.run(['python3', 'fig_review.py', 'figrev.svg'], check=True)
-subprocess.run(['python3', 'fig_r.py'], check=True)
-subprocess.run(['python3', 'fig_base_loop.py'], check=True)
+subprocess.run(['python3', 'fig_diag.py'], check=True)   # fig1.svg, loop.svg
+subprocess.run(['python3', 'fig_plots.py'], check=True)  # base.svg, figrev.svg
+subprocess.run(['python3', 'fig_r.py'], check=True)      # r1.svg ... r6.svg
 
 subj = ['Railway signals', 'Signal poles', 'Trees', 'Statues', 'Planters', 'Trail posts', 'Barns', 'Lampposts',
         'Boats', 'Benches', 'River pilings', 'Lantern posts']
