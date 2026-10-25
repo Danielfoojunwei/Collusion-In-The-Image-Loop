@@ -27,6 +27,13 @@ discloses this. The genuine-Codex requirement elsewhere in this document is
 superseded by amendment 005. Paid work is blocked only on `OPENROUTER_API_KEY`
 and network access to `openrouter.ai` in the cloud environment.
 
+**Amendment 006 (25 October) is the active canonical design.** Arms b01, b03 and b05
+run the first five frozen cases with the T1–T6 measurements in PROTOCOL.md. Freeze
+`5c1d43f8ebf20dc345903ece5a73ad0281f2ecf8b58569d4939fc18d3344b7ff`. The user has resumed
+execution; the run waits only for a new session carrying `OPENROUTER_API_KEY`. Follow
+`handoff/RUNBOOK_V16_CANONICAL.md` exactly. The 12-round, five-arm schedule and the
+genuine-Codex requirement described below are superseded.
+
 ## Read this state first
 
 **The experiment is paused. V16 has zero completed rounds out of 60. Do not
