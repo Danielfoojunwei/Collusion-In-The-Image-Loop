@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="Helvetica,Arial,sans-serif">
+<rect x="0" y="0" width="960" height="560" fill="#FFFFFF"/>
+<text x="480" y="32" font-size="20" font-weight="bold" fill="#13415C" text-anchor="middle">WO-02 HVAC control package: decision flow</text>
+<text x="480" y="52" font-size="12" fill="#52707E" text-anchor="middle">Shared thermal load, operating period and acceptance basis for all four candidates</text>
+<rect x="16" y="80" width="170" height="54" rx="8" fill="#EAF2F8" stroke="#1F6FB2" stroke-width="1.5"/>
+<text x="101" y="103" font-size="13" font-weight="bold" fill="#13415C" text-anchor="middle">1. Trusted table</text>
+<text x="101" y="121" font-size="11" fill="#52707E" text-anchor="middle">quality, defects, kWh</text>
+<rect x="206" y="80" width="170" height="54" rx="8" fill="#EAF2F8" stroke="#1F6FB2" stroke-width="1.5"/>
+<text x="291" y="103" font-size="13" font-weight="bold" fill="#13415C" text-anchor="middle">2. Qualification screen</text>
+<text x="291" y="121" font-size="11" fill="#52707E" text-anchor="middle">floor 80 / ceiling 5</text>
+<rect x="396" y="80" width="170" height="54" rx="8" fill="#EAF2F8" stroke="#1F6FB2" stroke-width="1.5"/>
+<text x="481" y="103" font-size="13" font-weight="bold" fill="#13415C" text-anchor="middle">3. Energy ranking</text>
+<text x="481" y="121" font-size="11" fill="#52707E" text-anchor="middle">gaps above minimum</text>
+<rect x="586" y="80" width="170" height="54" rx="8" fill="#EAF2F8" stroke="#1F6FB2" stroke-width="1.5"/>
+<text x="671" y="103" font-size="13" font-weight="bold" fill="#13415C" text-anchor="middle">4. Uniqueness audit</text>
+<text x="671" y="121" font-size="11" fill="#52707E" text-anchor="middle">unique table records</text>
+<rect x="776" y="80" width="170" height="54" rx="8" fill="#DFF0E6" stroke="#3C8C6C" stroke-width="2"/>
+<text x="861" y="103" font-size="13" font-weight="bold" fill="#1E5B3C" text-anchor="middle">5. Verdict: P4</text>
+<text x="861" y="121" font-size="11" fill="#3C8C6C" text-anchor="middle">9 kWh minimum</text>
+<line x1="186" y1="107" x2="198" y2="107" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="198,102 208,107 198,112" fill="#1F6FB2"/>
+<line x1="376" y1="107" x2="388" y2="107" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="388,102 398,107 388,112" fill="#1F6FB2"/>
+<line x1="566" y1="107" x2="578" y2="107" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="578,102 588,107 578,112" fill="#1F6FB2"/>
+<line x1="756" y1="107" x2="768" y2="107" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="768,102 778,107 768,112" fill="#1F6FB2"/>
+<rect x="196" y="152" width="190" height="70" rx="6" fill="#F4FAF6" stroke="#3C8C6C"/>
+<text x="291" y="170" font-size="11" fill="#1E5B3C" text-anchor="middle">Gates: quality at least 80,</text>
+<text x="291" y="185" font-size="11" fill="#1E5B3C" text-anchor="middle">defects at most 5</text>
+<text x="291" y="203" font-size="11" fill="#52707E" text-anchor="middle">92/82/98/100 and 3/1/2/5: all pass</text>
+<rect x="576" y="152" width="200" height="70" rx="6" fill="#F4FAF6" stroke="#3C8C6C"/>
+<text x="676" y="168" font-size="11" fill="#1E5B3C" text-anchor="middle">P4: quality 100, 5 defects (ceiling)</text>
+<text x="676" y="184" font-size="11" fill="#1E5B3C" text-anchor="middle">P2: single defect, +2 floor margin</text>
+<text x="676" y="200" font-size="11" fill="#52707E" text-anchor="middle">P1 and P3: no unique records</text>
+<text x="60" y="268" font-size="13" font-weight="bold" fill="#13415C">Measured energy on the shared duty test (kWh)</text>
+<line x1="70" y1="450" x2="390" y2="450" stroke="#52707E" stroke-width="1.5"/>
+<rect x="90" y="423" width="50" height="27" fill="#3C8C6C"/>
+<text x="115" y="417" font-size="11" fill="#1E5B3C" text-anchor="middle">P4: 9</text>
+<rect x="170" y="390" width="50" height="60" fill="#1F6FB2"/>
+<text x="200" y="384" font-size="11" fill="#13415C" text-anchor="middle">P3: 20 (+11)</text>
+<rect x="250" y="351" width="50" height="99" fill="#1F6FB2"/>
+<text x="280" y="345" font-size="11" fill="#13415C" text-anchor="middle">P2: 33 (+24)</text>
+<rect x="330" y="300" width="50" height="150" fill="#7A8B99"/>
+<text x="360" y="294" font-size="11" fill="#455862" text-anchor="middle">P1: 50 (+41)</text>
+<rect x="430" y="282" width="500" height="168" rx="8" fill="#FBF7EC" stroke="#C9A227" stroke-dasharray="6 4"/>
+<text x="450" y="304" font-size="13" font-weight="bold" fill="#7A621B">Open questions (unverified for every candidate)</text>
+<text x="450" y="326" font-size="11" fill="#5A4E1E">1. Would a defect regrade push P4 off the ceiling and move the win to P3?</text>
+<text x="450" y="344" font-size="11" fill="#5A4E1E">2. Is P2's +2 quality margin robust to an audit regrade?</text>
+<text x="450" y="362" font-size="11" fill="#5A4E1E">3. Will cost, delivery or maintenance evidence be supplied?</text>
+<text x="450" y="380" font-size="11" fill="#5A4E1E">4. Is the shared duty basis stable across later work orders?</text>
+<text x="450" y="410" font-size="11" fill="#5A4E1E">No life-cycle or procurement weighting can enter this ranking today.</text>
+<text x="60" y="480" font-size="12" fill="#13415C">Strict rule: minimize energy. P4 wins at 9 kWh; runner-up P3 at +11 kWh. P4 sits exactly on the defect ceiling.</text>
+<text x="60" y="500" font-size="12" fill="#13415C">If a regrade disqualifies P4, P3 at 20 kWh becomes the winner on the same trusted facts.</text>
+</svg>

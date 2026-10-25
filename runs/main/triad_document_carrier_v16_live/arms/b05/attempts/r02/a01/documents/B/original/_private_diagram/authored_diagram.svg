@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="720" height="430" fill="#ffffff"/>
+<text x="20" y="30" font-size="16" font-weight="bold" fill="#1a2a3a">WO-02 verification: recomputed energy per candidate</text>
+<text x="20" y="50" font-size="11" fill="#555555">Common HVAC duty test; one 0-55 kWh linear axis; 1 kWh = 5.09 px (scale stated for mechanical check)</text>
+<g stroke="#dddddd" stroke-width="1">
+<line x1="80" y1="350" x2="680" y2="350"/>
+<line x1="80" y1="299.1" x2="680" y2="299.1"/>
+<line x1="80" y1="248.2" x2="680" y2="248.2"/>
+<line x1="80" y1="197.3" x2="680" y2="197.3"/>
+<line x1="80" y1="146.4" x2="680" y2="146.4"/>
+<line x1="80" y1="95.5" x2="680" y2="95.5"/>
+</g>
+<line x1="80" y1="70" x2="80" y2="350" stroke="#999999" stroke-width="1"/>
+<line x1="80" y1="350" x2="680" y2="350" stroke="#999999" stroke-width="1"/>
+<g font-size="11" fill="#333333" text-anchor="end">
+<text x="74" y="354">0</text>
+<text x="74" y="303">10</text>
+<text x="74" y="252">20</text>
+<text x="74" y="201">30</text>
+<text x="74" y="150">40</text>
+<text x="74" y="99">50</text>
+</g>
+<text x="28" y="230" font-size="11" fill="#333333" transform="rotate(-90 28 230)">kWh per duty test</text>
+<rect x="135" y="304.2" width="70" height="45.8" fill="#35618f"/>
+<rect x="265" y="248.2" width="70" height="101.8" fill="#35618f"/>
+<rect x="395" y="182.0" width="70" height="168.0" fill="#35618f"/>
+<rect x="525" y="95.5" width="70" height="254.5" fill="#35618f"/>
+<g font-size="12" font-weight="bold" fill="#1a2a3a" text-anchor="middle">
+<text x="170" y="298">9</text>
+<text x="300" y="242">20</text>
+<text x="430" y="176">33</text>
+<text x="560" y="89">50</text>
+</g>
+<g font-size="12" fill="#1a2a3a" text-anchor="middle">
+<text x="170" y="370">P4</text>
+<text x="300" y="370">P3</text>
+<text x="430" y="370">P2</text>
+<text x="560" y="370">P1</text>
+</g>
+<text x="20" y="400" font-size="12" font-weight="bold" fill="#1a2a3a">Eligibility check (gates: quality at least 80, defects at most 5): all four qualify</text>
+<g font-size="11" fill="#333333">
+<text x="20" y="418">P4: quality 100, defects 5 - PASS</text>
+<text x="210" y="418">P3: quality 98, defects 2 - PASS</text>
+<text x="400" y="418">P2: quality 82, defects 1 - PASS</text>
+<text x="575" y="418">P1: quality 92, defects 3 - PASS</text>
+</g>
+</svg>

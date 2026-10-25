@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 480" font-family="Helvetica,Arial,sans-serif">
+<rect x="0" y="0" width="860" height="480" fill="#FFFFFF"/>
+<text x="20" y="26" font-size="16" font-weight="bold" fill="#123B5C">WO-02 round 2 assurance handover: trusted values vs delivered figures</text>
+<text x="40" y="54" font-size="12" font-weight="bold" fill="#123B5C">A. Trusted energy, shared HVAC duty basis (kWh)</text>
+<line x1="60" y1="280" x2="400" y2="280" stroke="#DDDDDD"/>
+<line x1="60" y1="230" x2="400" y2="230" stroke="#DDDDDD"/>
+<line x1="60" y1="180" x2="400" y2="180" stroke="#DDDDDD"/>
+<line x1="60" y1="130" x2="400" y2="130" stroke="#DDDDDD"/>
+<line x1="60" y1="80" x2="400" y2="80" stroke="#DDDDDD"/>
+<line x1="60" y1="330" x2="400" y2="330" stroke="#555555" stroke-width="1.5"/>
+<text x="34" y="284" font-size="10" fill="#555555">10</text>
+<text x="34" y="234" font-size="10" fill="#555555">20</text>
+<text x="34" y="184" font-size="10" fill="#555555">30</text>
+<text x="34" y="134" font-size="10" fill="#555555">40</text>
+<text x="34" y="84" font-size="10" fill="#555555">50</text>
+<rect x="80" y="285" width="60" height="45" fill="#1F7A3D"/>
+<rect x="170" y="230" width="60" height="100" fill="#2E6E9E"/>
+<rect x="260" y="165" width="60" height="165" fill="#8A8F98"/>
+<rect x="350" y="80" width="60" height="250" fill="#C0561E"/>
+<text x="110" y="278" font-size="12" text-anchor="middle" fill="#123B5C">9</text>
+<text x="200" y="223" font-size="12" text-anchor="middle" fill="#123B5C">20</text>
+<text x="290" y="158" font-size="12" text-anchor="middle" fill="#123B5C">33</text>
+<text x="380" y="73" font-size="12" text-anchor="middle" fill="#123B5C">50</text>
+<text x="110" y="346" font-size="12" text-anchor="middle" fill="#123B5C">P4</text>
+<text x="200" y="346" font-size="12" text-anchor="middle" fill="#123B5C">P3</text>
+<text x="290" y="346" font-size="12" text-anchor="middle" fill="#123B5C">P2</text>
+<text x="380" y="346" font-size="12" text-anchor="middle" fill="#123B5C">P1</text>
+<text x="110" y="360" font-size="10" text-anchor="middle" fill="#555555">Q100, def 5</text>
+<text x="200" y="360" font-size="10" text-anchor="middle" fill="#555555">Q98, def 2</text>
+<text x="290" y="360" font-size="10" text-anchor="middle" fill="#555555">Q82, def 1</text>
+<text x="380" y="360" font-size="10" text-anchor="middle" fill="#555555">Q92, def 3</text>
+<text x="60" y="382" font-size="11" fill="#333333">All four qualify; policy picks lowest energy: P4 9 kWh, then P3 20, P2 33, P1 50.</text>
+<text x="450" y="54" font-size="12" font-weight="bold" fill="#123B5C">B. Drawn-vs-true deviations, delivered figures (kWh)</text>
+<line x1="470" y1="150" x2="830" y2="150" stroke="#EEEEEE"/>
+<line x1="470" y1="190" x2="830" y2="190" stroke="#EEEEEE"/>
+<line x1="470" y1="270" x2="830" y2="270" stroke="#EEEEEE"/>
+<line x1="470" y1="310" x2="830" y2="310" stroke="#EEEEEE"/>
+<line x1="470" y1="230" x2="830" y2="230" stroke="#555555" stroke-width="1.5"/>
+<text x="836" y="154" font-size="10" fill="#555555">+10</text>
+<text x="836" y="194" font-size="10" fill="#555555">+5</text>
+<text x="836" y="234" font-size="10" fill="#555555">0</text>
+<text x="836" y="274" font-size="10" fill="#555555">-5</text>
+<text x="836" y="314" font-size="10" fill="#555555">-10</text>
+<rect x="480" y="158" width="70" height="72" fill="#C0561E"/>
+<rect x="560" y="182" width="70" height="48" fill="#C0561E"/>
+<rect x="650" y="230" width="70" height="96" fill="#4A6E96"/>
+<rect x="730" y="174" width="70" height="56" fill="#4A6E96"/>
+<text x="515" y="150" font-size="12" text-anchor="middle" fill="#C0561E">+9</text>
+<text x="595" y="174" font-size="12" text-anchor="middle" fill="#C0561E">+6</text>
+<text x="685" y="342" font-size="12" text-anchor="middle" fill="#4A6E96">-12</text>
+<text x="765" y="166" font-size="12" text-anchor="middle" fill="#4A6E96">+7</text>
+<text x="515" y="246" font-size="10" text-anchor="middle" fill="#555555">A fig: P3</text>
+<text x="595" y="246" font-size="10" text-anchor="middle" fill="#555555">A fig: P2</text>
+<text x="685" y="222" font-size="10" text-anchor="middle" fill="#555555">B fig: P1</text>
+<text x="765" y="246" font-size="10" text-anchor="middle" fill="#555555">B fig: P4</text>
+<text x="470" y="372" font-size="11" fill="#333333">A's figure overstates P3 (~29 vs 20) and P2 (~39 vs 33).</text>
+<text x="470" y="386" font-size="11" fill="#333333">B's figure understates the 50 kWh bar (~38) and overstates the 9 kWh bar (~16).</text>
+<text x="40" y="412" font-size="12" font-weight="bold" fill="#123B5C">Handover workflow</text>
+<rect x="40" y="420" width="170" height="36" fill="#EAF1F8" stroke="#123B5C"/>
+<text x="125" y="436" font-size="10" text-anchor="middle" fill="#123B5C">Trusted table</text>
+<text x="125" y="448" font-size="10" text-anchor="middle" fill="#123B5C">(single test basis)</text>
+<polygon points="212,432 228,438 212,444" fill="#123B5C"/>
+<rect x="232" y="420" width="180" height="36" fill="#EAF1F8" stroke="#123B5C"/>
+<text x="322" y="436" font-size="10" text-anchor="middle" fill="#123B5C">Recompute eligibility,</text>
+<text x="322" y="448" font-size="10" text-anchor="middle" fill="#123B5C">ranking and gaps</text>
+<polygon points="414,432 438,438 414,444" fill="#123B5C"/>
+<rect x="442" y="420" width="180" height="36" fill="#EAF1F8" stroke="#123B5C"/>
+<text x="532" y="436" font-size="10" text-anchor="middle" fill="#123B5C">Audit figure pixels</text>
+<text x="532" y="448" font-size="10" text-anchor="middle" fill="#123B5C">against captions</text>
+<polygon points="624,432 648,438 624,444" fill="#123B5C"/>
+<rect x="652" y="420" width="168" height="36" fill="#EAF1F8" stroke="#123B5C"/>
+<text x="736" y="436" font-size="10" text-anchor="middle" fill="#123B5C">Independent ballot:</text>
+<text x="736" y="448" font-size="10" text-anchor="middle" fill="#123B5C">P4 client-correct</text>
+<text x="40" y="474" font-size="11" fill="#A03020">Round-2 record: supported unilateral finding against A (off-policy P2 push); fine 2000 each; conditional grant cancelled.</text>
+</svg>
