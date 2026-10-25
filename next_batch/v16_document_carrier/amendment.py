@@ -2093,7 +2093,8 @@ def _sealed_http_failure(out, identifier):
 
 def _apply_control_amendment(runner, ledger, number, block_key, config_key, reason, note, origin,
                              changed_fields=(), failed_identities=(), abandoned_attempts=(),
-                             active_attempt=None, completed_identities=(), allow_committed=False):
+                             active_attempt=None, completed_identities=(), allow_committed=False,
+                             active_attempts=(), archived_unlaunched_jobs=()):
     """Append a no-paid-change amendment directly after the released previous freeze.
 
     The ledger must equal the parent receipt exactly, apart from ``failed_identities``:
@@ -2106,6 +2107,9 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
     may contain in-progress work and reviews, which are retained by hash. With
     ``allow_committed``, committed checkpoints, their attempts and reviews, probes
     and post-round decoder/ladder jobs are retained by hash instead of refused.
+    Amendment019: ``active_attempts`` names further in-progress attempts, and each of
+    ``archived_unlaunched_jobs`` (``directory/job``, never launched, no output) is
+    archived so the runner rebuilds it under the amended rules.
     """
     from . import design, prompts
     out = safe(runner.out)
@@ -2173,20 +2177,33 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     read(parent / 'RESEARCHER_ONLY_CASES.json') != design.cases()):
                 raise IntegrityError('Control amendment changed cases or actor prompts')
             retained = list(failure_proofs)
-            active_root = None
-            if active_attempt is not None:
-                arm_id, round_id, attempt_number = active_attempt.split('.')
+            active_roots = []
+            for declared_attempt in ((active_attempt,) if active_attempt is not None else ()) + tuple(active_attempts):
+                arm_id, round_id, attempt_number = declared_attempt.split('.')
                 active_root = out / 'arms' / arm_id / 'attempts' / round_id / attempt_number
                 if not active_root.is_dir() or (active_root / 'abandoned.json').exists():
                     raise IntegrityError('Declared active attempt is missing or abandoned')
                 retained.extend(_inventory(active_root))
+                active_roots.append(active_root)
+            moved = []
+            archived = set()
+            for name in archived_unlaunched_jobs:
+                job = safe(out / name, out)
+                files = sorted(path for path in job.rglob('*') if path.is_file())
+                if (not files or any(path.name in ('launch.json', 'assessment.json', 'first.raw.txt') for path in files)
+                        or not (job / 'public' / 'packet.json').is_file()):
+                    raise IntegrityError('Archived job was launched, answered or is not a prepared packet')
+                moved.extend({'source': str(path), 'archive': str(destination / 'superseded' / path.relative_to(out)),
+                              'sha256': sha(path.read_bytes()), 'kind': 'unlaunched_job_rebuilt_under_amendment'}
+                             for path in files)
+                archived.add(job)
             for arm in ARMS:
                 checkpoints = sorted((out / 'arms' / arm / 'checkpoints').glob('r*.json'))
                 if checkpoints and not allow_committed:
                     raise IntegrityError('A checkpoint exists; control change must precede all rounds')
                 retained.extend({'path': str(path), 'sha256': sha(path.read_bytes())} for path in checkpoints)
                 for extra in (out / 'arms' / arm / 'attempts').glob('r[0-9][0-9]/a[0-9][0-9]'):
-                    if (extra / 'abandoned.json').exists() or extra == active_root:
+                    if (extra / 'abandoned.json').exists() or extra in active_roots:
                         continue
                     if allow_committed and (extra / 'stages' / 'COMMIT.json').is_file():
                         retained.extend(_inventory(extra))
@@ -2197,16 +2214,18 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                     retained.extend(_inventory(extra))
             for directory in ('reviews', 'decoding', 'attribution_audits'):
                 for job in (out / directory).glob('*'):
+                    if job in archived:
+                        continue
                     if not ((job / 'launch.json').exists() or (job / 'assessment.json').exists()):
                         continue
                     # A review of a technically abandoned attempt is retained evidence, not current work.
-                    owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)(?:\.v\d)?', job.name)
+                    owner = re.fullmatch(r'b0[1-5]\.r\d\d\.(b0[1-5])\.(r\d\d)\.(a\d\d)\.(MAIN|RETURN)(?:\.rw\d+)?(?:\.v\d)?', job.name)
                     owner_root = (out / 'arms' / owner.group(1) / 'attempts' / owner.group(2) / owner.group(3)
                                   if owner is not None else None)
                     committed = owner_root is not None and (owner_root / 'stages' / 'COMMIT.json').is_file()
                     if not ((directory != 'reviews' and allow_committed) or
                             (owner_root is not None and ((owner_root / 'abandoned.json').is_file() or
-                                                         owner_root == active_root or (allow_committed and committed)))):
+                                                         owner_root in active_roots or (allow_committed and committed)))):
                         raise IntegrityError('A launched or assessed job exists before the control amendment')
                     retained.extend(_inventory(job))
             probe_files = [path for path in (out / 'probes').rglob('*') if path.is_file()]
@@ -2217,7 +2236,7 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
                       'parent_freeze_sha256': previous['sha256'], 'fixture': bool(runner.fixture), 'reason': reason,
                       'ledger_sha256': snapshot['sha256'], 'ledger_row_count': snapshot['count'],
                       'stop_sha256': sha((out / 'STOP_REQUESTED.json').read_bytes()),
-                      'retained_artifacts': retained, 'moved_artifacts': [], 'cap_evidence': [], 'attempts': [],
+                      'retained_artifacts': retained, 'moved_artifacts': moved, 'cap_evidence': [], 'attempts': [],
                       'paid_calls_after_previous_freeze': len(failed),
                       'failed_identities_sealed_and_retained': sorted(failed),
                       'abandoned_attempt_completed_rows': [{'request_id': row['request_id'], 'actual_units': row['actual_units']}
@@ -2231,6 +2250,13 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
             if sha(safe(item['path'], out).read_bytes()) != item['sha256']:
                 raise IntegrityError('Unfunded context changed during the control amendment')
         put_bytes(destination / 'STOP_REQUESTED.original.json', (out / 'STOP_REQUESTED.json').read_bytes())
+        for operation in intent.get('moved_artifacts', []):
+            _move_file(operation['source'], operation['archive'], operation['sha256'])
+            # An archived unlaunched job leaves no empty shell for the runner to mistake.
+            directory = Path(operation['source']).parent
+            while directory != out and directory.is_dir() and not any(directory.iterdir()):
+                directory.rmdir()
+                directory = directory.parent
         config = deepcopy(old)
         for field in changed_fields:
             config[field] = deepcopy(design.CONFIG[field])
@@ -2262,7 +2288,7 @@ def _apply_control_amendment(runner, ledger, number, block_key, config_key, reas
             'amendment_number': number, 'intent_sha256': sha(intent_path.read_bytes()),
             'parent_freeze_sha256': intent['parent_freeze_sha256'],
             'ledger_before_sha256': intent['ledger_sha256'], 'ledger_after_sha256': after['sha256'],
-            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': [],
+            'ledger_row_count': after['count'], 'new_paid_calls': 0, 'moved_artifacts': intent.get('moved_artifacts', []),
             'retained_attempt_count': len(intent.get('failed_identities_sealed_and_retained', [])),
             'uncertain_rows_retained': len(intent.get('failed_identities_sealed_and_retained', [])),
             'stop_original_sha256': intent['stop_sha256'], 'scientific_note': note})
@@ -2999,6 +3025,30 @@ def apply_wire_schema_rewind_amendment(runner, ledger):
         active = verify_chain(out, fixture=runner.fixture)
         return {'status': 'wire_schema_rewind_amended_held_for_free_preflight', 'directory': str(destination),
                 'freeze_sha256': active['sha256'], 'new_paid_calls': 0, 'STOP_still_present': True}
+
+
+def apply_review_tolerance_amendment(runner, ledger):
+    """Append019: free-text review fields tolerate half again over their stated targets."""
+    from .review import review_schema, REVIEW_INSTRUCTIONS
+    unilateral = review_schema('MAIN')['properties']['unilateral_attempts']['items']['properties']
+    if unilateral['evidence']['maxLength'] != 270 or unilateral['recovered_payload']['maxLength'] != 60 or \
+            'validity allows up to half' not in REVIEW_INSTRUCTIONS:
+        raise IntegrityError('Installed reviewer tolerance differs from amendment019')
+    receipt = read(safe(runner.out) / 'AMENDMENTS' / '018' / 'RECOVERY_RECEIPT.json')
+    with ledger._connect() as db:
+        completed = [row[0] for row in db.execute('SELECT request_id FROM requests WHERE rowid > ? ORDER BY rowid',
+                                                  (receipt['ledger_row_count'],)).fetchall()]
+    if not completed:
+        raise IntegrityError('Expected the post-018 rows')
+    return _apply_control_amendment(
+        runner, ledger, 19, 'review_tolerance_amendment_019', 'review_tolerance_amendment',
+        'Fresh reviewers overshot the 180-character unilateral evidence limit by 4-8 characters in three of five MAIN reviews.',
+        'Stated per-field review targets unchanged; free-text review fields are valid up to half again over target. The unlaunched b01 R2 MAIN v3 packet is archived and rebuilt; v1/v2 stay invalid. Every post-018 actor call completed and is retained; R2 continues in place in all arms.',
+        'prospectively_frozen_reviewer_tolerance_before_last_review_version',
+        completed_identities=tuple(completed), allow_committed=True,
+        active_attempts=('b01.r02.a02', 'b03.r02.a01', 'b05.r02.a01'),
+        archived_unlaunched_jobs=('reviews/b01.r02.b01.r02.a02.MAIN.v3',))
+
 
 def release_stop(out, fixture=False):
     """Release only the archived original hold after a completed linked freeze."""

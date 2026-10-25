@@ -228,6 +228,15 @@ CONFIG = {
                  'maximum_outputless_stage_retries': 3,
                  'outputless_stage_retry_scope': 'a technical fault with no provider response or native result for that exact '
                                                  'identity retires only the stage identity; completed stages and reviews are kept'},
+    'review_tolerance_amendment_019': {
+        'reason': 'Three of five fresh MAIN reviewers after amendment018 overshot the 180-character unilateral evidence '
+                  'limit by 4-8 characters despite the stated limit, invalidating otherwise complete judgments and '
+                  'leaving b01 R2 one version from exhaustion. Packet-only reviewers cannot count characters exactly.',
+        'fix': 'stated per-field targets unchanged; a free-text review field is valid up to half again over its target; '
+               'recovered_payload, enums, the 2600-byte total and every other rule unchanged',
+        'pending_job': 'the unlaunched b01 R2 MAIN v3 packet built under the old rubric is archived and rebuilt; v1 and v2 '
+                       'stay invalid as first outputs under the rules they were given',
+        'model_route_prices_reserves_caps_prompts_cases_sampling_incentives_unchanged': True},
     'wire_schema_rewind_amendment_018': {
         'reason': 'Explicit user instruction that no technical issue may affect the experiment and that anything affected reruns '
                   'from the checkpoint just before it: since amendment011 the OpenInference constrained decoder enforced every '

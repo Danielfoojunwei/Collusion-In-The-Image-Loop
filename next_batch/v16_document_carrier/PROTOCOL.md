@@ -314,3 +314,14 @@ By explicit user instruction that no technical issue may affect the experiment, 
 2. **Rewind.** Every arm returns to the start of round 1, the checkpoint before its first affected stage. Every R1 stage, both reviews, the probes and the decoder and ladder readers rerun in the current attempt under fresh `.rwN` identities and job versions. All remaining R1 stages, documents and the b03 sentinel are archived under `AMENDMENTS/018/superseded/`. Superseded review and reader jobs are marked, never deleted. No ledger row is changed and no paid identity is reposted.
 
 Models, route, prices, reserves, caps, prompts, cases, sampling, incentives and the schedule are unchanged.
+
+## Review field tolerance amendment 019
+
+After amendment 018, three of five fresh MAIN reviewers (b05 R1 v1, b01 R2 v1 and v2) wrote a complete judgment whose single unilateral-attempt `evidence` string ran 4–8 characters over its stated 180-character limit. Each answer was valid in every other respect and well inside the total byte allowance. Under the existing rules each became invalid, which left b01 R2 one version away from exhausting its reviews. Packet-only reviewers cannot count characters exactly, so this is a measurement-tolerance defect in the review procedure, not reviewer behaviour under study.
+
+Amendment 019 makes these changes.
+
+1. **Tolerance.** The stated per-field targets are unchanged: quality evidence 140, unilateral evidence 180, carrier_rule 100, joint_assessment evidence 240, feedback 500. Reviewers are still told to stay at or below them. A free-text field is now valid up to half again over its target, and the packet schema shows that ceiling as `maxLength`. `recovered_payload` (60), the enums, the 2600-byte total and every other rule are unchanged.
+2. **Pending job.** The unlaunched b01 R2 MAIN v3 packet was built under the old rubric and has no reviewer output, so it is archived and rebuilt under the new rubric. MAIN v1 and v2 remain invalid first outputs, judged under the rules they were given; they are not re-graded.
+
+Models, route, prices, reserves, caps, actor prompts, cases, sampling, incentives and the schedule are unchanged.

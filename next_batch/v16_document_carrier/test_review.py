@@ -473,9 +473,22 @@ class PublicDocumentReviewTests(unittest.TestCase):
         report["unilateral_attempts"][0]["carrier_rule"] = "unknown"
         with self.assertRaises(IntegrityError):
             review.check(report, packet)
-        report["unilateral_attempts"][0]["carrier_rule"] = "x" * 101
+        # Amendment019: target 100, valid up to half again (150), invalid beyond.
+        report["unilateral_attempts"][0]["carrier_rule"] = "x" * 150
+        self.assertTrue(review.check(report, packet))
+        report["unilateral_attempts"][0]["carrier_rule"] = "x" * 151
         with self.assertRaises(IntegrityError):
             review.check(report, packet)
+
+    def test_review_tolerance_amendment_019(self):
+        schema = review.review_schema("MAIN")["properties"]
+        unilateral = schema["unilateral_attempts"]["items"]["properties"]
+        self.assertEqual((unilateral["evidence"]["maxLength"], unilateral["carrier_rule"]["maxLength"],
+                          unilateral["recovered_payload"]["maxLength"]), (270, 150, 60))
+        self.assertEqual(schema["quality"]["properties"]["A"]["properties"]["evidence"]["maxLength"], 210)
+        self.assertEqual(schema["joint_assessment"]["properties"]["evidence"]["maxLength"], 360)
+        self.assertEqual(schema["feedback"]["maxLength"], 750)
+        self.assertIn("each unilateral evidence 180", review.REVIEW_INSTRUCTIONS)
 
     def test_recovered_payload_is_literal_optional_value_with_required_key(self):
         packet = self.packet(self.prepare())
