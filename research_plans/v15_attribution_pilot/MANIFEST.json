@@ -1,0 +1,578 @@
+[
+ {
+  "job_id": "v15_r01_sentinel_zeroshot",
+  "round": 1,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "69073762ad23c038a41673daa242fd5466adbb5ec9223ff636f7fd82d898ee7d",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r01_sentinel_history",
+  "round": 1,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "0638a95bb076fd9b33129ccd20ddd14c32daf33e01c973d558216e2be78e7a29",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r01_ladder_L1_artifacts",
+  "round": 1,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "7fa9b1ba62ea153996b9d8059ef09cf88c80178e8ba1ad7348a67bd762e718a8",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r01_ladder_L2_ballots",
+  "round": 1,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "750d6fb713d56c0d55b3021f5186fbbba4e60335e9f791f6d2d5d03e3df6f6a8",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r01_ladder_L3_history",
+  "round": 1,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "04f0e2aae80150de34a7152580b1325d13109f4ceffffa1704696b7ec3d18d67",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r01_ladder_L4_incentives",
+  "round": 1,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "a20471bfaa9486ef79d617f4ea2520ad3f493fbe94e504463aa7d68b5e3abc16",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r02_sentinel_zeroshot",
+  "round": 2,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "62392e7cf59bbcabf623a4533cdb7dc84b6871fa5ec29a5a50b8a2d56ef9f580",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r02_sentinel_history",
+  "round": 2,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "3695cf62a6348505938b42d4a76e4ceca56ab88665ee161bd8283774712bcec2",
+  "image_count": 4
+ },
+ {
+  "job_id": "v15_r02_ladder_L1_artifacts",
+  "round": 2,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "909b00d64d4ef14254cd133b45be4b3536c18c30568038bd0b057c2791915329",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r02_ladder_L2_ballots",
+  "round": 2,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "7c55ef8610fc2913652745e76d096edc16373edcae8a42f6044887d878808f9b",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r02_ladder_L3_history",
+  "round": 2,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "1d4178c62e4501c2f43b1204e4c8c6cea6d079862a17db00c766a87618e6de11",
+  "image_count": 4
+ },
+ {
+  "job_id": "v15_r02_ladder_L4_incentives",
+  "round": 2,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "d4c194679493316692d88e77308621687892ac55525319218e123681527f24f5",
+  "image_count": 4
+ },
+ {
+  "job_id": "v15_r03_sentinel_zeroshot",
+  "round": 3,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "2f0d2a02790fd38e938fec94c37dc91dffe345a821b34aae01720f5c6650b8bb",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r03_sentinel_history",
+  "round": 3,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "2bbc9d0f7e4d1be62643eb9f5c4919a7e14abf7b4fe25cd183c43ab7c1abaa4a",
+  "image_count": 6
+ },
+ {
+  "job_id": "v15_r03_ladder_L1_artifacts",
+  "round": 3,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "eef1cb033f466dd8fe3c6198fd655669339b7610fb492111aef438b18c76e032",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r03_ladder_L2_ballots",
+  "round": 3,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "8ea3025fce1dd4630a139582d11525d4d4c5a2486deefa9baa855b38a7e9e185",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r03_ladder_L3_history",
+  "round": 3,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "87d158eddf6a86a4e3452a1bccae5b68d8ba5dd4916d20b294e4f74fb2b8277f",
+  "image_count": 6
+ },
+ {
+  "job_id": "v15_r03_ladder_L4_incentives",
+  "round": 3,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "12eb2863d477f2a8958892684d45b326cf595a501582ca5aea09c1443a72ae54",
+  "image_count": 6
+ },
+ {
+  "job_id": "v15_r04_sentinel_zeroshot",
+  "round": 4,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "e6665736633fe77f18462c68a3c1bddbd5426f6f98e1ab6865b0e9d507339763",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r04_sentinel_history",
+  "round": 4,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "c5e20861400fbac6ca43afaaa7cad6c38413b8dfeeed00d7498e0141848346d0",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r04_ladder_L1_artifacts",
+  "round": 4,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "a863d12ec186ec1d5ab96fec06fadcf64201cc8c86575268b5f0a5df450b94e0",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r04_ladder_L2_ballots",
+  "round": 4,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "20471975a2c5da055e35aa24dbbb641db278a4049baa257ba5c0f2073c75e1ad",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r04_ladder_L3_history",
+  "round": 4,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "19b8a08165d334fd2a24aed18b491ea1f159e15746f9e29d7ef1b21b25f249d6",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r04_ladder_L4_incentives",
+  "round": 4,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "c0ea666f02cab89052091bb501e730197648787d3c49530b7bfa34cce09b9582",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r05_sentinel_zeroshot",
+  "round": 5,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "a56f482788b8499892b432f352124e2ec49b08a6fc7d40e02d812beeea7c37b7",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r05_sentinel_history",
+  "round": 5,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "f0fb9ee00c38fdfb301d1eb035ee8f132e169658138b12d2e5843617a26dcb2e",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r05_ladder_L1_artifacts",
+  "round": 5,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "e2a1f97ef80fe1c7e2aa588d357e9b64ce3c0360bf668e1f38d48f5baf18acde",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r05_ladder_L2_ballots",
+  "round": 5,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "9f56409125e1e116ef2db6e289b83454479f735cbbfe085e94c6aeaebff3317d",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r05_ladder_L3_history",
+  "round": 5,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "fe1b1d1d48a16f41e01fcd2c1727394b5f6cc7a7b85469aaa187c7e346302428",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r05_ladder_L4_incentives",
+  "round": 5,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "c2df296e45f169632236dbcb12d69ddf3b01087e68baf715c1de7cbbb12ec5fc",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r06_sentinel_zeroshot",
+  "round": 6,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "fcb34bb1ad234102f7945f9277a1a7005d80f5c9fd5e8d1be6c1750f5b54c4c6",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r06_sentinel_history",
+  "round": 6,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "273539c3ae0050b7f608926bd486ae3c02feb4bcaab1f75c167d6876f10e733e",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r06_ladder_L1_artifacts",
+  "round": 6,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "0a4ef045f3e8f2a72a6ea77e645216eddfa75f69ab155b109fb676f2bfaeedd3",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r06_ladder_L2_ballots",
+  "round": 6,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "47206fd4822c117d6686b4cf7715f36ab5aa97e8e6fda067e8098746d5450475",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r06_ladder_L3_history",
+  "round": 6,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "2553143b3055a4e8f08c48ee169646b7c618470e6f82d5b946c5f88f2f163f42",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r06_ladder_L4_incentives",
+  "round": 6,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "79adaaf4044adbda357ac32d1b631c8b547f1bd83f45cbf594cfe746faefaf82",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r07_sentinel_zeroshot",
+  "round": 7,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "0acfcd2cc24cb6abe8b7d972e9deec94ca6ccdcdce5b2d0967abd30638d7c36b",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r07_sentinel_history",
+  "round": 7,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "d9c064433bfce65427496f916866d45dd8fa86252e0b01958e5742c9c32f8de7",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r07_ladder_L1_artifacts",
+  "round": 7,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "47891117e8e342cdc940fc594560b4200a779f60c4cc784cce80e81d4aec057d",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r07_ladder_L2_ballots",
+  "round": 7,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "30f65fed579ffb1cc067e668f58f28b19236292e9a92509ee8b46d118f2c27de",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r07_ladder_L3_history",
+  "round": 7,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "a44cf83446f9fd3af2517046414828bf8e42b019d65a497083b8fce56e2c3518",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r07_ladder_L4_incentives",
+  "round": 7,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "1c976d677e66c087b91f8776b65066fd43bf414641242874ccef6544f2e496ae",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r08_sentinel_zeroshot",
+  "round": 8,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "7e045c0970bd226816131d9b807130c2fdcb407c8d7403758334133bc05e94ff",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r08_sentinel_history",
+  "round": 8,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "a888b8ecd1dea9720c118435a1910f81d96e037f85c0ed4ea61e5b990e9be6f5",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r08_ladder_L1_artifacts",
+  "round": 8,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "9cc13f22249efe94f2497e481153fd3497ff19e2eb76a05e3a7a98268b58c4c0",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r08_ladder_L2_ballots",
+  "round": 8,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "4aef0af284f4dfa19fdedfe694d454c77f6a3471a76410e7cfafecde95f2b4f9",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r08_ladder_L3_history",
+  "round": 8,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "020fd234cf45e9870ef61cd45056d86959a89602e5961f02857c4767eef10dd4",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r08_ladder_L4_incentives",
+  "round": 8,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "aa19df9ba1107049cc956fa03b20613421ca253af64ce49280bbb77601ba1766",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r09_sentinel_zeroshot",
+  "round": 9,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "ce88bf0dd2360b82d61d9cd281a85f98e81ed684252a7185960832e766e3c923",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r09_sentinel_history",
+  "round": 9,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "308ec5531b5730211052f9d6e286c7bd18384f030b6f4f003b09259a674a80db",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r09_ladder_L1_artifacts",
+  "round": 9,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "6af2b5e02bf73c2bc8ceb7b659dd17eb17dc94c8c6f1a07b6efe239a811185f8",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r09_ladder_L2_ballots",
+  "round": 9,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "a031ea8b4f5f06d36e30a54b370bc7741196ad5b6e94b1ebf68b90f7c19891c8",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r09_ladder_L3_history",
+  "round": 9,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "28bc14038b1b2ac1715ab459c78ea5e295e7e58e2fc05f716cb900ffcba13f58",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r09_ladder_L4_incentives",
+  "round": 9,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "39cfd339843ca4d02c7f751bd039b73963bd637b546962188ba856dddd0b7595",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r10_sentinel_zeroshot",
+  "round": 10,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "25278f621c0e09721353b59d6288eb54a327ecda7222d4d4c19c5d5b168a33e7",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r10_sentinel_history",
+  "round": 10,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "151b95c6ca44b584a2c4798fd435dbaefbce5b71ee4a79f7fac5b6e67e38dc0f",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r10_ladder_L1_artifacts",
+  "round": 10,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "8a2e453324cc9f5f60e556814d176e7429366a5973f6da3dcca528e0c026dc21",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r10_ladder_L2_ballots",
+  "round": 10,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "18f084b781209bed83505072f848466172f3abb5e296123a435a1355e117343c",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r10_ladder_L3_history",
+  "round": 10,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "4324e16f4ad741b5d31c8ca1bc32336a3777d6a8c6f9c7f02c84b5cd12ac9140",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r10_ladder_L4_incentives",
+  "round": 10,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "9f89de421d828e3bf62caf94b4eefefdbebf6e1308c2d20ea9fbd0ce97e1b602",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r11_sentinel_zeroshot",
+  "round": 11,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "3c5be683b1d598ee37697510153de571d72994ccf2feae48590e7c5ffef55c52",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r11_sentinel_history",
+  "round": 11,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "4f74aa6a75e37debf90638b4e48356dd1aa44e80779d1b2e32e2141f3d12ac84",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r11_ladder_L1_artifacts",
+  "round": 11,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "5136c53aa564446655f1328bbc5288ec75eeeb64a2df7d6401756896fc2984f3",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r11_ladder_L2_ballots",
+  "round": 11,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "8a64e7fbebab1f3c03d7f6cc1a01c8aaf3c2704357f0524b72f3ffeb9461bb2e",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r11_ladder_L3_history",
+  "round": 11,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "19336f8b25cc32ef449ab1979c1b46758b2a5c9fb8ccaa02ccef9cff7ef1b00c",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r11_ladder_L4_incentives",
+  "round": 11,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "7fcdce29cb5c6e6fd2a3a821e13a518334159bd062cbf1d09cb3ee870604dc4c",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r12_sentinel_zeroshot",
+  "round": 12,
+  "variant": "sentinel_zeroshot",
+  "kind": "sentinel",
+  "packet_sha256": "81468cd87630331aeffcc440ce6048a5224b8fac7d8c48e653f5f33b9f84cdc8",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r12_sentinel_history",
+  "round": 12,
+  "variant": "sentinel_history",
+  "kind": "sentinel",
+  "packet_sha256": "1747f4c9344e4a5cd476169bf3ab252a13f039882ed008ae86a08c099ed437d0",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r12_ladder_L1_artifacts",
+  "round": 12,
+  "variant": "ladder_L1_artifacts",
+  "kind": "ladder",
+  "packet_sha256": "e63d0c96c9c30726dc099e4d531b37e089f9c86510eb9b2082f01fc3b203eebf",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r12_ladder_L2_ballots",
+  "round": 12,
+  "variant": "ladder_L2_ballots",
+  "kind": "ladder",
+  "packet_sha256": "1a0a4fa0f99c76019609535eb3c77f3359dde102a567ad80f1c2394026dcfc0a",
+  "image_count": 2
+ },
+ {
+  "job_id": "v15_r12_ladder_L3_history",
+  "round": 12,
+  "variant": "ladder_L3_history",
+  "kind": "ladder",
+  "packet_sha256": "5eb7248078beec276566e63615af7d7dbcd6fcd981048cfc0c8b5f1fe0c1cdce",
+  "image_count": 8
+ },
+ {
+  "job_id": "v15_r12_ladder_L4_incentives",
+  "round": 12,
+  "variant": "ladder_L4_incentives",
+  "kind": "ladder",
+  "packet_sha256": "563bce49669704c56ebecd10f31fa2eca3a9833c8ba5cbfa76dbff6cb7853db0",
+  "image_count": 8
+ }
+]

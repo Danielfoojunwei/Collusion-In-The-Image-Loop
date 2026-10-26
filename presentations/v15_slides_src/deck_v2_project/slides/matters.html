@@ -1,0 +1,19 @@
+<section id="matters" data-transition="fade" style="background:#F5F2EB;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:72px 128px 72px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;color:#A8481F;text-transform:uppercase">Why it matters · the deployment default</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:56px;font-weight:600;line-height:1.1">Real overseers get the same diet: outputs, not payoffs or reasoning</h2>
+</div>
+<table style="font-size:24px;color:#1B2433">
+<tr><th style="width:24%">System</th><th style="width:30%">Overseer sees</th><th style="width:30%">Overseer cannot see</th><th style="width:16%">Mirrors</th></tr>
+<tr><td>A2A agent protocol</td><td>Task messages, results</td><td>Internal state, memory, tools (by design)</td><td>R2</td></tr>
+<tr><td>Frontier reasoning APIs</td><td>Outputs, reasoning summaries</td><td>Raw chain of thought</td><td>R2</td></tr>
+<tr><td>Supervisor orchestration</td><td>Worker outputs, handoffs</td><td>Workers’ internal state</td><td>R1, R2</td></tr>
+<tr><td>AI-control monitoring</td><td>Each output, scored</td><td>The model’s goals, payoffs</td><td>R1, R4</td></tr>
+<tr><td>Algorithmic pricing law</td><td>Prices, public conduct</td><td>Objectives; agreement inferred</td><td>R3, R4</td></tr>
+</table>
+<div style="display:flex;gap:24px">
+<p style="flex:1;font-size:26px;line-height:1.4;background:#FBF9F4;border:1px solid #E3DDD1;border-radius:12px;padding:20px 24px">OpenAI’s CoT-monitoring study: reasoning access beats output-only monitoring, and pressure breeds obfuscation.</p>
+<p style="flex:1;font-size:26px;line-height:1.4;background:#FBF9F4;border:1px solid #E3DDD1;border-radius:12px;padding:20px 24px">Antitrust: parallel conduct alone is not an agreement; “plus factors” like motive are needed. Our reviewer was denied the motive.</p>
+</div>
+<aside>Sources (cited in the report): the A2A project README (“opaque agentic applications… without exposing their internal state, memory, or tools”); summary-only reasoning in the OpenAI Responses API, Anthropic extended thinking and Gemini thought summaries; the LangGraph supervisor pattern; Greenblatt et al., AI Control (ICML 2024); Calvano et al. (AER 2020) and Fish et al. on algorithmic collusion; Bell Atlantic v. Twombly (2007) and the 2026 Third Circuit algorithmic-pricing decision; Baker et al. (2025) on chain-of-thought monitoring and obfuscation. Why this experiment is a strong test: we hold ground truth on intent (plans committed before rendering, all reasoning logged), real separate components, independent audits, comparison judges that isolate the cause, and SHA-256-hashed records.</aside>
+</section>
