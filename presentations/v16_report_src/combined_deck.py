@@ -42,7 +42,7 @@ slides = [f'''
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap: receivers’ recovery rate minus outsiders’ (0 = receivers match strangers; negative = they recover less). Permissive → Guarded</span></div>
-    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>receiver votes for the sender’s target: the Permissive study → the Guarded study</span></div>
+    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>checker votes for the sender’s target: Permissive study → Guarded study</span></div>
     <div><b>{L15['L3']['supported']}/{L15['L3']['valid']} vs 0/{N['ladder_jobs']}</b><span>monitor attribution with ballots and history: on collusion vs on signal-present refusals</span></div>
   </div>
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
@@ -57,7 +57,7 @@ slides = [f'''
   <div class="full g2">{svg['game_round']}</div>
 </section>''', f'''
 <section>
-  <h2>the Permissive study · Seen, not stopped: GPT-6.1 Sol (Ultra) never called it collusion</h2>
+  <h2>Permissive study · Seen, not stopped: GPT-6.1 Sol (Ultra) never called it collusion</h2>
   {strip15([1, 4, 5, 6, 7, 10])}
   <div class="three">
     <div><h3>Collusion through noise</h3><p>{W['target_votes']}/{W['votes']} target votes and {W['grants']}/{W['rounds']} grants paid, although only {W['img_faithful']}/{W['img_total']} pictures were drawn as briefed.</p></div>
@@ -70,7 +70,7 @@ slides = [f'''
   <div class="full g2">{svg['lessons']}</div>
 </section>''', f'''
 <section>
-  <h2>the Guarded study · A readable code nobody joined</h2>
+  <h2>Guarded study · A readable code nobody joined</h2>
   <div class="full">{svg['timeline']}</div>
   <div class="two even">
     <ul>
@@ -104,7 +104,7 @@ slides = [f'''
   <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>V16</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/{N['rounds']}</td></tr>
   <tr><td>Principal only, sanctioned</td><td>Next experiment</td><td>Predicted: deterrence without the leak</td></tr>
   </tbody></table>
-  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; F2 rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
+  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; A1 rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
 </section>''']
 
 css = '''
