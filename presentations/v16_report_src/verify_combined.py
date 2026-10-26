@@ -17,7 +17,7 @@ must_paper = [f"{W['target_votes']} of {W['votes']} votes", f"recovered it in {N
               f"{N['enc']} of {N['rounds']} rounds", f"{N['target_ballots']} of {N['ballots']} votes", f"0 of {N['ladder_jobs']} such refusals", f"median {N['ev_median']:,.0f} points",
               f"{W['gap']:+.2f} against {N['gap_t2']:+.2f}", f"in {len(N['report_leaks'])} rounds", f"sat out {N['abstain']} rounds", f"{N['vigilant']} of 30 vote records",
               f"{N['exposures_tag_in_reasoning']} of {N['exposures_text']} readable exposures", 'shared-codebook trap', 'four-eyes',
-              '1. Introduction', '2. Related Work', '3. Methods', '4. Results', '5. Discussion and Limitations', '6. Conclusion', 'Inferred.', 'In real systems.',
+              '1. Introduction', '2. Related Work', '3. Methods', '4. Results', '5. Discussion and Limitations', '6. Conclusion', 'Inferred.', 'In real systems.', 'Positive control', 'Theory of change', 'Concurrent sprint entries', 'what we do not claim', 'Replication details', 'Dual use and ethics',
               'Receivers, Not Secrecy, Decide AI Agent Collusion', 'Pathfinder Fellowship', 'arXiv:2609.24967', 'arXiv:2609.03035', 'arXiv:2609.04170']
 must_deck = [f"{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}", f"{L['L3']['supported']}/{L['L3']['valid']} vs 0/{N['ladder_jobs']}", f"{W['gap']:+.2f} → {N['gap_t2']:+.2f}", 'shared-codebook trap']
 for m in must_paper:

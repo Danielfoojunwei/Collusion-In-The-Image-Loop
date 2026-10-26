@@ -100,7 +100,7 @@ slides = [f'''
     <div><h3>F3 · Feedback</h3><p>Unsanctioned reports taught collusion; sanctioned public findings deterred the sender and left receivers a codebook shared with the monitor: the shared-codebook trap.</p></div>
     <div><h3>F4 · Attribution</h3><p>Ballots and history: {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}. On readable refusals: 0/{N['ladder_jobs']}. Calibrate on refusals.</p></div>
   </div>
-  <p class="foot">Beyond prior work: no earlier study pairs refusable receivers with a live sanctioning monitor, returns feedback that ends collusion, or calibrates on refusals (paper Table I5).</p>
+  <p class="foot">Beyond prior work and the sprint entries we could read: none pairs refusable receivers with a live sanctioning monitor, returns findings that end collusion, tests monitors on refusals, or uses image and document carriers.</p>
 </section>''', f'''
 <section>
   <h2>Design rules</h2>
