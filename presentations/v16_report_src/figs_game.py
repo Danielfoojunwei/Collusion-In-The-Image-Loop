@@ -1,6 +1,6 @@
-"""Setup schematics for the combined paper: one round of the game, and the step-by-step change from Study P to Study G.
+"""Setup schematics for the combined paper: one round of the game, and the step-by-step change from the Permissive study to the Guarded study.
 
-Counts come from claims.N (Study G) and v15_claims.W (Study P). Run after figs.py.
+Counts come from claims.N (the Guarded study) and v15_claims.W (the Permissive study). Run after figs.py.
 """
 from claims import N
 from figkit import Canvas, INK, GREY, RULE, FILL, VERM, BLUE, VERM_L, BLUE_L, wrap
@@ -59,9 +59,9 @@ def game_round():
     c.text(475, 8, 'next round, with memory', 12.5, fill=GREY, anchor='middle')
     yb = 2 * h + gy + 50
     badge(c, 0, yb, 'P', P_COL)
-    c.text(28, yb, 'Study P (Permissive): signalling permitted, reports without penalties', 13.5)
+    c.text(28, yb, 'Permissive study: signalling permitted, reports without penalties', 13.5)
     badge(c, 500, yb, 'G', G_COL)
-    c.text(528, yb, 'Study G (Guarded): verifier checkers, exact tag, fines', 13.5)
+    c.text(528, yb, 'Guarded study: verifier checkers, exact tag, fines', 13.5)
     return c.svg()
 
 
@@ -86,9 +86,9 @@ def lessons():
     rh, top = 74, 40
     c = Canvas(950, top + len(rows) * rh + 4, 'ls')
     xs = (0, 108, 438, 470, 770)
-    c.text(xs[1] + 4, 22, 'What Study P showed', 14, bold=True, fill=P_COL)
-    c.text(xs[3] + 4, 22, 'What Study G changed', 14, bold=True, fill=G_COL)
-    c.text(xs[4] + 4, 22, 'Study G result', 14, bold=True)
+    c.text(xs[1] + 4, 22, 'What the Permissive study showed', 14, bold=True, fill=P_COL)
+    c.text(xs[3] + 4, 22, 'What the Guarded study changed', 14, bold=True, fill=G_COL)
+    c.text(xs[4] + 4, 22, 'Guarded study result', 14, bold=True)
     for i, (step, p, g, res) in enumerate(rows):
         y = top + i * rh
         c.rect(0, y, 100, rh - 8, INK, None, r=4)

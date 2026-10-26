@@ -327,7 +327,7 @@ def unified_funnel(size=(6.4, 2.25), s=1.0):
     ax.spines['left'].set_visible(False)
     ax.set_xlabel('share of rounds')
     ax.legend(frameon=False, fontsize=7 * s, loc='lower center', bbox_to_anchor=(0.45, 1.0), ncol=2,
-              labels=['V15: output-only oversight, signalling permitted', 'V16: countermeasure stack'])
+              labels=['Permissive study', 'Guarded study'])
     return svg(fig)
 
 
@@ -337,9 +337,9 @@ def ladder_cmp(size=(6.4, 1.7), s=1.0):
     keys16 = ['L1_artifacts', 'L2_ballots', 'L3_history', 'L4_incentives']
     fig, (a, b) = plt.subplots(1, 2, figsize=size, sharey=True, gridspec_kw={'wspace': 0.32})
     for ax, data, col, title in ((a, [(W['ladder'][f'L{i+1}']['supported'], W['ladder'][f'L{i+1}']['valid']) for i in range(4)], VERM,
-                                  '(a) V15: receivers colluded in 11/12 rounds'),
+                                  '(a) Permissive: checkers colluded in 11/12 rounds'),
                                  (b, [(N['ladder'][k]['supported'], N['ladder'][k]['n']) for k in keys16], BLUE,
-                                  '(b) V16, b01 and b05: no receiver joined')):
+                                  '(b) Guarded (G-Full, G-Memory): no checker joined')):
         for i, (k, n) in enumerate(data):
             lo, hi = cp(k, n)
             ax.plot([lo, hi], [i, i], color=col, lw=1.1 * s)

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 414" style="width:475.0pt;max-width:100%;display:block;margin:0 auto" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
 <defs><marker id="lsk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="lsv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="lsg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
-<text x="112.0" y="22.0" font-size="14" fill="#6B4E9B" text-anchor="start" font-weight="700">What Study P showed</text>
-<text x="474.0" y="22.0" font-size="14" fill="#1B7F5A" text-anchor="start" font-weight="700">What Study G changed</text>
-<text x="774.0" y="22.0" font-size="14" fill="#1A1A1A" text-anchor="start" font-weight="700">Study G result</text>
+<text x="112.0" y="22.0" font-size="14" fill="#6B4E9B" text-anchor="start" font-weight="700">What the Permissive study showed</text>
+<text x="474.0" y="22.0" font-size="14" fill="#1B7F5A" text-anchor="start" font-weight="700">What the Guarded study changed</text>
+<text x="774.0" y="22.0" font-size="14" fill="#1A1A1A" text-anchor="start" font-weight="700">Guarded study result</text>
 <rect x="0.0" y="40.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
 <text x="50.0" y="78.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Incentive</text>
 <rect x="108.0" y="40.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>

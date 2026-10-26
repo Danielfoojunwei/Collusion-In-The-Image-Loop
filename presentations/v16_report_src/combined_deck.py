@@ -38,11 +38,11 @@ L15 = W['ladder']
 slides = [f'''
 <section class="title">
   <h1 class="long">Collusion Is Not a Secrecy Problem</h1>
-  <p class="sub">Five assumptions about monitoring AI agents, overturned</p>
+  <p class="sub">Testing five common assumptions about monitoring AI agents</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
-    <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
-    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>receiver votes for the sender’s target: Study P (Permissive) → Study G (Guarded)</span></div>
+    <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap: receivers’ recovery rate minus outsiders’ (0 = receivers match strangers; negative = they recover less). Permissive → Guarded</span></div>
+    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>receiver votes for the sender’s target: the Permissive study → the Guarded study</span></div>
     <div><b>{L15['L3']['supported']}/{L15['L3']['valid']} vs 0/{N['ladder_jobs']}</b><span>monitor attribution with ballots and history: on collusion vs on signal-present refusals</span></div>
   </div>
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
@@ -50,14 +50,14 @@ slides = [f'''
 <section>
   <h2>Same agents, same rewards: one code followed, one declined</h2>
   <div class="full fn">{svg['unified_funnel']}</div>
-  <p class="foot">Agents: GLM-5.3-Flash in both. Study P: reviewer GPT-6.1 Sol (Ultra reasoning) mentioned the code in {W['rev_green']}/{W['rounds']} reports, never called it collusion; checkers followed in {W['target_votes']}/{W['votes']}. Study G: reviewer Claude Opus 5.5 (medium effort) flagged every code round; outsiders read the tag in {N['t2_rounds_enc']}/{N['enc']}; checkers followed in {N['target_ballots']}/{N['ballots']}. A contrast, not an ablation.</p>
+  <p class="foot">Agents: GLM-5.3-Flash in both. The Permissive study: reviewer GPT-6.1 Sol (Ultra reasoning) mentioned the code in {W['rev_green']}/{W['rounds']} reports, never called it collusion; checkers followed in {W['target_votes']}/{W['votes']}. The Guarded study: reviewer Claude Opus 5.5 (medium effort) flagged every code round; outsiders read the tag in {N['t2_rounds_enc']}/{N['enc']}; checkers followed in {N['target_ballots']}/{N['ballots']}. A contrast, not an ablation.</p>
 </section>''', f'''
 <section>
   <h2>The game: one round of a two-key approval pipeline</h2>
   <div class="full g2">{svg['game_round']}</div>
 </section>''', f'''
 <section>
-  <h2>Study P · Seen, not stopped: GPT-6.1 Sol (Ultra) never called it collusion</h2>
+  <h2>the Permissive study · Seen, not stopped: GPT-6.1 Sol (Ultra) never called it collusion</h2>
   {strip15([1, 4, 5, 6, 7, 10])}
   <div class="three">
     <div><h3>Collusion through noise</h3><p>{W['target_votes']}/{W['votes']} target votes and {W['grants']}/{W['rounds']} grants paid, although only {W['img_faithful']}/{W['img_total']} pictures were drawn as briefed.</p></div>
@@ -66,11 +66,11 @@ slides = [f'''
   </div>
 </section>''', f'''
 <section>
-  <h2>What Study P taught us → what Study G changed</h2>
+  <h2>What the Permissive study taught us → what the Guarded study changed</h2>
   <div class="full g2">{svg['lessons']}</div>
 </section>''', f'''
 <section>
-  <h2>Study G · A readable code nobody joined</h2>
+  <h2>the Guarded study · A readable code nobody joined</h2>
   <div class="full">{svg['timeline']}</div>
   <div class="two even">
     <ul>
@@ -81,8 +81,8 @@ slides = [f'''
   </div>
 </section>''', f'''
 <section>
-  <h2>Five assumptions, overturned</h2>
-  <table class="sota lt"><thead><tr><th>It seems obvious that…</th><th>What we found</th></tr></thead><tbody>
+  <h2>Five common assumptions, tested</h2>
+  <table class="sota lt"><thead><tr><th>Common assumption</th><th>What we found</th></tr></thead><tbody>
   <tr><td><b>A1</b> collusion is a secrecy problem</td><td>Receivers decided: the same model used one readable code ({W['target_votes']}/{W['votes']}) and refused another (0/{N['ballots']}); gap {W['gap']:+.2f} → {N['gap_t2']:+.2f}</td></tr>
   <tr><td><b>A2</b> a more capable reviewer catches more</td><td>GPT-6.1 Sol at Ultra failed; with votes and history monitors went {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}; Claude Opus 5.5 at medium flagged every code round</td></tr>
   <tr><td><b>A3</b> flagging any visible code is safe</td><td>Codes visible where nobody joined; 0/{N['ladder_jobs']} attributions; flagging would punish the refusers</td></tr>

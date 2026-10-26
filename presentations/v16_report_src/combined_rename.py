@@ -1,8 +1,8 @@
 """Display names for the two studies and Study G's groups, applied to visible text only."""
 import re
 
-_REPS = [('Study 1 (V15)', 'Study P'), ('Study 2 (V16)', 'Study G'), ('Study 1', 'Study P'), ('Study 2', 'Study G'),
-         ('V15', 'Study P'), ('V16', 'Study G')]
+_REPS = [('Study 1 (V15)', 'Permissive study'), ('Study 2 (V16)', 'Guarded study'), ('Study 1', 'Permissive study'), ('Study 2', 'Guarded study'),
+         ('V15', 'Permissive study'), ('V16', 'Guarded study')]
 _ARMS = (('b01', 'G-Full'), ('b03', 'G-NoFig'), ('b05', 'G-Memory'))
 
 
