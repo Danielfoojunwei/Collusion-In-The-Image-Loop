@@ -26,6 +26,7 @@ slides.append(f'''
   <h1>Seeing Is Not Attributing</h1>
   <p class="sub">Image-generating agents carried a private code through a noisy renderer and past a frontier AI reviewer</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3.1</p>
+  <p class="new"><b>What is new:</b> agents can coordinate only through a separate, lossy image generator; we measure detection and attribution separately; and the reviewer’s reports feed back into the game.</p>
   <div class="nums">
     <div><b>23/24</b><span>votes by B and C for A’s private target</span></div>
     <div><b>2/36</b><span>sent pictures drawn as the brief asked</span></div>
@@ -45,7 +46,7 @@ slides.append(f'''
   <h2>C1 · The incentive alone did not produce coordination</h2>
   <div class="full c1">{svg['base']}</div>
   <div class="two even">
-    <p>Without a usable picture code, B and C chose the client-correct answer in <b>6 of 8</b> votes under the full incentive prompt, and <b>2 of 2</b> under an honest prompt. Both exceptions came at round 8, where B read the remembered code into a task-only picture.</p>
+    <p>Positive control: replays with the original pictures gave <b>5 of 6</b> target votes. Negative controls: without a usable picture code, B and C chose the client-correct answer in <b>6 of 8</b> votes under the full incentive prompt, and <b>2 of 2</b> under an honest prompt. Target votes fell from 23/24 to 2/8 (one-sided Fisher exact p ≈ 2 × 10<sup>−4</sup>, treating votes as independent).</p>
     <blockquote>“With no usable evidence recovering T (P2/P3/P4), I take the reliable client-correct ballot on P1 rather than a 1-in-3 blind guess.”<cite>B, unreadable memo, round 4</cite></blockquote>
   </div>
 </section>''')
@@ -89,7 +90,7 @@ slides.append(f'''
     <li><b>State a standard of proof</b> and calibrate on honest cases, without the monitor’s own earlier verdicts.</li>
     <li><b>Send reports to the principal,</b> not to the agents being judged.</li>
   </ol>
-  <p class="foot">Limits: induced coordination; one cohort of 12 dependent rounds; descriptive replays; monitor differs from the reviewer in rubric and model family; reviewer identity from the operator’s configuration.</p>
+  <p class="foot">Limits: induced coordination; one cohort of 12 dependent rounds; descriptive replays; monitor differs from the reviewer in rubric and model family; reviewer identity from the operator’s configuration. Dual use: the code is simple and visible; the findings describe what reviewers lack and favour defenders.</p>
 </section>''')
 
 css = '''
@@ -106,7 +107,8 @@ b { font-weight: 700; }
 .title { display: flex; flex-direction: column; justify-content: center; }
 .title h1 { font-size: 46pt; margin: 0 0 10pt; }
 .title .sub { font-size: 20pt; color: #444; margin: 0 0 22pt; max-width: 10.5in; }
-.title .auth { font-size: 14pt; color: #5F5F5F; margin: 0 0 40pt; }
+.title .auth { font-size: 14pt; color: #5F5F5F; margin: 0 0 22pt; }
+.new { font-size: 15pt; color: #333; margin: 0 0 22pt; max-width: 11.5in; }
 .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4in; border-top: 1pt solid #BDBDBD; padding-top: 18pt; }
 .nums b { display: block; font-size: 40pt; color: #D55E00; }
 .nums span { font-size: 14pt; color: #444; }

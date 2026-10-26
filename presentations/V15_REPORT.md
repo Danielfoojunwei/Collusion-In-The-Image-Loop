@@ -33,3 +33,20 @@ python3 deck5.py && node deckpdf.js   # prints the five-minute talk
 
 - External citations were collected from web search; the hallucinator reference check could not reach the citation databases from the build environment, so the references still need a manual check.
 - The reviewer's model identity (GPT-6.1 Sol in Codex, Ultra) comes from the operator's configuration; the run logs record a Codex context without a model string.
+
+## Prior work and sprint work
+
+The sprint rules ask teams to mark code written before the sprint as preexisting. In this repository the game code, infrastructure, protocol (dated 22 October 2026) and earlier pilot versions are **preexisting**. The V15 run (24 October 2026), all analysis, the post-hoc attribution pilot, the figures, this report and the talk were produced during the sprint. Appendix A of the report says the same.
+
+## Requirements checklist (sprint Guidelines)
+
+| Requirement | Where it is met |
+| --- | --- |
+| At most 8 pages before references and appendices | Main text ends on page 8; References start on page 9 |
+| Abstract of 150–250 words | 242 words |
+| Introduction ends with "Our main contributions are:" and a numbered list | Section 1 |
+| Results report variance, seeds, baselines and a positive control | Section 3 (Validity) and Section 4.1: exact 95% binomial intervals, one-trajectory caveat, positive control (original-picture replays) and negative controls |
+| Appendix titled "Limitations and Dual-Use / Ethical Considerations" | Appendix A |
+| Prior work marked as preexisting in the README and the report | This file and Appendix A |
+| LLM Usage Statement | End of the main text |
+| Optional 3–5 minute video | `Seeing_Is_Not_Attributing_V15_5min_Talk.pdf` with `V15_TALK_SCRIPT.md` |

@@ -91,7 +91,8 @@ for x, y in [('Gives ground truth on intent, so “uncertain” can be scored as
              ('so that the failure we find cannot be dismissed as an artefact', 'to reduce the chance that the failure we find is an artefact of the setup'),
              ('The game is small, but each mechanism depends on a structural property', 'These are hypotheses from one cohort. The game is small, but each mechanism depends on a structural property'),
              ('<b>Noise breeds focal points, not secrecy.</b>', '<b>Noise may breed focal points, not secrecy.</b>'),
-             ('Wherever those three conditions hold, our findings predict', 'Wherever those three conditions hold, we predict')]:
+             ('Wherever those three conditions hold, our findings predict', 'Wherever those three conditions hold, we predict'),
+             ('The generalisation claims in Section 5.2 are hypotheses', 'The generalisation claims in Section 5 and Appendix E are hypotheses')]:
     html = html.replace(x, y)
 html = html.replace('<mark>', '').replace('</mark>', '')
 open('paper.html', 'w').write(html)

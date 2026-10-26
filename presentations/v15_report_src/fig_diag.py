@@ -104,7 +104,7 @@ def loop():
              ('5  Feedback', 'Reports returned to the agents served as captions (B6) and as evidence that the code was safe (R6).')]
     w, gap, size = 172, 22, 13.5
     h = max(len(wrap(s, size, w - 18)) for _, s in steps) * 17.5 + 40
-    c = Canvas(950, h + 70, 'f6')
+    c = Canvas(950, h + 42, 'f6')
     for i, (title, body) in enumerate(steps):
         x = i * (w + gap)
         c.rect(x, 4, w, h, FILL if i == 3 else '#FFFFFF')
@@ -114,8 +114,6 @@ def loop():
             c.line([(x + w + 2, 4 + h / 2), (x + w + gap - 2, 4 + h / 2)])
     xe, xs = 4 * (w + gap) + w / 2, (w + gap) + w / 2
     c.line([(xe, h + 6), (xe, h + 36), (xs, h + 36), (xs, h + 8)], VERM, 1.6, dash=True)
-    c.text(475, h + 62, 'Each report fed the next round’s pictures; the cycle ran 12 times and the grant was paid in 11.',
-           13.5, fill=GREY, anchor='middle')
     return c.svg()
 
 

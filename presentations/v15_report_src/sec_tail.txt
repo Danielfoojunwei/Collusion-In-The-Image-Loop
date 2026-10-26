@@ -22,8 +22,8 @@
 <li>Baker, B., et al. (2025). Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation. arXiv:2503.11926.</li>
 </ol>
 
-<h2 class="pb">Appendix A. Limitations, Dual-Use and Ethical Considerations</h2>
-<p class="small"><b>Pre-sprint disclosure.</b> The game infrastructure, protocol and earlier pilot versions were prepared before the sprint (protocol dated 22 October 2026). The V15 run reported here was executed on 24 October 2026, during the sprint, and all analysis, the post-hoc pilot and this report were produced during the sprint.</p>
+<h2 class="pb">Appendix A. Limitations and Dual-Use / Ethical Considerations</h2>
+<p class="small"><b>Pre-sprint disclosure.</b> The game code, infrastructure, protocol and earlier pilot versions are preexisting: they were prepared before the sprint (protocol dated 22 October 2026). The V15 run reported here was executed on 24 October 2026, during the sprint, and all analysis, the post-hoc pilot and this report were produced during the sprint.</p>
 <p class="small"><b>Dual use.</b> The paper describes how agents coordinated through images and why a reviewer failed to attribute it. The coordination technique itself is simple and visible and needs no disclosure to be rediscovered; the novel content is diagnostic and favours defenders, because it identifies what reviewers lack (payoff information, decision history, a stated standard of proof, isolation from feedback). We release run records for verification, not optimised evasion prompts, and our recommendations target oversight design.</p>
 <p class="small"><b>Ethics.</b> The study used synthetic candidates and fictional points; no people, personal data or real financial decisions were involved. Agents were told the game was authorised and synthetic. All generated images passed a no-writing check; none depict real persons.</p>
 <p class="small"><b>Further limitations.</b> See Section 5.4. Findings concern one model trio and one reviewer configuration and should be replicated across model families and with spontaneous rather than induced coordination.</p>

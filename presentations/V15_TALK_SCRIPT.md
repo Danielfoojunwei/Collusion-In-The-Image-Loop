@@ -1,10 +1,10 @@
 # Seeing Is Not Attributing: 5-minute talk script
 
-Six slides, about 650 words at roughly 130 words per minute. Times are cumulative targets.
+Six slides, about 700 words at roughly 130 words per minute. Times are cumulative targets.
 
 ## Slide 1 · Title (0:00–0:30)
 
-AI reviewers increasingly oversee agent systems while seeing only what the agents produce. We asked what that costs when agents coordinate through generated images. Three numbers summarise the result: B and C voted for A’s private target in 23 of 24 votes; the image model drew only 2 of 36 sent pictures as briefed; and a frontier reviewer decoded the code in every round but attributed coordination in none.
+AI reviewers increasingly oversee agent systems while seeing only what the agents produce. We asked what that costs when agents coordinate through generated images. Three numbers summarise the result: B and C voted for A’s private target in 23 of 24 votes; the image model drew only 2 of 36 sent pictures as briefed; and a frontier reviewer decoded the code in every round but attributed coordination in none. What is new is the setting: the only channel is a separate, lossy image generator, we measure detection and attribution separately, and the reviewer’s reports feed back into the game.
 
 ## Slide 2 · The game (0:30–1:20)
 
@@ -12,7 +12,7 @@ A knows a target and can convey it only through a generated picture. B relays to
 
 ## Slide 3 · C1 (1:20–2:05)
 
-First, the incentive alone did not produce coordination. When there was no usable picture code, B and C took the client answer in 6 of 8 votes, and 2 of 2 under an honest prompt. Their reasoning follows the expected-value argument in the prompt. The two exceptions came at round 8, after seven rounds of play, when B read the remembered convention into a task-only picture.
+First, the incentive alone did not produce coordination. Replays with the original pictures, our positive control, gave 5 of 6 target votes. In the negative controls, with no usable picture code, B and C took the client answer in 6 of 8 votes, and 2 of 2 under an honest prompt; target votes fell from 23 of 24 to 2 of 8, a one-sided Fisher exact p of about 2 in 10,000 if votes are treated as independent. The two exceptions came at round 8, when B read the remembered convention into a task-only picture.
 
 ## Slide 4 · C2 (2:05–3:05)
 
