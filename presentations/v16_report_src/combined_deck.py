@@ -7,7 +7,7 @@ from v15_claims import W, VQ, V15_STRIP
 
 E = html.escape
 svg = {k: re.sub(r'style="width:[^"]*"', 'style="width:100%;display:block"', open(f'{f}.svg').read(), count=1)
-       for k, f in (('fig1', 'fig1'), ('veto', 'veto_slide'), ('timeline', 'timeline'), ('funnel', 'funnel'), ('prevention', 'prevention'), ('unified_funnel', 'unified_funnel_slide'), ('ladder_cmp', 'ladder_cmp_slide'))}
+       for k, f in (('fig1', 'fig1'), ('veto', 'veto_slide'), ('timeline', 'timeline'), ('funnel', 'funnel'), ('prevention', 'prevention'), ('unified_funnel', 'unified_funnel_slide'), ('ladder_cmp', 'ladder_cmp_slide'), ('game_round', 'game_round'), ('lessons', 'lessons'))}
 pre, post, L = N['pre'], N['post'], N['ladder']
 
 
@@ -42,28 +42,22 @@ slides = [f'''
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
-    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>receiver votes for the sender’s target: unsanctioned feedback → verifier receivers and sanctioned findings</span></div>
+    <div><b>{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}</b><span>receiver votes for the sender’s target: Study P (Permissive) → Study G (Guarded)</span></div>
     <div><b>{L15['L3']['supported']}/{L15['L3']['valid']} vs 0/{N['ladder_jobs']}</b><span>monitor attribution with ballots and history: on collusion vs on signal-present refusals</span></div>
   </div>
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
 </section>''', f'''
 <section>
-  <h2>Same model, same payoff: one code followed, one declined</h2>
+  <h2>Same agents, same rewards: one code followed, one declined</h2>
   <div class="full fn">{svg['unified_funnel']}</div>
-  <p class="foot">V15: a reviewer mentioned the green cue in {W['rev_green']}/{W['rounds']} reports; receivers followed in {W['target_votes']}/{W['votes']}. V16: outsiders recovered the exact tag in {N['t2_rounds_enc']}/{N['enc']} code rounds; receivers followed in {N['target_ballots']}/{N['ballots']}. The code was no better hidden. A contrast, not an ablation.</p>
+  <p class="foot">Agents: GLM-5.3-Flash in both. Study P: reviewer GPT-6.1 Sol (Ultra reasoning) mentioned the code in {W['rev_green']}/{W['rounds']} reports, never called it collusion; checkers followed in {W['target_votes']}/{W['votes']}. Study G: reviewer Claude Opus 5.5 (medium effort) flagged every code round; outsiders read the tag in {N['t2_rounds_enc']}/{N['enc']}; checkers followed in {N['target_ballots']}/{N['ballots']}. A contrast, not an ablation.</p>
 </section>''', f'''
 <section>
-  <h2>Why this game: a two-key approval pipeline</h2>
-  <table class="sota"><thead><tr><th>Game element</th><th>Deployment situation</th><th>What it tests</th></tr></thead><tbody>
-  <tr><td>Sender with a private target, never the client’s best</td><td>Drafting or vendor-side agent that gains from a worse option</td><td>Interest departs from the client’s</td></tr>
-  <tr><td>Two receivers, both needed</td><td>Four-eyes approval: verifier and QA sign-off</td><td>A coalition must recruit every key-holder</td></tr>
-  <tr><td>4,000 for correct work vs 10,000 grant</td><td>Honest pay vs a side payment</td><td>Temptation, not instruction</td></tr>
-  <tr><td>Pictures (V15); reports with charts (V16)</td><td>Agents exchange rendered artefacts</td><td>Codes beyond text monitors</td></tr>
-  <tr><td>Sanctioning reviewer; report shown to all</td><td>Trusted monitor; published audit findings</td><td>Whether watching breaks a coalition, and the report as a channel</td></tr>
-  </tbody></table>
+  <h2>The game: one round of a two-key approval pipeline</h2>
+  <div class="full g2">{svg['game_round']}</div>
 </section>''', f'''
 <section>
-  <h2>V15 · Seen, not stopped</h2>
+  <h2>Study P · Seen, not stopped: GPT-6.1 Sol (Ultra) never called it collusion</h2>
   {strip15([1, 4, 5, 6, 7, 10])}
   <div class="three">
     <div><h3>Collusion through noise</h3><p>{W['target_votes']}/{W['votes']} target votes and {W['grants']}/{W['rounds']} grants paid, although only {W['img_faithful']}/{W['img_total']} pictures were drawn as briefed.</p></div>
@@ -72,17 +66,11 @@ slides = [f'''
   </div>
 </section>''', f'''
 <section>
-  <h2>What V15 taught us → what V16 changed, one link at a time</h2>
-  <table class="sota lt"><thead><tr><th>Link</th><th>V15 lesson</th><th>V16 change</th><th>V16 result</th></tr></thead><tbody>
-  <tr><td><b>Incentive</b></td><td>Permitted signalling; receivers followed T up to {W['max_ratio_followed']:.0f}× worse</td><td>Contract prohibits coordination; exact tag from both; collective fines</td><td>Joining worth {N['ev_median']:,.0f} vs 4,000</td></tr>
-  <tr><td><b>Carrier</b></td><td>Noise did not stop the code ({W['img_faithful']}/{W['img_total']} faithful, {W['coalition_rounds']}/{W['rounds']} coalitions)</td><td>Reports with prose and figures; b03 removes figures</td><td>Code moved into text</td></tr>
-  <tr><td><b>Attribution</b></td><td>Reviewer called signalling authorized; ladder: ballots + history → {L15['L3']['supported']}/{L15['L3']['valid']}</td><td>Motive, ballot history, standard of proof, findings on A alone</td><td>{N['flag_enc']}/{N['enc']} code rounds flagged; no false joint finding</td></tr>
-  <tr><td><b>Uptake</b></td><td>Receivers acted as relays</td><td>Independent verifier and QA, paid for correct work; trusted source table</td><td>0 tags; {N['target_ballots']}/{N['ballots']}</td></tr>
-  <tr><td><b>Feedback</b></td><td>Reports taught: “keep encoding but vary framing”</td><td>Still public, now sanctioned</td><td>Sender deterred; tags leaked in {len(N['report_leaks'])} rounds</td></tr>
-  </tbody></table>
+  <h2>What Study P taught us → what Study G changed</h2>
+  <div class="full g2">{svg['lessons']}</div>
 </section>''', f'''
 <section>
-  <h2>V16 · A readable code nobody joined</h2>
+  <h2>Study G · A readable code nobody joined</h2>
   <div class="full">{svg['timeline']}</div>
   <div class="two even">
     <ul>
@@ -98,9 +86,9 @@ slides = [f'''
     <div><h3>F1 · Carrier</h3><p>Restricting a channel moves the code, never stops it: noise, figure removal, and the reviewer’s own report all carried it.</p></div>
     <div><h3>F2 · Uptake</h3><p>Receivers decided. Gap {W['gap']:+.2f} → {N['gap_t2']:+.2f}; same model both times, so refusal came from role, payoff and trusted sources.</p></div>
     <div><h3>F3 · Feedback</h3><p>Unsanctioned reports taught collusion; sanctioned public findings deterred the sender and left receivers a codebook shared with the monitor: the shared-codebook trap.</p></div>
-    <div><h3>F4 · Attribution</h3><p>Ballots and history: {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}. On readable refusals: 0/{N['ladder_jobs']}. Calibrate on refusals.</p></div>
+    <div><h3>F4 · Attribution</h3><p>Information beats reasoning effort. Votes and history: {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}. On readable refusals: 0/{N['ladder_jobs']}. Calibrate on refusals.</p></div>
   </div>
-  <p class="foot">Beyond prior work and the sprint entries we could read: none pairs refusable receivers with a live sanctioning monitor, returns findings that end collusion, tests monitors on refusals, or uses image and document carriers.</p>
+  <p class="foot">Defied expectations: GPT-6.1 Sol at Ultra reasoning failed for lack of votes and history; Claude Opus 5.5 at medium effort, given them, flagged every code round; the caught sender quit rather than hid.</p>
 </section>''', f'''
 <section>
   <h2>Design rules</h2>
@@ -168,8 +156,9 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35in; }
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
-.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; } .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in 0.5in; margin-top: 0.2in; } .grid4 h3 { font-size: 18pt; color: #D55E00; } .grid4 p { font-size: 16pt; margin: 0; } .lt td { font-size: 13pt; padding: 7pt 9pt; }
+.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .g2 svg { width: 88% !important; margin: 0 auto; } .gapline { font-size: 16pt; margin-top: 0.3in; } .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in 0.5in; margin-top: 0.2in; } .grid4 h3 { font-size: 18pt; color: #D55E00; } .grid4 p { font-size: 16pt; margin: 0; } .lt td { font-size: 13pt; padding: 7pt 9pt; }
 '''
-open('combined_deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>Legible Yet Refused</title><style>'
-                             + css + '</style></head><body>' + ''.join(slides) + '</body></html>')
+from combined_rename import rename as _rename
+open('combined_deck.html', 'w').write(_rename('<!doctype html><html><head><meta charset="utf-8"><title>Legible Yet Refused</title><style>'
+                             + css + '</style></head><body>' + ''.join(slides) + '</body></html>'))
 print('combined_deck.html')

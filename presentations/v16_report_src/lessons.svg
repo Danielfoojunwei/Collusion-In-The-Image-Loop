@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 414" style="width:475.0pt;max-width:100%;display:block;margin:0 auto" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
+<defs><marker id="lsk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="lsv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="lsg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
+<text x="112.0" y="22.0" font-size="14" fill="#6B4E9B" text-anchor="start" font-weight="700">What Study P showed</text>
+<text x="474.0" y="22.0" font-size="14" fill="#1B7F5A" text-anchor="start" font-weight="700">What Study G changed</text>
+<text x="774.0" y="22.0" font-size="14" fill="#1A1A1A" text-anchor="start" font-weight="700">Study G result</text>
+<rect x="0.0" y="40.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
+<text x="50.0" y="78.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Incentive</text>
+<rect x="108.0" y="40.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>
+<text x="116.0" y="59.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">Signalling was permitted and only the target mattered:</text>
+<text x="116.0" y="74.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">checkers backed T even when it was up to 13× worse</text>
+<text x="116.0" y="90.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">for the client.</text>
+<polyline points="442.0,73.0 466.0,73.0" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#lsk)"/>
+<rect x="470.0" y="40.0" width="292.0" height="66.0" rx="4" fill="#DDF0E7" stroke="none" stroke-width="1.4"/>
+<text x="478.0" y="59.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">A contract forbids coordination; the bonus needs</text>
+<text x="478.0" y="74.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">the exact tag from both checkers; fines are</text>
+<text x="478.0" y="90.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">shared.</text>
+<rect x="770.0" y="40.0" width="180.0" height="66.0" rx="4" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.0"/>
+<text x="778.0" y="59.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">Joining worth a median 765</text>
+<text x="778.0" y="74.5" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">vs a certain 4,000</text>
+<rect x="0.0" y="114.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
+<text x="50.0" y="152.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Carrier</text>
+<rect x="108.0" y="114.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>
+<text x="116.0" y="133.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">Noise did not stop the code: only 2 of 36 pictures</text>
+<text x="116.0" y="148.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">matched their description, yet it worked.</text>
+<polyline points="442.0,147.0 466.0,147.0" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#lsk)"/>
+<rect x="470.0" y="114.0" width="292.0" height="66.0" rx="4" fill="#DDF0E7" stroke="none" stroke-width="1.4"/>
+<text x="478.0" y="133.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">A richer carrier (report with prose and figures);</text>
+<text x="478.0" y="148.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">one group has figures removed.</text>
+<rect x="770.0" y="114.0" width="180.0" height="66.0" rx="4" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.0"/>
+<text x="778.0" y="133.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">Code moved into text;</text>
+<text x="778.0" y="148.5" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">outsiders read the tag in</text>
+<text x="778.0" y="164.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">5/8</text>
+<rect x="0.0" y="188.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
+<text x="50.0" y="226.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Attribution</text>
+<rect x="108.0" y="188.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>
+<text x="116.0" y="207.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">The reviewer called signalling authorized (9/12); no</text>
+<text x="116.0" y="222.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">rewards or votes in view; joint accusations only.</text>
+<polyline points="442.0,221.0 466.0,221.0" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#lsk)"/>
+<rect x="470.0" y="188.0" width="292.0" height="66.0" rx="4" fill="#DDF0E7" stroke="none" stroke-width="1.4"/>
+<text x="478.0" y="207.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">Signalling declared not authorized; rewards,</text>
+<text x="478.0" y="222.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">voting history and a standard of proof in view;</text>
+<text x="478.0" y="238.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">fines on A alone.</text>
+<rect x="770.0" y="188.0" width="180.0" height="66.0" rx="4" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.0"/>
+<text x="778.0" y="207.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">8/8 code rounds flagged;</text>
+<text x="778.0" y="222.5" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">no false joint finding</text>
+<rect x="0.0" y="262.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
+<text x="50.0" y="300.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Uptake</text>
+<rect x="108.0" y="262.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>
+<text x="116.0" y="281.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">B relayed pictures to C: the checkers were relays, not</text>
+<text x="116.0" y="296.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">independent checkers.</text>
+<polyline points="442.0,295.0 466.0,295.0" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#lsk)"/>
+<rect x="470.0" y="262.0" width="292.0" height="66.0" rx="4" fill="#DDF0E7" stroke="none" stroke-width="1.4"/>
+<text x="478.0" y="281.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">B an independent verifier, C a QA author, both</text>
+<text x="478.0" y="296.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">paid for correct work, with a trusted source table.</text>
+<rect x="770.0" y="262.0" width="180.0" height="66.0" rx="4" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.0"/>
+<text x="778.0" y="281.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">0 tags recorded; 0/30 target</text>
+<text x="778.0" y="296.5" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">votes</text>
+<rect x="0.0" y="336.0" width="100.0" height="66.0" rx="4" fill="#1A1A1A" stroke="none" stroke-width="1.4"/>
+<text x="50.0" y="374.0" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="700">Feedback</text>
+<rect x="108.0" y="336.0" width="330.0" height="66.0" rx="4" fill="#ECE6F4" stroke="none" stroke-width="1.4"/>
+<text x="116.0" y="355.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">Reports reached the agents and taught them: “keep</text>
+<text x="116.0" y="370.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">encoding but vary framing”.</text>
+<polyline points="442.0,369.0 466.0,369.0" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#lsk)"/>
+<rect x="470.0" y="336.0" width="292.0" height="66.0" rx="4" fill="#DDF0E7" stroke="none" stroke-width="1.4"/>
+<text x="478.0" y="355.0" font-size="12.6" fill="#1A1A1A" text-anchor="start">Reports stay public but now carry fines (routing</text>
+<text x="478.0" y="370.5" font-size="12.6" fill="#1A1A1A" text-anchor="start">unchanged).</text>
+<rect x="770.0" y="336.0" width="180.0" height="66.0" rx="4" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.0"/>
+<text x="778.0" y="355.0" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">Sender sat out 7 rounds;</text>
+<text x="778.0" y="370.5" font-size="12.6" fill="#1A1A1A" text-anchor="start" font-weight="700">tag leaked in 3</text>
+</svg>
