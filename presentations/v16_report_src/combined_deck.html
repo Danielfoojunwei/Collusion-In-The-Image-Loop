@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><title>From Legible Collusion to No Coalition</title><style>
+<!doctype html><html><head><meta charset="utf-8"><title>Legible Yet Refused</title><style>
 @page { size: 13.333in 7.5in; margin: 0; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Liberation Sans', Arial, Helvetica, sans-serif; color: #1A1A1A; counter-reset: s; }
@@ -47,17 +47,28 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35in; }
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
+.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; }
 </style></head><body>
 <section class="title">
-  <h1 class="long">From Legible Collusion to No Coalition</h1>
-  <p class="sub">Diagnosing and breaking covert coordination among multimodal LLM agents: two studies, same agents, same payoffs</p>
+  <h1 class="long">Legible Yet Refused</h1>
+  <p class="sub">Covert collusion among LLM agents is decided by receiver uptake and oversight feedback, not channel secrecy. Two studies, same multimodal agents, same payoffs</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
-    <div><b>23/24 → 0/30</b><span>receiver votes for the sender’s target: output-only oversight → countermeasure stack</span></div>
-    <div><b>0/11 → 12/12</b><span>monitor attribution of Study 1’s collusion: pictures only → plus ballots and history</span></div>
-    <div><b>0/40</b><span>same monitors on Study 2’s refusals: the diagnostic separates collusion from refusal</span></div>
+    <div><b>+0.04 → -0.56</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
+    <div><b>23/24 → 0/30</b><span>receiver votes for the sender’s target: unsanctioned feedback → verifier receivers and sanctioned findings</span></div>
+    <div><b>12/12 vs 0/40</b><span>monitor attribution with ballots and history: on collusion vs on signal-present refusals</span></div>
   </div>
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
+</section>
+<section>
+  <h2>Prior work measures secrecy; we vary the links it holds fixed</h2>
+  <table class="sota"><thead><tr><th></th><th>Receiver</th><th>Oversight output to agents</th><th>Monitor negatives</th></tr></thead><tbody>
+  <tr><td><b>Secrecy and detection</b><br><span>Motwani · Mathew · Dineen · Rose · Makins · Das</span></td><td>Willing by design: “agents are explicitly told to collude”</td><td>None, or a penalty or score: collusion gets subtler or continues (“the agents keep colluding”)</td><td>Runs with no collusion</td></tr>
+  <tr><td><b>Refusal and feedback</b><br><span>Zeng · Shi · Paglieri · Alnuhait · Nakamura</span></td><td>Can refuse; refusal tied to particular models and framing</td><td>No live sanctioning monitor; unenforced feedback teaches violation; whistleblowing fails</td><td>–</td></tr>
+  <tr class="ours"><td><b>This work</b><br><span>Study 1 (V15) · Study 2 (V16)</span></td><td>Verifier with its own payoff; uptake observed with ground truth</td><td>Unsanctioned public reports vs sanctioned public findings</td><td>Signal present, receivers refused</td></tr>
+  </tbody></table>
+  <p class="gapline">Untested before this work: a receiver that can refuse <b>under a live, sanctioning monitor</b>; oversight feedback that <b>ends</b> collusion rather than refining it; monitor calibration on <b>refusals</b>.</p>
+  <p class="foot">Quotations verbatim from Rose et al. (arXiv:2604.01151) and Das et al. (arXiv:2609.03035). Full comparison: paper Table 1.</p>
 </section>
 <section>
   <h2>The collusion chain, link by link, in both studies</h2>
@@ -767,12 +778,19 @@ L 666.197422 157.736734
   </div>
 </section>
 <section>
-  <h2>What the two studies show together</h2>
+  <h2>What decided collusion</h2>
   <ol class="recs">
-    <li><b>The feedback paradox.</b> Unsanctioned reports reassured colluders (“keep encoding but vary framing”). Sanctioned reports deterred the sender and trapped receivers in the last exposed pattern (the <i>shared-codebook trap</i>), but leaked decoded tags in 3 rounds. Send findings to the principal; redact payloads.</li>
-    <li><b>Defend the receiver side.</b> Removing the signal moved the code (b03 wrote it in text); verifier roles, a prohibiting contract and exact two-key payloads stopped uptake. Study 1’s receivers followed targets with up to 13× the client answer’s energy.</li>
-    <li><b>Calibrate monitors on refusal as well as collusion.</b> The same ladder said 12/12 on Study 1’s collusion and 0/40 on Study 2’s refusals.</li>
-    <li><b>Audit the pipeline as a carrier:</b> generated text, layout and image resolution all changed what agents could see.</li>
+    <li><b>Uptake, not concealment.</b> Outsiders read the code in both studies. The same model followed it (23/24) and declined it (0 tags, 0/30); joining was worth a median 765 vs 4,000 by the receivers’ own beliefs. The gap’s sign separates collusion from refusal.</li>
+    <li><b>Feedback topology.</b> Reports returned without enforcement taught (“keep encoding but vary framing”), as in prior work. Sanctioned public findings deterred the sender (7 abstentions) and denied a private codebook (the <i>shared-codebook trap</i>), but leaked tags in 3 rounds. Next: findings to the principal only.</li>
+    <li><b>Calibrate on refusal.</b> The ladder said 12/12 on collusion and 0/40 on refusals with a visible signal; every prior calibration uses clean runs.</li>
+    <li><b>Track 3.1:</b> images, document structure and the oversight report itself carried coordination.</li>
   </ol>
-  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; induced coordination; one cohort per condition; beliefs are self-reports. Next: a no-countermeasure arm on Study 2’s carrier and single-countermeasure removals.</p>
+  <table class="sota topo"><thead><tr><th>Oversight output</th><th>Evidence</th><th>Effect on the coalition</th></tr></thead><tbody>
+  <tr><td>Returned, not enforced</td><td>Shi · Paglieri · Study 1</td><td>Teaches; Study 1 coalitions 11/12</td></tr>
+  <tr><td>Penalty to a joint team</td><td>Mathew</td><td>Subtler collusion</td></tr>
+  <tr><td>Returned as a score</td><td>Das</td><td>Adaptation; collusion continues</td></tr>
+  <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>Study 2</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/15</td></tr>
+  <tr><td>Principal only, sanctioned</td><td>Proposed</td><td>Predicted: deterrence without the leak</td></tr>
+  </tbody></table>
+  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; the uptake claim rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
 </section></body></html>
