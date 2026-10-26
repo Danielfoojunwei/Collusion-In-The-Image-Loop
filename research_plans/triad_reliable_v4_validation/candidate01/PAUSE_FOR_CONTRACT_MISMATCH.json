@@ -1,9 +1,0 @@
-{
-  "candidate01_output": "runs/main/reliable_v4_calibration",
-  "main_started": false,
-  "planned_repair": "Private logs retain all legal JSON string text exactly, with safe JSON serialization; no semantic cleanup or prompt/sampling change.",
-  "reason": "A native record_log returned exact valid JSON but private-text validator rejected one CR (U+000D) not prohibited by wire schema. Pausing before further actor stage; current paid call allowed to finish.",
-  "recorded_at": "2026-10-22T21:07:52.999600+00:00",
-  "response_and_charges_preserved": true,
-  "source_snapshot_files": 73
-}

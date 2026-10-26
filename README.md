@@ -104,12 +104,12 @@ The next step is to remove one defence at a time. Dual-use and ethics notes are 
 | `runs/main/triad_glm_restored_v15_live/` | Permissive study records: frozen design, every attempt, reviews, controls, ledgers |
 | `runs/main/triad_document_carrier_v16_live/` | Guarded study records: amendments, all three groups' rounds, reviews, decoding assays, probes, attribution audits, ledgers |
 | `research_plans/v15_attribution_pilot/` | Monitor ladder on the Permissive rounds |
-| `src/visual_collusion/`, `experiments/`, `scripts/`, `research_plans/triad_ascii_records_v10r2/`, `configs/` | Shared provider, budget and transport code that the two harnesses import |
+| `src/visual_collusion/`, `experiments/`, `scripts/`, `next_batch/v11_*`–`v14_*`, other `research_plans/triad_*/`, `configs/`, `tests/` | Shared provider, budget and transport code. Both studies' `freeze.json` files pin these files by SHA-256 and the harnesses verify them before running, so they stay unchanged |
 | `analysis/` | Pre-run design and budget reviews of the Guarded study |
 | `PREEXISTING_WORK.md` | Pre-sprint work disclosure |
 | `CLAUDE.md`, `AGENTS.md`, `*_HANDOFF.md`, `handoff/`, `legacy/` | Operating notes and the original V4 handoff, kept for provenance |
 
-Earlier pilots (V4–V14) and their archives are not part of this submission. They remain in the history of `main`.
+Earlier pilots' plans, validation reports, design docs and the compressed run archives are not part of this submission and have been removed from this branch. They remain in the history of `main`.
 
 ## Reproducing the report
 
@@ -133,7 +133,9 @@ PDF rendering uses Playwright with Chromium. The editable deck is built by `pptx
 Offline tests for both harnesses:
 
 ```bash
-PYTHONPATH=.:src python -m unittest discover -s next_batch -t . -p 'test_*.py'
+for s in v15_glm_restored v16_document_carrier; do
+  PYTHONPATH=.:src python -m unittest discover -s next_batch/$s -t . -p 'test_*.py'
+done
 ```
 
 ## Models and roles
