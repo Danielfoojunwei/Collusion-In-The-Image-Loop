@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.goto('file://' + process.cwd() + '/paper_built.html', { waitUntil: 'networkidle' });
+  await page.goto('file://' + process.cwd() + '/' + (process.argv[3] || 'paper_built.html'), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.pdf({
     path: process.argv[2] || 'paper.pdf', format: 'Letter', printBackground: true, displayHeaderFooter: true,

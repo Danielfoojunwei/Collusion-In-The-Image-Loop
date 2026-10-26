@@ -307,6 +307,55 @@ def prevention():
     return c.svg()
 
 
+def unified_funnel(size=(6.4, 2.25), s=1.0):
+    from v15_claims import W
+    stages = [('Sender intent', W['intent_rounds'], W['rounds'], N['enc'], N['rounds']),
+              ('Outside reader recovered the signal', W['sentinel'], W['sentinel_n'], N['t2_rounds_enc'], N['rounds']),
+              ('Live monitor: supported finding', W['reviewer_supported'], W['rounds'], N['supported'], N['rounds']),
+              ('Both receivers voted A’s target', W['coalition_rounds'], W['rounds'], N['coalition_rounds'], N['rounds']),
+              ('Grant paid', W['grants'], W['rounds'], N['grants'], N['rounds'])]
+    fig, ax = plt.subplots(figsize=size)
+    for i, (lab, k1, n1, k2, n2) in enumerate(stages):
+        for k, n, col, dy, name in ((k1, n1, VERM, -0.17, 'V15'), (k2, n2, BLUE, 0.17, 'V16')):
+            ax.barh(i + dy, k / n, height=0.3, color=col, alpha=0.9, label=name if i == 0 else None)
+            ax.text(k / n + 0.01, i + dy, f'{k}/{n}', va='center', fontsize=7 * s, color=col)
+    ax.set_yticks(range(len(stages)), [x[0] for x in stages])
+    ax.set_ylim(len(stages) - 0.5, -0.6)
+    ax.set_xlim(0, 1.12)
+    ax.set_xticks([0, 0.5, 1], ['0', '.5', '1'])
+    ax.tick_params(axis='y', length=0)
+    ax.spines['left'].set_visible(False)
+    ax.set_xlabel('share of rounds')
+    ax.legend(frameon=False, fontsize=7 * s, loc='lower center', bbox_to_anchor=(0.45, 1.0), ncol=2,
+              labels=['V15: output-only oversight, signalling permitted', 'V16: countermeasure stack'])
+    return svg(fig)
+
+
+def ladder_cmp(size=(6.4, 1.7), s=1.0):
+    from v15_claims import W
+    names = ['L1 artifacts', 'L2 + ballots', 'L3 + history', 'L4 + incentives']
+    keys16 = ['L1_artifacts', 'L2_ballots', 'L3_history', 'L4_incentives']
+    fig, (a, b) = plt.subplots(1, 2, figsize=size, sharey=True, gridspec_kw={'wspace': 0.32})
+    for ax, data, col, title in ((a, [(W['ladder'][f'L{i+1}']['supported'], W['ladder'][f'L{i+1}']['valid']) for i in range(4)], VERM,
+                                  '(a) V15: receivers colluded in 11/12 rounds'),
+                                 (b, [(N['ladder'][k]['supported'], N['ladder'][k]['n']) for k in keys16], BLUE,
+                                  '(b) V16, b01 and b05: no receiver joined')):
+        for i, (k, n) in enumerate(data):
+            lo, hi = cp(k, n)
+            ax.plot([lo, hi], [i, i], color=col, lw=1.1 * s)
+            ax.plot(k / n, i, 'o', ms=4 * s, color=col, mec='white', mew=0.5)
+            ax.text(1.04, i, f'{k}/{n}', va='center', fontsize=7 * s, transform=ax.get_yaxis_transform())
+        ax.set_xlim(0, 1)
+        ax.set_xticks([0, 0.5, 1], ['0', '.5', '1'])
+        ax.set_title(title, fontsize=7.5 * s, loc='left', pad=4)
+        ax.set_xlabel('monitors attributing knowing joint collusion')
+        ax.spines['left'].set_visible(False)
+        ax.tick_params(axis='y', length=0)
+    a.set_yticks(range(4), names)
+    a.set_ylim(3.5, -0.6)
+    return svg(fig)
+
+
 def chain():
     links = [('1  Encode', 'held', f'A wrote the exact tag into accurate reports in {N["enc"]} of {N["rounds"]} rounds; outside decoders read it in {N["t2_tag_enc"]} of {N["t2_reads_enc"]} readouts.', INK),
              ('2  Uptake', 'broke', f'B and C decoded 0 of {N["recv_reads_enc"]} and chose the target in {N["target_ballots"]} of {N["ballots"]} ballots; by their own estimates joining was worth a median {N["ev_median"]:,.0f} points against a certain 4,000.', VERM),
@@ -352,7 +401,8 @@ def loop():
 
 if __name__ == '__main__':
     out = {'fig1': fig1(), 'votes': votes(), 'readers': readers(), 'timeline': timeline(), 'ladder': ladder(), 'loop': loop(),
-           'veto': veto(), 'chain': chain(), 'funnel': funnel(), 'prevention': prevention()}
+           'veto': veto(), 'chain': chain(), 'funnel': funnel(), 'prevention': prevention(),
+           'unified_funnel': unified_funnel(), 'ladder_cmp': ladder_cmp()}
     s = 1.6
     with plt.rc_context({'font.size': 7.5 * s, 'axes.linewidth': 0.6 * s, 'xtick.major.width': 0.6 * s}):
         out['votes_slide'] = votes((5.6, 2.6), s, short=True)
@@ -360,6 +410,9 @@ if __name__ == '__main__':
         out['readers_slide'] = readers_slide()
     with plt.rc_context({'font.size': 7.5 * 1.45, 'axes.linewidth': 0.8}):
         out['veto_slide'] = veto((5.4, 3.4), 1.45)
+    with plt.rc_context({'font.size': 7.5 * 1.5, 'axes.linewidth': 0.8}):
+        out['unified_funnel_slide'] = unified_funnel((8.6, 3.3), 1.5)
+        out['ladder_cmp_slide'] = ladder_cmp((10.5, 2.6), 1.5)
     for k, v in out.items():
         open(f'{k}.svg', 'w').write(v)
     print('figures:', ', '.join(out))
