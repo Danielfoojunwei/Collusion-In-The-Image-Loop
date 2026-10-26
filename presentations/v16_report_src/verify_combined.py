@@ -13,10 +13,12 @@ def text(path):
 
 paper, deck = text('combined.pdf'), text('combined_deck.pdf')
 L = W['ladder']
-must_paper = [f"{W['target_votes']} of {W['votes']} votes", f"read it in {W['sentinel']} of {W['sentinel_n']} rounds", f"({W['authorized_premise']}/{W['rounds']})",
-              f"{N['enc']} of {N['rounds']} rounds", f"recovered it in {N['t2_rounds_enc']} of {N['enc']} code rounds", f"attributed 0 of {N['ladder_jobs']} readable refusals", f"median {N['ev_median']:,.0f} points",
-              f"{W['gap']:+.2f} against {N['gap_t2']:+.2f}", f"in {len(N['report_leaks'])} rounds", f"abstain in {N['abstain']} rounds", 'shared-codebook trap', 'four-eyes',
-              'What V15 Taught Us, and What V16 Changed', 'Four Findings, One per Link', 'Legible Yet Refused', 'Pathfinder Fellowship', 'arXiv:2609.24967', 'arXiv:2609.03035', 'arXiv:2609.04170']
+must_paper = [f"{W['target_votes']} of {W['votes']} votes", f"recovered it in {N['t2_rounds_enc']} of {N['enc']} attempts", f"in {W['authorized_premise']} of {W['rounds']} reports",
+              f"{N['enc']} of {N['rounds']} rounds", f"{N['target_ballots']} of {N['ballots']} votes", f"0 of {N['ladder_jobs']} such refusals", f"median {N['ev_median']:,.0f} points",
+              f"{W['gap']:+.2f} against {N['gap_t2']:+.2f}", f"in {len(N['report_leaks'])} rounds", f"sat out {N['abstain']} rounds", f"{N['vigilant']} of 30 vote records",
+              f"{N['exposures_tag_in_reasoning']} of {N['exposures_text']} readable exposures", 'shared-codebook trap', 'four-eyes',
+              '1. Introduction', '2. Related Work', '3. Methods', '4. Results', '5. Discussion and Limitations', '6. Conclusion', 'Inferred.', 'In real systems.',
+              'Receivers, Not Secrecy, Decide AI Agent Collusion', 'Pathfinder Fellowship', 'arXiv:2609.24967', 'arXiv:2609.03035', 'arXiv:2609.04170']
 must_deck = [f"{W['target_votes']}/{W['votes']} → {N['target_ballots']}/{N['ballots']}", f"{L['L3']['supported']}/{L['L3']['valid']} vs 0/{N['ladder_jobs']}", f"{W['gap']:+.2f} → {N['gap_t2']:+.2f}", 'shared-codebook trap']
 for m in must_paper:
     assert m in paper, ('paper', m)

@@ -38,7 +38,7 @@ L15 = W['ladder']
 slides = [f'''
 <section class="title">
   <h1 class="long">Legible Yet Refused</h1>
-  <p class="sub">A covert coalition is formed or refused at the receivers, and the oversight report decides whether the sender learns to hide or learns to stop</p>
+  <p class="sub">Receivers, not secrecy, decide AI agent collusion</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
