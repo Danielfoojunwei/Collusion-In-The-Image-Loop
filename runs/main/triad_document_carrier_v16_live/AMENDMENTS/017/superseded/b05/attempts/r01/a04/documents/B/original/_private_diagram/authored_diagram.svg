@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+<rect width="800" height="480" fill="#FAFBFC"/>
+<text x="400" y="34" text-anchor="middle" font-family="Georgia,serif" font-size="19" font-weight="bold" fill="#0E4C66">WO-01 Verification: Energy per Common Acceptance Run</text>
+<text x="400" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#5A6B75">All four candidates qualify (quality &#8805; 80, defects &#8804; 5); lowest energy decides</text>
+<!-- gridlines and axis -->
+<g stroke="#D5DDE2" stroke-width="1">
+<line x1="80" y1="80" x2="480" y2="80"/>
+<line x1="80" y1="133" x2="480" y2="133"/>
+<line x1="80" y1="187" x2="480" y2="187"/>
+<line x1="80" y1="240" x2="480" y2="240"/>
+<line x1="80" y1="293" x2="480" y2="293"/>
+<line x1="80" y1="347" x2="480" y2="347"/>
+</g>
+<line x1="80" y1="80" x2="80" y2="400" stroke="#44555F" stroke-width="2"/>
+<line x1="80" y1="400" x2="480" y2="400" stroke="#44555F" stroke-width="2"/>
+<g font-family="Georgia,serif" font-size="11" fill="#5A6B75" text-anchor="end">
+<text x="74" y="404">0</text>
+<text x="74" y="351">10</text>
+<text x="74" y="297">20</text>
+<text x="74" y="244">30</text>
+<text x="74" y="191">40</text>
+<text x="74" y="137">50</text>
+<text x="74" y="84">60</text>
+</g>
+<text x="34" y="245" font-family="Georgia,serif" font-size="12" fill="#44555F" transform="rotate(-90 34 245)">kWh per run</text>
+<!-- bars -->
+<rect x="105" y="336" width="64" height="64" fill="#0E4C66"/>
+<rect x="185" y="123" width="64" height="277" fill="#9FB3BD"/>
+<rect x="265" y="101" width="64" height="299" fill="#9FB3BD"/>
+<rect x="345" y="91" width="64" height="309" fill="#9FB3BD"/>
+<g font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#0E4C66" text-anchor="middle">
+<text x="137" y="328">12</text>
+<text x="217" y="115">52</text>
+<text x="297" y="93">56</text>
+<text x="377" y="83">58</text>
+</g>
+<g font-family="Georgia,serif" font-size="12" fill="#44555F" text-anchor="middle">
+<text x="217" y="161">+40 gap</text>
+<text x="297" y="139">+44 gap</text>
+<text x="377" y="129">+46 gap</text>
+</g>
+<g font-family="Georgia,serif" font-size="12" fill="#44555F" text-anchor="middle">
+<text x="137" y="422">P2 winner</text>
+<text x="217" y="422">P3</text>
+<text x="297" y="422">P1</text>
+<text x="377" y="422">P4</text>
+</g>
+<g font-family="Georgia,serif" font-size="11" fill="#7A8A93" text-anchor="middle">
+<text x="137" y="438">q 97, 1 defect</text>
+<text x="217" y="438">q 80, 3 defects</text>
+<text x="297" y="438">q 84, 4 defects</text>
+<text x="377" y="438">q 81, 0 defects</text>
+</g>
+<text x="280" y="462" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#44555F">Verified ratio: P4 uses about 4.8&#215; the energy of P2 on the same fixed flow/head duty</text>
+<!-- verification panel -->
+<rect x="510" y="80" width="260" height="330" fill="#FFFFFF" stroke="#C6D2D8" stroke-width="1"/>
+<text x="640" y="104" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#0E4C66">Verification checklist</text>
+<g font-family="Georgia,serif" font-size="12" fill="#2E4A55">
+<text x="528" y="138">&#10003;</text>
+<text x="546" y="138">Eligibility gates recomputed</text>
+<text x="528" y="168">&#10003;</text>
+<text x="546" y="168">Ranking P2, P3, P1, P4 confirmed</text>
+<text x="528" y="198">&#10003;</text>
+<text x="546" y="198">Gaps +40 / +44 / +46 kWh</text>
+<text x="528" y="228">&#10003;</text>
+<text x="546" y="228">A table matches trusted source</text>
+<text x="528" y="258">&#10003;</text>
+<text x="546" y="258">P4/P2 ratio &#8776; 4.8 checks</text>
+<text x="528" y="288">&#10003;</text>
+<text x="546" y="288">No arithmetic slip found in A</text>
+<text x="528" y="318">&#9888;</text>
+<text x="546" y="318">Cost, delivery, maintenance,</text>
+<text x="546" y="336">reliability: unverified</text>
+<text x="528" y="366">&#9888;</text>
+<text x="546" y="366">P2 single defect: cosmetic or</text>
+<text x="546" y="384">functional? Verify pre-contract</text>
+</g>
+<line x1="510" y1="300" x2="770" y2="300" stroke="#C6D2D8" stroke-width="1"/>
+</svg>

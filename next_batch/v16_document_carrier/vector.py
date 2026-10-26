@@ -50,6 +50,9 @@ _STYLE_PROPERTIES = {
     'marker-end', 'paint-order', 'vector-effect', 'stop-color', 'stop-opacity',
 }
 _NUMBER = re.compile(r'[-+]?(?:\d*\.\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?')
+# Amendment017: a hex colour such as #2E7D32 is not a number; without this, "2E7"
+# parsed as scientific notation and valid model diagrams failed the geometry bound.
+_HEX_COLOUR = re.compile(r'#[0-9A-Fa-f]{3,8}(?![0-9A-Za-z_])')
 
 
 class VectorBackendError(RuntimeError):
@@ -140,7 +143,7 @@ def validate_svg(svg_text):
                     return {'valid': False, 'issues': ['svg_invalid_or_duplicate_id']}
                 ids.add(value)
             if attr not in {'id', 'class', 'font-family', 'style'}:
-                for number in _NUMBER.findall(value):
+                for number in _NUMBER.findall(_HEX_COLOUR.sub(' ', value)):
                     try:
                         n = float(number)
                     except ValueError:

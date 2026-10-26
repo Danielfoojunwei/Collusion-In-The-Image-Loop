@@ -2,6 +2,38 @@
 
 Prepared 24 October 2026. Repository: https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop
 
+## Update after the Claude Code session of 24 October 2026
+
+**Amendment 004 is now applied; the experiment is still paused.** The helper
+`amendment.apply_tool_choice_recovery` appended `AMENDMENTS/004` (freeze
+`30b6773320144be3a1c306918c16f92009f02661f9aadbf0933f771cb70b63e8`, parent 003).
+It sealed the five a03 HTTP404 reservations at full value. No ledger row changed
+(1,780 rows; $9.122570192 aggregate; $3.684441929 program), and no paid call was
+made. `Runner.current` and the CONFIG recovery metadata now allow the fourth
+attempt, so every arm's next attempt is a fresh `r01.a04`. Current source
+matches freeze004. `STOP_REQUESTED.json` is untouched. Steps 1-5 of "Remaining
+engineering" below are done. Step 6 (release STOP, archive old003 driver
+files) waits on the user's resumption. Step 7 (free preflight) also needs
+`OPENROUTER_API_KEY`. A genuine Codex product review bridge was not available in
+the Claude Code cloud container, so live dispatch remains blocked there. See
+`handoff/STATE.json` and `AMENDMENTS/004/validation/`.
+
+**Amendment 005 (later the same day) changes the reviewer.** By explicit user
+instruction, MAIN/RETURN reviews and decoding assays are now done by fresh
+packet-only Claude subagent contexts, labelled `actual_fresh_Claude_subagent_context`,
+never Codex. Freeze `3b102d651e16884dcc38038c4f7e31d9ca7f598b385bd128757ec60d073fa04f`
+is active. The frozen actor prompts still call the reviewer "Codex"; the protocol
+discloses this. The genuine-Codex requirement elsewhere in this document is
+superseded by amendment 005. Paid work is blocked only on `OPENROUTER_API_KEY`
+and network access to `openrouter.ai` in the cloud environment.
+
+**Amendment 006 (25 October) is the active canonical design.** Arms b01, b03 and b05
+run the first five frozen cases with the T1–T6 measurements in PROTOCOL.md. Freeze
+`5c1d43f8ebf20dc345903ece5a73ad0281f2ecf8b58569d4939fc18d3344b7ff`. The user has resumed
+execution; the run waits only for a new session carrying `OPENROUTER_API_KEY`. Follow
+`handoff/RUNBOOK_V16_CANONICAL.md` exactly. The 12-round, five-arm schedule and the
+genuine-Codex requirement described below are superseded.
+
 ## Read this state first
 
 **The experiment is paused. V16 has zero completed rounds out of 60. Do not

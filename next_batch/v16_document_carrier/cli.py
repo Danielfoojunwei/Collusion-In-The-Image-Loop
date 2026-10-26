@@ -8,14 +8,16 @@ from experiments.pressure_interview_v1.budget_guard import readonly_budget_snaps
 from .runner import Runner,arm_list,budget_status
 from .funding import DEFAULT_OUT,AGGREGATE,Ledger,Guard,NORMAL_RESERVATION_USD
 from .provider import Provider,Fault
-from . import review
+from . import review, decoding, attribution, probes
 
 
 def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
- p.add_argument('command',choices=('init','status','verify','preflight','advance','launch-review','ingest-review','report'))
- p.add_argument('--out',type=Path,default=DEFAULT_OUT);p.add_argument('--arm');p.add_argument('--through-round',type=int,default=12);p.add_argument('--maximum-actor-stages',type=int)
- p.add_argument('--job-id');p.add_argument('--agent-id');p.add_argument('--raw-file',type=Path)
+ p.add_argument('command',choices=('init','status','verify','preflight','advance','launch-review','ingest-review','report',
+  'probe','prepare-decoding','launch-decoder','ingest-decoder','prepare-ladder','launch-ladder','ingest-ladder'))
+ p.add_argument('--round',type=int)
+ p.add_argument('--out',type=Path,default=DEFAULT_OUT);p.add_argument('--arm');p.add_argument('--through-round',type=int,default=None);p.add_argument('--maximum-actor-stages',type=int)
+ p.add_argument('--job-id');p.add_argument('--agent-id');p.add_argument('--raw-file',type=Path);p.add_argument('--actual-model')
  args=p.parse_args(argv);runner=Runner(args.out)
  try:
   if args.command=='init':
@@ -25,7 +27,7 @@ def main(argv=None):
   elif args.command in ('launch-review','ingest-review'):
    if not args.job_id or not args.agent_id:raise IntegrityError('Actual job and fresh agent IDs required')
    runner.verify()
-   if args.command=='launch-review':result=review.launch(runner.out,args.job_id,args.agent_id)
+   if args.command=='launch-review':result=review.launch(runner.out,args.job_id,args.agent_id,args.actual_model)
    else:
     if args.raw_file is None:raise IntegrityError('First raw output file required')
     result=review.ingest(runner.out,args.job_id,args.raw_file.read_text(),args.agent_id)
@@ -40,14 +42,30 @@ def main(argv=None):
     record={'status':'passed','new_paid_calls':0,'funding':budget,'normal60_round_reservation_usd':normal,'provider':metadata,'freeze_sha256':runner.freeze_info()['sha256'],'checked_at_unix':time.time()}
     put(runner.out/'preflights'/(sha(canonical(record).encode())+'.json'),record)
     result={k:v for k,v in record.items()if k!='provider'}
-  elif args.command=='advance':
+  elif args.command in('prepare-decoding','prepare-ladder'):
+   runner.verify()
+   if args.command=='prepare-decoding':result=decoding.prepare_all(runner,allow_partial=True)
+   else:
+    if args.arm is None or args.round is None:raise IntegrityError('Ladder preparation needs --arm and --round')
+    result={'jobs':attribution.prepare_round(runner.out,args.arm,args.round,runner.commits(args.arm))}
+  elif args.command in('launch-decoder','ingest-decoder','launch-ladder','ingest-ladder'):
+   if not args.job_id or not args.agent_id:raise IntegrityError('Actual job and fresh agent IDs required')
+   runner.verify();module=decoding if args.command.endswith('decoder')else attribution
+   if args.command.startswith('launch'):result=module.launch(runner.out,args.job_id,args.agent_id,args.actual_model)
+   else:
+    if args.raw_file is None:raise IntegrityError('First raw output file required')
+    result=module.ingest(runner.out,args.job_id,args.raw_file.read_text(),args.agent_id)
+    result={k:result.get(k)for k in('status','raw_sha256','agent_id','packet_sha256','error_class')}
+  elif args.command in('advance','probe'):
    if args.arm is None:raise IntegrityError('Choose one fixed independent arm producer')
    current_freeze=runner.freeze_info()['sha256']
    if not any(read(path).get('status')=='passed'and read(path).get('freeze_sha256')==current_freeze for path in(runner.out/'preflights').glob('*.json')):raise IntegrityError('Entire study free preflight for current freeze required')
    def stopped(signum,frame):
     put(runner.out/'STOP_REQUESTED.json',{'reason':'operator_signal','automatic_restart_forbidden':True});raise SystemExit(130)
    signal.signal(signal.SIGTERM,stopped)
-   with lock(runner.out/'arms'/args.arm):result=runner.advance(args.arm,args.through_round,args.maximum_actor_stages)
+   with lock(runner.out/'arms'/args.arm):
+    if args.command=='advance':result=runner.advance(args.arm,args.through_round,args.maximum_actor_stages)
+    else:runner.verify(args.arm);result=probes.run_due(runner,Ledger(AGGREGATE,runner.out),args.arm,args.through_round)
   else:
    from .report import build_report
    runner.verify();result=build_report(runner)

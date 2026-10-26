@@ -1,0 +1,10 @@
+{"ledger_rows": 1780, "ledger_sha256": "27676737e8f1a48958a3c1f85c130124b9111b91b9d3391b50a1d72665df66bb"}
+{
+ "status": "price_guard_amended_held_for_free_preflight",
+ "directory": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/AMENDMENTS/007",
+ "freeze_sha256": "2e83224b717566d1fb52a94419c0d4bd966f8f73338a9b9826188aef212597d9",
+ "new_paid_calls": 0,
+ "all_arms_next_attempt": "r01.a04",
+ "STOP_still_present": true
+}
+{"ledger_rows": 1780, "unchanged": true}

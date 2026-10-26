@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400">
+<rect width="960" height="400" fill="#ffffff"/>
+<text x="24" y="38" font-family="Helvetica,Arial,sans-serif" font-size="21" font-weight="bold" fill="#1A202C">WO-03 assurance workflow: compute node package selection</text>
+<text x="24" y="60" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#4A5568">Six assurance steps from source join to handover log; the trusted table is the only evidence input.</text>
+<g font-family="Helvetica,Arial,sans-serif">
+<rect x="16" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="34" cy="104" r="10" fill="#2C5282"/>
+<text x="34" y="108" font-size="11" fill="#ffffff" text-anchor="middle">1</text>
+<text x="26" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Join source</text>
+<text x="26" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">records</text>
+<text x="26" y="166" font-size="10.5" fill="#4A5568">trusted table only</text>
+<polygon points="164,127 174,130 164,133" fill="#2C5282"/>
+<rect x="174" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="192" cy="104" r="10" fill="#2C5282"/>
+<text x="192" y="108" font-size="11" fill="#ffffff" text-anchor="middle">2</text>
+<text x="184" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Validate</text>
+<text x="184" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">eligibility</text>
+<text x="184" y="166" font-size="10" fill="#4A5568">quality ≥80, defects ≤5</text>
+<polygon points="322,127 332,130 322,133" fill="#2C5282"/>
+<rect x="332" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="350" cy="104" r="10" fill="#2C5282"/>
+<text x="350" y="108" font-size="11" fill="#ffffff" text-anchor="middle">3</text>
+<text x="342" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Measure</text>
+<text x="342" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">energy</text>
+<text x="342" y="166" font-size="10.5" fill="#4A5568">10 / 22 / 28 / 49 Wh</text>
+<polygon points="480,127 490,130 480,133" fill="#2C5282"/>
+<rect x="490" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="508" cy="104" r="10" fill="#2C5282"/>
+<text x="508" y="108" font-size="11" fill="#ffffff" text-anchor="middle">4</text>
+<text x="500" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Weigh</text>
+<text x="500" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">gaps</text>
+<text x="500" y="166" font-size="10.5" fill="#4A5568">39 Wh spread</text>
+<polygon points="638,127 648,130 638,133" fill="#2C5282"/>
+<rect x="648" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="666" cy="104" r="10" fill="#2C5282"/>
+<text x="666" y="108" font-size="11" fill="#ffffff" text-anchor="middle">5</text>
+<text x="658" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Zero-base</text>
+<text x="658" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">audit</text>
+<text x="658" y="166" font-size="10.5" fill="#4A5568">pixels vs values</text>
+<polygon points="796,127 806,130 796,133" fill="#2C5282"/>
+<rect x="806" y="86" width="146" height="86" rx="8" fill="#EBF4FB" stroke="#2C5282" stroke-width="1.5"/>
+<circle cx="824" cy="104" r="10" fill="#2C5282"/>
+<text x="824" y="108" font-size="11" fill="#ffffff" text-anchor="middle">6</text>
+<text x="816" y="136" font-size="12.5" font-weight="bold" fill="#1A202C">Log</text>
+<text x="816" y="152" font-size="12.5" font-weight="bold" fill="#1A202C">handover</text>
+<text x="816" y="166" font-size="10.5" fill="#4A5568">next analyst</text>
+<rect x="16" y="200" width="292" height="120" rx="8" fill="#F0FFF4" stroke="#276749" stroke-width="1.5"/>
+<text x="30" y="224" font-size="13.5" font-weight="bold" fill="#1A202C">Policy decision (energy-first)</text>
+<text x="30" y="248" font-size="12" fill="#1A202C">Pick: P3 — 10 Wh, unique minimum</text>
+<text x="30" y="268" font-size="12" fill="#1A202C">Runner-up: P2 — 22 Wh (+12)</text>
+<text x="30" y="288" font-size="12" fill="#1A202C">Last qualifier: P4 — 49 Wh (+39)</text>
+<text x="30" y="308" font-size="12" fill="#1A202C">Tie-break on candidate ID: idle</text>
+<rect x="328" y="200" width="300" height="120" rx="8" fill="#FFF8F0" stroke="#9C4221" stroke-width="1.5"/>
+<text x="342" y="224" font-size="13.5" font-weight="bold" fill="#1A202C">Secondary view — not the client policy</text>
+<text x="342" y="248" font-size="12" fill="#1A202C">Quality order: P4 98, P3 97, P2 95, P1 87</text>
+<text x="342" y="268" font-size="12" fill="#1A202C">Energy-first ranking remains decisive.</text>
+<text x="342" y="288" font-size="12" fill="#1A202C">Wh per quality point: P3 0.10 best,</text>
+<text x="342" y="308" font-size="12" fill="#1A202C">P2 0.23, P1 0.32, P4 0.50.</text>
+<rect x="648" y="200" width="304" height="120" rx="8" fill="#FAFBFF" stroke="#4A5568" stroke-width="1.5"/>
+<text x="662" y="224" font-size="13.5" font-weight="bold" fill="#1A202C">Open items (4) — unmeasured</text>
+<text x="662" y="248" font-size="12" fill="#1A202C">1 cost · 2 delivery</text>
+<text x="662" y="268" font-size="12" fill="#1A202C">3 maintenance · 4 field reliability</text>
+<text x="662" y="288" font-size="12" fill="#1A202C">Unverified for every package;</text>
+<text x="662" y="308" font-size="12" fill="#1A202C">not decisive under current policy.</text>
+<text x="24" y="352" font-size="12" fill="#4A5568">All values derive from the trusted WO-03 table on one shared acceptance basis; no cost, delivery, maintenance or reliability data exist in the record.</text>
+<text x="24" y="372" font-size="12" fill="#4A5568">Review note: verify every figure pixel against its stated value before handover.</text>
+</g>
+</svg>

@@ -1,0 +1,60 @@
+<style>
+@page { size: Letter; }
+* { box-sizing: border-box; }
+body { font-family: 'Source Serif 4', Georgia, serif; font-size: 10pt; line-height: 1.33; color: #1d1d1d; margin: 0; }
+p { margin: 0 0 7pt; text-align: justify; hyphens: auto; }
+h1.title { font-family: 'Old Standard TT', serif; font-weight: 700; font-size: 19pt; text-align: center; margin: 14pt 0 4pt; line-height: 1.2; letter-spacing: .3px; }
+.subtitle { font-family: 'Old Standard TT', serif; text-align: center; font-size: 12.5pt; margin: 0 0 12pt; }
+.rule-top { border-top: 3pt solid #111; }
+.rule-bot { border-top: 0.8pt solid #111; margin: 10pt 0 14pt; }
+.authors { text-align: center; font-family: 'Old Standard TT', serif; font-size: 11pt; margin-bottom: 12pt; }
+.abstract { margin: 0 0.45in 10pt; font-style: italic; font-size: 10.1pt; }
+.abstract h3 { font-family: 'Old Standard TT', serif; font-style: normal; text-align: center; font-size: 13pt; margin: 0 0 6pt; }
+h2 { font-family: 'Old Standard TT', serif; font-size: 14pt; font-weight: 700; color: #333; margin: 15pt 0 6pt; break-after: avoid; }
+h3 { font-family: 'Old Standard TT', serif; font-size: 11.8pt; font-weight: 700; color: #333; margin: 11pt 0 5pt; break-after: avoid; }
+h4 { font-family: 'Source Serif 4', serif; font-size: 10.5pt; font-weight: 700; margin: 9pt 0 3pt; break-after: avoid; color: #1b3a5c; }
+ol, ul { margin: 0 0 7pt; padding-left: 18pt; }
+li { margin-bottom: 3pt; text-align: justify; }
+mark { background: linear-gradient(transparent 38%, #FFE58A 38%, #FFE58A 92%, transparent 92%); color: inherit; padding: 0 1px; font-weight: 600; }
+figure { margin: 8pt 0 10pt; break-inside: avoid; }
+figcaption { font-size: 9.1pt; line-height: 1.35; margin-top: 4pt; text-align: justify; }
+table { border-collapse: collapse; width: 100%; font-size: 8.8pt; line-height: 1.3; break-inside: avoid; }
+th, td { padding: 2.6pt 4pt; vertical-align: top; text-align: left; }
+thead th { border-top: 1pt solid #111; border-bottom: 0.6pt solid #111; font-weight: 700; }
+tbody tr:last-child td { border-bottom: 1pt solid #111; }
+.tcap { font-size: 9.1pt; margin: 8pt 0 3pt; text-align: justify; break-after: avoid; }
+.q { font-style: italic; }
+.src { font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt; color: #555; white-space: nowrap; }
+.yes { color: #1e7a46; font-weight: 700; } .no { color: #b03a2e; font-weight: 700; } .part { color: #9a6a00; font-weight: 700; }
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5pt; }
+.strip div { font-family: 'IBM Plex Sans', sans-serif; font-size: 7.8pt; text-align: center; line-height: 1.25; }
+.strip img { width: 100%; border-radius: 3pt; display: block; margin-bottom: 1.5pt; }
+.strip .miss { color: #b03a2e; font-weight: 700; }
+.box { border: 0.8pt solid #bbb; background: #faf8f3; border-radius: 4pt; padding: 6pt 9pt; margin: 6pt 0 9pt; font-size: 9.4pt; break-inside: avoid; }
+.box p { margin-bottom: 4pt; }
+.keybox { border: 1.2pt solid #1b3a5c; background: #f2f6fb; border-radius: 5pt; padding: 7pt 10pt; margin: 8pt 0 10pt; break-inside: avoid; font-size: 9.6pt; }
+.keybox b.h { font-family: 'IBM Plex Sans', sans-serif; font-size: 9pt; letter-spacing: 1px; text-transform: uppercase; color: #1b3a5c; display: block; margin-bottom: 3pt; }
+.keybox ol, .keybox ul { margin: 0; }
+.recon { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; }
+.recon img { width: 100%; border: 0.6pt solid #ccc; }
+.fn { font-size: 8.4pt; border-top: 0.6pt solid #888; width: 2.2in; padding-top: 3pt; margin-top: 10pt; }
+.refs li { font-size: 9.1pt; text-align: left; }
+.small { font-size: 9.2pt; }
+.pb { break-before: page; }
+sup { font-size: 7pt; }
+.prompt { font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt; line-height: 1.35; background: #f6f4ef; border-left: 2.5pt solid #1b3a5c; padding: 5pt 8pt; margin: 4pt 0 8pt; white-space: pre-wrap; text-align: left; }
+.case { border: 1pt solid #c9c2b3; border-radius: 6pt; background: #fffdf8; padding: 7pt; margin: 6pt 0 10pt; break-inside: avoid; }
+.case-head { font-family: 'IBM Plex Sans', sans-serif; font-weight: 700; font-size: 9.2pt; color: #fff; background: #1b3a5c; border-radius: 4pt; padding: 3pt 7pt; margin-bottom: 6pt; }
+.case-body { display: grid; grid-template-columns: 41% 1fr; gap: 8pt; }
+.case-body.wide { grid-template-columns: 50% 1fr; }
+.case-imgs { display: grid; gap: 4pt; align-content: start; }
+.case-imgs.two { grid-template-columns: 1fr 1fr; }
+.ann { position: relative; line-height: 0; }
+.ann img { width: 100%; border-radius: 3pt; display: block; }
+.ann svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cap { font-family: 'IBM Plex Sans', sans-serif; font-size: 7.3pt; line-height: 1.25; text-align: center; margin-top: 2pt; }
+.row { font-size: 8.7pt; line-height: 1.32; margin-bottom: 4pt; text-align: justify; }
+.tag { display: inline-block; font-family: 'IBM Plex Sans', sans-serif; font-size: 6.9pt; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; border-radius: 3pt; padding: 0.5pt 4pt; margin-right: 3pt; color: #fff; }
+.t-notice { background: #c98a00; } .t-prompt { background: #2f8f7f; } .t-reason { background: #6e56b0; } .t-audit { background: #6b7280; } .t-transfer { background: #c0392b; }
+.step { font-family: 'IBM Plex Sans', sans-serif; font-weight: 700; color: #fff; background: #1b3a5c; border-radius: 50%; display: inline-block; width: 13pt; height: 13pt; line-height: 13pt; text-align: center; font-size: 7.5pt; }
+</style>

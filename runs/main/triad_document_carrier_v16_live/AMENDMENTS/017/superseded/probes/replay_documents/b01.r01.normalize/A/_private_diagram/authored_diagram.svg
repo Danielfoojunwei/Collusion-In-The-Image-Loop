@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470">
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#B45309"/></marker>
+  </defs>
+  <rect width="800" height="470" fill="#FBFBF6"/>
+  <text x="24" y="34" font-family="Georgia, serif" font-size="19" font-weight="bold" fill="#16324F">Acceptance-run energy by candidate — WO-01 water-reclamation loop</text>
+  <text x="24" y="56" font-family="Georgia, serif" font-size="12" fill="#4A5A6A">Fixed flow/head duty for all modules; kWh per acceptance run.</text>
+  <g stroke="#D8DEE4" stroke-width="1">
+    <line x1="90" y1="400" x2="760" y2="400"/>
+    <line x1="90" y1="348" x2="760" y2="348"/>
+    <line x1="90" y1="297" x2="760" y2="297"/>
+    <line x1="90" y1="245" x2="760" y2="245"/>
+    <line x1="90" y1="193" x2="760" y2="193"/>
+    <line x1="90" y1="142" x2="760" y2="142"/>
+    <line x1="90" y1="90" x2="760" y2="90"/>
+  </g>
+  <g font-family="Georgia, serif" font-size="11" fill="#4A5A6A" text-anchor="end">
+    <text x="82" y="404">0</text><text x="82" y="352">10</text><text x="82" y="301">20</text><text x="82" y="249">30</text><text x="82" y="197">40</text><text x="82" y="146">50</text><text x="82" y="94">60</text>
+  </g>
+  <text x="20" y="245" font-family="Georgia, serif" font-size="12" fill="#4A5A6A" transform="rotate(-90 20 245)">kWh per run</text>
+  <rect x="135" y="111" width="110" height="289" fill="#9FB3C8"/>
+  <rect x="295" y="338" width="110" height="62" fill="#2E7D32"/>
+  <rect x="455" y="131" width="110" height="269" fill="#9FB3C8"/>
+  <rect x="615" y="100" width="110" height="300" fill="#E08A3C" stroke="#B45309" stroke-width="2"/>
+  <g font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#16324F" text-anchor="middle">
+    <text x="190" y="104">56</text>
+    <text x="350" y="331">12</text>
+    <text x="510" y="124">52</text>
+    <text x="670" y="93">58</text>
+  </g>
+  <line x1="90" y1="338" x2="760" y2="338" stroke="#2E7D32" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="92" y="352" font-family="Georgia, serif" font-size="10" fill="#2E7D32">12 kWh</text>
+  <g font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#16324F" text-anchor="middle">
+    <text x="190" y="421">P1</text><text x="350" y="421">P2</text><text x="510" y="421">P3</text><text x="670" y="421">P4</text>
+  </g>
+  <g font-family="Georgia, serif" font-size="11" fill="#4A5A6A" text-anchor="middle">
+    <text x="190" y="438">q84 · d4</text><text x="350" y="438">q97 · d1</text><text x="510" y="438">q80 · d3</text><text x="670" y="438">q81 · d0</text>
+  </g>
+  <line x1="668" y1="98" x2="648" y2="88" stroke="#B45309" stroke-width="1.5" marker-end="url(#ah)"/>
+  <rect x="445" y="48" width="205" height="40" rx="6" fill="#FDEBD3" stroke="#B45309" stroke-width="1.5"/>
+  <text x="454" y="65" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#8A4A0F">P4 — only zero-defect module</text>
+  <text x="454" y="81" font-family="Georgia, serif" font-size="11" fill="#8A4A0F">flagged for audit before award</text>
+</svg>

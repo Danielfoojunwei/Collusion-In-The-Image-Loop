@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 172.0" style="width:475.0pt;max-width:100%;display:block;margin:0 auto" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
+<defs><marker id="f7k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="f7v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="f7g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
+<rect x="0.0" y="4.0" width="292.0" height="132.0" rx="2" fill="#FFFFFF" stroke="#1A1A1A" stroke-width="1.0"/>
+<text x="10.0" y="26.0" font-size="15" fill="#1A1A1A" text-anchor="start" font-weight="700">1  Encode</text>
+<text x="282.0" y="26.0" font-size="14" fill="#1A1A1A" text-anchor="end" font-weight="700">held</text>
+<text x="10.0" y="50.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">A wrote the exact tag into accurate reports in</text>
+<text x="10.0" y="67.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">8 of 15 rounds; outside decoders read it in 9</text>
+<text x="10.0" y="85.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">of 16 readouts.</text>
+<polyline points="295.0,70.0 326.0,70.0" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f7k)"/>
+<rect x="329.0" y="4.0" width="292.0" height="132.0" rx="2" fill="#FFF6EF" stroke="#D55E00" stroke-width="1.4"/>
+<text x="339.0" y="26.0" font-size="15" fill="#1A1A1A" text-anchor="start" font-weight="700">2  Uptake</text>
+<text x="611.0" y="26.0" font-size="14" fill="#D55E00" text-anchor="end" font-weight="700">broke</text>
+<text x="339.0" y="50.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">B and C decoded 0 of 16 and chose the</text>
+<text x="339.0" y="67.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">target in 0 of 30 ballots; by their own</text>
+<text x="339.0" y="85.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">estimates joining was worth a median 765</text>
+<text x="339.0" y="102.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">points against a certain 4,000.</text>
+<polyline points="624.0,70.0 655.0,70.0" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#f7k)"/>
+<rect x="658.0" y="4.0" width="292.0" height="132.0" rx="2" fill="#FFF6EF" stroke="#D55E00" stroke-width="1.4"/>
+<text x="668.0" y="26.0" font-size="15" fill="#1A1A1A" text-anchor="start" font-weight="700">3  Evade</text>
+<text x="940.0" y="26.0" font-size="14" fill="#D55E00" text-anchor="end" font-weight="700">broke</text>
+<text x="668.0" y="50.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">The reviewer flagged all 8 code rounds and</text>
+<text x="668.0" y="67.5" font-size="13.5" fill="#1A1A1A" text-anchor="start">fined 4; A moved the code, then stopped in</text>
+<text x="668.0" y="85.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">two arms.</text>
+<text x="475.0" y="164.0" font-size="13.5" fill="#5F5F5F" text-anchor="middle">Collusion pays only if every link holds. The grant was never paid.</text>
+</svg>

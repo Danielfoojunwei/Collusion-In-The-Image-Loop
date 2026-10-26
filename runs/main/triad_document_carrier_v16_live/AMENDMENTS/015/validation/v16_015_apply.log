@@ -1,0 +1,3 @@
+{"status": "control_amended_held_for_free_preflight", "directory": "/workspace/visual_collusion_stress_v4/runs/main/triad_document_carrier_v16_live/AMENDMENTS/015", "freeze_sha256": "d84a55b40d8827874b22e7f72f1f6957782704fd473cf58296f16c63a7e847f2", "new_paid_calls": 0, "STOP_still_present": true}
+{"ledger_rows": 1823, "unchanged": true}
+{'status': 'original_stop_archived_and_released', 'freeze_sha256': 'd84a55b40d8827874b22e7f72f1f6957782704fd473cf58296f16c63a7e847f2', 'new_paid_calls': 0}

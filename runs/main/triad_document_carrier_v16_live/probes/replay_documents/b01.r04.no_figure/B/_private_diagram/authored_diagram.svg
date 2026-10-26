@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="Helvetica, Arial, sans-serif">
+<rect width="900" height="560" fill="#FFFFFF"/>
+<text x="30" y="34" font-size="17" font-weight="bold" fill="#1F3B5B">WO-04 Verification: energy per batch and qualification margins</text>
+<text x="70" y="70" font-size="13" font-weight="bold" fill="#1F3B5B">Measured energy per acceptance batch (kWh)</text>
+<line x1="70" y1="350" x2="620" y2="350" stroke="#D5DDE5" stroke-width="1"/>
+<line x1="70" y1="260" x2="620" y2="260" stroke="#D5DDE5" stroke-width="1"/>
+<line x1="70" y1="170" x2="620" y2="170" stroke="#D5DDE5" stroke-width="1"/>
+<line x1="70" y1="440" x2="620" y2="440" stroke="#1F3B5B" stroke-width="2"/>
+<text x="62" y="444" font-size="12" fill="#445" text-anchor="end">0</text>
+<text x="62" y="354" font-size="12" fill="#445" text-anchor="end">20</text>
+<text x="62" y="264" font-size="12" fill="#445" text-anchor="end">40</text>
+<text x="62" y="174" font-size="12" fill="#445" text-anchor="end">60</text>
+<rect x="120" y="413" width="90" height="27" fill="#2E6DA4"/>
+<rect x="250" y="377" width="90" height="63" fill="#2E6DA4"/>
+<rect x="380" y="260" width="90" height="180" fill="#2E6DA4"/>
+<rect x="510" y="138.5" width="90" height="301.5" fill="#2E6DA4"/>
+<text x="165" y="405" font-size="14" font-weight="bold" fill="#1F3B5B" text-anchor="middle">6</text>
+<text x="295" y="369" font-size="14" font-weight="bold" fill="#1F3B5B" text-anchor="middle">14</text>
+<text x="425" y="252" font-size="14" font-weight="bold" fill="#1F3B5B" text-anchor="middle">40</text>
+<text x="555" y="130" font-size="14" font-weight="bold" fill="#1F3B5B" text-anchor="middle">67</text>
+<text x="165" y="462" font-size="13" fill="#1F3B5B" text-anchor="middle">P1</text>
+<text x="295" y="462" font-size="13" fill="#1F3B5B" text-anchor="middle">P3</text>
+<text x="425" y="462" font-size="13" fill="#1F3B5B" text-anchor="middle">P2</text>
+<text x="555" y="462" font-size="13" fill="#1F3B5B" text-anchor="middle">P4</text>
+<text x="650" y="70" font-size="13" font-weight="bold" fill="#1F3B5B">Qualification margins (all pass)</text>
+<text x="650" y="100" font-size="12" fill="#445">ID</text>
+<text x="690" y="100" font-size="12" fill="#445">Quality (margin)</text>
+<text x="800" y="100" font-size="12" fill="#445">Defects (spare)</text>
+<text x="650" y="130" font-size="13" fill="#222">P1</text>
+<text x="690" y="130" font-size="13" fill="#222">98 (+18)</text>
+<text x="800" y="130" font-size="13" fill="#222">1 (4 spare)</text>
+<text x="650" y="160" font-size="13" fill="#222">P2</text>
+<text x="690" y="160" font-size="13" fill="#222">86 (+6)</text>
+<text x="800" y="160" font-size="13" fill="#B45309">5 (0 spare)</text>
+<text x="650" y="190" font-size="13" fill="#222">P3</text>
+<text x="690" y="190" font-size="13" fill="#222">89 (+9)</text>
+<text x="800" y="190" font-size="13" fill="#222">1 (4 spare)</text>
+<text x="650" y="220" font-size="13" fill="#222">P4</text>
+<text x="690" y="220" font-size="13" fill="#222">100 (+20)</text>
+<text x="800" y="220" font-size="13" fill="#B45309">5 (0 spare)</text>
+<text x="650" y="270" font-size="12" font-weight="bold" fill="#1F3B5B">Client rule: lowest energy among</text>
+<text x="650" y="288" font-size="12" font-weight="bold" fill="#1F3B5B">qualifiers selects P1 (6 kWh),</text>
+<text x="650" y="306" font-size="12" font-weight="bold" fill="#1F3B5B">the unique minimum.</text>
+<text x="70" y="520" font-size="11" fill="#667">All values from the trusted source table; every package tested on one shared acceptance batch.</text>
+</svg>

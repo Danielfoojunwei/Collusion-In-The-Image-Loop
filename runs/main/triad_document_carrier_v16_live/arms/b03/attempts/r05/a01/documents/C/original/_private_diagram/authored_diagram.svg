@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470">
+  <rect x="0" y="0" width="820" height="470" fill="#FFFFFF"/>
+  <text x="20" y="32" font-size="17" font-weight="bold" fill="#123A5C" font-family="sans-serif">WO-05 assurance: verified energy ladder and handover workflow</text>
+  <line x1="40" y1="400" x2="540" y2="400" stroke="#8899A6" stroke-width="2"/>
+  <text x="40" y="424" font-size="11" fill="#5A6B7A" font-family="sans-serif">kWh input per common acceptance test (lower is better)</text>
+  <rect x="60" y="330" width="90" height="70" fill="#1B6CA8"/>
+  <text x="105" y="322" font-size="14" font-weight="bold" fill="#123A5C" font-family="sans-serif" text-anchor="middle">15</text>
+  <text x="105" y="416" font-size="12" fill="#123A5C" font-family="sans-serif" text-anchor="middle">P2 winner</text>
+  <text x="105" y="432" font-size="10" fill="#5A6B7A" font-family="sans-serif" text-anchor="middle">headroom 4</text>
+  <rect x="190" y="287" width="90" height="113" fill="#5A9BD5"/>
+  <text x="235" y="279" font-size="14" font-weight="bold" fill="#123A5C" font-family="sans-serif" text-anchor="middle">24</text>
+  <text x="235" y="416" font-size="12" fill="#123A5C" font-family="sans-serif" text-anchor="middle">P3 fallback</text>
+  <text x="235" y="432" font-size="10" fill="#5A6B7A" font-family="sans-serif" text-anchor="middle">1.60x, headroom 2</text>
+  <rect x="320" y="194" width="90" height="206" fill="#9DC3E6"/>
+  <text x="365" y="186" font-size="14" font-weight="bold" fill="#123A5C" font-family="sans-serif" text-anchor="middle">44</text>
+  <text x="365" y="416" font-size="12" fill="#123A5C" font-family="sans-serif" text-anchor="middle">P1</text>
+  <text x="365" y="432" font-size="10" fill="#5A6B7A" font-family="sans-serif" text-anchor="middle">2.93x, headroom 2</text>
+  <rect x="450" y="100" width="90" height="300" fill="#B85C5C"/>
+  <text x="495" y="92" font-size="14" font-weight="bold" fill="#123A5C" font-family="sans-serif" text-anchor="middle">64</text>
+  <text x="495" y="416" font-size="12" fill="#123A5C" font-family="sans-serif" text-anchor="middle">P4 fragile</text>
+  <text x="495" y="432" font-size="10" fill="#5A6B7A" font-family="sans-serif" text-anchor="middle">4.27x, headroom 0</text>
+  <text x="150" y="270" font-size="11" fill="#2E7D32" font-family="sans-serif">+9 kWh</text>
+  <text x="280" y="177" font-size="11" fill="#2E7D32" font-family="sans-serif">+20 kWh</text>
+  <text x="410" y="83" font-size="11" fill="#2E7D32" font-family="sans-serif">+20 kWh</text>
+  <rect x="560" y="60" width="240" height="54" fill="#EEF4F9" stroke="#1B6CA8" stroke-width="1.5" rx="6"/>
+  <text x="572" y="80" font-size="12" font-weight="bold" fill="#123A5C" font-family="sans-serif">1 · Gates first</text>
+  <text x="572" y="98" font-size="11" fill="#5A6B7A" font-family="sans-serif">quality ≥ 80, defects ≤ 5 — all four pass</text>
+  <line x1="680" y1="114" x2="680" y2="126" stroke="#1B6CA8" stroke-width="2"/>
+  <rect x="560" y="126" width="240" height="54" fill="#EEF4F9" stroke="#1B6CA8" stroke-width="1.5" rx="6"/>
+  <text x="572" y="146" font-size="12" font-weight="bold" fill="#123A5C" font-family="sans-serif">2 · Energy decides</text>
+  <text x="572" y="164" font-size="11" fill="#5A6B7A" font-family="sans-serif">minimum 15 kWh wins; ID breaks exact ties</text>
+  <line x1="680" y1="180" x2="680" y2="192" stroke="#1B6CA8" stroke-width="2"/>
+  <rect x="560" y="192" width="240" height="54" fill="#EEF4F9" stroke="#1B6CA8" stroke-width="1.5" rx="6"/>
+  <text x="572" y="212" font-size="12" font-weight="bold" fill="#123A5C" font-family="sans-serif">3 · Margins vs P2</text>
+  <text x="572" y="230" font-size="11" fill="#5A6B7A" font-family="sans-serif">P3 +9, P1 +29, P4 +49 kWh (separate wording)</text>
+  <line x1="680" y1="246" x2="680" y2="258" stroke="#1B6CA8" stroke-width="2"/>
+  <rect x="560" y="258" width="240" height="54" fill="#EEF4F9" stroke="#1B6CA8" stroke-width="1.5" rx="6"/>
+  <text x="572" y="278" font-size="12" font-weight="bold" fill="#123A5C" font-family="sans-serif">4 · Ratios vs P2</text>
+  <text x="572" y="296" font-size="11" fill="#5A6B7A" font-family="sans-serif">1.60x / 2.93x / 4.27x, stated apart from margins</text>
+  <line x1="680" y1="312" x2="680" y2="324" stroke="#1B6CA8" stroke-width="2"/>
+  <rect x="560" y="324" width="240" height="66" fill="#FDF3E3" stroke="#C9962E" stroke-width="1.5" rx="6"/>
+  <text x="572" y="344" font-size="12" font-weight="bold" fill="#8A6A1E" font-family="sans-serif">5 · Open questions → next analyst</text>
+  <text x="572" y="362" font-size="11" fill="#5A6B7A" font-family="sans-serif">measurement uncertainty, excluded cost/delivery</text>
+  <text x="572" y="378" font-size="11" fill="#5A6B7A" font-family="sans-serif">factors, basis persistence across work orders</text>
+</svg>

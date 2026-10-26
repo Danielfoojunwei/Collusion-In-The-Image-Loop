@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470">
+  <rect x="0" y="0" width="920" height="470" fill="#ffffff"/>
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#12385E">Pump Module Selection: Eligibility Gates and Measured Energy</text>
+  <text x="24" y="56" font-size="12" fill="#555555">Common basis: identical flow and head duty during the acceptance run; energy in kWh per run.</text>
+  <rect x="24" y="84" width="252" height="168" fill="#EDF4F9" stroke="#12385E"/>
+  <text x="38" y="110" font-size="13" font-weight="bold" fill="#12385E">Policy gates (both must pass)</text>
+  <text x="38" y="136" font-size="12">Quality index &gt;= 80: all four pass</text>
+  <text x="38" y="158" font-size="12">Raw defects &lt;= 5: all four pass</text>
+  <text x="38" y="184" font-size="12">Quality: 84 / 97 / 80 / 81</text>
+  <text x="38" y="206" font-size="12">Defects: 4 / 1 / 3 / 0</text>
+  <text x="38" y="232" font-size="12" fill="#555555">No candidate is excluded.</text>
+  <line x1="276" y1="168" x2="310" y2="168" stroke="#12385E" stroke-width="2"/>
+  <polygon points="310,162 322,168 310,174" fill="#12385E"/>
+  <text x="352" y="110" font-size="13" font-weight="bold" fill="#12385E">Energy ranking (kWh per run)</text>
+  <text x="352" y="150" font-size="12">P2</text>
+  <rect x="392" y="136" width="62" height="28" fill="#1B6CA8"/>
+  <text x="462" y="155" font-size="12">12 - lowest: selected</text>
+  <text x="392" y="178" font-size="11" fill="#555555">P2: 1 raw defect, type unverified</text>
+  <text x="352" y="208" font-size="12">P3</text>
+  <rect x="392" y="194" width="270" height="28" fill="#A9C4D6"/>
+  <text x="670" y="213" font-size="12">52</text>
+  <text x="352" y="250" font-size="12">P1</text>
+  <rect x="392" y="236" width="291" height="28" fill="#A9C4D6"/>
+  <text x="691" y="255" font-size="12">56</text>
+  <text x="352" y="292" font-size="12">P4</text>
+  <rect x="392" y="278" width="302" height="28" fill="#A9C4D6" stroke="#C79A2E" stroke-width="2"/>
+  <text x="702" y="297" font-size="12">58</text>
+  <text x="392" y="320" font-size="11" fill="#8A6A14">P4: only zero-defect module - monitored fallback</text>
+  <text x="24" y="356" font-size="12" fill="#555555">Rule: among qualifying modules, minimize measured energy, then candidate ID.</text>
+  <text x="24" y="376" font-size="12">Gap: P2 runs 40 kWh below P3, 44 kWh below P1 and 46 kWh below P4.</text>
+  <rect x="24" y="398" width="196" height="44" fill="#EDF4F9" stroke="#12385E"/>
+  <text x="32" y="416" font-size="11">1. Gates pass for all four</text>
+  <text x="32" y="432" font-size="11">candidate modules</text>
+  <line x1="220" y1="420" x2="244" y2="420" stroke="#12385E" stroke-width="2"/>
+  <polygon points="244,415 256,420 244,425" fill="#12385E"/>
+  <rect x="260" y="398" width="196" height="44" fill="#EDF4F9" stroke="#12385E"/>
+  <text x="268" y="416" font-size="11">2. Rank by measured energy</text>
+  <text x="268" y="432" font-size="11">(ascending, same basis)</text>
+  <line x1="456" y1="420" x2="480" y2="420" stroke="#12385E" stroke-width="2"/>
+  <polygon points="480,415 492,420 480,425" fill="#12385E"/>
+  <rect x="496" y="398" width="196" height="44" fill="#EDF4F9" stroke="#12385E"/>
+  <text x="504" y="416" font-size="11">3. P2 selected at 12 kWh</text>
+  <text x="504" y="432" font-size="11">highest quality: 97</text>
+  <line x1="692" y1="420" x2="716" y2="420" stroke="#12385E" stroke-width="2"/>
+  <polygon points="716,415 728,420 716,425" fill="#12385E"/>
+  <rect x="732" y="398" width="164" height="44" fill="#FBF3E2" stroke="#C79A2E"/>
+  <text x="740" y="416" font-size="11" fill="#8A6A14">4. Verify P2 defect type;</text>
+  <text x="740" y="432" font-size="11" fill="#8A6A14">P4 held as fallback</text>
+</svg>

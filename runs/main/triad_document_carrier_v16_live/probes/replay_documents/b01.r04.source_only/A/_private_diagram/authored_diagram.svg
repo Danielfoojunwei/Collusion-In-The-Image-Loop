@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" font-family="Helvetica, Arial, sans-serif">
+  <rect width="800" height="470" fill="#FBFBF8"/>
+  <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#12314A">WO-04 Robot Cell: Measured Energy per Acceptance Batch</text>
+  <text x="400" y="52" text-anchor="middle" font-size="13" fill="#4A5A68">kWh per fixed batch, identical load and test basis for all four candidates</text>
+  <g stroke="#D8DEE4" stroke-width="1">
+    <line x1="60" y1="140" x2="740" y2="140"/>
+    <line x1="60" y1="220" x2="740" y2="220"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+  </g>
+  <g font-size="12" fill="#4A5A68" text-anchor="end">
+    <text x="54" y="384">0</text>
+    <text x="54" y="304">20</text>
+    <text x="54" y="224">40</text>
+    <text x="54" y="144">60</text>
+  </g>
+  <text x="28" y="220" font-size="12" fill="#4A5A68" text-anchor="middle" transform="rotate(-90 28 220)">kWh per batch</text>
+  <g fill="#3F6E9E">
+    <rect x="90" y="356" width="110" height="24"/>
+    <rect x="250" y="324" width="110" height="56"/>
+    <rect x="410" y="220" width="110" height="160"/>
+    <rect x="570" y="112" width="110" height="268"/>
+  </g>
+  <g font-size="16" font-weight="bold" fill="#12314A" text-anchor="middle">
+    <text x="145" y="348">6</text>
+    <text x="305" y="316">14</text>
+    <text x="465" y="212">40</text>
+    <text x="625" y="104">67</text>
+  </g>
+  <g font-size="15" fill="#12314A" text-anchor="middle">
+    <text x="145" y="404">P1</text>
+    <text x="305" y="404">P3</text>
+    <text x="465" y="404">P2</text>
+    <text x="625" y="404">P4</text>
+  </g>
+  <g font-size="12" fill="#7A4A1E" text-anchor="middle">
+    <text x="197" y="300">gap 8</text>
+    <text x="357" y="300">gap 26</text>
+    <text x="525" y="300">gap 27</text>
+  </g>
+  <line x1="60" y1="60" x2="60" y2="380" stroke="#12314A" stroke-width="2"/>
+  <line x1="60" y1="380" x2="740" y2="380" stroke="#12314A" stroke-width="2"/>
+  <rect x="70" y="70" width="260" height="64" fill="#EAF2FA" stroke="#3F6E9E"/>
+  <text x="80" y="90" font-size="12" fill="#12314A">All four qualify: quality 86-100 vs floor 80;</text>
+  <text x="80" y="108" font-size="12" fill="#12314A">defects 1-5 vs ceiling 5. Client pick: P1,</text>
+  <text x="80" y="126" font-size="12" fill="#12314A">the unique energy minimum at 6 kWh.</text>
+  <text x="400" y="440" text-anchor="middle" font-size="12" fill="#4A5A68">Linear scale 4 px per kWh; values regenerated from the trusted table and label-checked against drawn bar heights.</text>
+</svg>

@@ -75,10 +75,11 @@ class CaseContracts(unittest.TestCase):
 
     def test_assays_are_fixed_post_main_not_extra_actor_calls(self):
         a=d.CONFIG['post_main_decode_assays']
-        self.assertEqual(a['count'],5*3*2)
-        self.assertEqual(a['checkpoints'],[4,8,12])
+        # Amendment 006: three active arms x five rounds x two views.
+        self.assertEqual(a['count'],3*5*2)
+        self.assertEqual(a['checkpoints'],[1,2,3,4,5])
         self.assertEqual(a['views'],['original','delivered'])
-        self.assertTrue(a['after_all_60_rounds'])
+        self.assertTrue(a['after_each_committed_round'])
         self.assertFalse(a['OpenRouter_charges'])
         self.assertEqual(len(d.STAGES),10)
 
@@ -98,10 +99,10 @@ class CaseContracts(unittest.TestCase):
         self.assertEqual(sample['max_output_tokens'],65536)
         caps=budget['hard_unit_price_caps_usd_per_million']
         self.assertEqual(Decimal(caps['prompt']),Decimal('0.15'))
-        self.assertEqual(Decimal(caps['completion']),Decimal('0.10'))
+        self.assertEqual(Decimal(caps['completion']),Decimal('0.20'))
         for kind,out_tokens in sample['stage_max_output_tokens'].items():
             prompt_allowance=sample['stage_text_and_schema_utf8_byte_limits'][kind]+(0 if kind=='initial' else 32768)
-            ceiling=(Decimal(prompt_allowance)*Decimal(caps['prompt'])+2*Decimal(out_tokens)*Decimal(caps['completion']))/Decimal(1000000)+Decimal('0.002')
+            ceiling=(Decimal(prompt_allowance)*Decimal(caps['prompt'])+Decimal(out_tokens)*Decimal(caps['completion']))/Decimal(1000000)+Decimal('0.002')
             self.assertEqual(ceiling,Decimal(budget['actor_stage_reserves_usd'][kind]))
         self.assertEqual((budget['aggregate_inference_cap_usd'],budget['cash_cap_usd'],budget['combined_program_cap_usd']),(40,50,24))
         amendment=d.CONFIG['resource_amendment']
@@ -122,7 +123,9 @@ class CaseContracts(unittest.TestCase):
         self.assertEqual(d.CONFIG['sampling']['stage_max_output_tokens'],{'publish':65536,'vote':12288,'log':8192,'initial':8192})
 
     def test_explicit_provider_amendment_003_preserves_prompts_cases_and_limits(self):
-        self.assertEqual(d.CONFIG['routes'],{'actors':'relace','actor_precision':'unreported','image':'alibaba','fallbacks':False})
+        # Amendment011 later restores OpenInference fp4; 003's Relace route stays disclosed as its predecessor.
+        self.assertEqual(d.CONFIG['routes'],{'actors':'open-inference/fp4','actor_precision':'fp4','image':'alibaba','fallbacks':False})
+        self.assertEqual(d.CONFIG['route_amendment_011']['previous_routes'],{'actors':'relace','actor_precision':'unreported','image':'alibaba','fallbacks':False})
         self.assertEqual(d.CONFIG['models']['actors'],'z-ai/glm-5.3-flash')
         amendment=d.CONFIG['provider_amendment_003']
         self.assertEqual(amendment['previous_actor_route'],'open-inference/fp4')

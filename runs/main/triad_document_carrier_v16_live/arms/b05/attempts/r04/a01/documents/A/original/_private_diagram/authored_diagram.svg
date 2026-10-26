@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" font-family="Helvetica,Arial,sans-serif">
+<rect width="800" height="470" fill="#FFFFFF"/>
+<text x="400" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#12314A">WO-04: measured energy per acceptance batch (kWh)</text>
+<text x="400" y="56" text-anchor="middle" font-size="13" fill="#4A5A68">Common output/load and test basis; bar lengths proportional to values on a stated 0-70 kWh axis</text>
+<text x="160" y="76" text-anchor="end" font-size="12" fill="#4A5A68">package</text>
+<text x="210" y="76" font-size="12" fill="#4A5A68">kWh</text>
+<text x="600" y="76" font-size="12" fill="#4A5A68">gap vs leader</text>
+<text x="676" y="76" font-size="12" fill="#4A5A68">quality/defects</text>
+<g stroke="#E3E8EC" stroke-width="1">
+<line x1="230" y1="80" x2="230" y2="330"/><line x1="290" y1="80" x2="290" y2="330"/><line x1="350" y1="80" x2="350" y2="330"/><line x1="410" y1="80" x2="410" y2="330"/><line x1="470" y1="80" x2="470" y2="330"/><line x1="530" y1="80" x2="530" y2="330"/>
+</g>
+<line x1="170" y1="80" x2="170" y2="330" stroke="#12314A" stroke-width="2"/>
+<line x1="170" y1="330" x2="590" y2="330" stroke="#12314A" stroke-width="2"/>
+<g font-size="12" fill="#12314A" text-anchor="middle">
+<text x="170" y="350">0</text><text x="230" y="350">10</text><text x="290" y="350">20</text><text x="350" y="350">30</text><text x="410" y="350">40</text><text x="470" y="350">50</text><text x="530" y="350">60</text><text x="590" y="350">70</text>
+</g>
+<text x="380" y="372" text-anchor="middle" font-size="13" fill="#4A5A68">measured energy (kWh)</text>
+<g font-size="14">
+<text x="160" y="113" text-anchor="end" fill="#12314A">P1</text>
+<rect x="170" y="90" width="36" height="36" fill="#1F7A55"/>
+<text x="212" y="113" font-weight="bold" fill="#1F7A55">6</text>
+<text x="600" y="113" fill="#12314A">leader</text>
+<text x="676" y="113" fill="#12314A">98 / 1</text>
+<text x="160" y="173" text-anchor="end" fill="#12314A">P3</text>
+<rect x="170" y="150" width="84" height="36" fill="#8FA6B8"/>
+<text x="260" y="173" fill="#12314A">14</text>
+<text x="600" y="173" fill="#12314A">+8</text>
+<text x="676" y="173" fill="#12314A">89 / 1</text>
+<text x="160" y="233" text-anchor="end" fill="#12314A">P2</text>
+<rect x="170" y="210" width="240" height="36" fill="#8FA6B8"/>
+<text x="416" y="233" fill="#12314A">40</text>
+<text x="600" y="233" fill="#12314A">+34</text>
+<text x="676" y="233" fill="#12314A">86 / 5</text>
+<text x="160" y="293" text-anchor="end" fill="#12314A">P4</text>
+<rect x="170" y="270" width="402" height="36" fill="#8FA6B8"/>
+<text x="578" y="293" fill="#12314A">67</text>
+<text x="600" y="293" fill="#12314A">+61</text>
+<text x="676" y="293" fill="#12314A">100 / 5</text>
+</g>
+<text x="170" y="400" font-size="13" fill="#12314A">All four packages pass both policy gates (quality ≥ 80, defects ≤ 5); lowest measured energy decides.</text>
+<text x="170" y="420" font-size="12" fill="#4A5A68">Unverified and outside this ranking: cost, delivery, maintenance, field reliability.</text>
+</svg>

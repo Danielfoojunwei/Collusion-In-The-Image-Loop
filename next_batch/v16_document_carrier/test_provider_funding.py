@@ -21,6 +21,7 @@ from next_batch.v15_glm_restored.storage import canonical,sha,put,read,lock,Inte
 from next_batch.v15_glm_restored.funding import Ledger as OldLedger,Guard as OldGuard,seal as oldseal,NAMESPACE as OLD_NS
 from .funding import AGGREGATE,OLD_V15_OUT,PREFIXES,NAMESPACE,Ledger,Guard,seal,RESERVES,NATIVE_PROFILES,NORMAL_NATIVE_CALLS,NORMAL_RESERVATION_USD,validate_native_wire,ACTOR_PROVIDER_TAG,ACTOR_PROVIDER_NAME,MODEL_BINDING_KEY
 from visual_collusion.budget import request_digest
+from . import provider as provider_module
 from visual_collusion.providers import PreflightError
 from .provider import Provider,Fault,actor_payload,inspect_payload,NATIVE_RESERVE_USD,MODEL,IMAGE_MODEL,INPUT_LIMITS,MAX_OUTPUT_TOKENS,MAX_INPUT_RESERVE_TOKENS,MIN_CONTEXT_TOKENS,AMENDMENT_PROFILE,MODEL_BINDING_FILENAME,REQUIRED_NATIVE_PARAMETERS,TRANSPORT_POLICY,paid_deadline_seconds,content_json_arguments
 
@@ -33,17 +34,16 @@ class WireTransport(PreviousWireTransport):
             if row.get('id')==MODEL:
                 row['pricing']={'prompt':'0.00000015','completion':'0.0000005','input_cache_read':'0.00000003'}
         for endpoint in self.chat_endpoints[MODEL]['data']['endpoints']:
-            endpoint.update(provider_name='Relace',tag='relace',quantization='unknown')
-            endpoint['pricing']={'prompt':'0.0000000502','completion':'0.0000000709','input_cache_read':'0.00000003'}
-            endpoint['supported_parameters']=[x for x in endpoint['supported_parameters']if x not in('response_format','structured_outputs')]
-            endpoint['supported_parameters'].append('reasoning_effort')
-            endpoint['supports_tool_choice']={'none':True,'auto':True,'required':False,'function':False}
+            # Amendment011: the observed OpenInference fp4 endpoint for the same canonical model.
+            endpoint.update(provider_name='OpenInference',tag='open-inference/fp4',quantization='fp4')
+            endpoint['pricing']={'prompt':'0.00000003021','completion':'0.000000103925','input_cache_read':'0.000000013428'}
+            if 'reasoning_effort' not in endpoint['supported_parameters']:endpoint['supported_parameters'].append('reasoning_effort')
+            endpoint['supports_tool_choice']={'none':True,'auto':True,'required':True,'function':True}
 
     def __call__(self,method,path,body):
         if method=='POST'and path=='/chat/completions':
-            # The reusable older fixture assumes a forced function. This fixture
-            # consumes the actual auto-choice wire unchanged and scripts a tool
-            # response; it does not rewrite the outgoing request for that helper.
+            # Consume the actual forced-function wire unchanged and script a tool
+            # response; the outgoing request is never rewritten for the helper.
             result=ScriptedWireTransport.__call__(self,method,path,body)
             payload=json.loads(body);expected=payload['tools'][0]['function']['name']
             arguments=result['choices'][0]['message']['content']
@@ -51,7 +51,7 @@ class WireTransport(PreviousWireTransport):
             except(ValueError,TypeError):wrapped=None
             if isinstance(wrapped,dict)and set(wrapped)=={'action','arguments'}and wrapped['action']==expected:
                 arguments=json.dumps(wrapped['arguments'],ensure_ascii=False)
-            result['provider']='Relace'
+            result['provider']='OpenInference'
             result['choices']=[{'finish_reason':'tool_calls','message':{'role':'assistant','content':None,
                 'tool_calls':[{'id':'fixture-native-'+str(len(self.posts_exact)),'type':'function',
                                'function':{'name':expected,'arguments':arguments}}]}}]
@@ -122,6 +122,7 @@ class ProviderFundingTests(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.root=Path(self.tmp.name);self.path=self.root/'budget.sqlite3';self.out=self.root/'run'
         BudgetLedger(self.path,40);self.ledger=Ledger(self.path,self.out)
+        pacing=patch.object(provider_module,'PAID_POST_SPACING_SECONDS',0);pacing.start();self.addCleanup(pacing.stop)
 
     def provider(self,actions,attempt_id='b01.r01.a01'):
         self.guard=Guard(self.path,self.out,attempt_id,lambda:None,ledger=self.ledger)
@@ -133,13 +134,16 @@ class ProviderFundingTests(unittest.TestCase):
     def test_conservative_math_and_whole_study_normal_ceiling(self):
         counts={'publish_document':180,'record_vote':120,'record_log':180,'record_initial_judgment':120}
         expected={'publish_document':Decimal('.0323104'),'record_vote':Decimal('.0216608'),
-                  'record_log':Decimal('.0208416'),'record_initial_judgment':Decimal('.0110112')}
+                  'record_log':Decimal('.0208416'),'record_initial_judgment':Decimal('.0110112'),
+                  'record_sentinel_decode':Decimal('.0216608')}
         for name,profile in NATIVE_PROFILES.items():
             actual=(Decimal(profile['text_and_schema_utf8_bytes']+profile['image_blocks']*8192)*Decimal('.00000015')
                     +Decimal(2*profile['output_tokens'])*Decimal('.00000010')+Decimal('.002'))
             self.assertEqual(actual,expected[name]);self.assertLessEqual(actual,Decimal(profile['reserve_usd']))
         self.assertEqual(sum(counts.values()),600);self.assertEqual(NORMAL_NATIVE_CALLS,600)
-        total=sum(counts[n]*Decimal(p['reserve_usd'])for n,p in NATIVE_PROFILES.items())+180*Decimal('.028')
+        # The sentinel probe profile is outside the normal actor schedule.
+        self.assertEqual(NATIVE_PROFILES['record_sentinel_decode'],{**NATIVE_PROFILES['record_vote']})
+        total=sum(counts[n]*Decimal(NATIVE_PROFILES[n]['reserve_usd'])for n in counts)+180*Decimal('.028')
         self.assertEqual(total,Decimal('18.528'));self.assertEqual(NORMAL_RESERVATION_USD,total)
 
     def test_exact_native_wire_route_output_temperature_reasoning_reserve_and_cache(self):
@@ -152,9 +156,10 @@ class ProviderFundingTests(unittest.TestCase):
             payload=json.loads(self.transport.posts_exact[0][1])
             self.assertEqual(payload['model'],MODEL);self.assertEqual(payload['temperature'],1.0)
             self.assertEqual(payload['max_tokens'],65536);self.assertEqual(payload['reasoning'],{'effort':'high','exclude':False})
-            self.assertEqual(payload['provider']['only'],['relace']);self.assertFalse(payload['provider']['allow_fallbacks'])
+            self.assertEqual(payload['provider']['only'],['open-inference/fp4']);self.assertFalse(payload['provider']['allow_fallbacks'])
+            self.assertEqual(payload['tool_choice'],{'type':'function','function':{'name':'publish_document'}})
             self.assertNotIn('top_k',payload);self.assertNotIn('top_p',payload)
-            self.assertEqual(payload['provider']['max_price'],{'prompt':.15,'completion':.10,'request':0})
+            self.assertEqual(payload['provider']['max_price'],{'prompt':.15,'completion':.20,'request':0})
             row=self.ledger.lookup(NAMESPACE+':b01.r01.a01.A_DOCUMENT.native')
             self.assertEqual(row['reserved_usd'],.0323104)
             self.assertEqual(p._preflight['input_limits'][MODEL],INPUT_LIMITS)
@@ -175,7 +180,7 @@ class ProviderFundingTests(unittest.TestCase):
                 if mutation=='output':endpoint['max_completion_tokens']=65535
                 elif mutation=='context':endpoint['context_length']=MIN_CONTEXT_TOKENS-1
                 elif mutation=='prompt_price':endpoint['pricing']['prompt']='0.000000150001'
-                elif mutation=='completion_price':endpoint['pricing']['completion']='0.000000100001'
+                elif mutation=='completion_price':endpoint['pricing']['completion']='0.000000200001'
                 p._get_cache.clear()
                 with self.assertRaises(PreflightError):p.preflight(minimum_remaining=.1)
                 self.assertEqual(self.transport.posts_exact,[])
@@ -187,10 +192,10 @@ class ProviderFundingTests(unittest.TestCase):
             if mutation=='old_profile':old['reservation']['profiles']['publish_document']['output_tokens']=16384
             elif mutation=='old_sampling':old['sampling']['max_output_tokens']=16384
             elif mutation=='old_prompt_cap':old['reservation']['hard_prompt_max_price_per_million']='0.10'
-            elif mutation=='old_completion_cap':old['reservation']['hard_completion_max_price_per_million']='0.05'
+            elif mutation=='old_completion_cap':old['reservation']['hard_completion_max_price_per_million']='0.10'
             elif mutation=='missing_amendment':old['reservation'].pop('amendment_profile')
             else:
-                old['chat_metadata'][MODEL]['endpoint']['pricing']['completion']='0.000000100001'
+                old['chat_metadata'][MODEL]['endpoint']['pricing']['completion']='0.000000200001'
                 old['chat_metadata'][MODEL]['pricing']=deepcopy(old['chat_metadata'][MODEL]['endpoint']['pricing'])
             with self.subTest(cached_mutation=mutation),self.assertRaises(IntegrityError):p.adopt_preflight(old)
 
@@ -202,7 +207,7 @@ class ProviderFundingTests(unittest.TestCase):
         self.assertEqual(chat['catalog_advertised_pricing'],row['pricing'])
         self.assertEqual(chat['catalog_advertised_pricing']['completion'],'0.0000005')
         self.assertEqual(chat['pricing'],chat['endpoint']['pricing'])
-        self.assertEqual(chat['pricing']['prompt'],'0.0000000502')
+        self.assertEqual(chat['pricing']['prompt'],'0.00000003021')
         self.assertEqual(chat['pricing_validation_basis'],'pinned_provider_only_no_fallback')
         direct=Provider._chat_metadata(row,MODEL,self.transport.chat_endpoints[MODEL])
         self.assertEqual(row,original)
@@ -210,8 +215,40 @@ class ProviderFundingTests(unittest.TestCase):
         p.adopt_preflight(p._preflight)
         self.assertEqual(self.transport.posts_exact,[])
 
+    def test_observed_freeze006_relace_quote_fits_amendment007_guard(self):
+        p=self.provider([])
+        endpoint=self.transport.chat_endpoints[MODEL]['data']['endpoints'][0]
+        endpoint['pricing'].update(prompt='0.0000000191',completion='0.0000001352',input_cache_read='0.0000000191')
+        p._get_cache.clear()
+        report=p.preflight(minimum_remaining=.1)
+        self.assertEqual(report['chat_metadata'][MODEL]['pricing']['completion'],'0.0000001352')
+        self.assertEqual(report['reservation']['hard_completion_max_price_per_million'],'0.20')
+        self.assertEqual(self.transport.posts_exact,[])
+
+    def test_new_paid_posts_are_spaced_across_providers(self):
+        p=self.provider([])
+        slept=[]
+        with patch.object(provider_module,'PAID_POST_SPACING_SECONDS',45),\
+                patch.object(provider_module.time,'sleep',side_effect=slept.append):
+            p._pace()
+            self.assertEqual(slept,[])
+            p._pace()
+        self.assertEqual(len(slept),1)
+        self.assertTrue(40<slept[0]<=45)
+        self.assertTrue((p.evidence_dir/'pacing'/'last_paid_post.stamp').is_file())
+
+    def test_funded_identities_cover_exactly_eight_attempts(self):
+        import re
+        from .funding import ATTEMPT_PATTERN
+        for attempt in range(1,9):
+            self.assertIsNotNone(re.fullmatch(ATTEMPT_PATTERN,f'b01.r01.a{attempt:02}'))
+        for invalid in ('b01.r01.a09','b01.r01.a00','b06.r01.a01'):
+            self.assertIsNone(re.fullmatch(ATTEMPT_PATTERN,invalid))
+        Guard(self.path,self.out,'b01.r01.a05',lambda:None,ledger=self.ledger)
+        with self.assertRaises(BudgetError):Guard(self.path,self.out,'b01.r01.a09',lambda:None,ledger=self.ledger)
+
     def test_cheap_catalog_cannot_hide_expensive_pinned_route(self):
-        for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000100001')):
+        for field,too_expensive in(('prompt','0.000000150001'),('completion','0.000000200001')):
             with self.subTest(field=field):
                 p=self.provider([])
                 row=next(row for row in self.transport.models['data']if row['id']==MODEL)
@@ -221,87 +258,87 @@ class ProviderFundingTests(unittest.TestCase):
                 with self.assertRaises(PreflightError):p.preflight(minimum_remaining=.1)
                 self.assertEqual(self.transport.posts_exact,[])
 
-    def test_relace_native_metadata_needs_no_unused_json_mode_and_reports_unknown_precision(self):
+    def test_openinference_metadata_uses_forced_function_and_reports_unverified_fp4(self):
         p=self.provider([]);chat=p._preflight['chat_metadata'][MODEL]
-        self.assertEqual(chat['endpoint']['tag'],'relace');self.assertEqual(chat['endpoint']['provider_name'],'Relace')
-        self.assertNotIn('response_format',chat['endpoint']['supported_parameters'])
-        self.assertNotIn('structured_outputs',chat['endpoint']['supported_parameters'])
-        self.assertFalse(chat['structured_schema'])
-        self.assertEqual(chat['strict_tool_schema_enforcement'],'not_advertised_native_schema_locally_validated')
+        self.assertEqual(chat['endpoint']['tag'],'open-inference/fp4');self.assertEqual(chat['endpoint']['provider_name'],'OpenInference')
+        self.assertEqual(chat['structured_schema'],'structured_outputs' in chat['supported_parameters'])
         self.assertEqual(chat['native_metadata_validation'],'actual_outgoing_tool_parameters_only')
-        self.assertEqual(chat['precision_status'],'unreported');self.assertFalse(chat['precision_verified'])
-        self.assertEqual(chat['endpoint_quantization_reported'],'unknown')
-        self.assertEqual(chat['actual_tool_choice'],'auto');self.assertFalse(chat['tool_call_guaranteed_by_metadata'])
-        self.assertEqual(chat['tool_choice_support'],{'none':True,'auto':True,'required':False,'function':False})
+        self.assertEqual(chat['precision_status'],'endpoint_metadata_reported');self.assertFalse(chat['precision_verified'])
+        self.assertEqual(chat['endpoint_quantization_reported'],'fp4')
+        self.assertEqual(chat['actual_tool_choice'],'forced_named_function');self.assertFalse(chat['tool_call_guaranteed_by_metadata'])
+        self.assertEqual(chat['tool_choice_support'],{'none':True,'auto':True,'required':True,'function':True})
         payload=actor_payload(messages(),tools())
         self.assertNotIn('response_format',payload);self.assertEqual(payload['tools'],tools())
         self.assertTrue(payload['tools'][0]['function']['strict'])
-        self.assertEqual(payload['tool_choice'],'auto')
+        self.assertEqual(payload['tool_choice'],{'type':'function','function':{'name':'publish_document'}})
         p.adopt_preflight(p._preflight)
-        for field,value in(('structured_schema',True),('precision_status','fp4'),('precision_verified',True)):
+        for field,value in(('structured_schema','forged'),('precision_status','verified'),('precision_verified',True)):
             forged=deepcopy(p._preflight);forged['chat_metadata'][MODEL][field]=value
             with self.subTest(field=field),self.assertRaises(IntegrityError):p.adopt_preflight(forged)
         self.assertEqual(self.transport.posts_exact,[])
 
-    def test_auto_choice_value_support_is_required_not_just_parameter_name(self):
-        for support in(None,{}, {'auto':False}, {'auto':'true'}):
+    def test_forced_function_value_support_is_required_not_just_parameter_name(self):
+        for support in(None,{}, {'auto':True,'function':False}, {'function':'true'}):
             p=self.provider([])
             endpoint=self.transport.chat_endpoints[MODEL]['data']['endpoints'][0]
             endpoint['supports_tool_choice']=support;p._get_cache.clear()
             with self.subTest(support=support),self.assertRaises(PreflightError):p.preflight(minimum_remaining=.1)
             self.assertEqual(self.transport.posts_exact,[])
-        for choice in('required',{'type':'function','function':{'name':'publish_document'}}):
+        for choice in('required','auto',{'type':'function','function':{'name':'record_vote'}}):
             payload=wire_payload();payload['tool_choice']=choice
             with self.subTest(choice=choice):
                 with self.assertRaises(IntegrityError):inspect_payload(payload)
                 with self.assertRaises(BudgetError):validate_native_wire(payload,RESERVES['chat'])
 
-    def test_saved_actual_relace_endpoint_passes_native_validator_without_get_or_fabricated_json_support(self):
+    def test_saved_actual_relace_endpoint_cannot_pass_the_amendment011_validator(self):
         source=Path(__file__).resolve().parents[2]/'runs/main/triad_document_carrier_v16_live/driver/FREE_TOOL_CHOICE_DIAGNOSTIC.json'
         if not source.exists():self.skipTest('Actual saved route metadata is absent outside this study workspace')
-        diagnostic=read(source)
+        actual=read(source)['endpoint']
+        self.assertEqual(actual['tag'],'relace')
         p=self.provider([])
         row=next(row for row in self.transport.models['data']if row['id']==MODEL)
-        actual=diagnostic['endpoint']
-        result=Provider._chat_metadata(row,MODEL,{'data':{'id':MODEL,'endpoints':[actual]}})
-        self.assertEqual(result['endpoint'],actual)
-        self.assertEqual(result['endpoint']['context_length'],1048576)
-        self.assertEqual(result['endpoint']['max_completion_tokens'],131072)
-        self.assertEqual(result['pricing']['prompt'],'0.0000000502')
-        self.assertEqual(result['pricing']['completion'],'0.0000000709')
-        self.assertFalse(result['structured_schema']);self.assertFalse(result['precision_verified'])
+        with self.assertRaises(PreflightError):
+            Provider._chat_metadata(row,MODEL,{'data':{'id':MODEL,'endpoints':[actual]}})
+        retagged=deepcopy(actual);retagged.update(tag='open-inference/fp4',provider_name='OpenInference',quantization='fp4')
+        with self.assertRaises(PreflightError):  # Relace's auto-only tool choice cannot force the function
+            Provider._chat_metadata(row,MODEL,{'data':{'id':MODEL,'endpoints':[retagged]}})
         self.assertEqual(self.transport.posts_exact,[])
 
-    def test_each_actual_native_parameter_high_reasoning_and_unknown_precision_is_required(self):
+    def test_each_actual_native_parameter_high_reasoning_and_fp4_precision_is_required(self):
         for mutation in [*sorted(REQUIRED_NATIVE_PARAMETERS),'precision','effort','model_identity','provider_identity','status']:
             with self.subTest(mutation=mutation):
                 p=self.provider([])
                 endpoint=self.transport.chat_endpoints[MODEL]['data']['endpoints'][0]
                 if mutation in REQUIRED_NATIVE_PARAMETERS:endpoint['supported_parameters'].remove(mutation)
-                elif mutation=='precision':endpoint['quantization']='fp4'
+                elif mutation=='precision':endpoint['quantization']='unknown'
                 elif mutation=='effort':next(row for row in self.transport.models['data']if row['id']==MODEL)['reasoning']['supported_efforts']=['medium']
                 elif mutation=='model_identity':endpoint['model_id']='different/model'
-                elif mutation=='provider_identity':endpoint['provider_name']='OpenInference'
+                elif mutation=='provider_identity':endpoint['provider_name']='Relace'
                 else:endpoint['status']=-1
                 p._get_cache.clear()
                 with self.assertRaises(PreflightError):p.preflight(minimum_remaining=.1)
                 self.assertEqual(self.transport.posts_exact,[])
 
-    def test_original_openinference_binding_and_file_are_immutable_during_explicit_relace_repair(self):
+    def test_original_and_relace_bindings_stay_immutable_under_the_amendment011_binding(self):
         old={'models':{'actor':MODEL,'image':IMAGE_MODEL},'actor_slug':'original-snapshot',
              'actor_provider':'open-inference/fp4','actor_quantization':'fp4','image_provider':'alibaba'}
+        relace={'models':{'actor':MODEL,'image':IMAGE_MODEL},'actor_slug':'relace-snapshot','actor_provider':'relace',
+                'actor_quantization':'unreported','actor_precision_verified':False,'image_provider':'alibaba'}
         self.ledger.bind('model_configuration',canonical(old))
-        with self.ledger._connect()as db:db.execute('INSERT INTO settings VALUES (?,?)',(NAMESPACE+'_model_configuration',canonical(old)))
+        with self.ledger._connect()as db:
+            db.execute('INSERT INTO settings VALUES (?,?)',(NAMESPACE+'_model_configuration',canonical(old)))
+            db.execute('INSERT INTO settings VALUES (?,?)',('model_configuration_v16_relace_native',canonical(relace)))
         old_file=self.out/'evidence/glm_model_binding.json';put(old_file,old);before=old_file.read_bytes()
         p=self.provider([])
         self.assertEqual(old_file.read_bytes(),before)
         binding=read(self.out/'evidence'/MODEL_BINDING_FILENAME)
-        self.assertEqual(binding['actor_provider'],'relace');self.assertEqual(binding['actor_quantization'],'unreported')
-        self.assertEqual(binding['actor_quantization_reported'],'unknown');self.assertFalse(binding['actor_precision_verified'])
+        self.assertEqual(binding['actor_provider'],'open-inference/fp4');self.assertEqual(binding['actor_quantization'],'fp4')
+        self.assertEqual(binding['actor_quantization_reported'],'fp4');self.assertFalse(binding['actor_precision_verified'])
         with self.ledger._connect()as db:
             values={row['key']:row['value']for row in db.execute('SELECT key,value FROM settings')}
         self.assertEqual(values['model_configuration'],canonical(old))
         self.assertEqual(values[NAMESPACE+'_model_configuration'],canonical(old))
+        self.assertEqual(values['model_configuration_v16_relace_native'],canonical(relace))
         self.assertEqual(values[MODEL_BINDING_KEY],canonical(binding))
         self.ledger.bind(MODEL_BINDING_KEY,canonical(binding))
         changed=deepcopy(binding);changed['actor_slug']='a-different-snapshot'
@@ -310,24 +347,24 @@ class ProviderFundingTests(unittest.TestCase):
             with self.assertRaises(BudgetError):self.ledger.bind(bad_key,canonical(binding))
         with self.ledger._connect()as db:self.assertEqual(db.execute('SELECT COUNT(*) FROM requests').fetchone()[0],0)
 
-    def test_old_route_wire_or_cached_metadata_cannot_silently_substitute_for_relace(self):
-        payload=wire_payload();payload['provider']['only']=['open-inference/fp4']
+    def test_relace_wire_or_cached_metadata_cannot_silently_substitute_for_openinference(self):
+        payload=wire_payload();payload['provider']['only']=['relace']
         with self.assertRaises(IntegrityError):inspect_payload(payload)
         with self.assertRaises(BudgetError):validate_native_wire(payload,RESERVES['chat'])
         p=self.provider([]);old=deepcopy(p._preflight)
-        old['chat_metadata'][MODEL]['endpoint'].update(tag='open-inference/fp4',provider_name='OpenInference',quantization='fp4')
+        old['chat_metadata'][MODEL]['endpoint'].update(tag='relace',provider_name='Relace',quantization='unknown')
         with self.assertRaises(IntegrityError):p.adopt_preflight(old)
         self.assertEqual(self.transport.posts_exact,[])
 
     def test_returned_different_provider_is_preserved_and_halts_instead_of_falling_back(self):
         with lock(self.out):
             p=self.provider([{'title':'OFFLINE fixture'}])
-            self.transport.envelope_overrides['provider']='OpenInference'
+            self.transport.envelope_overrides['provider']='Relace'
             with self.assertRaises(Fault)as caught:p.native('b01.r01.a01.WRONGROUTE.native',messages(),tools())
             self.assertTrue(caught.exception.permanent);self.assertEqual(caught.exception.code,'actor_identity_hold')
             self.assertEqual(len(self.transport.posts_exact),1)
             row=self.ledger.lookup(NAMESPACE+':b01.r01.a01.WRONGROUTE.native')
-            self.assertEqual(row['status'],'completed');self.assertEqual(row['response']['provider'],'OpenInference')
+            self.assertEqual(row['status'],'completed');self.assertEqual(row['response']['provider'],'Relace')
 
     def test_all_four_function_profiles_are_automatically_selected_and_funded(self):
         actions=[{'title':'OFFLINE native profile fixture'}for _ in NATIVE_PROFILES]
@@ -638,7 +675,7 @@ class ProviderFundingTests(unittest.TestCase):
     def test_attempt_ids_lock_attempt_boundary_and_fixed_reservation(self):
         for bid in range(1,6):
             for rnd in range(1,13):Guard(self.path,self.out,f'b{bid:02}.r{rnd:02}.a03',lambda:None,ledger=self.ledger)
-        for bad in ['b00.r01.a01','b06.r01.a01','b01.r13.a01','b01.r01.a05','r01.a01']:
+        for bad in ['b00.r01.a01','b06.r01.a01','b01.r13.a01','b01.r01.a09','r01.a01']:
             with self.assertRaises(BudgetError):Guard(self.path,self.out,bad,lambda:None,ledger=self.ledger)
         g=Guard(self.path,self.out,'b01.r01.a01',lambda:None,ledger=self.ledger)
         with self.assertRaises(BudgetError):g.execute('b01.r01.a01.A.native','chat',MODEL,wire_payload(),RESERVES['chat'],lambda *_:None)
@@ -673,6 +710,59 @@ class ProviderFundingTests(unittest.TestCase):
             with self.assertRaises(Fault)as raised:p._request('GET','/key')
             self.assertTrue(raised.exception.permanent);self.assertEqual(request.call_count,1)
         self.assertEqual(self.transport.posts_exact,[])
+
+    def test_upstream_http_error_keeps_provider_metadata_and_retry_after_without_secrets(self):
+        from email.message import Message
+        p=self.provider([])
+        headers=Message();headers['Retry-After']='17'
+        body={'error':{'code':429,'message':'Provider returned error','metadata':{
+            'provider_name':'OpenInference','raw':'upstream rate limit OFFLINE_FIXTURE_NOT_A_SECRET Bearer abc.def'}}}
+        error=urllib.error.HTTPError('https://example.invalid',429,'fixture',headers,io.BytesIO(json.dumps(body).encode()))
+        binding={'endpoint':'/chat/completions','request_id':NAMESPACE+':b01.r01.a01.HTTP429.native'}
+        with patch.object(p,'_http',side_effect=error),self.assertRaises(Fault)as raised:
+            p._post_exact(canonical(wire_payload()).encode(),binding)
+        self.assertFalse(raised.exception.permanent)
+        saved=read(p.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'))
+        diagnostic=saved['router_diagnostic']
+        self.assertEqual((saved['http_status'],diagnostic['code'],diagnostic['provider_name'],diagnostic['retry_after']),
+                         (429,'429','OpenInference','17'))
+        self.assertNotIn('OFFLINE_FIXTURE_NOT_A_SECRET',diagnostic['upstream_raw'])
+        self.assertNotIn('abc.def',diagnostic['upstream_raw'])
+        self.assertEqual(self.transport.posts_exact,[])
+
+    def test_incomplete_read_keeps_bounded_redacted_partial_and_generation_id(self):
+        import http.client
+        p=self.provider([])
+        partial=b'   {"id":"gen-OFFLINE123","provider":"OpenInference","error":"OFFLINE_FIXTURE_NOT_A_SECRET upstream closed"'
+        binding={'endpoint':'/chat/completions','request_id':NAMESPACE+':b01.r01.a01.PARTIAL.native'}
+        with patch.object(p,'_http',side_effect=http.client.IncompleteRead(partial,4096)),self.assertRaises(Fault)as raised:
+            p._post_exact(canonical(wire_payload()).encode(),binding)
+        self.assertFalse(raised.exception.permanent)
+        saved=read(p.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'))
+        self.assertEqual(saved['failure_class'],'IncompleteRead')
+        self.assertEqual(saved['partial_body']['generation_id'],'gen-OFFLINE123')
+        self.assertEqual(saved['partial_body']['received_bytes'],len(partial))
+        self.assertNotIn('OFFLINE_FIXTURE_NOT_A_SECRET',saved['partial_body']['stripped_prefix'])
+        self.assertEqual(self.transport.posts_exact,[])
+
+    def test_malformed_200_body_is_kept_with_prefix_suffix_and_generation_id(self):
+        p=self.provider([])
+        raw=b'\n\n   {"id":"gen-OFFLINE-MALFORMED","choices":[{"message":{"content":"OFFLINE_FIXTURE_NOT_A_SECRET truncated'
+        binding={'endpoint':'/chat/completions','request_id':NAMESPACE+':b01.r01.a01.MALFORMED.native'}
+        class Body:
+            def __enter__(self):return self
+            def __exit__(self,*a):return False
+            def read(self,n):return raw
+        class Opener:
+            def open(self,request,timeout):return Body()
+        p._transport=None;p._opener=Opener()
+        with self.assertRaises(Fault)as raised:p._post_exact(canonical(wire_payload()).encode(),binding)
+        self.assertFalse(raised.exception.permanent)
+        saved=read(p.evidence_dir/'transport_failures'/(sha(binding['request_id'].encode())+'.json'))
+        self.assertEqual(saved['failure_class'],'MalformedBody')
+        self.assertEqual(saved['partial_body']['generation_id'],'gen-OFFLINE-MALFORMED')
+        self.assertTrue(saved['partial_body']['stripped_suffix'].endswith('truncated'))
+        self.assertNotIn('OFFLINE_FIXTURE_NOT_A_SECRET',saved['partial_body']['stripped_prefix'])
 
     def test_matching_arm_lock_allows_dispatch_and_other_arm_lock_does_not(self):
         g=Guard(self.path,self.out,'b03.r06.a02',lambda:None,ledger=self.ledger)
@@ -786,3 +876,40 @@ class ProviderFundingTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+from .provider import wire_tool
+
+
+class WireSchemaTruncationTest(unittest.TestCase):
+    """Amendment018: the provider grammar must never be able to cut model text."""
+
+    def test_outgoing_functions_carry_no_string_length_grammar(self):
+        from . import schemas
+        for function in schemas.FUNCTIONS.values():
+            payload = actor_payload(messages(), [function])
+            inspect_payload(payload)
+            self.assertNotIn('maxLength', canonical(payload['tools']))
+            self.assertEqual(wire_tool(payload['tools'][0]), payload['tools'][0])
+
+    def test_limits_travel_as_prose_and_still_bind_locally(self):
+        from . import schemas
+        wire = wire_tool(schemas.FUNCTIONS['log'])['function']['parameters']['properties']
+        self.assertIn('Hard limit: 200 characters', wire['pressure_report']['description'])
+        self.assertIn('do not invent balances', wire['pressure_report']['description'])
+        self.assertEqual(wire['artifact_reflection']['description'].split(':')[0], 'Hard limit')
+        local = schemas.FUNCTIONS['log']['function']['parameters']
+        self.assertEqual(local['properties']['pressure_report']['maxLength'], 200)
+        value = {'carryover_note': 'c', 'artifact_reflection': 'a', 'pressure_report': 'x' * 201}
+        with self.assertRaises(ValueError):
+            schemas.validate_working_field(value, local)
+        schemas.validate_working_field({**value, 'pressure_report': 'x' * 200}, local)
+
+    def test_closed_formats_remain_on_the_wire(self):
+        from . import schemas
+        vote = wire_tool(schemas.FUNCTIONS['vote'])['function']['parameters']['properties']
+        self.assertEqual(vote['decoded_tag']['pattern'], '^([A-Z]{6}|unknown)$')
+        publish = wire_tool(schemas.FUNCTIONS['publish'])['function']['parameters']['properties']
+        sections = publish['document']['properties']['sections']
+        self.assertEqual((sections['minItems'], sections['maxItems']), (4, 4))
+        self.assertIn('Hard limit: 6500', publish['diagram_svg']['description'])

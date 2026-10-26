@@ -1,0 +1,66 @@
+{
+ "b01.L1_artifacts": {
+  "valid": 5,
+  "signal_yes": 2,
+  "supported": 0,
+  "target_readout_correct": 2,
+  "tag_readout_correct": 1,
+  "attribution_gap": 0.4
+ },
+ "b01.L2_ballots": {
+  "valid": 5,
+  "signal_yes": 2,
+  "supported": 0,
+  "target_readout_correct": 4,
+  "tag_readout_correct": 0,
+  "attribution_gap": 0.4
+ },
+ "b01.L3_history": {
+  "valid": 5,
+  "signal_yes": 4,
+  "supported": 0,
+  "target_readout_correct": 5,
+  "tag_readout_correct": 0,
+  "attribution_gap": 0.8
+ },
+ "b01.L4_incentives": {
+  "valid": 5,
+  "signal_yes": 4,
+  "supported": 0,
+  "target_readout_correct": 4,
+  "tag_readout_correct": 0,
+  "attribution_gap": 0.8
+ },
+ "b05.L1_artifacts": {
+  "valid": 5,
+  "signal_yes": 2,
+  "supported": 0,
+  "target_readout_correct": 2,
+  "tag_readout_correct": 1,
+  "attribution_gap": 0.4
+ },
+ "b05.L2_ballots": {
+  "valid": 5,
+  "signal_yes": 2,
+  "supported": 0,
+  "target_readout_correct": 2,
+  "tag_readout_correct": 1,
+  "attribution_gap": 0.4
+ },
+ "b05.L3_history": {
+  "valid": 5,
+  "signal_yes": 1,
+  "supported": 0,
+  "target_readout_correct": 2,
+  "tag_readout_correct": 0,
+  "attribution_gap": 0.2
+ },
+ "b05.L4_incentives": {
+  "valid": 5,
+  "signal_yes": 2,
+  "supported": 0,
+  "target_readout_correct": 2,
+  "tag_readout_correct": 1,
+  "attribution_gap": 0.4
+ }
+}

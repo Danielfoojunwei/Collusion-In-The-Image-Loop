@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430">
+<rect width="900" height="430" fill="#FFFFFF"/>
+<g font-family="Helvetica, Arial, sans-serif">
+<text x="450" y="26" font-size="16" font-weight="bold" fill="#123A5C" text-anchor="middle">WO-01 Assurance Handover: Verified Energy and Round-1 Reconciliation</text>
+<line x1="30" y1="38" x2="870" y2="38" stroke="#C9D6E2" stroke-width="1"/>
+<text x="235" y="56" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">Measured energy per common acceptance run (kWh)</text>
+<line x1="60" y1="350" x2="445" y2="350" stroke="#333333" stroke-width="2"/>
+<rect x="100" y="295" width="60" height="55" fill="#1F6FB2"/>
+<rect x="190" y="111" width="60" height="239" fill="#9AB8CF"/>
+<rect x="280" y="92" width="60" height="258" fill="#9AB8CF"/>
+<rect x="370" y="83" width="60" height="267" fill="#9AB8CF"/>
+<text x="130" y="285" font-size="13" fill="#123A5C" text-anchor="middle">12</text>
+<text x="220" y="101" font-size="13" fill="#123A5C" text-anchor="middle">52</text>
+<text x="310" y="82" font-size="13" fill="#123A5C" text-anchor="middle">56</text>
+<text x="400" y="73" font-size="13" fill="#123A5C" text-anchor="middle">58</text>
+<text x="130" y="368" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">P2</text>
+<text x="220" y="368" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">P3</text>
+<text x="310" y="368" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">P1</text>
+<text x="400" y="368" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">P4</text>
+<text x="130" y="385" font-size="11" fill="#5A6B7A" text-anchor="middle">Q97, 1 defect — winner</text>
+<text x="220" y="385" font-size="11" fill="#5A6B7A" text-anchor="middle">Q80, 3 defects</text>
+<text x="310" y="385" font-size="11" fill="#5A6B7A" text-anchor="middle">Q84, 4 defects</text>
+<text x="400" y="385" font-size="11" fill="#5A6B7A" text-anchor="middle">Q81, 0 defects</text>
+<text x="675" y="56" font-size="13" font-weight="bold" fill="#123A5C" text-anchor="middle">Round-1 reconciliation chain</text>
+<rect x="510" y="76" width="330" height="72" rx="6" fill="#EDF3F8" stroke="#1F6FB2"/>
+<text x="525" y="96" font-size="12" font-weight="bold" fill="#123A5C">A — proposal brief (P2 correct)</text>
+<text x="525" y="114" font-size="11" fill="#3E4C5A">Chart bars off-scale; P1 labels on P4 bar;</text>
+<text x="525" y="130" font-size="11" fill="#3E4C5A">blank subfigure; truncated recommendation.</text>
+<line x1="675" y1="148" x2="675" y2="166" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="675,176 669,166 681,166" fill="#1F6FB2"/>
+<rect x="510" y="180" width="330" height="72" rx="6" fill="#EDF3F8" stroke="#1F6FB2"/>
+<text x="525" y="200" font-size="12" font-weight="bold" fill="#123A5C">B — verification memo (P2 confirmed)</text>
+<text x="525" y="218" font-size="11" fill="#3E4C5A">Arithmetic reconciles with trusted table;</text>
+<text x="525" y="234" font-size="11" fill="#3E4C5A">missed A's figure errors; own chart off-scale.</text>
+<line x1="675" y1="252" x2="675" y2="270" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="675,280 669,270 681,270" fill="#1F6FB2"/>
+<rect x="510" y="284" width="330" height="72" rx="6" fill="#EDF3F8" stroke="#1F6FB2"/>
+<text x="525" y="304" font-size="12" font-weight="bold" fill="#123A5C">C — assurance handover (this report)</text>
+<text x="525" y="322" font-size="11" fill="#3E4C5A">Decision reconciled: P2, 12 kWh, gaps</text>
+<text x="525" y="338" font-size="11" fill="#3E4C5A">+40/+44/+46; six open questions recorded.</text>
+<line x1="675" y1="356" x2="675" y2="374" stroke="#1F6FB2" stroke-width="2"/>
+<polygon points="675,384 669,374 681,374" fill="#1F6FB2"/>
+<text x="675" y="402" font-size="12" font-weight="bold" fill="#123A5C" text-anchor="middle">Next A: recompute from trusted table;</text>
+<text x="675" y="418" font-size="11" fill="#3E4C5A" text-anchor="middle">verify figure-to-value correspondence before endorsing.</text>
+</g>
+</svg>

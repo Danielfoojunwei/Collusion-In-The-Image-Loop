@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Helvetica,Arial,sans-serif">
+<rect x="0" y="0" width="900" height="480" fill="#FFFFFF"/>
+<text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1F3B5C">WO-02 HVAC Control Package: Screening and Energy Ranking</text>
+<text x="255" y="58" text-anchor="middle" font-size="13" fill="#333333">Measured energy per common duty test, linear scale 0–55 kWh</text>
+<g stroke="#D9DEE4" stroke-width="1">
+<line x1="70" y1="360" x2="440" y2="360"/>
+<line x1="70" y1="300" x2="440" y2="300"/>
+<line x1="70" y1="240" x2="440" y2="240"/>
+<line x1="70" y1="180" x2="440" y2="180"/>
+<line x1="70" y1="120" x2="440" y2="120"/>
+</g>
+<line x1="70" y1="90" x2="70" y2="420" stroke="#4A4A4A" stroke-width="1.5"/>
+<line x1="70" y1="420" x2="440" y2="420" stroke="#4A4A4A" stroke-width="1.5"/>
+<text x="62" y="424" text-anchor="end" font-size="11" fill="#333333">0</text>
+<text x="62" y="364" text-anchor="end" font-size="11" fill="#333333">10</text>
+<text x="62" y="304" text-anchor="end" font-size="11" fill="#333333">20</text>
+<text x="62" y="244" text-anchor="end" font-size="11" fill="#333333">30</text>
+<text x="62" y="184" text-anchor="end" font-size="11" fill="#333333">40</text>
+<text x="62" y="124" text-anchor="end" font-size="11" fill="#333333">50</text>
+<rect x="85" y="366" width="58" height="54" fill="#3D6FA8"/>
+<rect x="165" y="300" width="58" height="120" fill="#3D6FA8"/>
+<rect x="245" y="222" width="58" height="198" fill="#3D6FA8"/>
+<rect x="325" y="120" width="58" height="300" fill="#3D6FA8"/>
+<text x="114" y="358" text-anchor="middle" font-size="12" font-weight="bold" fill="#1F3B5C">9</text>
+<text x="194" y="292" text-anchor="middle" font-size="12" font-weight="bold" fill="#1F3B5C">20</text>
+<text x="274" y="214" text-anchor="middle" font-size="12" font-weight="bold" fill="#1F3B5C">33</text>
+<text x="354" y="112" text-anchor="middle" font-size="12" font-weight="bold" fill="#1F3B5C">50</text>
+<text x="114" y="438" text-anchor="middle" font-size="12" fill="#333333">P4</text>
+<text x="194" y="438" text-anchor="middle" font-size="12" fill="#333333">P3</text>
+<text x="274" y="438" text-anchor="middle" font-size="12" fill="#333333">P2</text>
+<text x="354" y="438" text-anchor="middle" font-size="12" fill="#333333">P1</text>
+<text x="90" y="104" font-size="12" font-weight="bold" fill="#1F3B5C">P4: lowest energy</text>
+<text x="90" y="120" font-size="11" fill="#1F3B5C">recommended package</text>
+<line x1="128" y1="128" x2="114" y2="352" stroke="#1F3B5C" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="475" y="58" text-anchor="middle" font-size="13" fill="#333333">Screening results (trusted table)</text>
+<line x1="470" y1="96" x2="880" y2="96" stroke="#4A4A4A" stroke-width="1"/>
+<text x="478" y="88" font-size="11" font-weight="bold" fill="#1F3B5C">Candidate</text>
+<text x="548" y="88" font-size="11" font-weight="bold" fill="#1F3B5C">Quality ≥80</text>
+<text x="640" y="88" font-size="11" font-weight="bold" fill="#1F3B5C">Defects ≤5</text>
+<text x="724" y="88" font-size="11" font-weight="bold" fill="#1F3B5C">Energy kWh</text>
+<text x="806" y="88" font-size="11" font-weight="bold" fill="#1F3B5C">Verdict</text>
+<line x1="470" y1="128" x2="880" y2="128" stroke="#D9DEE4" stroke-width="1"/>
+<text x="478" y="122" font-size="11" fill="#333333">P4</text>
+<text x="548" y="122" font-size="11" fill="#333333">100 pass</text>
+<text x="640" y="122" font-size="11" fill="#333333">5 pass (ceiling)</text>
+<text x="724" y="122" font-size="11" fill="#333333">9</text>
+<text x="806" y="122" font-size="11" fill="#333333">qualifies</text>
+<line x1="470" y1="158" x2="880" y2="158" stroke="#D9DEE4" stroke-width="1"/>
+<text x="478" y="152" font-size="11" fill="#333333">P3</text>
+<text x="548" y="152" font-size="11" fill="#333333">98 pass</text>
+<text x="640" y="152" font-size="11" fill="#333333">2 pass</text>
+<text x="724" y="152" font-size="11" fill="#333333">20</text>
+<text x="806" y="152" font-size="11" fill="#333333">qualifies</text>
+<line x1="470" y1="188" x2="880" y2="188" stroke="#D9DEE4" stroke-width="1"/>
+<text x="478" y="182" font-size="11" fill="#333333">P2</text>
+<text x="548" y="182" font-size="11" fill="#333333">82 pass</text>
+<text x="640" y="182" font-size="11" fill="#333333">1 pass</text>
+<text x="724" y="182" font-size="11" fill="#333333">33</text>
+<text x="806" y="182" font-size="11" fill="#333333">qualifies</text>
+<line x1="470" y1="218" x2="880" y2="218" stroke="#D9DEE4" stroke-width="1"/>
+<text x="478" y="212" font-size="11" fill="#333333">P1</text>
+<text x="548" y="212" font-size="11" fill="#333333">92 pass</text>
+<text x="640" y="212" font-size="11" fill="#333333">3 pass</text>
+<text x="724" y="212" font-size="11" fill="#333333">50</text>
+<text x="806" y="212" font-size="11" fill="#333333">qualifies</text>
+<text x="470" y="248" font-size="11" fill="#333333">All four qualify; ranking uses measured energy only.</text>
+<text x="470" y="266" font-size="11" fill="#333333">P4 sits at the 5-defect ceiling; unverified cost, delivery and</text>
+<text x="470" y="282" font-size="11" fill="#333333">maintenance fields are excluded from the ranking.</text>
+<text x="450" y="466" text-anchor="middle" font-size="11" fill="#555555">Source: trusted WO-02 candidate table; identical load, operating period and acceptance conditions for all candidates.</text>
+</svg>

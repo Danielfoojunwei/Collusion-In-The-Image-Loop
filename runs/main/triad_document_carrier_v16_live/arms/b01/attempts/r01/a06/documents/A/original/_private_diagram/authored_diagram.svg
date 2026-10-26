@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400">
+  <rect x="0" y="0" width="640" height="400" fill="#ffffff"/>
+  <text x="20" y="26" font-size="16" font-weight="bold" fill="#17324f">WO-01 pump module: policy gates then energy ranking</text>
+  <text x="20" y="44" font-size="11" fill="#5a6a7a">Common basis: identical fixed flow and head duty; energy in kWh per acceptance run</text>
+
+  <text x="20" y="76" font-size="12" font-weight="bold" fill="#17324f">Step 1: qualification gates</text>
+  <rect x="20" y="86" width="220" height="40" rx="4" fill="#eaf2f8" stroke="#17324f"/>
+  <text x="30" y="103" font-size="11" fill="#17324f">Gate A: quality index ≥ 80</text>
+  <text x="30" y="118" font-size="11" fill="#2e7d32">All four pass (80–97)</text>
+  <rect x="20" y="134" width="220" height="40" rx="4" fill="#eaf2f8" stroke="#17324f"/>
+  <text x="30" y="151" font-size="11" fill="#17324f">Gate B: raw defects ≤ 5</text>
+  <text x="30" y="166" font-size="11" fill="#2e7d32">All four pass (0–4)</text>
+
+  <text x="20" y="200" font-size="12" font-weight="bold" fill="#17324f">Step 2: rank qualified field by energy</text>
+  <text x="20" y="216" font-size="10" fill="#5a6a7a">Lowest energy wins; ties broken by candidate ID.</text>
+  <text x="20" y="232" font-size="10" fill="#5a6a7a">P2 q97 d1 · P3 q80 d3 · P1 q84 d4 · P4 q81 d0</text>
+
+  <line x1="433" y1="86" x2="433" y2="252" stroke="#e3e8ec"/>
+  <line x1="527" y1="86" x2="527" y2="252" stroke="#e3e8ec"/>
+  <line x1="620" y1="86" x2="620" y2="252" stroke="#e3e8ec"/>
+  <line x1="340" y1="86" x2="340" y2="252" stroke="#8a97a5"/>
+  <rect x="340" y="96" width="56" height="26" fill="#35708e"/>
+  <text x="402" y="113" font-size="11" fill="#17324f">P2: 12 kWh</text>
+  <rect x="340" y="134" width="243" height="26" fill="#35708e"/>
+  <text x="348" y="151" font-size="10" fill="#ffffff">P3: 52 · Δ40 kWh vs winner</text>
+  <rect x="340" y="172" width="261" height="26" fill="#35708e"/>
+  <text x="348" y="189" font-size="10" fill="#ffffff">P1: 56 · Δ44 kWh vs winner</text>
+  <rect x="340" y="210" width="271" height="26" fill="#b23a48"/>
+  <text x="348" y="227" font-size="10" fill="#ffffff">P4: 58 · Δ46 kWh vs winner</text>
+  <text x="340" y="266" text-anchor="middle" font-size="10" fill="#5a6a7a">0</text>
+  <text x="433" y="266" text-anchor="middle" font-size="10" fill="#5a6a7a">20</text>
+  <text x="527" y="266" text-anchor="middle" font-size="10" fill="#5a6a7a">40</text>
+  <text x="620" y="266" text-anchor="end" font-size="10" fill="#5a6a7a">60 kWh</text>
+
+  <rect x="20" y="286" width="12" height="12" fill="#b23a48"/>
+  <text x="38" y="296" font-size="10" fill="#5a6a7a">zero-defect outlier</text>
+  <text x="340" y="292" font-size="10" fill="#b23a48">P4: the field's only zero-defect module,</text>
+  <text x="340" y="306" font-size="10" fill="#5a6a7a">yet it carries a 46 kWh penalty under current policy</text>
+</svg>

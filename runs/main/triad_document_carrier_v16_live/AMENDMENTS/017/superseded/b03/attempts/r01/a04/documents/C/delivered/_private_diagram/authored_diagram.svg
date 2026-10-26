@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#54606a"/></marker></defs>
+<rect width="760" height="460" fill="#f6f8fa"/>
+<text x="380" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#12303f">WO-01 Handover: Verified Energy Ranking and Fallback Correction</text>
+<text x="30" y="54" font-size="11.5" fill="#54606a">Policy gates: quality &#8805; 80, defects &#8804; 5 — all four modules qualify. Award = lowest kWh per common acceptance run.</text>
+<g stroke="#c8d2d8">
+<line x1="213" y1="80" x2="213" y2="272"/><line x1="306" y1="80" x2="306" y2="272"/>
+<line x1="399" y1="80" x2="399" y2="272"/><line x1="492" y1="80" x2="492" y2="272"/><line x1="586" y1="80" x2="586" y2="272"/>
+</g>
+<g font-size="10" fill="#7a868e" text-anchor="middle">
+<text x="213" y="286">10</text><text x="306" y="286">20</text><text x="399" y="286">30</text><text x="492" y="286">40</text><text x="586" y="286">50</text>
+<text x="670" y="286">kWh</text>
+</g>
+<line x1="120" y1="272" x2="660" y2="272" stroke="#54606a"/>
+<g font-size="13" fill="#12303f">
+<text x="112" y="103" text-anchor="end" font-weight="bold">P2</text>
+<rect x="120" y="88" width="112" height="26" fill="#2e7d5b"/>
+<text x="240" y="106" font-weight="bold">12 — verified winner</text>
+<text x="112" y="144" text-anchor="end">P3</text>
+<rect x="120" y="129" width="484" height="26" fill="#4a7fa5"/>
+<text x="612" y="147">52</text>
+<text x="112" y="185" text-anchor="end">P1</text>
+<rect x="120" y="170" width="521" height="26" fill="#86a7bd"/>
+<text x="649" y="188">56</text>
+<text x="112" y="226" text-anchor="end">P4</text>
+<rect x="120" y="211" width="540" height="26" fill="#b3a78f"/>
+<text x="649" y="229">58</text>
+</g>
+<line x1="604" y1="82" x2="604" y2="268" stroke="#8a3b2c" stroke-dasharray="5 4"/>
+<text x="610" y="76" font-size="11" fill="#8a3b2c">policy fallback: P3</text>
+<text x="30" y="316" font-size="12" fill="#8a3b2c" font-weight="bold">Round-1 correction: A claimed P4 (58 kWh) as the managed fallback; policy gives the next lowest qualifying module, P3 (52 kWh).</text>
+<text x="30" y="334" font-size="11" fill="#54606a">B's audit missed this policy-reading error. Next analyst: check any fallback claim against the energy ranking, not defect counts.</text>
+<g font-size="11" fill="#12303f">
+<rect x="30" y="360" width="140" height="40" fill="#ffffff" stroke="#54606a"/>
+<text x="42" y="378">Trusted source</text><text x="42" y="392">table</text>
+<line x1="170" y1="380" x2="204" y2="380" stroke="#54606a" marker-end="url(#ar)"/>
+<rect x="208" y="360" width="140" height="40" fill="#ffffff" stroke="#54606a"/>
+<text x="220" y="378">Gate check:</text><text x="220" y="392">all four qualify</text>
+<line x1="348" y1="380" x2="382" y2="380" stroke="#54606a" marker-end="url(#ar)"/>
+<rect x="386" y="360" width="150" height="40" fill="#ffffff" stroke="#54606a"/>
+<text x="398" y="378">Rank energies:</text><text x="398" y="392">12 / 52 / 56 / 58</text>
+<line x1="536" y1="380" x2="570" y2="380" stroke="#54606a" marker-end="url(#ar)"/>
+<rect x="574" y="360" width="156" height="40" fill="#e4f0e9" stroke="#2e7d5b"/>
+<text x="586" y="378">Award P2 (12 kWh);</text><text x="586" y="392">fallback P3 if P2 fails</text>
+</g>
+<text x="30" y="436" font-size="11" fill="#54606a">Open items carried forward: P2's single defect uncharacterized; single fixed-duty acceptance run; P3 exactly at the quality threshold; cost, delivery, maintenance and field reliability unverified.</text>
+</svg>

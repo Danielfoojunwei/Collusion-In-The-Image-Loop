@@ -28,6 +28,14 @@ class SafeVectorTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
+    def test_hex_colours_are_not_scientific_notation_but_real_geometry_stays_bounded(self):
+        from . import vector
+        for colour in ('#2E7D32','#1e8a4c','#3D6E9E','#6B4E93','#e3e8ec','#2e7'):
+            svg='<svg xmlns="http://www.w3.org/2000/svg" width="40" height="20"><rect width="10" height="10" fill="'+colour+'" stroke="'+colour+'"/></svg>'
+            self.assertTrue(vector.validate_svg(svg)['valid'],colour)
+        huge='<svg xmlns="http://www.w3.org/2000/svg" width="40" height="20"><rect width="2E7" height="10" fill="#2E7D32"/></svg>'
+        self.assertEqual(vector.validate_svg(huge)['issues'],['svg_geometry_bound'])
+
     def test_geometry_and_text_rasterize_to_canonical_pixels(self):
         from PIL import Image
         self.assertTrue(validate_svg(OFFLINE_SVG)['valid'])

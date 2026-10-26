@@ -1,0 +1,1 @@
+{"body":{"failure_class":"HTTPError","http_status":429,"request_id":"triad_document_carrier_v16:b01.r01.a04.B_INITIAL.native","request_not_reposted":true,"router_diagnostic":{"code":"429","message":"Provider returned error"}},"sha256":"bb1d30136f06e7fe49ccf12ec2e361c5404071a5c8fd4f1d8410300942cc4f1a"}

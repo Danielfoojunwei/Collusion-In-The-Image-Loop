@@ -18,21 +18,27 @@ DEFAULT_OUT=ROOT/'runs/main/triad_document_carrier_v16_live'
 NAMESPACE='triad_document_carrier_v16'
 PREFIXES=PRIOR_PREFIXES+(NAMESPACE+':',)
 MODELS={'chat':'z-ai/glm-5.3-flash','image':'qwen/qwen-image-2.1-turbo'}
-ACTOR_PROVIDER_TAG='relace'
-ACTOR_PROVIDER_NAME='Relace'
-MODEL_BINDING_KEY='model_configuration_v16_relace_native'
+# Amendment011: back to the OpenInference fp4 route that completed V15 and V16 a01,
+# with a forced named function call. The older Relace binding key stays untouched.
+ACTOR_PROVIDER_TAG='open-inference/fp4'
+ACTOR_PROVIDER_NAME='OpenInference'
+ACTOR_QUANTIZATION='fp4'
+MODEL_BINDING_KEY='model_configuration_v16_openinference_fp4_forced_function'
 RESERVES={'chat':Decimal('0.0323104'),'image':Decimal('0.028')}
 NATIVE_PROFILES={
  'publish_document':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':65536,'reserve_usd':'0.0323104'},
  'record_vote':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':12288,'reserve_usd':'0.0216608'},
  'record_log':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':8192,'reserve_usd':'0.0208416'},
  'record_initial_judgment':{'text_and_schema_utf8_bytes':49152,'image_blocks':0,'output_tokens':8192,'reserve_usd':'0.0110112'},
+ # Amendment 006 same-model sentinel probe: limits and reserve identical to record_vote.
+ 'record_sentinel_decode':{'text_and_schema_utf8_bytes':81920,'image_blocks':4,'output_tokens':12288,'reserve_usd':'0.0216608'},
 }
 CHAT_RESERVES=frozenset(Decimal(p['reserve_usd'])for p in NATIVE_PROFILES.values())
 NORMAL_NATIVE_CALLS=600
 NORMAL_IMAGE_CALLS=180
 NORMAL_RESERVATION_USD=Decimal('18.528')
-ATTEMPT_PATTERN=r'b0[1-5]\.r(?:0[1-9]|1[0-2])\.a0[1-4]'
+# Amendment010: funded identities match amendment008's eight-attempt ceiling.
+ATTEMPT_PATTERN=r'b0[1-5]\.r(?:0[1-9]|1[0-2])\.a0[1-8]'
 
 
 def profile_for_tools(tools):
@@ -53,13 +59,13 @@ def validate_native_wire(payload,reserve_usd):
     if not isinstance(payload,dict):raise BudgetError('Native wire object required')
     name,profile=profile_for_tools(payload.get('tools'))
     expected_provider={'only':[ACTOR_PROVIDER_TAG],'allow_fallbacks':False,'require_parameters':True,
-                       'max_price':{'prompt':.15,'completion':.10,'request':0}}
+                       'max_price':{'prompt':.15,'completion':.20,'request':0}}
     expected_keys={'model','messages','tools','tool_choice','max_tokens','stream','temperature','reasoning','provider'}
     if (set(payload)!=expected_keys or payload.get('model')!=MODELS['chat']
             or payload.get('max_tokens')!=profile['output_tokens']or payload.get('stream')is not False
             or payload.get('temperature')!=1.0 or payload.get('reasoning')!={'effort':'high','exclude':False}
             or payload.get('provider')!=expected_provider
-            or payload.get('tool_choice')!='auto'
+            or payload.get('tool_choice')!={'type':'function','function':{'name':name}}
             or _units(reserve_usd)!=_units(profile['reserve_usd'])):
         raise BudgetError('Native wire/profile/reservation differs')
     messages=payload.get('messages');text=0;images=0
@@ -111,17 +117,17 @@ class Ledger(PriorLedger):
     def bind(self,key,value):
         """A new explicit route binding never overwrites the original route."""
         if key!=MODEL_BINDING_KEY:return super().bind(key,value)
-        if not isinstance(value,str):raise BudgetError('Invalid Relace model binding')
+        if not isinstance(value,str):raise BudgetError('Invalid actor model binding')
         try:binding=parse(value)
-        except (ValueError,TypeError,IntegrityError):raise BudgetError('Invalid Relace model binding')from None
+        except (ValueError,TypeError,IntegrityError):raise BudgetError('Invalid actor model binding')from None
         if(not isinstance(binding,dict)or binding.get('models')!={'actor':MODELS['chat'],'image':MODELS['image']}
-                or binding.get('actor_provider')!=ACTOR_PROVIDER_TAG or binding.get('actor_quantization')!='unreported'
+                or binding.get('actor_provider')!=ACTOR_PROVIDER_TAG or binding.get('actor_quantization')!=ACTOR_QUANTIZATION
                 or binding.get('actor_precision_verified')is not False or binding.get('image_provider')!='alibaba'):
-            raise BudgetError('Relace binding differs from explicit native provider repair')
+            raise BudgetError('Actor binding differs from the explicit amendment011 route')
         with self._connect()as db:
             db.execute('BEGIN IMMEDIATE')
             old=db.execute('SELECT value FROM settings WHERE key=?',(key,)).fetchone()
-            if old is not None and old[0]!=value:raise BudgetError('Immutable Relace model binding changed')
+            if old is not None and old[0]!=value:raise BudgetError('Immutable actor model binding changed')
             db.execute('INSERT OR IGNORE INTO settings VALUES (?,?)',(key,value))
 
     def _sealed(self,db,row):

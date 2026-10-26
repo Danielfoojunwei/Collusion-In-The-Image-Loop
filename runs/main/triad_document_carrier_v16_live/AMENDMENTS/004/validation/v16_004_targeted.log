@@ -1,0 +1,228 @@
+test_abandoned_same_arm_requires_matching_lock_and_seal (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_abandoned_same_arm_requires_matching_lock_and_seal) ... ok
+test_all_four_actual_png_inputs_survive_lossless_wire (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_all_four_actual_png_inputs_survive_lossless_wire) ... ok
+test_all_four_function_profiles_are_automatically_selected_and_funded (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_all_four_function_profiles_are_automatically_selected_and_funded) ... ok
+test_amended_metadata_requires_output_capacity_context_prices_and_profile (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_amended_metadata_requires_output_capacity_context_prices_and_profile) ... ok
+test_amendment_never_reuses_or_overwrites_an_old_paid_identity (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_amendment_never_reuses_or_overwrites_an_old_paid_identity) ... ok
+test_attempt_ids_lock_attempt_boundary_and_fixed_reservation (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_attempt_ids_lock_attempt_boundary_and_fixed_reservation) ... ok
+test_auto_choice_value_support_is_required_not_just_parameter_name (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_auto_choice_value_support_is_required_not_just_parameter_name) ... ok
+test_auto_content_json_exact_object_or_fence_preserves_raw_and_bad_values_without_fake_calls (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_auto_content_json_exact_object_or_fence_preserves_raw_and_bad_values_without_fake_calls) ... ok
+test_below_cap_malformed_and_at_cap_semantic_invalid_remain_behavioral (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_below_cap_malformed_and_at_cap_semantic_invalid_remain_behavioral) ... ok
+test_capped_incomplete_content_is_technical_but_multiple_complete_objects_are_behavioral (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_capped_incomplete_content_is_technical_but_multiple_complete_objects_are_behavioral) ... ok
+test_changed_route_temperature_or_output_rejected_locally (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_changed_route_temperature_or_output_rejected_locally) ... ok
+test_cheap_catalog_cannot_hide_expensive_pinned_route (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_cheap_catalog_cannot_hide_expensive_pinned_route) ... ok
+test_complete_valid_primary_at_cap_is_preserved_even_with_length_finish_reason (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_complete_valid_primary_at_cap_is_preserved_even_with_length_finish_reason) ... ok
+test_conservative_math_and_whole_study_normal_ceiling (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_conservative_math_and_whole_study_normal_ceiling) ... ok
+test_content_json_no_narrative_multiple_objects_selection_refusal_or_value_repair (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_content_json_no_narrative_multiple_objects_selection_refusal_or_value_repair) ... ok
+test_each_actual_native_parameter_high_reasoning_and_unknown_precision_is_required (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_each_actual_native_parameter_high_reasoning_and_unknown_precision_is_required) ... ok
+test_empty_primary_at_cap_is_technical_but_below_cap_refusal_and_text_remain_behavioral (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_empty_primary_at_cap_is_technical_but_below_cap_refusal_and_text_remain_behavioral) ... ok
+test_exact_cap_malformed_primary_is_archived_technical_fault_without_repost (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_exact_cap_malformed_primary_is_archived_technical_fault_without_repost) ... ok
+test_exact_native_wire_route_output_temperature_reasoning_reserve_and_cache (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_exact_native_wire_route_output_temperature_reasoning_reserve_and_cache) ... ok
+test_expensive_catalog_with_valid_pinned_route_passes_and_preserves_original_quote (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_expensive_catalog_with_valid_pinned_route_passes_and_preserves_original_quote) ... ok
+test_fifth_png_rejected_before_funding_or_post (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_fifth_png_rejected_before_funding_or_post) ... ok
+test_free_preflight_creates_no_request_and_rejects_old_bound_metadata (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_free_preflight_creates_no_request_and_rejects_old_bound_metadata) ... ok
+test_funding_checks_actual_wire_input_bound_and_typed_pins_before_reserving (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_funding_checks_actual_wire_input_bound_and_typed_pins_before_reserving) ... ok
+test_http_policy_is_single_post_and_free_get_retries_are_bounded (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_http_policy_is_single_post_and_free_get_retries_are_bounded) ... ok
+test_initial_judgment_profile_has_smaller_exact_text_bound_and_no_images (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_initial_judgment_profile_has_smaller_exact_text_bound_and_no_images) ... ok
+test_interrupt_stops_future_calls_without_new_reservations (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_interrupt_stops_future_calls_without_new_reservations) ... ok
+test_live_other_arm_pending_can_be_funded_concurrently_without_releasing_reserve (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_live_other_arm_pending_can_be_funded_concurrently_without_releasing_reserve) ... ok
+test_matching_arm_lock_allows_dispatch_and_other_arm_lock_does_not (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_matching_arm_lock_allows_dispatch_and_other_arm_lock_does_not) ... ok
+test_native_multiple_calls_only_first_and_invalid_first_never_searches_later (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_native_multiple_calls_only_first_and_invalid_first_never_searches_later) ... ok
+test_old_route_wire_or_cached_metadata_cannot_silently_substitute_for_relace (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_old_route_wire_or_cached_metadata_cannot_silently_substitute_for_relace) ... ok
+test_old_v15_unknown_proof_uses_old_run_root_not_new (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_old_v15_unknown_proof_uses_old_run_root_not_new) ... ok
+test_one_actual_qwen_png_and_optional_reference_are_funded_exactly (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_one_actual_qwen_png_and_optional_reference_are_funded_exactly) ... ok
+test_original_openinference_binding_and_file_are_immutable_during_explicit_relace_repair (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_original_openinference_binding_and_file_are_immutable_during_explicit_relace_repair) ... ok
+test_outgoing_hard_price_ceiling_cannot_be_relaxed (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_outgoing_hard_price_ceiling_cannot_be_relaxed) ... ok
+test_own_uncertain_request_stays_held_and_its_owner_is_never_rebound (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_own_uncertain_request_stays_held_and_its_owner_is_never_rebound) ... ok
+test_previous_namespace_spend_counts_inside_combined24cap (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_previous_namespace_spend_counts_inside_combined24cap) ... ok
+test_publication_deadline_and_socket_timeout_match_3600_other_calls_600 (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_publication_deadline_and_socket_timeout_match_3600_other_calls_600) ... ok
+test_quote_heavy_encoded_context_fits_expanded_profile_without_changing_content (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_quote_heavy_encoded_context_fits_expanded_profile_without_changing_content) ... ok
+test_relace_native_metadata_needs_no_unused_json_mode_and_reports_unknown_precision (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_relace_native_metadata_needs_no_unused_json_mode_and_reports_unknown_precision) ... ok
+test_reserve_time_other_arm_barrier_propagates_without_own_row_or_post (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_reserve_time_other_arm_barrier_propagates_without_own_row_or_post) ... ok
+test_returned_different_provider_is_preserved_and_halts_instead_of_falling_back (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_returned_different_provider_is_preserved_and_halts_instead_of_falling_back) ... ok
+test_saved_actual_relace_endpoint_passes_native_validator_without_get_or_fabricated_json_support (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_saved_actual_relace_endpoint_passes_native_validator_without_get_or_fabricated_json_support) ... ok
+test_text_and_schema_utf8_bound_is_exact_not_character_count (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_text_and_schema_utf8_bound_is_exact_not_character_count) ... ok
+test_two_process_unreserved_owner_rollover_and_completed_native_cache_make_one_post (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_two_process_unreserved_owner_rollover_and_completed_native_cache_make_one_post) ... ok
+test_unknown_charge_seal_keeps_full_reserve_and_never_reposts (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_unknown_charge_seal_keeps_full_reserve_and_never_reposts) ... ok
+test_unknown_mixed_and_cheap_profiles_cannot_buy_larger_calls (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_unknown_mixed_and_cheap_profiles_cannot_buy_larger_calls) ... ok
+test_unowned_dead_and_uncertain_rows_remain_blocking (next_batch.v16_document_carrier.test_provider_funding.ProviderFundingTests.test_unowned_dead_and_uncertain_rows_remain_blocking) ... ok
+test_active_producer_lock_blocks_offline_recovery (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_active_producer_lock_blocks_offline_recovery) ... ok
+test_current_source_change_after_amendment_is_rejected (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_current_source_change_after_amendment_is_rejected) ... ok
+test_fixture_cannot_be_promoted_to_live (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_fixture_cannot_be_promoted_to_live) ... ok
+test_full_recovery_preserves_originals_raw_attempts_and_ledger (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_full_recovery_preserves_originals_raw_attempts_and_ledger) ... ok
+test_idempotent_completed_recovery_makes_no_new_mutations (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_idempotent_completed_recovery_makes_no_new_mutations) ... ok
+test_interrupted_move_resumes_same_intent_without_losing_data (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_interrupted_move_resumes_same_intent_without_losing_data) ... ok
+test_launched_review_or_complete_round_cannot_be_superseded (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_launched_review_or_complete_round_cannot_be_superseded) ... ok
+test_metadata_repair_rejects_actual_sampling_changes (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_metadata_repair_rejects_actual_sampling_changes) ... ok
+test_metadata_repair_retains_and_verifies_free_failure_diagnostic (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_metadata_repair_retains_and_verifies_free_failure_diagnostic) ... ok
+test_new_paid_identity_after_first_amendment_blocks_metadata_repair (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_new_paid_identity_after_first_amendment_blocks_metadata_repair) ... ok
+test_original_and_current_source_verification_are_distinct (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_original_and_current_source_verification_are_distinct) ... ok
+test_provider_repair_blocks_more_paid_work_or_any_stage (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_blocks_more_paid_work_or_any_stage) ... ok
+test_provider_repair_is_idempotent_and_checks_funding_proof_integrity (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_is_idempotent_and_checks_funding_proof_integrity) ... ok
+test_provider_repair_keeps_unknown_invoices_and_seals_full_reserves (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_keeps_unknown_invoices_and_seals_full_reserves) ... ok
+test_provider_repair_refuses_model_output_or_non404_scope (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_refuses_model_output_or_non404_scope) ... ok
+test_provider_repair_requires_producer_locks_and_unchanged_resources (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_requires_producer_locks_and_unchanged_resources) ... ok
+test_provider_repair_resumes_after_interrupted_seal (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_provider_repair_resumes_after_interrupted_seal) ... ok
+test_release_cannot_clear_a_newer_operator_hold (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_release_cannot_clear_a_newer_operator_hold) ... ok
+test_release_requires_complete_verified_amendment_and_archives_stop (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_release_requires_complete_verified_amendment_and_archives_stop) ... ok
+test_retained_raw_cap_response_and_stop_archives_are_verified (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_retained_raw_cap_response_and_stop_archives_are_verified) ... ok
+test_runner_current_resumes_at_a04_and_stops_after_fourth_attempt (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_runner_current_resumes_at_a04_and_stops_after_fourth_attempt) ... ok
+test_tool_choice_repair_blocks_output_extra_paid_work_a04_or_reviews (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_blocks_output_extra_paid_work_a04_or_reviews) ... ok
+test_tool_choice_repair_is_idempotent_and_detects_seal_tampering (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_is_idempotent_and_detects_seal_tampering) ... ok
+test_tool_choice_repair_rejects_an_auto_request_that_was_not_forced (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_rejects_an_auto_request_that_was_not_forced) ... ok
+test_tool_choice_repair_requires_auto_only_diagnostic_and_unchanged_condition (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_requires_auto_only_diagnostic_and_unchanged_condition) ... ok
+test_tool_choice_repair_requires_newer_stop_and_idle_locks (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_requires_newer_stop_and_idle_locks) ... ok
+test_tool_choice_repair_requires_the_specific_forced_choice_rejection (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_requires_the_specific_forced_choice_rejection) ... ok
+test_tool_choice_repair_resumes_after_interrupted_seal (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_resumes_after_interrupted_seal) ... ok
+test_tool_choice_repair_seals_a03_reserves_and_prepares_fresh_a04 (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_tool_choice_repair_seals_a03_reserves_and_prepares_fresh_a04) ... ok
+test_unpaid_metadata_repair_appends_without_rewind_or_ledger_change (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_unpaid_metadata_repair_appends_without_rewind_or_ledger_change) ... ok
+test_unpaid_metadata_repair_is_idempotent (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_unpaid_metadata_repair_is_idempotent) ... ok
+test_unresolved_or_later_paid_identity_blocks_recovery (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_unresolved_or_later_paid_identity_blocks_recovery) ... ok
+test_work_in_unfunded_context_blocks_no_rewind_metadata_repair (next_batch.v16_document_carrier.test_amendment.AmendmentTests.test_work_in_unfunded_context_blocks_no_rewind_metadata_repair) ... ok
+test_ambiguous_findings_do_not_fine (next_batch.v16_document_carrier.test_runner.RunnerTests.test_ambiguous_findings_do_not_fine) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_behavioral_invalid_does_not_invent_previousC_or_retry (next_batch.v16_document_carrier.test_runner.RunnerTests.test_behavioral_invalid_does_not_invent_previousC_or_retry) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":2,"stage":"C_LOG"}
+ok
+test_committed_artifact_corruption_stops_resume (next_batch.v16_document_carrier.test_runner.RunnerTests.test_committed_artifact_corruption_stops_resume) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_full_round_allfivearms_real_renderer_review_bridge (next_batch.v16_document_carrier.test_runner.RunnerTests.test_full_round_allfivearms_real_renderer_review_bridge) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b02","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b03","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b05","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_offline_fixture_cannot_become_live (next_batch.v16_document_carrier.test_runner.RunnerTests.test_offline_fixture_cannot_become_live) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_round12_max_planned_context_fits_exact_provider_profiles (next_batch.v16_document_carrier.test_runner.RunnerTests.test_round12_max_planned_context_fits_exact_provider_profiles) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_sourceonly_peer_has_no_original_quality_or_hash_sidechannel (next_batch.v16_document_carrier.test_runner.RunnerTests.test_sourceonly_peer_has_no_original_quality_or_hash_sidechannel) ... {"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b04","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_supported_unilateral_cancels_grant_and_fines_all_three_once (next_batch.v16_document_carrier.test_runner.RunnerTests.test_supported_unilateral_cancels_grant_and_fines_all_three_once) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_target_adoption_and_exact_payload_are_distinct_grant_gates (next_batch.v16_document_carrier.test_runner.RunnerTests.test_target_adoption_and_exact_payload_are_distinct_grant_gates) ... ok
+test_unknown_quality_stays_pending (next_batch.v16_document_carrier.test_runner.RunnerTests.test_unknown_quality_stays_pending) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_INITIAL"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_VOTE"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"A_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_LOG"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_PUBLISH"}
+{"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"C_LOG"}
+ok
+test_unreserved_funding_barrier_resumes_same_stage_without_round_restart (next_batch.v16_document_carrier.test_runner.RunnerTests.test_unreserved_funding_barrier_resumes_same_stage_without_round_restart) ... {"arm":"b01","attempt":1,"event":"stage_complete","round":1,"stage":"B_INITIAL"}
+ok
+test_valid_reject_all_is_retained (next_batch.v16_document_carrier.test_runner.RunnerTests.test_valid_reject_all_is_retained) ... ok
+
+----------------------------------------------------------------------
+Ran 92 tests in 248.017s
+
+OK

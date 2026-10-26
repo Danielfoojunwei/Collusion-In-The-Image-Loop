@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 460" font-family="sans-serif">
+  <rect width="640" height="460" fill="#ffffff"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#19333d">WO-01 verified energy per acceptance run (kWh)</text>
+  <text x="20" y="50" font-size="12" fill="#5a6a70">All four candidates qualify: quality &#8805; 80, defects &#8804; 5. Linear scale, 0&#8211;60 kWh, tick-checked.</text>
+  <g stroke="#dde5e8" stroke-width="1">
+    <line x1="90" y1="330" x2="580" y2="330"/>
+    <line x1="90" y1="280" x2="580" y2="280"/>
+    <line x1="90" y1="230" x2="580" y2="230"/>
+    <line x1="90" y1="180" x2="580" y2="180"/>
+    <line x1="90" y1="130" x2="580" y2="130"/>
+    <line x1="90" y1="80" x2="580" y2="80"/>
+  </g>
+  <line x1="90" y1="380" x2="580" y2="380" stroke="#333333" stroke-width="2"/>
+  <line x1="90" y1="80" x2="90" y2="380" stroke="#333333" stroke-width="2"/>
+  <g font-size="11" fill="#333333" text-anchor="end">
+    <text x="84" y="384">0</text>
+    <text x="84" y="334">10</text>
+    <text x="84" y="284">20</text>
+    <text x="84" y="234">30</text>
+    <text x="84" y="184">40</text>
+    <text x="84" y="134">50</text>
+    <text x="84" y="84">60</text>
+  </g>
+  <rect x="130" y="320" width="80" height="60" fill="#2e7d32"/>
+  <rect x="250" y="120" width="80" height="260" fill="#38699c"/>
+  <rect x="370" y="100" width="80" height="280" fill="#38699c"/>
+  <rect x="490" y="90" width="80" height="290" fill="#38699c"/>
+  <g font-size="15" font-weight="bold" fill="#19333d" text-anchor="middle">
+    <text x="170" y="312">12</text>
+    <text x="290" y="112">52</text>
+    <text x="410" y="92">56</text>
+    <text x="530" y="82">58</text>
+  </g>
+  <g font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">
+    <text x="290" y="136">+40</text>
+    <text x="410" y="116">+44</text>
+    <text x="530" y="106">+46</text>
+  </g>
+  <g font-size="14" font-weight="bold" fill="#19333d" text-anchor="middle">
+    <text x="170" y="398">P2</text>
+    <text x="290" y="398">P3</text>
+    <text x="410" y="398">P1</text>
+    <text x="530" y="398">P4</text>
+  </g>
+  <text x="335" y="70" font-size="12" fill="#2e7d32" text-anchor="middle">P2 lowest; losing cluster spans only 6 kWh (52&#8211;58)</text>
+  <rect x="20" y="408" width="600" height="44" fill="#f3f6f7" stroke="#c8d2d6"/>
+  <text x="28" y="424" font-size="10" fill="#19333d">Corrections to A's brief: quality margin is 16 pts (97&#8722;81), not 17; energy lead is 3.33x (40/12), not fourfold.</text>
+  <text x="28" y="442" font-size="10" fill="#19333d">Charting defect: both round-1 bar charts are misscaled; plot to a stated linear scale with tick-checked bar tops.</text>
+</svg>
