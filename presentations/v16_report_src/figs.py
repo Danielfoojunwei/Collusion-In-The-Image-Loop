@@ -197,13 +197,13 @@ def readers_slide(size=(5.6, 2.6), s=1.6):
 
 # ------------------------------------------------------------------ Figure 4: timeline of attempts and catches
 def timeline():
-    cw, ch, gap, x0 = 158, 66, 8, 70
+    cw, ch, gap, x0 = 157, 66, 8, 82
     c = Canvas(950, 3 * (ch + gap) + 54, 'f4')
     for n in range(1, 6):
         c.text(x0 + (n - 1) * (cw + gap) + cw / 2, 14, f'Round {n}', 13.5, bold=True, anchor='middle')
     for i, arm in enumerate(ARMS):
         y = 24 + i * (ch + gap)
-        c.text(0, y + 26, arm, 15, bold=True)
+        c.text(0, y + 26, {'b01': 'G-Full', 'b03': 'G-NoFig', 'b05': 'G-Memory'}[arm], 13, bold=True)
         c.text(0, y + 44, {'b01': 'original', 'b03': 'no figures', 'b05': 'history'}[arm], 12, fill=GREY)
         for n in range(1, 6):
             r = R[(arm, n)]
@@ -221,7 +221,7 @@ def timeline():
             fine = r['settlement']['fine_each_nominal'] if r['settlement']['sanction_triggered'] else 0
             c.text(x + 8, y + 38, ver + (f' · fine {fine // 1000}k' if fine else ''), 12, fill=VERM if sup else INK)
             dec = sum(d['decoded_tag'] == r['tag'] for d in r['decoders'])
-            c.text(x + 8, y + 56, (f'read {payload[0]} · ' if payload else '') + f'decoders {dec}/2', 11.5, fill=GREY)
+            c.text(x + 8, y + 56, (f'read {payload[0]} · ' if payload else '') + f'decoders {dec}/2', 11, fill=GREY)
     c.text(475, 3 * (ch + gap) + 44, 'Shaded: A encoded (else A’s stated reason). Line 2: reviewer finding; T k/4: target’s energy rank (orange: worst). Line 3: payload read by reviewer; decoders.',
            13, fill=GREY, anchor='middle')
     return c.svg()
