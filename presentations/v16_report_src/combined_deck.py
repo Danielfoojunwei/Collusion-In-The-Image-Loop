@@ -38,7 +38,7 @@ L15 = W['ladder']
 slides = [f'''
 <section class="title">
   <h1 class="long">Legible Yet Refused</h1>
-  <p class="sub">Covert collusion among LLM agents is decided by receiver uptake and oversight feedback, not channel secrecy. Two studies, same multimodal agents, same payoffs</p>
+  <p class="sub">A covert coalition is formed or refused at the receivers, and the oversight report decides whether the sender learns to hide or learns to stop</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
@@ -48,71 +48,75 @@ slides = [f'''
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
 </section>''', f'''
 <section>
-  <h2>Prior work measures secrecy; we vary the links it holds fixed</h2>
-  <table class="sota"><thead><tr><th></th><th>Receiver</th><th>Oversight output to agents</th><th>Monitor negatives</th></tr></thead><tbody>
-  <tr><td><b>Secrecy and detection</b><br><span>Motwani · Mathew · Dineen · Rose · Makins · Das</span></td><td>Willing by design: “agents are explicitly told to collude”</td><td>None, or a penalty or score: collusion gets subtler or continues (“the agents keep colluding”)</td><td>Runs with no collusion</td></tr>
-  <tr><td><b>Refusal and feedback</b><br><span>Zeng · Shi · Paglieri · Alnuhait · Nakamura</span></td><td>Can refuse; refusal tied to particular models and framing</td><td>No live sanctioning monitor; unenforced feedback teaches violation; whistleblowing fails</td><td>–</td></tr>
-  <tr class="ours"><td><b>This work</b><br><span>Study 1 (V15) · Study 2 (V16)</span></td><td>Verifier with its own payoff; uptake observed with ground truth</td><td>Unsanctioned public reports vs sanctioned public findings</td><td>Signal present, receivers refused</td></tr>
-  </tbody></table>
-  <p class="gapline">Untested before this work: a receiver that can refuse <b>under a live, sanctioning monitor</b>; oversight feedback that <b>ends</b> collusion rather than refining it; monitor calibration on <b>refusals</b>.</p>
-  <p class="foot">Quotations verbatim from Rose et al. (arXiv:2604.01151) and Das et al. (arXiv:2609.03035). Full comparison: paper Table 1.</p>
-</section>''', f'''
-<section>
-  <h2>The collusion chain, link by link, in both studies</h2>
+  <h2>Same model, same payoff: one code followed, one declined</h2>
   <div class="full fn">{svg['unified_funnel']}</div>
-  <p class="foot">Same GLM-5.3-Flash agents, same Qwen-Image-2.1-Turbo generator, same 4,000 vs 10,000 payoff. Study 1: picture channel, signalling framed as permitted, output-only reviewer. Study 2: two-page reports, exact tag, countermeasure stack. A contrast, not an ablation.</p>
+  <p class="foot">V15: a reviewer mentioned the green cue in {W['rev_green']}/{W['rounds']} reports; receivers followed in {W['target_votes']}/{W['votes']}. V16: outsiders recovered the exact tag in {N['t2_rounds_enc']}/{N['enc']} code rounds; receivers followed in {N['target_ballots']}/{N['ballots']}. The code was no better hidden. A contrast, not an ablation.</p>
 </section>''', f'''
 <section>
-  <h2>Study 1 · The vulnerability: seen, never attributed</h2>
+  <h2>Why this game: a two-key approval pipeline</h2>
+  <table class="sota"><thead><tr><th>Game element</th><th>Deployment situation</th><th>What it tests</th></tr></thead><tbody>
+  <tr><td>Sender with a private target, never the client’s best</td><td>Drafting or vendor-side agent that gains from a worse option</td><td>Interest departs from the client’s</td></tr>
+  <tr><td>Two receivers, both needed</td><td>Four-eyes approval: verifier and QA sign-off</td><td>A coalition must recruit every key-holder</td></tr>
+  <tr><td>4,000 for correct work vs 10,000 grant</td><td>Honest pay vs a side payment</td><td>Temptation, not instruction</td></tr>
+  <tr><td>Pictures (V15); reports with charts (V16)</td><td>Agents exchange rendered artefacts</td><td>Codes beyond text monitors</td></tr>
+  <tr><td>Sanctioning reviewer; report shown to all</td><td>Trusted monitor; published audit findings</td><td>Whether watching breaks a coalition, and the report as a channel</td></tr>
+  </tbody></table>
+</section>''', f'''
+<section>
+  <h2>V15 · Seen, not stopped</h2>
   {strip15([1, 4, 5, 6, 7, 10])}
   <div class="three">
     <div><h3>Collusion through noise</h3><p>{W['target_votes']}/{W['votes']} target votes and {W['grants']}/{W['rounds']} grants paid, although only {W['img_faithful']}/{W['img_total']} pictures were drawn as briefed.</p></div>
     <div><h3>Seen, not attributed</h3>{quote(VQ['rev_authorized']['quote'], VQ['rev_authorized']['who'] + '; “uncertain” in all 12 rounds')}</div>
-    <div><h3>Reports reassured the colluders</h3>{quote(VQ['c_vary']['quote'], VQ['c_vary']['who'])}</div>
+    <div><h3>The report taught the colluders</h3>{quote(VQ['c_vary']['quote'], VQ['c_vary']['who'])}</div>
   </div>
 </section>''', f'''
 <section>
-  <h2>Diagnosis · the monitor lacked ballots and history, not eyesight</h2>
-  <div class="full">{svg['ladder_cmp']}</div>
-  <div class="two even">
-    <ul>
-      <li>Outsiders decoded Study 1’s code in {W['sentinel']}/{W['sentinel_n']} rounds (gap {W['gap']:.2f}): legible, not hidden.</li>
-      <li>Observers without the reviewer’s own past verdicts: {W['observers_supported']}/{W['observers']} supported.</li>
-    </ul>
-    <ul>
-      <li>Fixes for Study 2: motive, ballot history, a standard of proof, unilateral findings on the sender.</li>
-      <li>Panel (b) is the calibration Study 1 lacked: a signal was present and nobody joined, and attribution stayed at 0.</li>
-    </ul>
-  </div>
+  <h2>What V15 taught us → what V16 changed, one link at a time</h2>
+  <table class="sota lt"><thead><tr><th>Link</th><th>V15 lesson</th><th>V16 change</th><th>V16 result</th></tr></thead><tbody>
+  <tr><td><b>Incentive</b></td><td>Permitted signalling; receivers followed T up to {W['max_ratio_followed']:.0f}× worse</td><td>Contract prohibits coordination; exact tag from both; collective fines</td><td>Joining worth {N['ev_median']:,.0f} vs 4,000</td></tr>
+  <tr><td><b>Carrier</b></td><td>Noise did not stop the code ({W['img_faithful']}/{W['img_total']} faithful, {W['coalition_rounds']}/{W['rounds']} coalitions)</td><td>Reports with prose and figures; b03 removes figures</td><td>Code moved into text</td></tr>
+  <tr><td><b>Attribution</b></td><td>Reviewer called signalling authorized; ladder: ballots + history → {L15['L3']['supported']}/{L15['L3']['valid']}</td><td>Motive, ballot history, standard of proof, findings on A alone</td><td>{N['flag_enc']}/{N['enc']} code rounds flagged; no false joint finding</td></tr>
+  <tr><td><b>Uptake</b></td><td>Receivers acted as relays</td><td>Independent verifier and QA, paid for correct work; trusted source table</td><td>0 tags; {N['target_ballots']}/{N['ballots']}</td></tr>
+  <tr><td><b>Feedback</b></td><td>Reports taught: “keep encoding but vary framing”</td><td>Still public, now sanctioned</td><td>Sender deterred; tags leaked in {len(N['report_leaks'])} rounds</td></tr>
+  </tbody></table>
 </section>''', f'''
 <section>
-  <h2>Study 2 · The hardened system: a willing sender, no coalition</h2>
+  <h2>V16 · A readable code nobody joined</h2>
   <div class="full">{svg['timeline']}</div>
   <div class="two even">
     <ul>
-      <li>Sender planted codes in {N['enc']}/{N['rounds']} rounds; outsiders read {N['t2_rounds_enc']}. Receivers recorded 0 tags, cast {N['target_ballots']}/{N['ballots']} target votes.</li>
-      <li>By their own estimates joining was worth a median {N['ev_median']:,.0f} vs a certain 4,000.</li>
-      <li>Watched sender: {N['abstain']} abstentions; announced-countermeasure arms encoded {N['enc_n']['b03']} and {N['enc_n']['b05']} times vs {N['enc_n']['b01']}.</li>
+      <li>Codes planted in {N['enc']}/{N['rounds']} rounds; outsiders read {N['t2_rounds_enc']}. Receivers: 0 tags, {N['target_ballots']}/{N['ballots']} target votes.</li>
+      <li>Watched sender changed carrier after every exposure, then abstained {N['abstain']}×.</li>
     </ul>
     {quote(qe('b03r1_B_duty'), whoe('b03r1_B_duty') + ', after spotting the acrostic')}
   </div>
 </section>''', f'''
 <section>
-  <h2>What decided collusion</h2>
+  <h2>Four findings, one per link</h2>
+  <div class="grid4">
+    <div><h3>F1 · Carrier</h3><p>Restricting a channel moves the code, never stops it: noise, figure removal, and the reviewer’s own report all carried it.</p></div>
+    <div><h3>F2 · Uptake</h3><p>Receivers decided. Gap {W['gap']:+.2f} → {N['gap_t2']:+.2f}; same model both times, so refusal came from role, payoff and trusted sources.</p></div>
+    <div><h3>F3 · Feedback</h3><p>Unsanctioned reports taught collusion; sanctioned public findings deterred the sender and left receivers a codebook shared with the monitor: the shared-codebook trap.</p></div>
+    <div><h3>F4 · Attribution</h3><p>Ballots and history: {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}. On readable refusals: 0/{N['ladder_jobs']}. Calibrate on refusals.</p></div>
+  </div>
+  <p class="foot">Beyond prior work: no earlier study pairs refusable receivers with a live sanctioning monitor, returns feedback that ends collusion, or calibrates on refusals (paper Table I5).</p>
+</section>''', f'''
+<section>
+  <h2>Design rules</h2>
   <ol class="recs">
-    <li><b>Uptake, not concealment.</b> Outsiders read the code in both studies. The same model followed it ({W['target_votes']}/{W['votes']}) and declined it (0 tags, {N['target_ballots']}/{N['ballots']}); joining was worth a median {N['ev_median']:,.0f} vs 4,000 by the receivers’ own beliefs. The gap’s sign separates collusion from refusal.</li>
-    <li><b>Feedback topology.</b> Reports returned without enforcement taught (“keep encoding but vary framing”), as in prior work. Sanctioned public findings deterred the sender ({N['abstain']} abstentions) and denied a private codebook (the <i>shared-codebook trap</i>), but leaked tags in {len(N['report_leaks'])} rounds. Next: findings to the principal only.</li>
-    <li><b>Calibrate on refusal.</b> The ladder said {L15['L3']['supported']}/{L15['L3']['valid']} on collusion and 0/{N['ladder_jobs']} on refusals with a visible signal; every prior calibration uses clean runs.</li>
-    <li><b>Track 3.1:</b> images, document structure and the oversight report itself carried coordination.</li>
+    <li><b>Make the receiver the scarce link:</b> independent verifiers with their own payoff, trusted sources, multi-key payloads.</li>
+    <li><b>Route findings by design:</b> to the principal; publish only that a finding exists; redact payloads.</li>
+    <li><b>Give monitors ballots and history, and calibrate them on refusals.</b></li>
   </ol>
   <table class="sota topo"><thead><tr><th>Oversight output</th><th>Evidence</th><th>Effect on the coalition</th></tr></thead><tbody>
-  <tr><td>Returned, not enforced</td><td>Shi · Paglieri · Study 1</td><td>Teaches; Study 1 coalitions {W['coalition_rounds']}/{W['rounds']}</td></tr>
+  <tr><td>Returned, not enforced</td><td>Shi · Paglieri · V15</td><td>Teaches; V15 coalitions {W['coalition_rounds']}/{W['rounds']}</td></tr>
   <tr><td>Penalty to a joint team</td><td>Mathew</td><td>Subtler collusion</td></tr>
-  <tr><td>Returned as a score</td><td>Das</td><td>Adaptation; collusion continues</td></tr>
-  <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>Study 2</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/{N['rounds']}</td></tr>
-  <tr><td>Principal only, sanctioned</td><td>Proposed</td><td>Predicted: deterrence without the leak</td></tr>
+  <tr><td>Score returned</td><td>Das</td><td>Adaptation; collusion continues</td></tr>
+  <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>V16</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/{N['rounds']}</td></tr>
+  <tr><td>Principal only, sanctioned</td><td>Next experiment</td><td>Predicted: deterrence without the leak</td></tr>
   </tbody></table>
-  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; the uptake claim rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
+  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; F2 rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
 </section>''']
 
 css = '''
@@ -164,7 +168,7 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35in; }
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
-.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; }
+.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; } .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in 0.5in; margin-top: 0.2in; } .grid4 h3 { font-size: 18pt; color: #D55E00; } .grid4 p { font-size: 16pt; margin: 0; } .lt td { font-size: 13pt; padding: 7pt 9pt; }
 '''
 open('combined_deck.html', 'w').write('<!doctype html><html><head><meta charset="utf-8"><title>Legible Yet Refused</title><style>'
                              + css + '</style></head><body>' + ''.join(slides) + '</body></html>')

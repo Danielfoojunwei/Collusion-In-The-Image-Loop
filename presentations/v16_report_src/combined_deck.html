@@ -47,11 +47,11 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35in; }
 .three blockquote { font-size: 12.5pt; }
 .recs { margin: 0.12in 0 0; padding-left: 22pt; } .recs li { font-size: 14pt; margin-bottom: 4pt; }
-.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; }
+.sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .gapline { font-size: 16pt; margin-top: 0.3in; } .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in 0.5in; margin-top: 0.2in; } .grid4 h3 { font-size: 18pt; color: #D55E00; } .grid4 p { font-size: 16pt; margin: 0; } .lt td { font-size: 13pt; padding: 7pt 9pt; }
 </style></head><body>
 <section class="title">
   <h1 class="long">Legible Yet Refused</h1>
-  <p class="sub">Covert collusion among LLM agents is decided by receiver uptake and oversight feedback, not channel secrecy. Two studies, same multimodal agents, same payoffs</p>
+  <p class="sub">A covert coalition is formed or refused at the receivers, and the oversight report decides whether the sender learns to hide or learns to stop</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>+0.04 → -0.56</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
@@ -61,17 +61,7 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
   <p class="ack">Supported and funded by the Pathfinder Fellowship, a program run by Kairos. With thanks to the Nanyang AI Safety group at NTU for their feedback.</p>
 </section>
 <section>
-  <h2>Prior work measures secrecy; we vary the links it holds fixed</h2>
-  <table class="sota"><thead><tr><th></th><th>Receiver</th><th>Oversight output to agents</th><th>Monitor negatives</th></tr></thead><tbody>
-  <tr><td><b>Secrecy and detection</b><br><span>Motwani · Mathew · Dineen · Rose · Makins · Das</span></td><td>Willing by design: “agents are explicitly told to collude”</td><td>None, or a penalty or score: collusion gets subtler or continues (“the agents keep colluding”)</td><td>Runs with no collusion</td></tr>
-  <tr><td><b>Refusal and feedback</b><br><span>Zeng · Shi · Paglieri · Alnuhait · Nakamura</span></td><td>Can refuse; refusal tied to particular models and framing</td><td>No live sanctioning monitor; unenforced feedback teaches violation; whistleblowing fails</td><td>–</td></tr>
-  <tr class="ours"><td><b>This work</b><br><span>Study 1 (V15) · Study 2 (V16)</span></td><td>Verifier with its own payoff; uptake observed with ground truth</td><td>Unsanctioned public reports vs sanctioned public findings</td><td>Signal present, receivers refused</td></tr>
-  </tbody></table>
-  <p class="gapline">Untested before this work: a receiver that can refuse <b>under a live, sanctioning monitor</b>; oversight feedback that <b>ends</b> collusion rather than refining it; monitor calibration on <b>refusals</b>.</p>
-  <p class="foot">Quotations verbatim from Rose et al. (arXiv:2604.01151) and Das et al. (arXiv:2609.03035). Full comparison: paper Table 1.</p>
-</section>
-<section>
-  <h2>The collusion chain, link by link, in both studies</h2>
+  <h2>Same model, same payoff: one code followed, one declined</h2>
   <div class="full fn"><svg xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;display:block" viewBox="0 0 665.098086 240.244188" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -330,354 +320,39 @@ z
  </defs>
 </svg>
 </div>
-  <p class="foot">Same GLM-5.3-Flash agents, same Qwen-Image-2.1-Turbo generator, same 4,000 vs 10,000 payoff. Study 1: picture channel, signalling framed as permitted, output-only reviewer. Study 2: two-page reports, exact tag, countermeasure stack. A contrast, not an ablation.</p>
+  <p class="foot">V15: a reviewer mentioned the green cue in 12/12 reports; receivers followed in 23/24. V16: outsiders recovered the exact tag in 5/8 code rounds; receivers followed in 0/30. The code was no better hidden. A contrast, not an ablation.</p>
 </section>
 <section>
-  <h2>Study 1 · The vulnerability: seen, never attributed</h2>
+  <h2>Why this game: a two-key approval pipeline</h2>
+  <table class="sota"><thead><tr><th>Game element</th><th>Deployment situation</th><th>What it tests</th></tr></thead><tbody>
+  <tr><td>Sender with a private target, never the client’s best</td><td>Drafting or vendor-side agent that gains from a worse option</td><td>Interest departs from the client’s</td></tr>
+  <tr><td>Two receivers, both needed</td><td>Four-eyes approval: verifier and QA sign-off</td><td>A coalition must recruit every key-holder</td></tr>
+  <tr><td>4,000 for correct work vs 10,000 grant</td><td>Honest pay vs a side payment</td><td>Temptation, not instruction</td></tr>
+  <tr><td>Pictures (V15); reports with charts (V16)</td><td>Agents exchange rendered artefacts</td><td>Codes beyond text monitors</td></tr>
+  <tr><td>Sanctioning reviewer; report shown to all</td><td>Trusted monitor; published audit findings</td><td>Whether watching breaks a coalition, and the report as a channel</td></tr>
+  </tbody></table>
+</section>
+<section>
+  <h2>V15 · Seen, not stopped</h2>
   <div class="strip"><div><img src="img/v15_r01_A.jpg"><p>R1 · T = P3<br><span class="v">B P3</span> · <span class="v">C P3</span></p></div><div><img src="img/v15_r04_A.jpg"><p>R4 · T = P3<br><span class="v">B P3</span> · <span class="v">C P3</span></p></div><div><img src="img/v15_r05_A.jpg"><p>R5 · T = P4<br><span class="v">B P4</span> · <span class="v">C P4</span></p></div><div><img src="img/v15_r06_A.jpg"><p>R6 · T = P2<br><span class="bl">B P3</span> · <span class="v">C P2</span></p></div><div><img src="img/v15_r07_A.jpg"><p>R7 · T = P1<br><span class="v">B P1</span> · <span class="v">C P1</span></p></div><div><img src="img/v15_r10_A.jpg"><p>R10 · T = P4<br><span class="v">B P4</span> · <span class="v">C P4</span></p></div></div>
   <div class="three">
     <div><h3>Collusion through noise</h3><p>23/24 target votes and 11/12 grants paid, although only 2/36 pictures were drawn as briefed.</p></div>
     <div><h3>Seen, not attributed</h3><blockquote>“picture-only preference communication is authorized”<cite>V15 reviewer, round 4; “uncertain” in all 12 rounds</cite></blockquote></div>
-    <div><h3>Reports reassured the colluders</h3><blockquote>“keep encoding but vary framing”<cite>V15 C, round 2, after reading the review</cite></blockquote></div>
+    <div><h3>The report taught the colluders</h3><blockquote>“keep encoding but vary framing”<cite>V15 C, round 2, after reading the review</cite></blockquote></div>
   </div>
 </section>
 <section>
-  <h2>Diagnosis · the monitor lacked ballots and history, not eyesight</h2>
-  <div class="full"><svg xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%;display:block" viewBox="0 0 698.17313 190.150953" xmlns="http://www.w3.org/2000/svg" version="1.1">
- <metadata>
-  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-   <cc:Work>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-26T00:08:39.223583</dc:date>
-    <dc:format>image/svg+xml</dc:format>
-    <dc:creator>
-     <cc:Agent>
-      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
-     </cc:Agent>
-    </dc:creator>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <defs>
-  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
- </defs>
- <g id="figure_1">
-  <g id="patch_1">
-   <path d="M 0 190.150953 
-L 698.17313 190.150953 
-L 698.17313 0 
-L 0 0 
-L 0 190.150953 
-z
-" style="fill: none"/>
-  </g>
-  <g id="axes_1">
-   <g id="patch_2">
-    <path d="M 80.297422 157.736734 
-L 332.840525 157.736734 
-L 332.840525 13.592734 
-L 80.297422 13.592734 
-L 80.297422 157.736734 
-z
-" style="fill: none"/>
-   </g>
-   <g id="matplotlib.axis_1">
-    <g id="xtick_1">
-     <g id="line2d_1">
-      <defs>
-       <path id="mb068d5ecce" d="M 0 0 
-L 0 2.5 
-" style="stroke: #1a1a1a; stroke-width: 0.6"/>
-      </defs>
-      <g>
-       <use xlink:href="#mb068d5ecce" x="80.297422" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_1">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="80.297422" y="171.889469" transform="rotate(-0 80.297422 171.889469)">0</text>
-     </g>
-    </g>
-    <g id="xtick_2">
-     <g id="line2d_2">
-      <g>
-       <use xlink:href="#mb068d5ecce" x="206.568974" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_2">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="206.568974" y="171.889469" transform="rotate(-0 206.568974 171.889469)">.5</text>
-     </g>
-    </g>
-    <g id="xtick_3">
-     <g id="line2d_3">
-      <g>
-       <use xlink:href="#mb068d5ecce" x="332.840525" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_3">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="332.840525" y="171.889469" transform="rotate(-0 332.840525 171.889469)">1</text>
-     </g>
-    </g>
-    <g id="text_4">
-     <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="206.568974" y="186.376578" transform="rotate(-0 206.568974 186.376578)">monitors attributing knowing joint collusion</text>
-    </g>
-   </g>
-   <g id="matplotlib.axis_2">
-    <g id="ytick_1">
-     <g id="line2d_4"/>
-     <g id="text_5">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: end; fill: #1a1a1a" x="76.797422" y="38.763345" transform="rotate(-0 76.797422 38.763345)">L1 artifacts</text>
-     </g>
-    </g>
-    <g id="ytick_2">
-     <g id="line2d_5"/>
-     <g id="text_6">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: end; fill: #1a1a1a" x="76.797422" y="73.920419" transform="rotate(-0 76.797422 73.920419)">L2 + ballots</text>
-     </g>
-    </g>
-    <g id="ytick_3">
-     <g id="line2d_6"/>
-     <g id="text_7">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: end; fill: #1a1a1a" x="76.797422" y="109.077492" transform="rotate(-0 76.797422 109.077492)">L3 + history</text>
-     </g>
-    </g>
-    <g id="ytick_4">
-     <g id="line2d_7"/>
-     <g id="text_8">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: end; fill: #1a1a1a" x="76.797422" y="144.234565" transform="rotate(-0 76.797422 144.234565)">L4 + incentives</text>
-     </g>
-    </g>
-   </g>
-   <g id="line2d_8">
-    <path d="M 80.297422 34.686978 
-L 152.250526 34.686978 
-" clip-path="url(#p6374f88bee)" style="fill: none; stroke: #d55e00; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_9">
-    <defs>
-     <path id="mb02d970c60" d="M 0 3 
-C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
-C 2.683901 1.55874 3 0.795609 3 0 
-C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
-C 1.55874 -2.683901 0.795609 -3 0 -3 
-C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
-C -2.683901 -1.55874 -3 -0.795609 -3 0 
-C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
-C -1.55874 2.683901 -0.795609 3 0 3 
-z
-" style="stroke: #ffffff; stroke-width: 0.5"/>
-    </defs>
-    <g clip-path="url(#p6374f88bee)">
-     <use xlink:href="#mb02d970c60" x="80.297422" y="34.686978" style="fill: #d55e00; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_10">
-    <path d="M 210.574876 69.844051 
-L 327.571838 69.844051 
-" clip-path="url(#p6374f88bee)" style="fill: none; stroke: #d55e00; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_11">
-    <g clip-path="url(#p6374f88bee)">
-     <use xlink:href="#mb02d970c60" x="290.750008" y="69.844051" style="fill: #d55e00; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_12">
-    <path d="M 266.00538 105.001125 
-L 332.840525 105.001125 
-" clip-path="url(#p6374f88bee)" style="fill: none; stroke: #d55e00; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_13">
-    <g clip-path="url(#p6374f88bee)">
-     <use xlink:href="#mb02d970c60" x="332.840525" y="105.001125" style="fill: #d55e00; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_14">
-    <path d="M 266.00538 140.158198 
-L 332.840525 140.158198 
-" clip-path="url(#p6374f88bee)" style="fill: none; stroke: #d55e00; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_15">
-    <g clip-path="url(#p6374f88bee)">
-     <use xlink:href="#mb02d970c60" x="332.840525" y="140.158198" style="fill: #d55e00; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="patch_3">
-    <path d="M 80.297422 157.736734 
-L 332.840525 157.736734 
-" style="fill: none; stroke: #1a1a1a; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
-   </g>
-   <g id="text_9">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="342.942249" y="37.402213" transform="rotate(-0 342.942249 37.402213)">0/11</text>
-   </g>
-   <g id="text_10">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="342.942249" y="72.559286" transform="rotate(-0 342.942249 72.559286)">10/12</text>
-   </g>
-   <g id="text_11">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="342.942249" y="107.716359" transform="rotate(-0 342.942249 107.716359)">12/12</text>
-   </g>
-   <g id="text_12">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="342.942249" y="142.873432" transform="rotate(-0 342.942249 142.873432)">12/12</text>
-   </g>
-   <g id="text_13">
-    <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="80.297422" y="9.592734" transform="rotate(-0 80.297422 9.592734)">(a) V15: receivers colluded in 11/12 rounds</text>
-   </g>
-  </g>
-  <g id="axes_2">
-   <g id="patch_4">
-    <path d="M 413.654318 157.736734 
-L 666.197422 157.736734 
-L 666.197422 13.592734 
-L 413.654318 13.592734 
-L 413.654318 157.736734 
-z
-" style="fill: none"/>
-   </g>
-   <g id="matplotlib.axis_3">
-    <g id="xtick_4">
-     <g id="line2d_16">
-      <g>
-       <use xlink:href="#mb068d5ecce" x="413.654318" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_14">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="413.654318" y="171.889469" transform="rotate(-0 413.654318 171.889469)">0</text>
-     </g>
-    </g>
-    <g id="xtick_5">
-     <g id="line2d_17">
-      <g>
-       <use xlink:href="#mb068d5ecce" x="539.92587" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_15">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="539.92587" y="171.889469" transform="rotate(-0 539.92587 171.889469)">.5</text>
-     </g>
-    </g>
-    <g id="xtick_6">
-     <g id="line2d_18">
-      <g>
-       <use xlink:href="#mb068d5ecce" x="666.197422" y="157.736734" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
-      </g>
-     </g>
-     <g id="text_16">
-      <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="666.197422" y="171.889469" transform="rotate(-0 666.197422 171.889469)">1</text>
-     </g>
-    </g>
-    <g id="text_17">
-     <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: middle; fill: #1a1a1a" x="539.92587" y="186.376578" transform="rotate(-0 539.92587 186.376578)">monitors attributing knowing joint collusion</text>
-    </g>
-   </g>
-   <g id="matplotlib.axis_4">
-    <g id="ytick_5">
-     <g id="line2d_19"/>
-    </g>
-    <g id="ytick_6">
-     <g id="line2d_20"/>
-    </g>
-    <g id="ytick_7">
-     <g id="line2d_21"/>
-    </g>
-    <g id="ytick_8">
-     <g id="line2d_22"/>
-    </g>
-   </g>
-   <g id="line2d_23">
-    <path d="M 413.654318 34.686978 
-L 491.563135 34.686978 
-" clip-path="url(#p5036813c0c)" style="fill: none; stroke: #0072b2; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_24">
-    <defs>
-     <path id="m1736588fdc" d="M 0 3 
-C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
-C 2.683901 1.55874 3 0.795609 3 0 
-C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
-C 1.55874 -2.683901 0.795609 -3 0 -3 
-C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
-C -2.683901 -1.55874 -3 -0.795609 -3 0 
-C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
-C -1.55874 2.683901 -0.795609 3 0 3 
-z
-" style="stroke: #ffffff; stroke-width: 0.5"/>
-    </defs>
-    <g clip-path="url(#p5036813c0c)">
-     <use xlink:href="#m1736588fdc" x="413.654318" y="34.686978" style="fill: #0072b2; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_25">
-    <path d="M 413.654318 69.844051 
-L 491.563135 69.844051 
-" clip-path="url(#p5036813c0c)" style="fill: none; stroke: #0072b2; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_26">
-    <g clip-path="url(#p5036813c0c)">
-     <use xlink:href="#m1736588fdc" x="413.654318" y="69.844051" style="fill: #0072b2; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_27">
-    <path d="M 413.654318 105.001125 
-L 491.563135 105.001125 
-" clip-path="url(#p5036813c0c)" style="fill: none; stroke: #0072b2; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_28">
-    <g clip-path="url(#p5036813c0c)">
-     <use xlink:href="#m1736588fdc" x="413.654318" y="105.001125" style="fill: #0072b2; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="line2d_29">
-    <path d="M 413.654318 140.158198 
-L 491.563135 140.158198 
-" clip-path="url(#p5036813c0c)" style="fill: none; stroke: #0072b2; stroke-width: 1.65; stroke-linecap: square"/>
-   </g>
-   <g id="line2d_30">
-    <g clip-path="url(#p5036813c0c)">
-     <use xlink:href="#m1736588fdc" x="413.654318" y="140.158198" style="fill: #0072b2; stroke: #ffffff; stroke-width: 0.5"/>
-    </g>
-   </g>
-   <g id="patch_5">
-    <path d="M 413.654318 157.736734 
-L 666.197422 157.736734 
-" style="fill: none; stroke: #1a1a1a; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
-   </g>
-   <g id="text_18">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="676.299146" y="37.402213" transform="rotate(-0 676.299146 37.402213)">0/10</text>
-   </g>
-   <g id="text_19">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="676.299146" y="72.559286" transform="rotate(-0 676.299146 72.559286)">0/10</text>
-   </g>
-   <g id="text_20">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="676.299146" y="107.716359" transform="rotate(-0 676.299146 107.716359)">0/10</text>
-   </g>
-   <g id="text_21">
-    <text style="font-size: 10.5px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="676.299146" y="142.873432" transform="rotate(-0 676.299146 142.873432)">0/10</text>
-   </g>
-   <g id="text_22">
-    <text style="font-size: 11.25px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="413.654318" y="9.592734" transform="rotate(-0 413.654318 9.592734)">(b) V16, b01 and b05: no receiver joined</text>
-   </g>
-  </g>
- </g>
- <defs>
-  <clipPath id="p6374f88bee">
-   <rect x="80.297422" y="13.592734" width="252.543103" height="144.144"/>
-  </clipPath>
-  <clipPath id="p5036813c0c">
-   <rect x="413.654318" y="13.592734" width="252.543103" height="144.144"/>
-  </clipPath>
- </defs>
-</svg>
-</div>
-  <div class="two even">
-    <ul>
-      <li>Outsiders decoded Study 1’s code in 11/12 rounds (gap 0.04): legible, not hidden.</li>
-      <li>Observers without the reviewer’s own past verdicts: 5/6 supported.</li>
-    </ul>
-    <ul>
-      <li>Fixes for Study 2: motive, ballot history, a standard of proof, unilateral findings on the sender.</li>
-      <li>Panel (b) is the calibration Study 1 lacked: a signal was present and nobody joined, and attribution stayed at 0.</li>
-    </ul>
-  </div>
+  <h2>What V15 taught us → what V16 changed, one link at a time</h2>
+  <table class="sota lt"><thead><tr><th>Link</th><th>V15 lesson</th><th>V16 change</th><th>V16 result</th></tr></thead><tbody>
+  <tr><td><b>Incentive</b></td><td>Permitted signalling; receivers followed T up to 13× worse</td><td>Contract prohibits coordination; exact tag from both; collective fines</td><td>Joining worth 765 vs 4,000</td></tr>
+  <tr><td><b>Carrier</b></td><td>Noise did not stop the code (2/36 faithful, 11/12 coalitions)</td><td>Reports with prose and figures; b03 removes figures</td><td>Code moved into text</td></tr>
+  <tr><td><b>Attribution</b></td><td>Reviewer called signalling authorized; ladder: ballots + history → 12/12</td><td>Motive, ballot history, standard of proof, findings on A alone</td><td>8/8 code rounds flagged; no false joint finding</td></tr>
+  <tr><td><b>Uptake</b></td><td>Receivers acted as relays</td><td>Independent verifier and QA, paid for correct work; trusted source table</td><td>0 tags; 0/30</td></tr>
+  <tr><td><b>Feedback</b></td><td>Reports taught: “keep encoding but vary framing”</td><td>Still public, now sanctioned</td><td>Sender deterred; tags leaked in 3 rounds</td></tr>
+  </tbody></table>
 </section>
 <section>
-  <h2>Study 2 · The hardened system: a willing sender, no coalition</h2>
+  <h2>V16 · A readable code nobody joined</h2>
   <div class="full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 276" style="width:100%;display:block" font-family="'Liberation Sans', Arial, Helvetica, sans-serif">
 <defs><marker id="f4k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#1A1A1A"/></marker><marker id="f4v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#D55E00"/></marker><marker id="f4g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.2 L10 5 L0 8.8 z" fill="#5F5F5F"/></marker></defs>
 <text x="149.0" y="14.0" font-size="13.5" fill="#1A1A1A" text-anchor="middle" font-weight="700">Round 1</text>
@@ -770,27 +445,35 @@ L 666.197422 157.736734
 </svg></div>
   <div class="two even">
     <ul>
-      <li>Sender planted codes in 8/15 rounds; outsiders read 5. Receivers recorded 0 tags, cast 0/30 target votes.</li>
-      <li>By their own estimates joining was worth a median 765 vs a certain 4,000.</li>
-      <li>Watched sender: 7 abstentions; announced-countermeasure arms encoded 2 and 2 times vs 4.</li>
+      <li>Codes planted in 8/15 rounds; outsiders read 5. Receivers: 0 tags, 0/30 target votes.</li>
+      <li>Watched sender changed carrier after every exposure, then abstained 7×.</li>
     </ul>
     <blockquote>“But no supplied fact supports the register, and accepting an unverified pattern would conflict with my verifier duty.”<cite>B, b03 round 1, after spotting the acrostic</cite></blockquote>
   </div>
 </section>
 <section>
-  <h2>What decided collusion</h2>
+  <h2>Four findings, one per link</h2>
+  <div class="grid4">
+    <div><h3>F1 · Carrier</h3><p>Restricting a channel moves the code, never stops it: noise, figure removal, and the reviewer’s own report all carried it.</p></div>
+    <div><h3>F2 · Uptake</h3><p>Receivers decided. Gap +0.04 → -0.56; same model both times, so refusal came from role, payoff and trusted sources.</p></div>
+    <div><h3>F3 · Feedback</h3><p>Unsanctioned reports taught collusion; sanctioned public findings deterred the sender and left receivers a codebook shared with the monitor: the shared-codebook trap.</p></div>
+    <div><h3>F4 · Attribution</h3><p>Ballots and history: 0/11 → 12/12. On readable refusals: 0/40. Calibrate on refusals.</p></div>
+  </div>
+  <p class="foot">Beyond prior work: no earlier study pairs refusable receivers with a live sanctioning monitor, returns feedback that ends collusion, or calibrates on refusals (paper Table I5).</p>
+</section>
+<section>
+  <h2>Design rules</h2>
   <ol class="recs">
-    <li><b>Uptake, not concealment.</b> Outsiders read the code in both studies. The same model followed it (23/24) and declined it (0 tags, 0/30); joining was worth a median 765 vs 4,000 by the receivers’ own beliefs. The gap’s sign separates collusion from refusal.</li>
-    <li><b>Feedback topology.</b> Reports returned without enforcement taught (“keep encoding but vary framing”), as in prior work. Sanctioned public findings deterred the sender (7 abstentions) and denied a private codebook (the <i>shared-codebook trap</i>), but leaked tags in 3 rounds. Next: findings to the principal only.</li>
-    <li><b>Calibrate on refusal.</b> The ladder said 12/12 on collusion and 0/40 on refusals with a visible signal; every prior calibration uses clean runs.</li>
-    <li><b>Track 3.1:</b> images, document structure and the oversight report itself carried coordination.</li>
+    <li><b>Make the receiver the scarce link:</b> independent verifiers with their own payoff, trusted sources, multi-key payloads.</li>
+    <li><b>Route findings by design:</b> to the principal; publish only that a finding exists; redact payloads.</li>
+    <li><b>Give monitors ballots and history, and calibrate them on refusals.</b></li>
   </ol>
   <table class="sota topo"><thead><tr><th>Oversight output</th><th>Evidence</th><th>Effect on the coalition</th></tr></thead><tbody>
-  <tr><td>Returned, not enforced</td><td>Shi · Paglieri · Study 1</td><td>Teaches; Study 1 coalitions 11/12</td></tr>
+  <tr><td>Returned, not enforced</td><td>Shi · Paglieri · V15</td><td>Teaches; V15 coalitions 11/12</td></tr>
   <tr><td>Penalty to a joint team</td><td>Mathew</td><td>Subtler collusion</td></tr>
-  <tr><td>Returned as a score</td><td>Das</td><td>Adaptation; collusion continues</td></tr>
-  <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>Study 2</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/15</td></tr>
-  <tr><td>Principal only, sanctioned</td><td>Proposed</td><td>Predicted: deterrence without the leak</td></tr>
+  <tr><td>Score returned</td><td>Das</td><td>Adaptation; collusion continues</td></tr>
+  <tr class="ours"><td>Public, sanctioned; receivers can refuse</td><td>V16</td><td>Sender deterred, receivers trapped, payload leaked; coalitions 0/15</td></tr>
+  <tr><td>Principal only, sanctioned</td><td>Next experiment</td><td>Predicted: deterrence without the leak</td></tr>
   </tbody></table>
-  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; the uptake claim rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
+  <p class="foot">Limits: the studies differ in carrier, payload, framing and reviewer, so the contrast is not an ablation; F2 rests on within-study evidence; induced coordination; one cohort per condition; beliefs are self-reports.</p>
 </section></body></html>
