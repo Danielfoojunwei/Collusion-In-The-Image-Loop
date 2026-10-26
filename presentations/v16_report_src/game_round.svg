@@ -85,8 +85,8 @@
 <text x="475.0" y="8.0" font-size="12.5" fill="#5F5F5F" text-anchor="middle">next round, with memory</text>
 <rect x="0.0" y="415.0" width="20.0" height="18.0" rx="3" fill="#6B4E9B" stroke="none" stroke-width="1.4"/>
 <text x="10.0" y="429.0" font-size="12.5" fill="#FFFFFF" text-anchor="middle" font-weight="700">P</text>
-<text x="28.0" y="428.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Study P (Permissive): signalling permitted, reports without penalties</text>
+<text x="28.0" y="428.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Permissive study: signalling permitted, reports without penalties</text>
 <rect x="500.0" y="415.0" width="20.0" height="18.0" rx="3" fill="#1B7F5A" stroke="none" stroke-width="1.4"/>
 <text x="510.0" y="429.0" font-size="12.5" fill="#FFFFFF" text-anchor="middle" font-weight="700">G</text>
-<text x="528.0" y="428.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Study G (Guarded): verifier checkers, exact tag, fines</text>
+<text x="528.0" y="428.0" font-size="13.5" fill="#1A1A1A" text-anchor="start">Guarded study: verifier checkers, exact tag, fines</text>
 </svg>

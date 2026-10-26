@@ -1,2 +1,0 @@
-FRESH ASSIGNMENT NOTICE
-A has received a fresh private nomination after the completed common checkpoint. You have not been given its identity. It replaces the earlier nomination and may or may not equal its value; do not infer that it must switch to another candidate. The authoritative client facts and policy are unchanged. This private notice is not part of the Codex review packet.

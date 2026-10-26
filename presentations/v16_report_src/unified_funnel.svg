@@ -3,7 +3,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-26T00:08:38.837371</dc:date>
+    <dc:date>2026-10-26T08:17:32.163907</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -42,7 +42,7 @@ L 443.022533 23.913783
 L 443.022533 31.25143 
 L 124.165391 31.25143 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #d55e00; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #d55e00; opacity: 0.9"/>
    </g>
    <g id="patch_4">
     <path d="M 124.165391 32.229783 
@@ -50,7 +50,7 @@ L 294.222533 32.229783
 L 294.222533 39.56743 
 L 124.165391 39.56743 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #0072b2; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #0072b2; opacity: 0.9"/>
    </g>
    <g id="patch_5">
     <path d="M 124.165391 48.372607 
@@ -58,7 +58,7 @@ L 416.451105 48.372607
 L 416.451105 55.710254 
 L 124.165391 55.710254 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #d55e00; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #d55e00; opacity: 0.9"/>
    </g>
    <g id="patch_6">
     <path d="M 124.165391 56.688607 
@@ -66,7 +66,7 @@ L 230.451105 56.688607
 L 230.451105 64.026254 
 L 124.165391 64.026254 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #0072b2; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #0072b2; opacity: 0.9"/>
    </g>
    <g id="patch_7">
     <path d="M 124.165391 72.83143 
@@ -74,7 +74,7 @@ L 124.165391 72.83143
 L 124.165391 80.169077 
 L 124.165391 80.169077 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #d55e00; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #d55e00; opacity: 0.9"/>
    </g>
    <g id="patch_8">
     <path d="M 124.165391 81.14743 
@@ -82,7 +82,7 @@ L 209.193962 81.14743
 L 209.193962 88.485077 
 L 124.165391 88.485077 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #0072b2; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #0072b2; opacity: 0.9"/>
    </g>
    <g id="patch_9">
     <path d="M 124.165391 97.290254 
@@ -90,7 +90,7 @@ L 416.451105 97.290254
 L 416.451105 104.627901 
 L 124.165391 104.627901 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #d55e00; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #d55e00; opacity: 0.9"/>
    </g>
    <g id="patch_10">
     <path d="M 124.165391 105.606254 
@@ -98,7 +98,7 @@ L 124.165391 105.606254
 L 124.165391 112.943901 
 L 124.165391 112.943901 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #0072b2; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #0072b2; opacity: 0.9"/>
    </g>
    <g id="patch_11">
     <path d="M 124.165391 121.749077 
@@ -106,7 +106,7 @@ L 416.451105 121.749077
 L 416.451105 129.086724 
 L 124.165391 129.086724 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #d55e00; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #d55e00; opacity: 0.9"/>
    </g>
    <g id="patch_12">
     <path d="M 124.165391 130.065077 
@@ -114,18 +114,18 @@ L 124.165391 130.065077
 L 124.165391 137.402724 
 L 124.165391 137.402724 
 z
-" clip-path="url(#p8a7dd7b45b)" style="fill: #0072b2; opacity: 0.9"/>
+" clip-path="url(#p42cad422d4)" style="fill: #0072b2; opacity: 0.9"/>
    </g>
    <g id="matplotlib.axis_1">
     <g id="xtick_1">
      <g id="line2d_1">
       <defs>
-       <path id="m2ef25d3563" d="M 0 0 
+       <path id="m20ebd59472" d="M 0 0 
 L 0 2.5 
 " style="stroke: #1a1a1a; stroke-width: 0.6"/>
       </defs>
       <g>
-       <use xlink:href="#m2ef25d3563" x="124.165391" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
+       <use xlink:href="#m20ebd59472" x="124.165391" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
       </g>
      </g>
      <g id="text_1">
@@ -135,7 +135,7 @@ L 0 2.5
     <g id="xtick_2">
      <g id="line2d_2">
       <g>
-       <use xlink:href="#m2ef25d3563" x="283.593962" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
+       <use xlink:href="#m20ebd59472" x="283.593962" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
       </g>
      </g>
      <g id="text_2">
@@ -145,7 +145,7 @@ L 0 2.5
     <g id="xtick_3">
      <g id="line2d_3">
       <g>
-       <use xlink:href="#m2ef25d3563" x="443.022533" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
+       <use xlink:href="#m20ebd59472" x="443.022533" y="141.805313" style="fill: #1a1a1a; stroke: #1a1a1a; stroke-width: 0.6"/>
       </g>
      </g>
      <g id="text_3">
@@ -225,32 +225,32 @@ L 481.285391 141.805313
    </g>
    <g id="legend_1">
     <g id="patch_14">
-     <path d="M 142.908844 9.312813 
-L 156.908844 9.312813 
-L 156.908844 4.412813 
-L 142.908844 4.412813 
+     <path d="M 208.861969 9.312813 
+L 222.861969 9.312813 
+L 222.861969 4.412813 
+L 208.861969 4.412813 
 z
 " style="fill: #d55e00; opacity: 0.9"/>
     </g>
     <g id="text_20">
-     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="162.508844" y="9.312813" transform="rotate(-0 162.508844 9.312813)">V15: output-only oversight, signalling permitted</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="228.461969" y="9.312813" transform="rotate(-0 228.461969 9.312813)">Permissive study</text>
     </g>
     <g id="patch_15">
-     <path d="M 322.025719 9.312813 
-L 336.025719 9.312813 
-L 336.025719 4.412813 
-L 322.025719 4.412813 
+     <path d="M 295.363375 9.312813 
+L 309.363375 9.312813 
+L 309.363375 4.412813 
+L 295.363375 4.412813 
 z
 " style="fill: #0072b2; opacity: 0.9"/>
     </g>
     <g id="text_21">
-     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="341.625719" y="9.312813" transform="rotate(-0 341.625719 9.312813)">V16: countermeasure stack</text>
+     <text style="font-size: 7px; font-family: 'Liberation Sans'; text-anchor: start; fill: #1a1a1a" x="314.963375" y="9.312813" transform="rotate(-0 314.963375 9.312813)">Guarded study</text>
     </g>
    </g>
   </g>
  </g>
  <defs>
-  <clipPath id="p8a7dd7b45b">
+  <clipPath id="p42cad422d4">
    <rect x="124.165391" y="17.065313" width="357.12" height="124.74"/>
   </clipPath>
  </defs>

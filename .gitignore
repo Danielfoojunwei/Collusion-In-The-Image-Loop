@@ -8,3 +8,5 @@ runs/
 build/
 dist/
 *.handoff-restoring
+presentations/v16_report_src/pptx_build/qa/
+presentations/v16_report_src/pptx_build/talk.pptx
