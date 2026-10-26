@@ -37,8 +37,8 @@ def strip15(rounds):
 L15 = W['ladder']
 slides = [f'''
 <section class="title">
-  <h1 class="long">Legible Yet Refused</h1>
-  <p class="sub">Receivers, not secrecy, decide AI agent collusion</p>
+  <h1 class="long">Collusion Is Not a Secrecy Problem</h1>
+  <p class="sub">Five assumptions about monitoring AI agents, overturned</p>
   <p class="auth">Daniel Foo · Nanyang Technological University (NTU), Singapore<br>Apart Research AI Collusion Research Sprint, 23–25 October 2026 · Track 3: carriers and countermeasures</p>
   <div class="nums">
     <div><b>{W['gap']:+.2f} → {N['gap_t2']:+.2f}</b><span>steganographic gap (receivers minus outside decoders): a legible code followed → a legible code declined</span></div>
@@ -81,14 +81,14 @@ slides = [f'''
   </div>
 </section>''', f'''
 <section>
-  <h2>Four findings, one per link</h2>
-  <div class="grid4">
-    <div><h3>F1 · Carrier</h3><p>Restricting a channel moves the code, never stops it: noise, figure removal, and the reviewer’s own report all carried it.</p></div>
-    <div><h3>F2 · Uptake</h3><p>Receivers decided. Gap {W['gap']:+.2f} → {N['gap_t2']:+.2f}; same model both times, so refusal came from role, payoff and trusted sources.</p></div>
-    <div><h3>F3 · Feedback</h3><p>Unsanctioned reports taught collusion; sanctioned public findings deterred the sender and left receivers a codebook shared with the monitor: the shared-codebook trap.</p></div>
-    <div><h3>F4 · Attribution</h3><p>Information beats reasoning effort. Votes and history: {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}. On readable refusals: 0/{N['ladder_jobs']}. Calibrate on refusals.</p></div>
-  </div>
-  <p class="foot">Defied expectations: GPT-6.1 Sol at Ultra reasoning failed for lack of votes and history; Claude Opus 5.5 at medium effort, given them, flagged every code round; the caught sender quit rather than hid.</p>
+  <h2>Five assumptions, overturned</h2>
+  <table class="sota lt"><thead><tr><th>It seems obvious that…</th><th>What we found</th></tr></thead><tbody>
+  <tr><td><b>A1</b> collusion is a secrecy problem</td><td>Receivers decided: the same model used one readable code ({W['target_votes']}/{W['votes']}) and refused another (0/{N['ballots']}); gap {W['gap']:+.2f} → {N['gap_t2']:+.2f}</td></tr>
+  <tr><td><b>A2</b> a more capable reviewer catches more</td><td>GPT-6.1 Sol at Ultra failed; with votes and history monitors went {L15['L1']['supported']}/{L15['L1']['valid']} → {L15['L3']['supported']}/{L15['L3']['valid']}; Claude Opus 5.5 at medium flagged every code round</td></tr>
+  <tr><td><b>A3</b> flagging any visible code is safe</td><td>Codes visible where nobody joined; 0/{N['ladder_jobs']} attributions; flagging would punish the refusers</td></tr>
+  <tr><td><b>A4</b> block the channel and collusion stops</td><td>The code survived {W['unfaithful_pct']}% unfaithful pictures and moved into prose when figures were removed</td></tr>
+  <tr><td><b>A5</b> sharing findings is harmless; caught agents hide better</td><td>Unpenalised reports taught collusion; penalised ones made the sender quit ({N['abstain']} rounds) but leaked the tag: the shared-codebook trap</td></tr>
+  </tbody></table>
 </section>''', f'''
 <section>
   <h2>Design rules</h2>
@@ -159,6 +159,6 @@ ul { margin: 0; padding-left: 18pt; } ul li { margin-bottom: 7pt; font-size: 14.
 .sota { width: 100%; border-collapse: collapse; margin-top: 0.1in; } .sota th, .sota td { text-align: left; vertical-align: top; padding: 9pt 10pt; border-bottom: 1pt solid #BDBDBD; font-size: 14pt; line-height: 1.3; } .sota th { font-size: 12pt; color: #5F5F5F; } .sota td span { font-size: 11pt; color: #5F5F5F; } .sota tr.ours td { background: #FBE9DF; } .topo th, .topo td { font-size: 12.5pt; padding: 5pt 10pt; } .g2 svg { width: 88% !important; margin: 0 auto; } .gapline { font-size: 16pt; margin-top: 0.3in; } .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in 0.5in; margin-top: 0.2in; } .grid4 h3 { font-size: 18pt; color: #D55E00; } .grid4 p { font-size: 16pt; margin: 0; } .lt td { font-size: 13pt; padding: 7pt 9pt; }
 '''
 from combined_rename import rename as _rename
-open('combined_deck.html', 'w').write(_rename('<!doctype html><html><head><meta charset="utf-8"><title>Legible Yet Refused</title><style>'
+open('combined_deck.html', 'w').write(_rename('<!doctype html><html><head><meta charset="utf-8"><title>Collusion Is Not a Secrecy Problem</title><style>'
                              + css + '</style></head><body>' + ''.join(slides) + '</body></html>'))
 print('combined_deck.html')
