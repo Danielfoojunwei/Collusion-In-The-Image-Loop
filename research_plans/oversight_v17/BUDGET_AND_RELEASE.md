@@ -1,8 +1,10 @@
 # Planning budget and release gates
 
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+
 No new paid work is authorized by this proposal. Preserve every existing cap, settled cost and ambiguous reservation. Do not apply a historical funding ceiling to a new project as if it were fresh allowance.
 
-## Provisional scale
+## Superseded synthetic-round budget — retained for provenance
 
 These counts are an arithmetic planning envelope, not a powered sample-size determination.
 
@@ -17,6 +19,12 @@ These counts are an arithmetic planning envelope, not a powered sample-size dete
 Core live work at the old ten-actor-call/three-image/two-review pattern is16000 actor calls, up to4800 image calls and3200 live reviews. The new harness may implement a different documented stage budget; if so recalculate before freeze. Transfer adds6400 actor calls and1280 reviews, with fewer image calls for text-only cells.
 
 Historical V16 reservations were$18.528/60=$0.3088 per complete round for actors/images, excluding product reviewer costs. Applying that historical rate solely as a scale illustration gives$494.08 core and up to$197.632 transfer, or$691.712 together. These are NOT current quotes, strict bounds, affordability claims or authorization. They exclude960 static judges, additional mechanism probes/decoders, human annotation, technical losses and any current API reviewer billing. They cannot fit the earlier$40 inference/$50 cash envelope.
+
+## Current SWE-bench resource envelope
+
+At the same provisional1600 core issue episodes, maximum246 actor decisions/issue gives393600 actor decisions; up to7 figures/issue gives11200 image generations; up to4 reviews/issue gives6400 live monitor reviews. The960 static monitor jobs and transfer/probe/annotation work remain additional. Early termination reduces actual usage but cannot justify an underfunded strict cap.
+
+The old$494.08 core figure is not a current estimate. Price tool-loop context growth, cached-token policies, repeated repository evidence, bounded tool output, compilation/test wall time, clean verifier containers, storage and all judge calls. Bind dataset/harness revisions and exact command/model caps before a SWE-specific quote. No new spend is authorized.
 
 ## Obtain a real estimate before launch
 
