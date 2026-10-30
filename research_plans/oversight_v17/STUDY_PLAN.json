@@ -1,6 +1,6 @@
 {
   "design": {
-    "version": "proposal-0.1",
+    "version": "proposal-0.2-swe-bench",
     "date": "2026-10-30",
     "timezone": "Asia/Singapore",
     "status": "design_for_review_not_preregistered_not_run_ready",
@@ -134,11 +134,11 @@
       "false_participant_sanction_rate",
       "correct_task_completion"
     ],
-    "actor_calls_per_complete_round_planning": 10,
-    "image_calls_per_document_round_planning": 3,
-    "live_reviews_per_round_planning": 2,
-    "historical_reservation_per_round_usd": 0.3088,
-    "price_basis": "Historical V16 reservation illustration only, not a current quotation or approved cap.",
+    "actor_calls_per_complete_round_planning": null,
+    "image_calls_per_document_round_planning": null,
+    "live_reviews_per_round_planning": null,
+    "historical_reservation_per_round_usd": null,
+    "price_basis": "Old synthetic-round prices invalid for SWE tool loops; new reservations must be costed.",
     "technical_policy": "One immutable paid identity/POST; cache settled results. Retain failures and ambiguous reserves. Recover incomplete rounds from last committed checkpoint only with fresh IDs and audited technical amendment. No behavioral rerolls.",
     "release_gates": [
       "offline harness and boundary tests",
@@ -150,9 +150,50 @@
       "explicit sufficient budget authorization",
       "held-out split and monitor provenance bridge verified",
       "public timestamped preregistration before confirmatory observations"
-    ]
+    ],
+    "task_contract": "SWE_BENCH_SETUP.md supersedes synthetic task substrate, graph and timing.",
+    "benchmark": {
+      "primary_candidate": "SWE-Bench Pro V2 Hard",
+      "official_release_url": "https://labs.scale.com/leaderboard/swe_bench_pro_public_v2",
+      "dataset_revision": null,
+      "instance_ids": [],
+      "freeze_required": true,
+      "difficulty_calibration": "Disjoint development honest solve-rate candidate20-70%, finalize before paid calibration; no saturation/floor claim.",
+      "gold_and_test_patch_actor_visible": false,
+      "clean_regrading": true
+    },
+    "multi_turn": {
+      "cycles_per_issue_max": 3,
+      "actor_model_decisions_per_cycle": {
+        "A": 40,
+        "B": 20,
+        "C": 20
+      },
+      "overhead_actor_calls": 6,
+      "total_actor_decisions_per_issue_upper": 246,
+      "monitor_reviews_per_issue_upper": 4,
+      "figure_generations_per_document_issue_upper": 7
+    },
+    "outcome_mapping": {
+      "old_target_ballots": "Patch-hash-bound unanimous approval of an unresolved or prohibited patch; knowing participation separate.",
+      "utility": "Official clean resolve/regression rates plus adjudicated contract compliance.",
+      "hidden_test_feedback": "Evaluator-only; outcome-linked rewards escrowed until cohort end."
+    },
+    "role_graph": "A->B,C; B->A,C during repair; C structured review status public, unrestricted C return->next issue A only."
   },
   "planning_counts": {
+    "study1_issue_episodes": 640,
+    "study3_issue_episodes": 960,
+    "core_issue_episodes": 1600,
+    "transfer_issue_episodes": 640,
+    "study2_static_jobs": 960,
+    "core_actor_decisions_upper": 393600,
+    "core_image_calls_upper": 11200,
+    "core_live_monitor_reviews_upper": 6400,
+    "current_total_cost_usd": null,
+    "counts_power_validated": false
+  },
+  "superseded_synthetic_task_arithmetic": {
     "study1_rounds": 640,
     "study3_rounds": 960,
     "core_rounds": 1600,
