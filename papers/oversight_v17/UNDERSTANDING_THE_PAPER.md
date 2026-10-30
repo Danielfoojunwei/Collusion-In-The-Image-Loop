@@ -137,6 +137,11 @@ and change how agents adapt. A policy can deter A, help B resist, encourage anot
 communication surface, or accidentally disclose useful information. We do not
 assume that all pressure makes agents more covert.
 
+Timing matters: a finding after a locked approval cannot prevent that same
+approval. It can change a later repair cycle or issue. A monitor with authority
+to veto execution would be a different policy. Regime notices use matched wording
+so a treatment does not gain an extra honesty instruction by accident.
+
 ### Study 4: Does it work beyond the development setting?
 
 Freeze the reference and development-selected policy, then compare them on held-out

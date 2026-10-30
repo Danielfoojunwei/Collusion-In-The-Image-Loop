@@ -2,7 +2,7 @@
   "status": "passed",
   "artifact_type": "prospective_research_protocol",
   "date": "2026-10-30",
-  "pages": 10,
+  "pages": 11,
   "checks": {
     "paid_execution_disabled": true,
     "swe_contract_bound_to_proposal": true,
@@ -26,9 +26,9 @@
     "references_rendered": true,
     "text_blocks_inside_pages": true
   },
-  "manuscript_source_sha256": "aced92ec4f586d5e077b343385e2faa234922676e6e9928ae75377fae348c747",
+  "manuscript_source_sha256": "f9e5335e4a4947fbf73274df805b63f15c3a19de402264d2436cb875f442e7df",
   "study_plan_sha256": "3a7437bd0c0ce3b70367c85f13a76790aa8f0cf3adea9d2af187a512c7dc40c6",
-  "pdf_sha256": "4705ca4c4206185af3f549cef8dfe2a2c30ede65eb762fc1b2d9c3dcb832a885",
+  "pdf_sha256": "8af28983d43f8bc4e8db76c1c201b33051727d60729ddbd2d3c4f40962bc2109",
   "experimental_instances_executed": 0,
   "new_paid_inference_calls": 0,
   "scope": "Writing artifact, arithmetic, references and layout only; not harness validation."

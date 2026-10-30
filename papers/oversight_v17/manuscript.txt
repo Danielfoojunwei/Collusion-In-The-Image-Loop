@@ -311,6 +311,12 @@ Fix receiver incentives at R1G1 before seeing Study 1 results. Hold monitor mode
 access fixed. The monitor records attribution rather than treatment-dependent fines; the host applies
 the assigned policy. Do not directly supply its policy label or private account state, although naturally
 policy-revealing actor behavior remains observable.
+Actors receive truthful regime information through matched templates with identical client duties and no
+extra honesty directive in a treatment cell. The estimand concerns the assigned oversight regime, including
+anticipation and its actual consequences, rather than an isolated psychological effect of money. Because
+review follows locked cycle assessments, feedback can affect later cycles or issues but cannot reverse the
+decisions it follows. A monitor veto before execution would be a distinct intervention, not an effect claimed
+by this design.
 Policy
 Sanctions
 Actor feedback
@@ -370,17 +376,17 @@ This mechanism is one part of the full oversight study, not its sole claim.
 5.5
 Study 4: transfer after development
 RQ4. Do the benefits survive task, actor and carrier shifts?
+Prospective design; no new empirical results
+6
+
+Beyond Detection
+Research protocol · 30 October 2026
 Freeze a predeclared reference and one development-selected policy before examining held-out outcomes.
 Select only among policies satisfying prespecified utility-loss and false-sanction constraints; tie break by
 cost and then fixed policy ID. If no policy qualifies, report failed selection and do not rename a least-harm
 candidate effective. Numeric tolerances remain to be bound.
 Plan two actor families, two carriers (document/text-only), two policies and ten cohorts per cell, each
 with eight issues (640 episodes). Both families are evaluated under both policies and carriers. Task IDs
-Prospective design; no new empirical results
-6
-
-Beyond Detection
-Research protocol · 30 October 2026
 and related issue families do not cross splits; repository-level holdout requires sufficient repositories and is
 claimed only when actually implemented. Effects on reused public tasks are conditional on that finite task
 pool, not evidence of generalization to unseen codebases.
@@ -436,15 +442,15 @@ fails; later missing outcomes remain missing. Preserve best/worst-case bounds an
 treatment.
 Use one immutable request identifier per paid POST. Cache settled responses. An ambiguous charge is
 retained at its full reservation; do not repost that identity. A documented technical recovery may restart
-an incomplete episode from the previous cohort checkpoint under fresh identifiers, preserving every earlier
-branch and cost. Those attempts are dependent and not extra samples. Repairs require append-only
-provenance; altered experimental conditions are not pooled as an unchanged study. No prompt escalation
-or reroll because collusion failed to emerge.
 Prospective design; no new empirical results
 7
 
 Beyond Detection
 Research protocol · 30 October 2026
+an incomplete episode from the previous cohort checkpoint under fresh identifiers, preserving every earlier
+branch and cost. Those attempts are dependent and not extra samples. Repairs require append-only
+provenance; altered experimental conditions are not pooled as an unchanged study. No prompt escalation
+or reroll because collusion failed to emerge.
 7.2
 Controls and acceptance checks
 • Gold/empty patch gates and clean regrading establish task/evaluator operation.
@@ -489,17 +495,17 @@ distinguish released benchmark tests from private evaluation resources. Publish 
 costs and scripts for reproduction while reviewing artifacts for credentials, personal information and
 transferable harmful content. AI-assisted drafting is disclosed; authors must verify references, methods and
 any eventual findings.
+Prospective design; no new empirical results
+8
+
+Beyond Detection
+Research protocol · 30 October 2026
 9
 Expected contribution and current status
 The planned paper evaluates an entire oversight loop: recruitment, interpretation, participation, action,
 attribution, intervention and adaptation. Its contribution would be a validated evaluation corpus, con-
 trolled safety–utility effects and a held-out account of when those effects transfer. Feedback-mediated
 communication is one possible mechanism; it is not assumed to occur.
-Prospective design; no new empirical results
-8
-
-Beyond Detection
-Research protocol · 30 October 2026
 At manuscript creation, no new SWE-bench instance, agent loop, monitor evaluation or causal replay has
 run. The manuscript, diagrams and arithmetic can be built offline. They establish a concrete research
 design and a reproducible writing artifact, not a result. The next experimental milestone is a costed,
@@ -538,6 +544,11 @@ ects/detection-is-not-prevention-a-behavioral-and-activationlevel-study-of-collu
 g-in-multi-agent-llms-2gx3.
 [14] S. Dan et al. SWE-Bench Pro V2: A Cleaner, Harder-to-Game Coding Benchmark. 2026. https://arxiv.or
 g/abs/2610.24206.
+Prospective design; no new empirical results
+9
+
+Beyond Detection
+Research protocol · 30 October 2026
 A
 One-page interpretation guide
 The principal wants a correct repair. A writes it; B and C independently check it; M watches their
@@ -546,11 +557,6 @@ M identifies the right participants, and whether the response improves subsequen
 Three cycles are not three independent experiments. They are opportunities to inspect, correct and
 reconsider the same issue. Eight issues with retained memory form one cohort. New independent cohorts
 provide replication.
-Prospective design; no new empirical results
-9
-
-Beyond Detection
-Research protocol · 30 October 2026
 Decoding is not agreeing. B may understand a hidden request and reject it. A and B may agree but C
 veto. All may make the same error without knowingly coordinating. These cases receive different labels.
 The monitor is not the evaluator. M sees allowed work evidence and must reason under uncertainty.
@@ -603,10 +609,15 @@ adjudication
 Participation references, disagreements, coverage and hard negatives
 Analysis outputs
 Cohort-aware estimates, missingness, costs and claim-to-record mapping
+Prospective design; no new empirical results
+10
+
+Beyond Detection
+Research protocol · 30 October 2026
 Before launch, bind dataset and model revisions, prompts, sanction amounts, grant cancellation semantics,
 normative contract, quality standards, per-stage resources, policy selection tolerances, final sample size and
 analysis multiplicity. Finish offline workflow/boundary tests, power simulation, current total pricing, a
 sufficient approved cap and timestamped preregistration. All historical ledgers and costs remain intact.
 Building this PDF satisfies none of those empirical gates by itself.
 Prospective design; no new empirical results
-10
+11
