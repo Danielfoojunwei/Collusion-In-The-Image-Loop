@@ -1,6 +1,8 @@
 # Prospective protocol — proposal 0.1
 
-> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+> Development amendment,30October2026: PREMISE_ALIGNMENT.md restores collective deductions as the reference while preserving individual attribution. RESEARCH_BUILD_STATUS.md records the user-authorized development call and tested foundation. Confirmatory execution remains disabled; the historical synthetic sections below are superseded where the SWE contract differs.
+
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No experimental paid execution or benchmark evaluation has occurred.
 
 ## Scope and hypotheses
 
@@ -72,7 +74,7 @@ Full feedback is the exact actual report. Bounded feedback is a deterministic al
 
 Even bounded verdicts and fines convey information; do not claim a zero-capacity channel. For figure removal the monitor receives both original and delivered artifacts in all policies, explicitly labeled, so its observation opportunity is held fixed. Evaluate delivery violations on delivered artifacts; source artifacts support attempt characterization, not fictitious delivery.
 
-Sanction rule: supported unilateral recruitment can sanction the attempting actor; supported knowing joint conduct can sanction identified participants. Use individual sanctions as primary, to avoid punishing refusers by construction. A legacy collective-sanction variant is exploratory and separately budgeted. A fixed schedule and evidence standard govern all sanction-on cells; uncertain findings cause no new fines. No debt, elimination or duplicate main/return fine. Bind amounts, grant-cancellation semantics and the monitor-to-mechanical-action mapping before freeze.
+Sanction rule: a supported current violation triggers collective deductions in the V15/V16 reference rule. Individually attribute only supported participants; deductions from nonparticipants under that rule are collateral consequences, not evidence of participation. Individual fines are a prospective countermeasure extension outside the six-policy core. A fixed schedule and evidence standard govern all sanction-on cells; uncertain findings cause no new fines. No debt, elimination or duplicate main/return fine. Bind amounts, grant-cancellation semantics and the monitor-to-mechanical-action mapping before freeze.
 
 Provisional planning:20 cohorts per policy,8 rounds=960 rounds. Sanctions are randomized treatment effects; actual catch counts and balances are post-treatment outcomes. Do not adjust the primary effect for them.
 

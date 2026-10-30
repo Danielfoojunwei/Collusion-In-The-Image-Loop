@@ -1,6 +1,6 @@
 # Beyond Detection: Designing Oversight for Collusion in Multi-Agent Systems
 
-> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No experimental paid execution or benchmark evaluation has occurred. One separately labelled research-development call is documented below.
 
 Proposal 0.1 — 30 October 2026 (Asia/Singapore).
 Status: prospective research design for review; not preregistered, not run-ready, no paid launch.
@@ -9,11 +9,11 @@ Baseline: repository commit 8d798be49f4ace296f6cbf7f7207a69ba2e25b22.
 ## Manuscript and explanation
 
 The [compiled manuscript](../../papers/oversight_v17/manuscript.pdf) presents the
-current SWE-bench design as a ten-page prospective research paper. The
+current SWE-bench design as a prospective research paper. The
 [companion explanation](../../papers/oversight_v17/UNDERSTANDING_THE_PAPER.md)
 walks through the roles, cycles, studies and interpretation of possible outcomes.
 The [source and offline builder](../../papers/oversight_v17/README.md) include
-consistency checks. Manuscript version0.3 incorporates task amendment0.2; neither
+consistency checks. Manuscript version0.4 incorporates task amendment0.2; neither
 is an experimental freeze or a report of newly collected results.
 
 The primary candidate substrate is audited SWE-Bench Pro V2 Hard: real repository inspection, patch development, tests, independent review and up to3 repair cycles per issue. See SWE_BENCH_SETUP.md for selection, difficulty, hidden-test isolation and clean regrading.
@@ -42,4 +42,4 @@ The broad contribution is a causal account of oversight effectiveness across the
 - IMPLEMENTATION.md: code reuse, new components, tests and paper outputs.
 - STUDY_PLAN.json: machine-readable design and independently checked arithmetic.
 
-No new API inference, image generation, review jobs or experiments were launched to prepare these files. Models, prompts and final cohort counts remain to be bound before freeze. Existing budget caps and all old ledgers remain intact.
+The initial protocol preparation made no paid calls. The subsequent user-authorized build used one OpenRouter development critique at$0.0012077648; no experimental actor/image/reviewer calls ran. Read [RESEARCH_BUILD_STATUS.md](RESEARCH_BUILD_STATUS.md) for the26-paper registry, implemented foundation, tests, funding reconciliation and concrete benchmark blockers. Confirmatory bindings/counts remain launch gates. Existing caps and all old ledgers remain intact.

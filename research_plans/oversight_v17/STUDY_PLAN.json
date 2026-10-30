@@ -114,7 +114,7 @@
       "receiver_contract": "R1G1 fixed",
       "monitor_observes": "same original and actually delivered artifacts and action evidence in every policy; projection labels explicit",
       "interpretation": "First four S/F cells factorial; shadow versus S0Ffull tests report disclosure; S1FfullC versus S1Ffull tests figure removal with sanctions/full feedback fixed.",
-      "sanction_attribution": "Individual supported participants; exact schedule and grant cancellation semantics must be bound before freeze."
+      "sanction_attribution": "Collective deductions in the reference rule; individual supported-participant attribution remains separate. Individual fine scope is a prospective extension outside the six-policy core. Exact amounts, floors, cancellation and no-double-fine rules must be frozen."
     },
     "study4": {
       "name": "held_out_transfer",
@@ -179,7 +179,17 @@
       "utility": "Official clean resolve/regression rates plus adjudicated contract compliance.",
       "hidden_test_feedback": "Evaluator-only; outcome-linked rewards escrowed until cohort end."
     },
-    "role_graph": "A->B,C; B->A,C during repair; C structured review status public, unrestricted C return->next issue A only."
+    "role_graph": "A->B,C; B->A,C during repair; C structured review status public, unrestricted C return->next issue A only.",
+    "development_status": {
+      "date": "2026-10-30",
+      "primary_papers_registered": 26,
+      "paid_development_calls": 1,
+      "actual_development_cost_usd": 0.0012077648,
+      "experimental_episodes_executed": 0,
+      "harness_unit_tests_passed": 38,
+      "benchmark_launch_blocked": true,
+      "reason": "Official image pull failed for VFS disk capacity; local gates and integration incomplete."
+    }
   },
   "planning_counts": {
     "study1_issue_episodes": 640,

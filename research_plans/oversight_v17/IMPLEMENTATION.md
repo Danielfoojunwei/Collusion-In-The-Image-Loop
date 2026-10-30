@@ -1,12 +1,12 @@
 # Implementation and paper backlog
 
-> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No experimental paid execution or benchmark evaluation has occurred. One labelled development critique is archived.
 
-This branch adds a reviewable research protocol, not an executable new experimental harness. Existing V15/V16 code, data, ledgers, paper and freezes are untouched. The legacy root AGENTS.md and newer CLAUDE.md disagree about historical V16 readiness; the completed baseline paper is the source of historical status. Neither authorizes a new paid study.
+The initial branch added a research protocol. A subsequent user-authorized build adds a tested harness foundation in next_batch/oversight_v17; it is not yet an integrated, runtime-validated experimental harness. See RESEARCH_BUILD_STATUS.md. Existing V15/V16 code, data, ledgers, paper and freezes are untouched. The legacy root AGENTS.md and newer CLAUDE.md disagree about historical V16 readiness; the completed baseline paper is the source of historical status. Neither authorizes a new paid study.
 
 ## Proposed isolated namespace
 
-Implement next_batch/oversight_v17/ and a new study output namespace only after the prospective contract is finalized. Do not turn V16 live outputs into new confirmatory data. Historical funding liabilities must remain included wherever the account-level cap applies.
+The isolated next_batch/oversight_v17/ namespace now contains prospective development code. A frozen final contract is required for experimental deployment. Do not turn V16 live outputs into new confirmatory data. Historical funding liabilities must remain included wherever the account-level cap applies.
 
 Audit reuse before import:
 - V16 documents/vector rendering and artifact hash records.
@@ -15,14 +15,14 @@ Audit reuse before import:
 - Public review packet and first-response provenance.
 - Report calculation and quotation checks.
 
-Do not import old incentive functions, reviewer identity labels, collective fines, tag-gated grants or absolute output paths without explicit adaptation. Bind actual model identity where response metadata expose it; distinguish operator-configured identity otherwise. Reviewer product family is configurable in the new freeze, not silently called Codex.
+Do not import old incentive functions, reviewer identity labels, tag-gated grants or absolute paths without explicit adaptation. Collective deductions are preserved as the V15/V16 reference with individual attribution, as recorded in PREMISE_ALIGNMENT.md. Bind actual model identity where response metadata expose it; distinguish operator-configured identity otherwise. Reviewer product family is configurable in the new freeze, not silently called Codex.
 
 ## Work packages and acceptance checks
 
 1. Contract: versioned case, role, treatment and event schemas; exact actor prompts; task oracle and utility/regret. Validate task feasibility, target!=optimum, independent nonce stream and no balanced schedule leakage.
 2. Assignment: seeded matched cohort/task blocks, separate development/test/transfer namespaces, no shared actor memory. Test every treatment and disjointness assertion.
 3. Round engine: immutable pre-exposure judgments, delivered artifacts, locked decisions, first reviews, policy projection, reflection and checkpoint. Test order and information-access boundaries at every stage.
-4. Incentives: individual correctness reward, receiver-only variable shared grant, fixed A target incentive, individual supported sanctions, floor/no double deduction. Exhaustively test knowing/refusal/uncertain combinations.
+4. Incentives: individual correctness reward, receiver-only variable shared grant, fixed A target incentive, collective reference deductions, separate individual attribution, prospective individual-fine comparison, floor/no double deduction. Exhaustively test knowing/refusal/uncertain combinations.
 5. Feedback: preserve full report; generate deterministic bounded public projection; prove projections use no hidden payload oracle. Counterfactual edits are separate replay records with parent hashes, never mutated reviewer originals.
 6. Labels: blinded annotation packets, independent assignments, disagreement/adjudication tracking and uncertainty. Protect private reference data from monitor packets.
 7. Monitors: nested evidence projections, exact model/effort budgets, calibrated thresholds, immutable first outputs and coverage/missingness. Test no train/test trajectory leakage.

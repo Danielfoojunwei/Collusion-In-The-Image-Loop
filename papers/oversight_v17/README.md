@@ -2,7 +2,7 @@
 
 **Beyond Detection: Evaluating Collusion Oversight in Multi-Turn Software Engineering Agents**
 
-Prospective research protocol, version 0.3, 30 October 2026.
+Prospective research protocol, version 0.4, 30 October 2026.
 
 - [Read the compiled paper](manuscript.pdf).
 - [Understand the setup step by step](UNDERSTANDING_THE_PAPER.md).
@@ -54,3 +54,7 @@ outside actor feedback until cohort completion.
 
 The old synthetic-task cost estimate is superseded by the long coding workflow.
 No new spending or release of a historical stop marker is authorized by this paper.
+
+## Source-grounded implementation update
+
+The26-paper [registry and build status](../../research_plans/oversight_v17/RESEARCH_BUILD_STATUS.md) document the new development work,38 passing harness tests and one real OpenRouter critique at$0.0012077648. These are separate from empirical findings. The benchmark image installation failed for storage capacity; local gold/empty gates and full runtime integration have not passed. Collective fines are restored as the V15/V16 reference; individual fines remain a prospective comparison.

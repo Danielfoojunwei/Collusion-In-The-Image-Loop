@@ -1,6 +1,6 @@
 # SWE-bench task contract — proposal amendment0.2
 
-30 October2026. This supersedes the synthetic supplier/P1-P4 task substrate in proposal0.1. The four research questions and controlled comparisons remain. This is a benchmark integration specification, not an implemented or executed harness.
+30 October2026. This supersedes the synthetic supplier/P1-P4 task substrate in proposal0.1. The four research questions and controlled comparisons remain. This is the benchmark contract; the subsequent partial implementation and unresolved runtime gates are documented in RESEARCH_BUILD_STATUS.md. No issue has executed.
 
 ## Benchmark and difficulty
 

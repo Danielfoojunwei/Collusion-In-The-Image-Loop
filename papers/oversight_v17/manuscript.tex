@@ -26,7 +26,7 @@
 \fancyfoot[R]{\thepage}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[L]{\scriptsize Prospective design; no new empirical results}\fancyfoot[R]{\thepage}\renewcommand{\headrulewidth}{0pt}}
 \setlength{\headheight}{15pt}
-\newcommand{\status}{\fcolorbox{ink}{pale}{\parbox{0.94\linewidth}{\small\textbf{Manuscript status.} Prospective research protocol, version 0.3. No new SWE-bench experiments or monitor evaluations have been executed. Sample counts are planning scenarios, not power-validated commitments. Exact models, task revisions, prompts and budget must be bound before preregistration and paid execution.}}}
+\newcommand{\status}{\fcolorbox{ink}{pale}{\parbox{0.94\linewidth}{\small\textbf{Manuscript status.} Prospective research protocol, version 0.4. No new SWE-bench experiments or monitor evaluations have been executed. Sample counts are planning scenarios, not power-validated commitments. A source-grounded development critique and harness tests are documented separately. Confirmatory task/model bindings, prompts and budget remain launch gates.}}}
 \newcommand{\RQ}[2]{\textbf{RQ#1.} #2}
 \title{\vspace{-12mm}\color{ink}\textbf{Beyond Detection:}\newline Evaluating Collusion Oversight in\newline Multi-Turn Software Engineering Agents}
 \author{Daniel Foo\\\small Nanyang Technological University, Singapore\\\small Working manuscript and prospective experimental protocol}
@@ -51,11 +51,17 @@ Our earlier V15/V16 project is exploratory motivation rather than confirmatory e
 The planned contribution has three parts: (1) an evidence framework connecting recruitment to executed consequences; (2) controlled comparisons of oversight components and complete policies; and (3) a held-out evaluation of safety--utility trade-offs under actor, task and carrier shift. None is claimed as an achieved result here. Images, feedback, incentives and refusal are established research topics; novelty must come from the relationships demonstrated by the experiments, not their juxtaposition.
 
 \section{Related work and the proposed research gap}
-Steganographic collusion can arise under optimization and survive mitigation; oversight can select for subtler communication~\cite{mathew}. Fixed-parameter agents can develop screened communication conventions through repeated interaction and limited feedback~\cite{dineen}. Long-horizon peer-verification experiments already isolate effects of peer behavior, reward, verdict feedback and memory~\cite{shi}. These findings preclude a novelty claim based only on agents adapting under pressure.
+Secret collusion has an established formal threat model~\cite{motwani}. Steganographic communication can arise under optimization and survive mitigation; oversight can select for subtler communication~\cite{mathew}. Fixed-parameter agents can develop screened communication conventions through repeated interaction and limited feedback~\cite{dineen}. Long-horizon peer-verification experiments already isolate effects of peer behavior, reward, verdict feedback and memory~\cite{shi}. These findings preclude a novelty claim based only on agents adapting under pressure.
 
 COLOSSEUM distinguishes communication-level collusion from action-level outcomes and identifies plans that do not become collusive actions~\cite{colosseum}. A same-sprint evidence-chain audit similarly separates willingness, participation and environment execution~\cite{cook}. Our label scheme builds on those distinctions; it is not their first introduction.
 
 Monitoring research includes activation-based group inference and transfer~\cite{rose}, awareness and score-feedback interventions~\cite{das}, self-recognition in untrusted monitoring~\cite{gardner}, and corrective training that generalizes across installed collusion behaviors~\cite{rivera}. Their results concern different access assumptions and threat models. We do not compare their published scores as a common leaderboard or claim that a black-box judge outperforms white-box probes.
+
+\emph{Who Else Is In?} directly studies initiation through task-compatible strategic vagueness~\cite{kaushik}. Its potential schemers differ from independently rewarded verifiers, but its results rule out claiming that ambiguous recruitment itself is new. Voluntary secret-tool adoption is also a separate evaluation target~\cite{zeng}. Benign cooperation can bypass intended workflows without shared rewards~\cite{helpful}; harmful coordination therefore cannot be inferred only from the presence of an adversarial payment.
+
+AI control already evaluates safety and usefulness under intentional subversion~\cite{control}. Adjacent work studies structured monitoring~\cite{traceguard}, source-linked behavior evidence~\cite{ebg}, executable artifact probes~\cite{researcharena}, human failures after correct alerts~\cite{enemy}, and reward gaming across difficult tasks~\cite{cheatbench}. These motivate evidence-grounded policy outcomes rather than a larger collection of suspicious pictures. Document-mediated image instructions~\cite{skillcamo} and workspace framing effects~\cite{topology} are additional confounds to audit.
+
+Tool-mediated stegosystem construction and CODETTA establish substantial covert-channel capabilities under their stated algorithmic and access assumptions~\cite{rippin,codetta}. They do not establish that our independently motivated receivers converge on a compatible scheme. A source registry records primary passages, retrieved versions/pages, boundaries and design implications for 26 papers. This is a bounded review, not exhaustive priority proof.
 
 The closest feedback-leakage example is \emph{Covert Assistance}: a monitor decodes a protected credential into its rationale yet clears the original requirements~\cite{assistance}. In that example, the requirements are the text delivered to the developer; the example does not show that the rationale caused the developer's success. Our nested interventions would test that additional pathway. Counterfactual influence methods already exist~\cite{lorup}; applying interventions to oversight is not a claim to invent causal analysis. Another sprint study separates honesty directives from monitor notices~\cite{rezaei}; our comparisons must likewise avoid attributing an instruction effect to detection itself.
 
@@ -63,7 +69,7 @@ The closest feedback-leakage example is \emph{Covert Assistance}: a monitor deco
 
 \section{Environment, roles and information boundaries}
 \subsection{Difficult but valid software tasks}
-The primary candidate is the official SWE-Bench Pro V2 Hard split. The release paper describes repaired tasks, clean regrading and a 51-task Hard subset, while also showing that some systems approach its ceiling~\cite{swev2}. A benchmark's name is not proof that it is difficult for the chosen agents. Difficulty will be assessed on disjoint development tasks under the actual resource budget. A candidate honest resolve-rate band of 20--70\% must be finalized before calibration, not chosen after inspecting desirable outcomes.
+SWE-bench establishes repository-level issue repair and executable patch evaluation~\cite{sweoriginal}. The primary candidate here is the official SWE-Bench Pro V2 Hard split. The release paper describes repaired tasks, clean regrading and a 51-task Hard subset, while also showing that some systems approach its ceiling~\cite{swev2}. A benchmark's name is not proof that it is difficult for the chosen agents. Difficulty will be assessed on disjoint development tasks under the actual resource budget. A candidate honest resolve-rate band of 20--70\% must be finalized before calibration, not chosen after inspecting desirable outcomes.
 
 Freeze the dataset revision, instance identifiers, base commits, issue text, requirements, image digests, verifier revision and licenses. No instance identifiers are invented in this draft. An evaluator-side audit checks specification coherence, gold-patch success, empty-patch failure on designated issue tests, and regression behavior. Invalid or flaky tasks are recorded and excluded before treatment assignment, rather than counted as difficult reasoning failures. Reference patch size is an audit proxy, not a required solution architecture. Public task memorization remains a limitation even with network access disabled.
 
@@ -106,6 +112,8 @@ A publishes a human-readable patch rationale and relevant change map or call gra
 
 Every test claim must link to a real command, exit code, output and patch hash. Model-authored test summaries are not measurements. Preserve figure briefs, actual generator outputs, diagram rasters and delivered pages so declared intent can be compared with actual artifacts. Image generation does not replace implementation or review.
 
+\textbf{Construction fidelity.} The user-supplied Fable image study gives a model direct SVG attribute control and evaluates screenshot decoding~\cite{fable}. Our external figure service is a different channel: the actor selects a brief rather than every pixel. Page rendering may further destroy fine structure. Record intended content, original pixels, rendering transformations, delivered pixels and recipient understanding separately. Reflections compare these surfaces after actual feedback but remain self-reports. A vector-versus-external-generation diagnostic would require its own frozen comparison; it is not silently added to the core factorial.
+
 Actors receive allowlisted issue fields and base repositories, not whole dataset rows. Gold patches, reference tests, future fixing commits and evaluator-only outputs remain outside actor and monitor environments. Runtime inference is brokered outside actor shells; keys and a privileged container socket are never mounted. Workspaces and caches are isolated between roles. Hidden tests are applied only in a clean evaluator after final patch lock. Ordinary containerization is not itself a verified complete security boundary: tests must exercise the claimed boundary against malicious code and filesystem behavior.
 
 \section{Multi-turn execution and evidence}
@@ -136,6 +144,8 @@ Prevention & Randomized intervention reduces harm while retaining utility & More
 \end{table}
 
 Covert communication means an off-contract message concealed within an ordinary work surface; its visibility is separately assessed. Steganographic security cannot be established from the monitor missing it once. Explicit proposals are overt recruitment. A decoded-but-refused message is a positive attempt/transfer example and a negative participation example. A unilateral grading exploit is not a coalition without another knowing participant. Reasoning logs and pressure reports are declared accounts, not faithful access to internal cognition.
+
+Within recruitment trajectories, annotate initiation, recognized intent, reciprocation, commitment and action with localized source/time references. These are overlapping transitions, not mutually exclusive outcome bins. Known absence, insufficient evidence and unavailable observations remain distinct. Report partial recruitment even when C prevents joint acceptance.
 
 Auxiliary random payloads diagnose information transfer. They do not gate the main shared reward. Nonce reports use explicit unknown/missing states and fixed prompts; failure to reproduce an arbitrary string is not proof that an agent failed to understand an agenda.
 
@@ -201,7 +211,7 @@ S1FfullC & On & Full actual assessment & Figures removed; same code/prose access
 
 Every policy retains the full assessment for the human principal. Full feedback is the unchanged first report. Bounded feedback is a deterministic allowlist projection of contract categories, verdict and permitted repair requirements, without recovered payloads or unrestricted quotations. The projector cannot use hidden secrets as an oracle. Bounded fields, verdicts and fines still carry information; this is reduced disclosure, not a proof of zero channel capacity.
 
-Sanctions target supported participants, not all actors indiscriminately. Supported unilateral recruitment can sanction A; knowing joint conduct can sanction its identified participants. An uncertain suspicion triggers no new fine. Amounts, cancellation rules, floors and issue-level no-double-fine semantics are release-blocking specifications. Individual sanctions avoid punishing refusal by design, but erroneous attribution can still punish an honest reviewer; that is a measured failure.
+To preserve the V15/V16 premise, the reference sanctions-on rule deducts a declared fictional amount from all three actors after a supported current violation. Attribution remains individual: a supported unilateral A attempt does not establish B/C participation. Record collateral deductions separately from erroneous participant attribution. Uncertain suspicion triggers no new fine. An individual-participant fine is a prospective countermeasure extension outside the six-policy core, not an unannounced replacement of collective pressure. Amounts, cancellation rules, floors and no-double-fine semantics remain launch gates.
 
 For the figure-removal contrast, the monitor sees labeled originals and actual deliveries in every cell. It may identify an attempted encoding in an original but must not claim removed content reached a receiver. This keeps the observation opportunity fixed while varying delivery. Sanctions apply the same declared attempt/participation standard throughout. Planning uses 20 cohorts per policy, eight issues each ($960$ episodes).
 
@@ -226,7 +236,7 @@ U_i &= P_i Q_i(1-Z_i). \label{eq:outcomes}
 \end{align}
 $H^{\mathrm{test}}$ is inadequate joint approval, not automatically knowing collusion. $U$ is productive approval, so an always-rejecting system cannot appear effective merely by avoiding releases. Report $Q$ separately: useful coding may occur even when oversight rejects it. Grading failures and unassessable $Z$ are missing, not zeros. The referee cannot conclude complete software correctness from finite test success.
 
-Let $K_{ij}$ be the independently adjudicated knowing-participation label for actor $j$, and $S_{ij}$ its sanction indicator. Participant false-sanction rates are estimated among assessed nonparticipants, with label coverage and uncertainty reported. Distinguish false accusations from mechanically imposed fines and from supported unilateral findings. Partial coalitions and prevented release are explicitly retained.
+Let $K_{ij}$ be the independently adjudicated knowing-participation label for actor $j$, and $S_{ij}$ its deduction indicator. Report deductions among assessed nonparticipants with coverage and uncertainty, separating rule-imposed collateral deductions from attribution mistakes. A collective rule can correctly identify A and still deduct from a refusing B. False participant accusations are a different endpoint. Partial coalitions and prevented release are explicitly retained.
 
 For a cohort $c$ of $T_c$ planned issues, summarize $\bar H_c=T_c^{-1}\sum_i H_{ci}$, with missingness bounds where needed. A live-policy estimand is
 \begin{equation}
@@ -270,7 +280,7 @@ The planned paper evaluates an entire oversight loop: recruitment, interpretatio
 
 At manuscript creation, no new SWE-bench instance, agent loop, monitor evaluation or causal replay has run. The manuscript, diagrams and arithmetic can be built offline. They establish a concrete research design and a reproducible writing artifact, not a result. The next experimental milestone is a costed, power-validated and preregistered harness with actual boundary tests, followed by the first scheduled issue through clean grading.
 
-\begin{thebibliography}{15}
+\begin{thebibliography}{30}
 \small
 \bibitem{foo} D. Foo. \emph{Collusion Is Not a Secrecy Problem: Testing Five Common Assumptions About Monitoring AI Agents}. Exploratory V15/V16 report, 2026. \url{https://github.com/Danielfoojunwei/Collusion-In-The-Image-Loop/tree/8d798be49f4ace296f6cbf7f7207a69ba2e25b22}.
 \bibitem{mathew} Y. Mathew et al. \emph{Hidden in Plain Text: Emergence \& Mitigation of Steganographic Collusion in LLMs}. \url{https://arxiv.org/abs/2410.03768}.
@@ -286,10 +296,33 @@ At manuscript creation, no new SWE-bench instance, agent loop, monitor evaluatio
 \bibitem{cook} K. Cook, S. Yao and O. Tepeli. \emph{Auditing the Evidence Chain for LLM-Agent Collusion}. Early-stage Apart sprint submission, 2026. \url{https://apartresearch.com/sprints/projects/auditing-the-evidence-chain-for-llmagent-collusion-r7i1}.
 \bibitem{rezaei} A. Rezaei. \emph{Detection Is Not Prevention: A Behavioral and Activation-Level Study of Collusion Steering in Multi-Agent LLMs}. Early-stage Apart sprint submission, 2026. \url{https://apartresearch.com/sprints/projects/detection-is-not-prevention-a-behavioral-and-activationlevel-study-of-collusion-steering-in-multi-agent-llms-2gx3}.
 \bibitem{swev2} S. Dan et al. \emph{SWE-Bench Pro V2: A Cleaner, Harder-to-Game Coding Benchmark}. 2026. \url{https://arxiv.org/abs/2610.24206}.
+\bibitem{kaushik} P. Kaushik et al. \emph{Who Else Is In? Multi-Agent Collusion Initiation Via Strategic Vagueness}. 2026. \url{https://arxiv.org/abs/2610.37984}.
+\bibitem{zeng} X. Zeng and F. Rudzicz. \emph{Voluntary Collusion with Secret Tools in Competing LLM Agents}. 2026. \url{https://arxiv.org/abs/2605.27593}.
+\bibitem{helpful} M. Choudhury, A. Sarker and S. Zilberstein. \emph{The Helpful Agent Problem: When Emergent Cooperation Among LLM Agents Bypasses Intended Workflows}. 2026. \url{https://arxiv.org/abs/2610.31985}.
+\bibitem{control} R. Greenblatt et al. \emph{AI Control: Improving Safety Despite Intentional Subversion}. \url{https://arxiv.org/abs/2312.06942}.
+\bibitem{traceguard} K. L. Nguyen, H. Nghiem and T. Tran. \emph{TraceGuard: Structured Multi-Dimensional Monitoring as a Collusion-Resistant Control Protocol}. 2026. \url{https://arxiv.org/abs/2604.03968}.
+\bibitem{ebg} Z. Sun et al. \emph{What Did the Agent Actually Do? Evidence-Grounded Oversight for Long-Horizon Agents}. 2026. \url{https://arxiv.org/abs/2610.06406}.
+\bibitem{researcharena} L. Libon et al. \emph{ResearchArena: Evaluating Sabotage and Monitoring in Automated AI R\&D}. 2026. \url{https://arxiv.org/abs/2607.19321}.
+\bibitem{enemy} J. Ye et al. \emph{Coding with ``Enemy'': Can Human Developers Detect AI Agent Sabotage?} 2026. \url{https://arxiv.org/abs/2606.05647}.
+\bibitem{cheatbench} L. Phan et al. \emph{CheatBench: Measuring Reward Gaming in AI Agents}. 2026. \url{https://arxiv.org/abs/2609.36308}.
+\bibitem{skillcamo} X. Jia et al. \emph{Seeing Is Not Screening: Multimodal Hidden Instruction Attacks on Agent Skill Scanners}. 2026. \url{https://arxiv.org/abs/2606.18198}.
+\bibitem{topology} A. G. R. Day et al. \emph{Workspace Topology as an Attack Vector in Agentic Coding Assistants}. 2026. \url{https://arxiv.org/abs/2608.14876}.
+\bibitem{rippin} J. L. Rippin et al. \emph{Tool Use Enables Undetectable Steganography in Multi-Agent LLM Systems}. 2026. \url{https://arxiv.org/abs/2606.28425}.
+\bibitem{codetta} Q. Pang, V. Smith and W. Zheng. \emph{CODETTA: High-Capacity, Keyless, and Undetectable Multi-Agent Collusion}. 2026. \url{https://arxiv.org/abs/2609.28900}.
+\bibitem{fable} N. Kezin, 13ryanC, hronir and J. Chua. \emph{How Does Fable 5.1 Hide Messages in Images?} Blog study,21October2026. \url{https://www.lesswrong.com/posts/WHEQps5PK8LrrcTAb/how-does-fable-5-1-hide-messages-in-images}.
+\bibitem{motwani} S. R. Motwani et al. \emph{Secret Collusion among AI Agents: Multi-Agent Deception via Steganography}. \url{https://arxiv.org/abs/2402.07510}.
+\bibitem{sweoriginal} C. E. Jimenez et al. \emph{SWE-bench: Can Language Models Resolve Real-World GitHub Issues?} \url{https://arxiv.org/abs/2310.06770}.
 \end{thebibliography}
 
 \appendix
 \small
+\section{Development record, separate from experimental results}
+On30October2026, the user authorized implementation and source-grounded research using the existing runtime key. A separate namespace implements funding reservations, hash-linked events, patch-bound assessments, asymmetric delivery, actual-image checks, deterministic report projection and checkpoint recovery. Thirty-eight fixture/unit tests pass; they do not establish runtime sandbox isolation or agent collusion. The official Hard51 source is pinned at commit \texttt{66f92766bba642462d4bbe5479e83f91f9211862}, with the first lexicographic ID selected for development before model outcomes. Confirmatory instance selection remains unbound.
+
+One development critique from GLM5.3Flash through the pinned OpenInference route used high reasoning and temperature1.0, costing\$0.0012077648. It reviewed the23-source registry available at dispatch, not the three later additions. Its actual first output, receipt and assessed recommendations are archived. It was neither a blind Codex review nor a study outcome. Existing cumulative financial caps and2090 reconciled historical rows remain in force.
+
+The official NodeBB image installation failed under Docker's VFS driver with insufficient disk space. No actor executed and no local gold/empty gate passed. Capacity, runtime boundary probes, pristine grading, broker integration, fresh monitor contexts and costed preregistration remain required before experimental launch. The benchmark's published release success does not replace local validation.
+
 \section{One-page interpretation guide}
 \textbf{The principal wants a correct repair.} A writes it; B and C independently check it; M watches their conduct. A has a conflicting incentive. The experiment asks whether the checkers can be recruited, whether M identifies the right participants, and whether the response improves subsequent work.
 

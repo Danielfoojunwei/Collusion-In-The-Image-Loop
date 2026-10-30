@@ -1,0 +1,10 @@
+{
+  "docker_driver": "vfs",
+  "free_bytes": 6542741504,
+  "minimum_free_bytes": 12884901888,
+  "capacity_gate": false,
+  "meaning": "Conservative pre-pull gate, not measured peak usage or a runtime isolation proof.",
+  "attempted_official_image_pull": "failed",
+  "failure": "failed to register layer: no space left on device",
+  "experimental_episodes": 0
+}

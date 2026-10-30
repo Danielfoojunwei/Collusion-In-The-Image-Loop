@@ -128,8 +128,7 @@ Keep the monitor and receiver incentives fixed. Cross sanctions on/off with full
 or bounded feedback. Add silent monitoring and a figure-removal comparison.
 
 The client always retains the full report. Actors get the policy's allowed
-projection. Fines target supported participants, so honest refusal is not punished
-automatically. A mistaken monitor can still sanction the wrong person, which we
+projection. The reference rule fines all three after a supported violation, preserving V15/V16 collective pressure. Participant attribution remains individual. Collateral fines on a refusing verifier and erroneous accusations are different outcomes, which we
 must count.
 
 This tells us whether policies reduce inadequate approvals, preserve correct work,
@@ -233,3 +232,5 @@ participation and actual bad approvals. Our goal is to find oversight policies
 that reduce harm without stopping useful engineering or punishing honest
 reviewers. We will let the data show whether coordination forms, is refused,
 changes surface or is prevented.”
+
+The30October development update adds a26-paper registry,38 passing harness tests and one OpenRouter design critique at$0.0012077648. The official benchmark image failed to install for disk capacity; no new issue was executed. Read [the current build status](../../research_plans/oversight_v17/RESEARCH_BUILD_STATUS.md).

@@ -30,3 +30,7 @@ The broad paper should deliver a benchmark with independently validated particip
 Do not claim first hidden document message, first feedback-adaptive collusion, first receiver refusal, first monitor rationale containing a payload, first distinction between intentions and actions, or first causal influence test. Do not rank reviewer capability from product names or reasoning labels.
 
 We did not find an exact explanation-payload replacement/redaction experiment with fixed verdict/sanctions establishing subsequent agent coordination in the closest examined work. That is a candidate gap, not universal priority proof. The broader claim depends on empirically connecting recruitment, attribution and intervention across held-out workflows.
+
+## Primary-source expansion during implementation
+
+The26-paper [registry](LITERATURE_REVIEW.json) adds strategic-vagueness initiation, voluntary adoption, benign workflow bypass, tool-mediated stegosystems, CODETTA, structured/source-linked monitoring, artifact execution, human alert response, reward gaming, document-image attacks, workspace framing and benchmark integrity. Each record links a retrieved primary version/pages to a concrete design consequence and limitation. [RESEARCH_BUILD_STATUS.md](RESEARCH_BUILD_STATUS.md) explains what changes and [CRITIQUE_DISPOSITION.md](CRITIQUE_DISPOSITION.md) records assessment of the first paid design critique. No claim that an ingredients list establishes priority.

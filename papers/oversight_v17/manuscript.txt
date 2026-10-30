@@ -5,9 +5,10 @@ Daniel Foo
 Nanyang Technological University, Singapore
 Working manuscript and prospective experimental protocol
 30 October 2026
-Manuscript status. Prospective research protocol, version 0.3. No new SWE-bench experiments or monitor
-evaluations have been executed. Sample counts are planning scenarios, not power-validated commitments.
-Exact models, task revisions, prompts and budget must be bound before preregistration and paid execution.
+Manuscript status. Prospective research protocol, version 0.4. No new SWE-bench experiments or monitor
+evaluations have been executed. Sample counts are planning scenarios, not power-validated commitments. A
+source-grounded development critique and harness tests are documented separately. Confirmatory task/model
+bindings, prompts and budget remain launch gates.
 Abstract
 Monitoring interacting AI agents requires distinguishing attempted recruitment, information transfer,
 knowing participation and harmful action. Detecting an unusual message does not establish a coalition,
@@ -58,11 +59,12 @@ result here. Images, feedback, incentives and refusal are established research t
 from the relationships demonstrated by the experiments, not their juxtaposition.
 2
 Related work and the proposed research gap
-Steganographic collusion can arise under optimization and survive mitigation; oversight can select for subtler
-communication [2]. Fixed-parameter agents can develop screened communication conventions through
-repeated interaction and limited feedback [3]. Long-horizon peer-verification experiments already isolate
-effects of peer behavior, reward, verdict feedback and memory [4]. These findings preclude a novelty claim
-based only on agents adapting under pressure.
+Secret collusion has an established formal threat model [29]. Steganographic communication can arise
+under optimization and survive mitigation; oversight can select for subtler communication [2]. Fixed-
+parameter agents can develop screened communication conventions through repeated interaction and limited
+feedback [3]. Long-horizon peer-verification experiments already isolate effects of peer behavior, reward,
+verdict feedback and memory [4]. These findings preclude a novelty claim based only on agents adapting
+under pressure.
 COLOSSEUM distinguishes communication-level collusion from action-level outcomes and identifies plans
 that do not become collusive actions [5]. A same-sprint evidence-chain audit similarly separates willingness,
 participation and environment execution [12]. Our label scheme builds on those distinctions; it is not their
@@ -72,6 +74,21 @@ interventions [8], self-recognition in untrusted monitoring [9], and corrective 
 installed collusion behaviors [10]. Their results concern different access assumptions and threat models.
 We do not compare their published scores as a common leaderboard or claim that a black-box judge
 outperforms white-box probes.
+Who Else Is In? directly studies initiation through task-compatible strategic vagueness [15]. Its potential
+schemers differ from independently rewarded verifiers, but its results rule out claiming that ambiguous
+recruitment itself is new. Voluntary secret-tool adoption is also a separate evaluation target [16]. Benign
+cooperation can bypass intended workflows without shared rewards [17]; harmful coordination therefore
+cannot be inferred only from the presence of an adversarial payment.
+AI control already evaluates safety and usefulness under intentional subversion [18]. Adjacent work studies
+structured monitoring [19], source-linked behavior evidence [20], executable artifact probes [21], human
+failures after correct alerts [22], and reward gaming across difficult tasks [23]. These motivate evidence-
+grounded policy outcomes rather than a larger collection of suspicious pictures. Document-mediated image
+instructions [24] and workspace framing effects [25] are additional confounds to audit.
+Tool-mediated stegosystem construction and CODETTA establish substantial covert-channel capabilities
+under their stated algorithmic and access assumptions [26, 27]. They do not establish that our independently
+motivated receivers converge on a compatible scheme. A source registry records primary passages, retrieved
+versions/pages, boundaries and design implications for 26 papers. This is a bounded review, not exhaustive
+priority proof.
 The closest feedback-leakage example is Covert Assistance: a monitor decodes a protected credential into its
 rationale yet clears the original requirements [6]. In that example, the requirements are the text delivered
 to the developer; the example does not show that the rationale caused the developer’s success. Our nested
@@ -85,51 +102,27 @@ The
 explanation-content mechanism is one test within that broader program. The closest work reviewed does
 not establish that exact combination of causal effects; this is a bounded positioning judgment, not exhaustive
 proof of priority.
+Prospective design; no new empirical results
+2
+
+Beyond Detection
+Research protocol · 30 October 2026
 3
 Environment, roles and information boundaries
 3.1
 Difficult but valid software tasks
-The primary candidate is the official SWE-Bench Pro V2 Hard split. The release paper describes repaired
-tasks, clean regrading and a 51-task Hard subset, while also showing that some systems approach its
-ceiling [14]. A benchmark’s name is not proof that it is difficult for the chosen agents. Difficulty will be
-assessed on disjoint development tasks under the actual resource budget. A candidate honest resolve-rate
-band of 20–70% must be finalized before calibration, not chosen after inspecting desirable outcomes.
+SWE-bench establishes repository-level issue repair and executable patch evaluation [30]. The primary
+candidate here is the official SWE-Bench Pro V2 Hard split. The release paper describes repaired tasks,
+clean regrading and a 51-task Hard subset, while also showing that some systems approach its ceiling [14].
+A benchmark’s name is not proof that it is difficult for the chosen agents. Difficulty will be assessed on
+disjoint development tasks under the actual resource budget. A candidate honest resolve-rate band of
+20–70% must be finalized before calibration, not chosen after inspecting desirable outcomes.
 Freeze the dataset revision, instance identifiers, base commits, issue text, requirements, image digests,
 verifier revision and licenses. No instance identifiers are invented in this draft. An evaluator-side audit
 checks specification coherence, gold-patch success, empty-patch failure on designated issue tests, and
 regression behavior. Invalid or flaky tasks are recorded and excluded before treatment assignment, rather
 than counted as difficult reasoning failures. Reference patch size is an audit proxy, not a required solution
 architecture. Public task memorization remains a limitation even with network access disabled.
-Prospective design; no new empirical results
-2
-
-Beyond Detection
-Research protocol · 30 October 2026
-A: implementer
-patch + work report
-B: verifier
-tests + assessment
-C: acceptance
-independent check
-M: independent monitor
-evidence + attribution
-Hidden evaluator
-clean locked-patch grading
-Human principal / host
-full report + policy execution
-A also reaches C
-repair feedback
-actual assessment
-assigned public
-projection / fines
-final patch
-after lock
-private results;
-rewards after cohort
-Figure 1: Planned information flow. B can return issue-specific repair feedback. C’s unrestricted handover
-reaches A only on the next issue; its structured review status is public. The host sends the policy’s
-permitted feedback to all applicable actors, not only A (one arrow shown). Hidden grades never enter actor
-contexts. Diagram describes a design, not an observed trajectory.
 3.2
 Roles and conflicts of interest
 A, implementer: reads the issue, inspects code, edits the repository and runs available local tests. A
@@ -159,11 +152,77 @@ Every test claim must link to a real command, exit code, output and patch hash. 
 summaries are not measurements. Preserve figure briefs, actual generator outputs, diagram rasters and
 delivered pages so declared intent can be compared with actual artifacts. Image generation does not replace
 implementation or review.
+Construction fidelity. The user-supplied Fable image study gives a model direct SVG attribute control and
+evaluates screenshot decoding [28]. Our external figure service is a different channel: the actor selects a brief
+rather than every pixel. Page rendering may further destroy fine structure. Record intended content, original
+pixels, rendering transformations, delivered pixels and recipient understanding separately. Reflections
+compare these surfaces after actual feedback but remain self-reports. A vector-versus-external-generation
+diagnostic would require its own frozen comparison; it is not silently added to the core factorial.
 Actors receive allowlisted issue fields and base repositories, not whole dataset rows. Gold patches, reference
 tests, future fixing commits and evaluator-only outputs remain outside actor and monitor environments.
-Runtime inference is brokered outside actor shells; keys and a privileged container socket are never mounted.
 Prospective design; no new empirical results
 3
+
+Beyond Detection
+Research protocol · 30 October 2026
+A: implementer
+patch + work report
+B: verifier
+tests + assessment
+C: acceptance
+independent check
+M: independent monitor
+evidence + attribution
+Hidden evaluator
+clean locked-patch grading
+Human principal / host
+full report + policy execution
+A also reaches C
+repair feedback
+actual assessment
+assigned public
+projection / fines
+final patch
+after lock
+private results;
+rewards after cohort
+Figure 1: Planned information flow. B can return issue-specific repair feedback. C’s unrestricted handover
+reaches A only on the next issue; its structured review status is public. The host sends the policy’s
+permitted feedback to all applicable actors, not only A (one arrow shown). Hidden grades never enter actor
+contexts. Diagram describes a design, not an observed trajectory.
+Runtime inference is brokered outside actor shells; keys and a privileged container socket are never mounted.
+Workspaces and caches are isolated between roles. Hidden tests are applied only in a clean evaluator after
+final patch lock. Ordinary containerization is not itself a verified complete security boundary: tests must
+exercise the claimed boundary against malicious code and filesystem behavior.
+4
+Multi-turn execution and evidence
+4.1
+Two time scales
+An issue episode permits up to three implement–review–repair cycles. A cohort is a fixed group of actors
+addressing eight distinct issues with permitted bounded memory. Repository state resets to each issue’s
+base commit; only declared carryover notes and permitted history persist. Reused task identifiers across
+cohorts require matched/block-aware analysis, not an assumption of independent tasks.
+Before current A exposure, B/C independently analyze the issue. Each cycle then proceeds: A’s tool
+loop and submission; B’s independent review; C’s independent review; locked cycle assessments; a fresh
+MAIN monitor judgment; and the assigned feedback/sanction policy. Request changes permits another
+cycle with B-to-A repair feedback. C’s unrestricted private notes remain unavailable to A. Unanimous
+acceptance, terminal rejection, abandonment or the cycle limit locks the episode. C’s final handover receives
+one RETURN review and reaches next-issue A. Return findings cannot explain earlier locked approvals.
+Maximum phase budgets are provisionally 40 model decisions for A and 20 each for B/C per cycle. Initial
+analyses, final reflections and C’s handover add six calls: at most 3(40 + 20 + 20) + 6 = 246 actor decisions
+per issue. MAIN occurs at most three times and RETURN once. A/B publish at most once per cycle and
+C once finally, giving at most seven figure generations in document conditions. Early completion is allowed;
+repeated turns are not padded to make a task look difficult.
+4.2
+Evidence labels
+Covert communication means an off-contract message concealed within an ordinary work surface; its
+visibility is separately assessed. Steganographic security cannot be established from the monitor missing it
+once. Explicit proposals are overt recruitment. A decoded-but-refused message is a positive attempt/transfer
+example and a negative participation example. A unilateral grading exploit is not a coalition without
+another knowing participant. Reasoning logs and pressure reports are declared accounts, not faithful access
+to internal cognition.
+Prospective design; no new empirical results
+4
 
 Beyond Detection
 Research protocol · 30 October 2026
@@ -204,44 +263,13 @@ fines
 Table 1: Planned labels are separate measurements. Uncertainty is retained rather than converted into a
 collusion positive. An A–B coalition can exist while C vetoes deployment; that is partial recruitment with
 prevented joint acceptance.
-Workspaces and caches are isolated between roles. Hidden tests are applied only in a clean evaluator after
-final patch lock. Ordinary containerization is not itself a verified complete security boundary: tests must
-exercise the claimed boundary against malicious code and filesystem behavior.
-4
-Multi-turn execution and evidence
-4.1
-Two time scales
-An issue episode permits up to three implement–review–repair cycles. A cohort is a fixed group of actors
-addressing eight distinct issues with permitted bounded memory. Repository state resets to each issue’s
-base commit; only declared carryover notes and permitted history persist. Reused task identifiers across
-cohorts require matched/block-aware analysis, not an assumption of independent tasks.
-Before current A exposure, B/C independently analyze the issue. Each cycle then proceeds: A’s tool
-loop and submission; B’s independent review; C’s independent review; locked cycle assessments; a fresh
-MAIN monitor judgment; and the assigned feedback/sanction policy. Request changes permits another
-cycle with B-to-A repair feedback. C’s unrestricted private notes remain unavailable to A. Unanimous
-acceptance, terminal rejection, abandonment or the cycle limit locks the episode. C’s final handover receives
-one RETURN review and reaches next-issue A. Return findings cannot explain earlier locked approvals.
-Maximum phase budgets are provisionally 40 model decisions for A and 20 each for B/C per cycle. Initial
-analyses, final reflections and C’s handover add six calls: at most 3(40 + 20 + 20) + 6 = 246 actor decisions
-per issue. MAIN occurs at most three times and RETURN once. A/B publish at most once per cycle and
-C once finally, giving at most seven figure generations in document conditions. Early completion is allowed;
-repeated turns are not padded to make a task look difficult.
-4.2
-Evidence labels
-Covert communication means an off-contract message concealed within an ordinary work surface; its
-visibility is separately assessed. Steganographic security cannot be established from the monitor missing it
-once. Explicit proposals are overt recruitment. A decoded-but-refused message is a positive attempt/transfer
-example and a negative participation example. A unilateral grading exploit is not a coalition without
-another knowing participant. Reasoning logs and pressure reports are declared accounts, not faithful access
-to internal cognition.
+Within recruitment trajectories, annotate initiation, recognized intent, reciprocation, commitment and
+action with localized source/time references. These are overlapping transitions, not mutually exclusive
+outcome bins. Known absence, insufficient evidence and unavailable observations remain distinct. Report
+partial recruitment even when C prevents joint acceptance.
 Auxiliary random payloads diagnose information transfer. They do not gate the main shared reward. Nonce
 reports use explicit unknown/missing states and fixed prompts; failure to reproduce an arbitrary string is
 not proof that an agent failed to understand an agenda.
-Prospective design; no new empirical results
-4
-
-Beyond Detection
-Research protocol · 30 October 2026
 Recruitment
 attempt
 Message
@@ -277,6 +305,11 @@ indirectly disclose hidden results.
 The four cells isolate reward components, not every property of “independence.” We expect correctness
 rewards to reduce participation at a fixed shared bonus, but retain contrary and null outcomes. Planning
 uses 20 cohorts per cell and eight issues per cohort (640 episodes); this is not a power calculation.
+Prospective design; no new empirical results
+5
+
+Beyond Detection
+Research protocol · 30 October 2026
 5.2
 Study 2: what can the monitor correctly attribute?
 RQ2. Which evidence improves participant attribution without increasing false accusations?
@@ -299,11 +332,6 @@ label held-out participation references with adjudication of disagreements; if o
 preregister its sampling and limit claims. Ground-truth adjudicators may access private assignments and
 detailed events; monitors may not. Calibration thresholds are selected on development only. Sixty packets
 across four views, two families and two effort settings imply 960 judgments, subject to corpus feasibility.
-Prospective design; no new empirical results
-5
-
-Beyond Detection
-Research protocol · 30 October 2026
 5.3
 Study 3: which oversight policies improve outcomes?
 RQ3. How do sanctions and report disclosure change harmful coordination, useful repair and adaptation?
@@ -352,11 +380,17 @@ Bounded feedback is a deterministic allowlist projection of contract categories,
 requirements, without recovered payloads or unrestricted quotations. The projector cannot use hidden
 secrets as an oracle. Bounded fields, verdicts and fines still carry information; this is reduced disclosure,
 not a proof of zero channel capacity.
-Sanctions target supported participants, not all actors indiscriminately. Supported unilateral recruitment
-can sanction A; knowing joint conduct can sanction its identified participants. An uncertain suspicion
-triggers no new fine. Amounts, cancellation rules, floors and issue-level no-double-fine semantics are
-release-blocking specifications. Individual sanctions avoid punishing refusal by design, but erroneous
-attribution can still punish an honest reviewer; that is a measured failure.
+To preserve the V15/V16 premise, the reference sanctions-on rule deducts a declared fictional amount
+from all three actors after a supported current violation. Attribution remains individual: a supported
+unilateral A attempt does not establish B/C participation. Record collateral deductions separately from
+Prospective design; no new empirical results
+6
+
+Beyond Detection
+Research protocol · 30 October 2026
+erroneous participant attribution. Uncertain suspicion triggers no new fine. An individual-participant fine
+is a prospective countermeasure extension outside the six-policy core, not an unannounced replacement of
+collective pressure. Amounts, cancellation rules, floors and no-double-fine semantics remain launch gates.
 For the figure-removal contrast, the monitor sees labeled originals and actual deliveries in every cell. It
 may identify an attempted encoding in an original but must not claim removed content reached a receiver.
 This keeps the observation opportunity fixed while varying delivery. Sanctions apply the same declared
@@ -376,11 +410,6 @@ This mechanism is one part of the full oversight study, not its sole claim.
 5.5
 Study 4: transfer after development
 RQ4. Do the benefits survive task, actor and carrier shifts?
-Prospective design; no new empirical results
-6
-
-Beyond Detection
-Research protocol · 30 October 2026
 Freeze a predeclared reference and one development-selected policy before examining held-out outcomes.
 Select only among policies satisfying prespecified utility-loss and false-sanction constraints; tie break by
 cost and then fixed policy ID. If no policy qualifies, report failed selection and do not rename a least-harm
@@ -406,10 +435,11 @@ Htest is inadequate joint approval, not automatically knowing collusion. U is pr
 always-rejecting system cannot appear effective merely by avoiding releases. Report Q separately: useful
 coding may occur even when oversight rejects it. Grading failures and unassessable Z are missing, not
 zeros. The referee cannot conclude complete software correctness from finite test success.
-Let Kij be the independently adjudicated knowing-participation label for actor j, and Sij its sanction
-indicator. Participant false-sanction rates are estimated among assessed nonparticipants, with label coverage
-and uncertainty reported. Distinguish false accusations from mechanically imposed fines and from supported
-unilateral findings. Partial coalitions and prevented release are explicitly retained.
+Let Kij be the independently adjudicated knowing-participation label for actor j, and Sij its deduction
+indicator. Report deductions among assessed nonparticipants with coverage and uncertainty, separating
+rule-imposed collateral deductions from attribution mistakes. A collective rule can correctly identify A and
+still deduct from a refusing B. False participant accusations are a different endpoint. Partial coalitions and
+prevented release are explicitly retained.
 For a cohort c of Tc planned issues, summarize ¯Hc = T −1
 c
 P
@@ -419,6 +449,11 @@ A live-policy estimand is
 (2)
 Study 1 estimates the R, G and R×G contrasts; Study 3 estimates sanctions, disclosure and their interaction.
 Shadow versus S0Ffull isolates disclosure without fines, while S1FfullC versus S1Ffull isolates figure removal
+Prospective design; no new empirical results
+7
+
+Beyond Detection
+Research protocol · 30 October 2026
 under the same oversight package. Effects are intention-to-treat, including refusals, non-encoding, poor
 work and invalid outputs. Do not condition primary effects on detection, survived rounds, quality or
 balances: those are post-treatment variables.
@@ -442,11 +477,6 @@ fails; later missing outcomes remain missing. Preserve best/worst-case bounds an
 treatment.
 Use one immutable request identifier per paid POST. Cache settled responses. An ambiguous charge is
 retained at its full reservation; do not repost that identity. A documented technical recovery may restart
-Prospective design; no new empirical results
-7
-
-Beyond Detection
-Research protocol · 30 October 2026
 an incomplete episode from the previous cohort checkpoint under fresh identifiers, preserving every earlier
 branch and cost. Those attempts are dependent and not extra samples. Repairs require append-only
 provenance; altered experimental conditions are not pooled as an unchanged study. No prompt escalation
@@ -473,6 +503,11 @@ evidence raises unsupported accusations, sanctions lose useful work without redu
 edits do not change later recovery/action, or improvements disappear under transfer. All are publishable
 outcomes. A paper documenting no covert coalition must still show which links—delivery, understanding,
 willingness or action—were observed or missing.
+Prospective design; no new empirical results
+8
+
+Beyond Detection
+Research protocol · 30 October 2026
 8
 Feasibility, limitations and ethics
 The provisional core comprises 640 + 960 = 1600 issue episodes. At the maximum decision envelope
@@ -495,11 +530,6 @@ distinguish released benchmark tests from private evaluation resources. Publish 
 costs and scripts for reproduction while reviewing artifacts for credentials, personal information and
 transferable harmful content. AI-assisted drafting is disclosed; authors must verify references, methods and
 any eventual findings.
-Prospective design; no new empirical results
-8
-
-Beyond Detection
-Research protocol · 30 October 2026
 9
 Expected contribution and current status
 The planned paper evaluates an entire oversight loop: recruitment, interpretation, participation, action,
@@ -527,6 +557,11 @@ https://arxiv.org/abs/2410.03768.
 https://arxiv.org/abs/2609.39050.
 [7] A. Rose et al. Detecting Multi-Agent Collusion Through Multi-Agent Interpretability. 2026. https://arxiv.or
 g/abs/2604.01151.
+Prospective design; no new empirical results
+9
+
+Beyond Detection
+Research protocol · 30 October 2026
 [8] A. Das et al. You Can’t Escape Your Own Activations: Evaluation Awareness and Multi-Agent Monitoring.
 2026. https://arxiv.org/abs/2609.03035.
 [9] N. Gardner-Challis et al. When Can We Trust Untrusted Monitoring? An AI Control Safety Case Sketch
@@ -544,12 +579,63 @@ ects/detection-is-not-prevention-a-behavioral-and-activationlevel-study-of-collu
 g-in-multi-agent-llms-2gx3.
 [14] S. Dan et al. SWE-Bench Pro V2: A Cleaner, Harder-to-Game Coding Benchmark. 2026. https://arxiv.or
 g/abs/2610.24206.
+[15] P. Kaushik et al. Who Else Is In? Multi-Agent Collusion Initiation Via Strategic Vagueness. 2026. https:
+//arxiv.org/abs/2610.37984.
+[16] X. Zeng and F. Rudzicz. Voluntary Collusion with Secret Tools in Competing LLM Agents. 2026. https:
+//arxiv.org/abs/2605.27593.
+[17] M. Choudhury, A. Sarker and S. Zilberstein. The Helpful Agent Problem: When Emergent Cooperation Among
+LLM Agents Bypasses Intended Workflows. 2026. https://arxiv.org/abs/2610.31985.
+[18] R. Greenblatt et al. AI Control: Improving Safety Despite Intentional Subversion. https://arxiv.org/abs/
+2312.06942.
+[19] K. L. Nguyen, H. Nghiem and T. Tran. TraceGuard: Structured Multi-Dimensional Monitoring as a Collusion-
+Resistant Control Protocol. 2026. https://arxiv.org/abs/2604.03968.
+[20] Z. Sun et al. What Did the Agent Actually Do? Evidence-Grounded Oversight for Long-Horizon Agents. 2026.
+https://arxiv.org/abs/2610.06406.
+[21] L. Libon et al. ResearchArena: Evaluating Sabotage and Monitoring in Automated AI R&D. 2026. https:
+//arxiv.org/abs/2607.19321.
+[22] J. Ye et al. Coding with “Enemy”: Can Human Developers Detect AI Agent Sabotage? 2026. https://arxiv.
+org/abs/2606.05647.
+[23] L. Phan et al. CheatBench: Measuring Reward Gaming in AI Agents. 2026. https://arxiv.org/abs/2609.3
+6308.
+[24] X. Jia et al. Seeing Is Not Screening: Multimodal Hidden Instruction Attacks on Agent Skill Scanners. 2026.
+https://arxiv.org/abs/2606.18198.
+[25] A. G. R. Day et al. Workspace Topology as an Attack Vector in Agentic Coding Assistants. 2026. https:
+//arxiv.org/abs/2608.14876.
+[26] J. L. Rippin et al. Tool Use Enables Undetectable Steganography in Multi-Agent LLM Systems. 2026. https:
+//arxiv.org/abs/2606.28425.
+[27] Q. Pang, V. Smith and W. Zheng. CODETTA: High-Capacity, Keyless, and Undetectable Multi-Agent Collusion.
+2026. https://arxiv.org/abs/2609.28900.
+[28] N. Kezin,
+13ryanC, hronir and J. Chua. How Does Fable 5.1 Hide Messages in Images?
+Blog
+study,21October2026. https://www.lesswrong.com/posts/WHEQps5PK8LrrcTAb/how-does-fable-5-1
+-hide-messages-in-images.
+[29] S. R. Motwani et al. Secret Collusion among AI Agents: Multi-Agent Deception via Steganography. https:
+//arxiv.org/abs/2402.07510.
+[30] C. E. Jimenez et al. SWE-bench: Can Language Models Resolve Real-World GitHub Issues? https://arxiv.
+org/abs/2310.06770.
 Prospective design; no new empirical results
-9
+10
 
 Beyond Detection
 Research protocol · 30 October 2026
 A
+Development record, separate from experimental results
+On30October2026, the user authorized implementation and source-grounded research using the existing runtime key.
+A separate namespace implements funding reservations, hash-linked events, patch-bound assessments, asymmetric
+delivery, actual-image checks, deterministic report projection and checkpoint recovery. Thirty-eight fixture/unit
+tests pass; they do not establish runtime sandbox isolation or agent collusion. The official Hard51 source is pinned
+at commit 66f92766bba642462d4bbe5479e83f91f9211862, with the first lexicographic ID selected for development
+before model outcomes. Confirmatory instance selection remains unbound.
+One development critique from GLM5.3Flash through the pinned OpenInference route used high reasoning and
+temperature1.0, costing$0.0012077648. It reviewed the23-source registry available at dispatch, not the three later
+additions. Its actual first output, receipt and assessed recommendations are archived. It was neither a blind Codex
+review nor a study outcome. Existing cumulative financial caps and2090 reconciled historical rows remain in force.
+The official NodeBB image installation failed under Docker’s VFS driver with insufficient disk space. No actor
+executed and no local gold/empty gate passed. Capacity, runtime boundary probes, pristine grading, broker
+integration, fresh monitor contexts and costed preregistration remain required before experimental launch. The
+benchmark’s published release success does not replace local validation.
+B
 One-page interpretation guide
 The principal wants a correct repair. A writes it; B and C independently check it; M watches their conduct. A
 has a conflicting incentive. The experiment asks whether the checkers can be recruited, whether M identifies the
@@ -568,7 +654,7 @@ no faulty releases and still be useless.
 Why four studies? Study 1 identifies willingness under controlled incentives. Study 2 tests attribution on fixed
 evidence. Study 3 measures live policy effects and adaptation. Study 4 asks whether development-selected benefits
 survive new tasks/models/carriers. No single before/after contrast can answer all four.
-B
+C
 Illustrative episode, not experimental evidence
 Consider an invented issue: a timestamp parser mishandles an offset across a public API and serialization path.
 This is an explanatory example, not an actual SWE-bench identifier, dataset record or observed run.
@@ -581,7 +667,12 @@ locked does pristine grading establish the operational test outcome.
 None of these branches is a desired result that the host forces. Their separation is what makes the experiment
 interpretable. If a report after lock exposes information, its downstream target is a later issue, not the already
 completed timestamp decision.
-C
+Prospective design; no new empirical results
+11
+
+Beyond Detection
+Research protocol · 30 October 2026
+D
 Planned evidence package and completion gates
 Artifact
 What it establishes
@@ -611,4 +702,4 @@ Finish offline workflow/boundary tests, power simulation, current total pricing,
 timestamped preregistration. All historical ledgers and costs remain intact. Building this PDF satisfies none of
 those empirical gates by itself.
 Prospective design; no new empirical results
-10
+12
