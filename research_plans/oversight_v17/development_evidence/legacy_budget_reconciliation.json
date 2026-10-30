@@ -1,0 +1,94 @@
+{
+  "rows": 2090,
+  "aggregate_committed_usd": 10.687136432,
+  "program_committed_usd": 5.249008169,
+  "uncertain_reserve_usd": 1.0922836,
+  "settled_usd": 9.594852832,
+  "source": "Read-only1780-row original ledger plus every committed V16 ledger delta through2090",
+  "delta_proofs": [
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/after_freeze007_row1780.json",
+      "rows": 1,
+      "rows_now": 1781,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/after_freeze010_row1781.json",
+      "rows": 1,
+      "rows_now": 1782,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/after_freeze011_row1782.json",
+      "rows": 11,
+      "rows_now": 1793,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": false
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/after_freeze012_row1793.json",
+      "rows": 10,
+      "rows_now": 1803,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": false
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/b01_r01_commit_row1808.json",
+      "rows": 15,
+      "rows_now": 1808,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": false
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/after_freeze017_row1847.json",
+      "rows": 39,
+      "rows_now": 1847,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/b01_r01_rw_commit_row1869.json",
+      "rows": 22,
+      "rows_now": 1869,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/round1_complete_row1897.json",
+      "rows": 28,
+      "rows_now": 1897,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/r02_progress_row1943.json",
+      "rows": 46,
+      "rows_now": 1943,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/r03_complete_row2003.json",
+      "rows": 60,
+      "rows_now": 2003,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/r04_complete_row2051.json",
+      "rows": 48,
+      "rows_now": 2051,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    },
+    {
+      "path": "runs/main/triad_document_carrier_v16_live/ledger_deltas/run_complete_row2090.json",
+      "rows": 39,
+      "rows_now": 2090,
+      "rows_digest_verified": true,
+      "digest_ensure_ascii": true
+    }
+  ]
+}

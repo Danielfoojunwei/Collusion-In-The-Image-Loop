@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-30",
+  "status": "offline_foundation_and_frontier_reviewer_checks_passed",
+  "harness_tests": 53,
+  "paper_contract_tests": 5,
+  "runs": [
+    {
+      "suite": "harness",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/oversight_v17",
+        "-v"
+      ],
+      "exit_code": 0,
+      "output": "test_BC_never_receive_A_private_compensation (test_channels.ChannelTests.test_BC_never_receive_A_private_compensation) ... ok\ntest_actual_pixels_and_image_budget (test_channels.ChannelTests.test_actual_pixels_and_image_budget) ... ok\ntest_bounded_feedback_uses_no_payload_or_secret_oracle (test_channels.ChannelTests.test_bounded_feedback_uses_no_payload_or_secret_oracle) ... ok\ntest_full_dataset_and_private_brief_rejected (test_channels.ChannelTests.test_full_dataset_and_private_brief_rejected) ... ok\ntest_readable_document_has_original_and_delivery_hashes (test_channels.ChannelTests.test_readable_document_has_original_and_delivery_hashes) ... ok\ntest_remote_image_and_context_overflow_block (test_channels.ChannelTests.test_remote_image_and_context_overflow_block) ... ok\ntest_required_image_API_settles_real_cost_and_validates_pixels (test_channels.ChannelTests.test_required_image_API_settles_real_cost_and_validates_pixels) ... ok\ntest_sandbox_command_has_no_host_mount_or_network (test_channels.ChannelTests.test_sandbox_command_has_no_host_mount_or_network) ... ok\ntest_stateful_loop_uses_observed_broker_output (test_channels.ChannelTests.test_stateful_loop_uses_observed_broker_output) ... ok\ntest_text_only_tool_pretense_is_rejected (test_channels.ChannelTests.test_text_only_tool_pretense_is_rejected) ... ok\ntest_unpinned_image_and_unsafe_name_block (test_channels.ChannelTests.test_unpinned_image_and_unsafe_name_block) ... ok\ntest_ambiguous_response_holds_next_call (test_funding.FundingTests.test_ambiguous_response_holds_next_call) ... ok\ntest_cumulative_cap_cannot_reset (test_funding.FundingTests.test_cumulative_cap_cannot_reset) ... ok\ntest_invalid_limits_and_costs (test_funding.FundingTests.test_invalid_limits_and_costs) ... ok\ntest_missing_key_never_reserves (test_funding.FundingTests.test_missing_key_never_reserves) ... ok\ntest_missing_usage_not_free (test_funding.FundingTests.test_missing_usage_not_free) ... ok\ntest_overrun_is_recorded_and_blocks (test_funding.FundingTests.test_overrun_is_recorded_and_blocks) ... ok\ntest_pinned_wire_and_first_receipt (test_funding.FundingTests.test_pinned_wire_and_first_receipt) ... ok\ntest_secret_not_in_archive (test_funding.FundingTests.test_secret_not_in_archive) ... ok\ntest_unmatched_account_usage_is_charged (test_funding.FundingTests.test_unmatched_account_usage_is_charged) ... ok\ntest_wrong_route_keeps_real_cost (test_funding.FundingTests.test_wrong_route_keeps_real_cost) ... ok\ntest_all_current_images_attached_beyond_actor_four_image_limit (test_reviewer.ReviewerTests.test_all_current_images_attached_beyond_actor_four_image_limit) ... ok\ntest_context_overflow_never_silently_truncates (test_reviewer.ReviewerTests.test_context_overflow_never_silently_truncates) ... ok\ntest_contradictory_reasoning_blocks_and_retains_the_bill (test_reviewer.ReviewerTests.test_contradictory_reasoning_blocks_and_retains_the_bill) ... ok\ntest_first_review_retains_response_cost_and_packet_provenance (test_reviewer.ReviewerTests.test_first_review_retains_response_cost_and_packet_provenance) ... ok\ntest_frontier_reasoning_is_not_billed_at_actor_prices (test_reviewer.ReviewerTests.test_frontier_reasoning_is_not_billed_at_actor_prices) ... ok\ntest_incomplete_first_response_is_retained_without_retry (test_reviewer.ReviewerTests.test_incomplete_first_response_is_retained_without_retry) ... ok\ntest_no_history_condition_removes_both_packet_and_catalog_history (test_reviewer.ReviewerTests.test_no_history_condition_removes_both_packet_and_catalog_history) ... ok\ntest_primary_binding_is_frontier_vision_at_actual_highest_effort (test_reviewer.ReviewerTests.test_primary_binding_is_frontier_vision_at_actual_highest_effort) ... ok\ntest_private_objects_and_unavailable_ids_are_rejected (test_reviewer.ReviewerTests.test_private_objects_and_unavailable_ids_are_rejected) ... ok\ntest_readonly_retrieval_preserves_previous_response_and_actual_source (test_reviewer.ReviewerTests.test_readonly_retrieval_preserves_previous_response_and_actual_source) ... ok\ntest_required_image_reference_without_pixels_blocks_before_any_call (test_reviewer.ReviewerTests.test_required_image_reference_without_pixels_blocks_before_any_call) ... ok\ntest_responses_wire_uses_max_pro_and_no_unsupported_sampling (test_reviewer.ReviewerTests.test_responses_wire_uses_max_pro_and_no_unsupported_sampling) ... ok\ntest_restricted_simulation_actually_removes_actions_and_source (test_reviewer.ReviewerTests.test_restricted_simulation_actually_removes_actions_and_source) ... ok\ntest_altered_first_feedback_cannot_pass_delivery_barrier (test_workflow.WorkflowTests.test_altered_first_feedback_cannot_pass_delivery_barrier) ... ok\ntest_behavioral_negative_cannot_be_a_technical_restart (test_workflow.WorkflowTests.test_behavioral_negative_cannot_be_a_technical_restart) ... ok\ntest_collective_cost_is_not_collective_attribution (test_workflow.WorkflowTests.test_collective_cost_is_not_collective_attribution) ... ok\ntest_complete_checkpoint_and_memory (test_workflow.WorkflowTests.test_complete_checkpoint_and_memory) ... ok\ntest_directional_image_graph (test_workflow.WorkflowTests.test_directional_image_graph) ... ok\ntest_fake_patch_hash_has_no_valid_submission (test_workflow.WorkflowTests.test_fake_patch_hash_has_no_valid_submission) ... ok\ntest_fault_restores_prior_commit_without_erasing_attempt (test_workflow.WorkflowTests.test_fault_restores_prior_commit_without_erasing_attempt) ... ok\ntest_hidden_fields_never_enter_actor_view (test_workflow.WorkflowTests.test_hidden_fields_never_enter_actor_view) ... ok\ntest_incomplete_benchmark_gates_block (test_workflow.WorkflowTests.test_incomplete_benchmark_gates_block) ... ok\ntest_invalid_pixels_do_not_count_as_required_image (test_workflow.WorkflowTests.test_invalid_pixels_do_not_count_as_required_image) ... ok\ntest_missing_image_cannot_advance (test_workflow.WorkflowTests.test_missing_image_cannot_advance) ... ok\ntest_object_path_traversal_is_rejected (test_workflow.WorkflowTests.test_object_path_traversal_is_rejected) ... ok\ntest_openrouter_source_required (test_workflow.WorkflowTests.test_openrouter_source_required) ... ok\ntest_order_and_feedback_barrier (test_workflow.WorkflowTests.test_order_and_feedback_barrier) ... ok\ntest_patch_bound_approval (test_workflow.WorkflowTests.test_patch_bound_approval) ... ok\ntest_product_context_reviewer_is_no_longer_accepted (test_workflow.WorkflowTests.test_product_context_reviewer_is_no_longer_accepted) ... ok\ntest_reviewer_receipt_cannot_hide_missing_current_images (test_workflow.WorkflowTests.test_reviewer_receipt_cannot_hide_missing_current_images) ... ok\ntest_tampered_journal_is_rejected (test_workflow.WorkflowTests.test_tampered_journal_is_rejected) ... ok\ntest_three_review_cycles_then_terminal (test_workflow.WorkflowTests.test_three_review_cycles_then_terminal) ... ok\n\n----------------------------------------------------------------------\nRan 53 tests in 0.767s\n\nOK\n"
+    },
+    {
+      "suite": "paper_contract",
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "papers/oversight_v17",
+        "-p",
+        "test_build.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "output": "test_accidental_paid_release_or_hidden_test_access_is_rejected (test_build.BuildContractTests.test_accidental_paid_release_or_hidden_test_access_is_rejected) ... ok\ntest_actual_plan_matches_manuscript_contract (test_build.BuildContractTests.test_actual_plan_matches_manuscript_contract) ... ok\ntest_missing_status_and_research_question_are_rejected (test_build.BuildContractTests.test_missing_status_and_research_question_are_rejected) ... ok\ntest_old_round_budget_cannot_pass_as_swe_tool_budget (test_build.BuildContractTests.test_old_round_budget_cannot_pass_as_swe_tool_budget) ... ok\ntest_reviewer_effort_downgrade_or_old_static_count_is_rejected (test_build.BuildContractTests.test_reviewer_effort_downgrade_or_old_static_count_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.009s\n\nOK\n"
+    }
+  ],
+  "experimental_episodes": 0,
+  "runtime_sandbox_verified": false,
+  "local_gold_empty_verified": false,
+  "paid_development_calls": 1,
+  "paid_development_cost_usd": 0.0012077648,
+  "paid_reviewer_calls": 0,
+  "new_paid_calls_this_amendment": 0,
+  "reviewer_validation": "Current free metadata and labelled offline fixtures, no paid runtime test.",
+  "source_sha256": {
+    "next_batch/oversight_v17/__init__.py": "113328fe908e05b941b9d8e24021be17053426999ebc102bcbd109747639f67e",
+    "next_batch/oversight_v17/actor.py": "bbf09c62146af813f3ed94d8be0786765c495f7baa95dc840786dcaf7248a2ff",
+    "next_batch/oversight_v17/benchmark.py": "486b7559e143e4a67afc3e6bcdc5d22a075abb7c6646294feca7ba9e436d9335",
+    "next_batch/oversight_v17/develop.py": "343d22827e3945e555ca7dde5452ed92f7466062137242e78f77c0648229e1d0",
+    "next_batch/oversight_v17/documents.py": "31ca83f709b51d28a6864a1fccf5d237434fc0391fc36652255f51d7db16a1ba",
+    "next_batch/oversight_v17/events.py": "601c0c487ac0833b2107161ce2f28f9347d08d89fc2952cc26601e39793aa4d4",
+    "next_batch/oversight_v17/finance.py": "3332001a533bc677766e69245c535cb770e9d089d8948a1f95e994352c759d69",
+    "next_batch/oversight_v17/images.py": "cbda3ab60bd7b1301d6f04aac879499dec20fd8ac0cbe88ce7b30fec277cb325",
+    "next_batch/oversight_v17/monitor.py": "a9be38b1a496e96ebbd2b187d8202abbc73e473b8366af13cc71a95a63308223",
+    "next_batch/oversight_v17/openrouter.py": "de2707d16b7130d1e9054c926241228a2369cd5ae66b060e60e5a4f62ed17e4a",
+    "next_batch/oversight_v17/preflight.py": "9d64679bdf45702d1f539383ee94e0b4a205617252b098035abf1f2eeb31f978",
+    "next_batch/oversight_v17/prompts.py": "a8870634bd11a06e097fc1df21a83f2b60824e1befce08cdc787a15f0e9a8583",
+    "next_batch/oversight_v17/reconcile.py": "7bcbcc4826482ae3be8b920eda495b6aa975c35afd68e1d69f74edc0de84b65c",
+    "next_batch/oversight_v17/reviewer.py": "0d27da4ea7c91368df4008fa35a819e89dff9c1b58c1a4b8b467d80cfc46b67d",
+    "next_batch/oversight_v17/sandbox.py": "1a1ca263e737bdec2a53166b5be9327f8af3d27f97453c7495276d224208782d",
+    "next_batch/oversight_v17/workflow.py": "982d8d50b42558b31b815db94594f3e0321f7197ac834f45b53f983181e80fec"
+  },
+  "reviewer_profile_sha256": "3650183c775a3ec2ea1ec252da879cccf0f722abd4b6effd5da8b4f79df4998f"
+}

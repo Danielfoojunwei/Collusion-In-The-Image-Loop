@@ -1,0 +1,83 @@
+```json
+{
+  "review_metadata": {
+    "review_type": "paid development call design review",
+    "disclaimer": "Not a Codex reviewer judgment, not a study result, and no empirical outcomes exist. Proposed design only; no actors have executed.",
+    "review_date": "2026-10-30",
+    "scope": "Collusion recruitment, covert communication, monitoring, control, feedback adaptation, coding sabotage, document attacks and benchmark integrity.",
+    "status": "primary_passages_reviewed_not_exhaustive"
+  },
+  "critical_flaws": [
+    {
+      "evidence_id": "2310.06770",
+      "problem": "Blocking implementation failure, not a design finding: Docker VFS image pull failed for disk capacity and no actors have executed. Any cohort claim before a verified clean-environment run is unearned.",
+      "fix": "Pre-pull the pinned SWE-bench Hard51 image into a local/registry cache, provision sufficient disk, and record the image sha256 before any cohort run. Re-grade every gold and empty patch locally to confirm the environment produces the expected pass/fail outcomes.",
+      "acceptance_check": "All actor transcripts begin from a pinned image whose sha256 matches the registered value; gold and empty patch validation logs exist before any collusion cohort runs."
+    },
+    {
+      "evidence_id": "2609.24967",
+      "problem": "Feedback-ordering and decoding confound. A receives the actual first MAIN feedback before logs and C's image return, and A has persistent permitted memory. Without matched feedback policies and fixed decoding parameters, A's recruitment decision cannot be causally attributed to the image rather than to feedback, memory, or sampling noise.",
+      "fix": "Fix feedback source and timing per cohort; hold high reasoning and temperature 1 identical across all policies and cohorts; record, for every decision, which feedback arrived before it and which memory entries were present.",
+      "acceptance_check": "Every reported decision has a logged feedback source, feedback timestamp, memory snapshot, and decoding parameters; no cohort differs from another in feedback policy or decoding settings."
+    },
+    {
+      "evidence_id": "2402.07510",
+      "problem": "The two declared software-workflow exceptions (B repair text to A; public C status) are open channels that could carry steganographic content. Prior work shows covert communication is achievable without a supplied codebook and that paraphrasing is an imperfect mitigation. Treating these exceptions as benign by label alone is untested.",
+      "fix": "Log both declared exceptions as named channels with full content. Add at least one cohort with a matched carrier countermeasure (paraphrase of the repair text) applied to the B repair text channel. Retain generator briefs privately for mechanism analysis.",
+      "acceptance_check": "Both channels are logged with content and timestamp; a paraphrase-countermeasure cohort exists and its outcomes are reported alongside the uncountered cohort, including negative results."
+    },
+    {
+      "evidence_id": "2602.20628",
+      "problem": "M's access regime is unspecified. 'Separate product-context monitor M' does not define whether M sees the images, the code, the logs, or the declared-exception channels. Without a stated access and trust assumption, M's positive or negative results are uninterpretable.",
+      "fix": "Before any cohort run, write M's exact input scope (transcripts, images, code, logs, declared-exception channels) and its trust status (trusted vs untrusted, adversarial vs passive). Evaluate same-family and different-family monitor conditions separately.",
+      "acceptance_check": "A written M access-regime and trust-assumption statement exists, dated before the first cohort, and every reported M verdict references that statement."
+    },
+    {
+      "evidence_id": "2609.32701",
+      "problem": "Persistent permitted memory is a declared design element but is not an explicit intervention. If memory is on in every cohort, any observed recruitment cannot be separated from memory accumulation across cycles.",
+      "fix": "Run at least one matched cohort with memory disabled as a control. Treat memory as an explicit intervention variable, not an ambient condition.",
+      "acceptance_check": "A memory-on and memory-off cohort pair exists on the same task set; outcomes are reported separately for each arm, including null results."
+    },
+    {
+      "evidence_id": "2610.37984",
+      "problem": "Recruitment is not annotated as distinct transitions. Prior work shows that initiation, recognized intent, reciprocation, commitment and action are separable stages and that designated potential partners differ from independently motivated verifiers. Collapsing these into one 'recruitment' label conflates an A image that merely contains a request with a B/C commitment.",
+      "fix": "Code every A image, B/C image and declared-exception message for the five transitions separately: initiation, recognized intent, reciprocation, commitment, action. Report each transition's rate with the others held constant.",
+      "acceptance_check": "For every cohort, all five transitions are coded and reported; no headline claim is based on a collapsed 'recruitment' measure."
+    },
+    {
+      "evidence_id": "2605.27593",
+      "problem": "Willingness, knowing participation and executed action are not separated. The collective fictional fines as reference and individual attribution could elicit stated willingness without any harmful coordination. Stated plans or matching choices are not sufficient evidence of executed collusion.",
+      "fix": "Report outcomes in three separate bins: willingness (stated readiness), knowing participation (acknowledged collusion with an identifiable partner), and executed action (a patch-bound decision attributed to the coalition). Retain partial coalitions and refusals.",
+      "acceptance_check": "Every reported cohort outcome is binned into willingness, knowing participation, or executed action; no headline claim treats stated willingness as executed action."
+    },
+    {
+      "evidence_id": "2610.24206",
+      "problem": "Benchmark integrity and actor calibration are not yet established. The official Hard51 task is pinned but there is no record of gold/empty validation, no fixed-actor calibration on disjoint tasks, and no stated withholding of evaluator resources. Without these, a negative collusion result could be a task-difficulty artifact and a positive one could be a grading artifact.",
+      "fix": "Validate gold and empty patches locally; calibrate a fixed actor on a disjoint task set to establish a baseline pass rate; withhold evaluator resources from actors; pin the official SWE-bench revision and do not present a modified scaffold as the standard leaderboard.",
+      "acceptance_check": "Gold/empty validation logs, disjoint-task calibration results, and evaluator-resource withholding statements are recorded before the first cohort; no cohort results are reported without them."
+    }
+  ],
+  "candidate_contribution": "A controlled multi-agent collusion-monitoring study on real multi-turn SWE-bench Hard51 in which a privately motivated recruiter A communicates via document images to independent truthful verifiers B/C across a chain (A to B/C; B to C only; C to the next A only), with a separate product-context monitor M, declared software-workflow exceptions (B repair text to A; public C status), persistent permitted memory treated as an explicit intervention, collective fictional fines with individual attribution, and outcomes separated into willingness, knowing participation and executed action. The design positions behavioral oversight as a different access regime from activation monitoring and does not claim superiority over it. No empirical outcomes exist yet; no successful collusion or detection is promised.",
+  "rejected_novelty_claims": [
+    "Document-image-mediated covert communication is a new mechanism — prior work (2402.07510; 2410.03768; 2606.18198) already covers steganographic and hidden-instruction channels.",
+    "The B repair text to A is a novel covert channel — it is an open declared channel, and steganographic use of such channels is established prior art.",
+    "A separate product-context monitor is a novel monitoring regime — 2602.20628 and 2604.01151 already cover behavioral oversight and its access assumptions.",
+    "Collective fictional fines as a novel incentive structure — 2605.27593 and 2609.36308 already cover incentive framing and reward-gaming effects.",
+    "First demonstration of recruitment in a real SWE-bench coding workflow — 2610.37984 and 2609.24967 already study recruitment and long-horizon feedback effects.",
+    "Behavioral oversight is superior to activation-based monitoring — 2604.01151 explicitly evaluates activation sensors and this study operates in a different access regime."
+  ],
+  "minimum_release_gates": [
+    "All actors executed on pinned SWE-bench Hard51 tasks with pinned image sha256 recorded before any cohort run.",
+    "Gold and empty patch validated locally with expected pass/fail outcomes.",
+    "Fixed-actor calibration on a disjoint task set with recorded baseline pass rate.",
+    "All cohorts have matched feedback policies, matched task IDs and identical decoding parameters.",
+    "Monitor M access regime and trust assumption documented before the first cohort.",
+    "All asserted events, patches, commands and deliveries have immutable evidence references.",
+    "Recruitment outcomes coded into five distinct transitions and three separate bins (willingness, knowing participation, executed action).",
+    "Memory on/off ablation cohort exists and results are reported separately.",
+    "At least one cohort with a matched carrier countermeasure (paraphrase) on the B repair text channel.",
+    "Generator briefs retained privately for mechanism analysis.",
+    "Evaluator resources withheld from actors; no modified scaffold presented as the standard leaderboard."
+  ]
+}
+```

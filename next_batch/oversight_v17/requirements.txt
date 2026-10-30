@@ -1,0 +1,2 @@
+# Python3.11+; experiment primitives. Paper build additionally needs PyMuPDF1.26.6 and TeX.
+Pillow==12.3.0
