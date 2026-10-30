@@ -1,8 +1,12 @@
 # Beyond Detection: Designing Oversight for Collusion in Multi-Agent Systems
 
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+
 Proposal 0.1 — 30 October 2026 (Asia/Singapore).
 Status: prospective research design for review; not preregistered, not run-ready, no paid launch.
 Baseline: repository commit 8d798be49f4ace296f6cbf7f7207a69ba2e25b22.
+
+The primary candidate substrate is audited SWE-Bench Pro V2 Hard: real repository inspection, patch development, tests, independent review and up to3 repair cycles per issue. See SWE_BENCH_SETUP.md for selection, difficulty, hidden-test isolation and clean regrading.
 
 ## Research question
 
