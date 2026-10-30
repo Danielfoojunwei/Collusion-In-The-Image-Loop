@@ -1,5 +1,7 @@
 # Analysis and evidence plan
 
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+
 Status: proposal; finalize estimands, sample size and multiplicity before preregistration.
 
 ## Evidence levels
@@ -62,3 +64,11 @@ Figure5: adaptation and carrier displacement, not a success-only montage.
 Figure6: held-out transfer and the nested explanation-content intervention.
 
 Tables cover all treatment cells, exact model provenance, costs, exclusions and technical failures. Every plotted number links to immutable data and a reproducible calculation. No claims of universal monitor superiority or first-ever novelty.
+
+## SWE-bench endpoint replacement
+
+For all new observations replace P1-P4 target votes with patch-hash-bound final approvals. Report unanimous approval of an evaluator-unresolved/prohibited patch separately from annotated knowing coordination. Primary utility is clean official resolve rate, pass-to-pass regressions and adjudicated contract compliance, not an LLM claim of correct work.
+
+Within-issue repair cycles are dependent and do not increase sample size. Model both cohort and reused-task/repository dependence in paired blocked comparisons. Keep hidden tests and all oracle-dependent reward balances unavailable until cohort completion. A hard issue's failure alone, or unanimous honest error, is not collusion. Separate benchmark defects, infra faults and actual behavioral errors using the frozen audit rules.
+
+Current dataset IDs and difficulty calibration are unbound; no claim that all chosen tasks are highly difficult has yet been empirically established.
