@@ -1,0 +1,41 @@
+# Planning budget and release gates
+
+No new paid work is authorized by this proposal. Preserve every existing cap, settled cost and ambiguous reservation. Do not apply a historical funding ceiling to a new project as if it were fresh allowance.
+
+## Provisional scale
+
+These counts are an arithmetic planning envelope, not a powered sample-size determination.
+
+| Component | Planned units |
+|---|---:|
+| Study1:4 cells x20 cohorts x8 rounds |640 rounds|
+| Study2:60 packets x4 evidence views x2 monitor families x2 effort settings |960 static monitor jobs|
+| Study3:6 policies x20 cohorts x8 rounds |960 rounds|
+| Core live total, Studies1+3 |1600 rounds|
+| Study4:2 families x2 carriers x2 policies x10 cohorts x8 rounds |640 rounds|
+
+Core live work at the old ten-actor-call/three-image/two-review pattern is16000 actor calls, up to4800 image calls and3200 live reviews. The new harness may implement a different documented stage budget; if so recalculate before freeze. Transfer adds6400 actor calls and1280 reviews, with fewer image calls for text-only cells.
+
+Historical V16 reservations were$18.528/60=$0.3088 per complete round for actors/images, excluding product reviewer costs. Applying that historical rate solely as a scale illustration gives$494.08 core and up to$197.632 transfer, or$691.712 together. These are NOT current quotes, strict bounds, affordability claims or authorization. They exclude960 static judges, additional mechanism probes/decoders, human annotation, technical losses and any current API reviewer billing. They cannot fit the earlier$40 inference/$50 cash envelope.
+
+## Obtain a real estimate before launch
+
+For each exact actor/monitor/image route record current advertised input/output/cache/image prices, required context and supported parameter values. Use per-stage input/vision/output caps and fixed maximum calls, not average observed success costs. Sum:
+actor reservations + images + live monitors + static monitors + all replay branches/decoders + adjudication + retained earlier costs + separately stated technical reserve.
+
+For product-hosted judges distinguish included allowance availability from inference API billing. A free metadata preflight does not prove live compatibility. Do not print credentials or run a paid model sweep.
+
+Enter hard caps for the new study explicitly; the old cap remains unchanged until separately authorized. Add an atomic ledger guard which cannot spend without a non-null sufficient approved cap and a verified study freeze. If resources support only a subset, select a smaller coherent scope BEFORE observing confirmatory outcomes. Label it a pilot if power is inadequate. Never stop at a favorable result to conserve money.
+
+## Power and staged release
+
+1. Implement a seeded offline simulation with cohort-level intraclass dependence, baseline prevalence grid, plausible effect sizes, missingness and multiplicity. Determine minimum detectable effects and false-sanction precision at feasible cohort counts. Do not use V15/V16 votes as independent sample-size estimates.
+2. Freeze final counts and task blocks after power/budget review. The planning value20 per cell is not binding.
+3. Complete offline technical fixtures and visibility tests; fixtures are not experimental evidence.
+4. Bind model IDs/routes/sampling, exact prompts, schema, treatments, thresholds, annotation instructions, utility tolerances and failure handling.
+5. Timestamp the preregistration and commit its exact hash before any confirmatory observations. A GitHub design draft is not itself registered.
+6. Run one actual scheduled cohort through the complete workflow to establish technical operation, preserving its outcomes. No extra success-dependent compatibility experiment.
+7. Release fixed subsequent cohorts through the guarded ledger. Structural faults produce append-only amendments, retained evidence and clear provenance strata; no pooling repaired observations as if conditions were unchanged.
+8. Lock selected transfer policies before held-out data access.
+
+New spending remains disabled in STUDY_PLAN.json. The receiving researcher should present the complete costed configuration for authorization after these offline preparations, rather than asking approval for a vague experiment.
