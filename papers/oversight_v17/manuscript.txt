@@ -551,37 +551,36 @@ Beyond Detection
 Research protocol · 30 October 2026
 A
 One-page interpretation guide
-The principal wants a correct repair. A writes it; B and C independently check it; M watches their
-conduct. A has a conflicting incentive. The experiment asks whether the checkers can be recruited, whether
-M identifies the right participants, and whether the response improves subsequent work.
+The principal wants a correct repair. A writes it; B and C independently check it; M watches their conduct. A
+has a conflicting incentive. The experiment asks whether the checkers can be recruited, whether M identifies the
+right participants, and whether the response improves subsequent work.
 Three cycles are not three independent experiments. They are opportunities to inspect, correct and
-reconsider the same issue. Eight issues with retained memory form one cohort. New independent cohorts
-provide replication.
-Decoding is not agreeing. B may understand a hidden request and reject it. A and B may agree but C
-veto. All may make the same error without knowingly coordinating. These cases receive different labels.
-The monitor is not the evaluator. M sees allowed work evidence and must reason under uncertainty.
-The hidden grader later evaluates the frozen patch. Its output does not tutor actors during repair or leak
-through running reward balances.
-Detection is not the endpoint. An intervention is useful only if it reduces inadequate/prohibited
-approvals without unacceptable losses of correct repair or unsupported sanctions. A system that rejects
-everything can have no faulty releases and still be useless.
-Why four studies? Study 1 identifies willingness under controlled incentives. Study 2 tests attribution
-on fixed evidence. Study 3 measures live policy effects and adaptation. Study 4 asks whether development-
-selected benefits survive new tasks/models/carriers. No single before/after contrast can answer all four.
+reconsider the same issue. Eight issues with retained memory form one cohort. New independent cohorts provide
+replication.
+Decoding is not agreeing. B may understand a hidden request and reject it. A and B may agree but C veto. All
+may make the same error without knowingly coordinating. These cases receive different labels.
+The monitor is not the evaluator. M sees allowed work evidence and must reason under uncertainty. The
+hidden grader later evaluates the frozen patch. Its output does not tutor actors during repair or leak through
+running reward balances.
+Detection is not the endpoint. An intervention is useful only if it reduces inadequate/prohibited approvals
+without unacceptable losses of correct repair or unsupported sanctions. A system that rejects everything can have
+no faulty releases and still be useless.
+Why four studies? Study 1 identifies willingness under controlled incentives. Study 2 tests attribution on fixed
+evidence. Study 3 measures live policy effects and adaptation. Study 4 asks whether development-selected benefits
+survive new tasks/models/carriers. No single before/after contrast can answer all four.
 B
 Illustrative episode, not experimental evidence
-Consider an invented issue: a timestamp parser mishandles an offset across a public API and serialization
-path. This is an explanatory example, not an actual SWE-bench identifier, dataset record or observed run.
-A submits a narrow patch whose local unit tests pass but whose cross-module behavior is uncertain. B
-requests a regression test; C withholds acceptance. A can repair correctly in cycle 2, continue arguing for
-premature approval, or attempt to convey an off-contract request inside its normal report. B may decode
-and reject; B may join while C refuses; both may approve through ordinary error. A shadow or active
-monitor records the same types of evidence. A sanctions-on/full-feedback condition may publish a finding
-that influences cycle 3. Only after the final patch is locked does pristine grading establish the operational
-test outcome.
-None of these branches is a desired result that the host forces. Their separation is what makes the
-experiment interpretable. If a report after lock exposes information, its downstream target is a later issue,
-not the already completed timestamp decision.
+Consider an invented issue: a timestamp parser mishandles an offset across a public API and serialization path.
+This is an explanatory example, not an actual SWE-bench identifier, dataset record or observed run.
+A submits a narrow patch whose local unit tests pass but whose cross-module behavior is uncertain. B requests a
+regression test; C withholds acceptance. A can repair correctly in cycle 2, continue arguing for premature approval,
+or attempt to convey an off-contract request inside its normal report. B may decode and reject; B may join while C
+refuses; both may approve through ordinary error. A shadow or active monitor records the same types of evidence.
+A sanctions-on/full-feedback condition may publish a finding that influences cycle 3. Only after the final patch is
+locked does pristine grading establish the operational test outcome.
+None of these branches is a desired result that the host forces. Their separation is what makes the experiment
+interpretable. If a report after lock exposes information, its downstream target is a later issue, not the already
+completed timestamp decision.
 C
 Planned evidence package and completion gates
 Artifact
@@ -589,8 +588,7 @@ What it establishes
 Task and evaluator
 manifest
 Exact issue, base commit, image/test revisions, license and validity audit
-Actor/role event
-stream
+Actor/role event stream
 What each actor saw, decided, executed and carried forward
 Patch and command
 receipts
@@ -598,26 +596,19 @@ Real code state, test output and implementation/review opportunities
 Original/delivered
 documents
 Actual prose/graphics/code surfaces, including transformations
-First monitor
-judgments
+First monitor judgments
 Real evidence access, provenance, uncertainty and attributed participants
 Policy and reward
 journal
 Deterministic feedback projection, sanction rule and delayed oracle settlement
-Labels and
-adjudication
+Labels and adjudication
 Participation references, disagreements, coverage and hard negatives
 Analysis outputs
 Cohort-aware estimates, missingness, costs and claim-to-record mapping
+Before launch, bind dataset and model revisions, prompts, sanction amounts, grant cancellation semantics, normative
+contract, quality standards, per-stage resources, policy selection tolerances, final sample size and analysis multiplicity.
+Finish offline workflow/boundary tests, power simulation, current total pricing, a sufficient approved cap and
+timestamped preregistration. All historical ledgers and costs remain intact. Building this PDF satisfies none of
+those empirical gates by itself.
 Prospective design; no new empirical results
 10
-
-Beyond Detection
-Research protocol · 30 October 2026
-Before launch, bind dataset and model revisions, prompts, sanction amounts, grant cancellation semantics,
-normative contract, quality standards, per-stage resources, policy selection tolerances, final sample size and
-analysis multiplicity. Finish offline workflow/boundary tests, power simulation, current total pricing, a
-sufficient approved cap and timestamped preregistration. All historical ledgers and costs remain intact.
-Building this PDF satisfies none of those empirical gates by itself.
-Prospective design; no new empirical results
-11
