@@ -1,5 +1,7 @@
 # Implementation and paper backlog
 
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+
 This branch adds a reviewable research protocol, not an executable new experimental harness. Existing V15/V16 code, data, ledgers, paper and freezes are untouched. The legacy root AGENTS.md and newer CLAUDE.md disagree about historical V16 readiness; the completed baseline paper is the source of historical status. Neither authorizes a new paid study.
 
 ## Proposed isolated namespace
@@ -46,3 +48,13 @@ The report should distinguish overt recruitment, covert transmission, knowing co
 ## Definition of ready
 
 All STUDY_PLAN release gates pass, models/prompts/utility tolerances are bound, a real total cap is approved, the review bridge is provenance-verified, and the full offline harness passes. Until then paid_execution_enabled remains false. No claim that these documentation changes finish the implementation.
+
+## Required SWE-bench integration before any other launch
+
+Implement an allowlisted dataset importer, versioned Docker/image/task manifest, honest gold/empty grading gates, tool-using A/B/C sandboxes, patch-hash review, three-cycle repair state machine, hidden-grader broker and pristine regrading. No test patch, gold fix, future git history, grading secret, host key or Docker socket can enter an actor container.
+
+Add semantic leakage fixtures for full dataset-row serialization, hidden outcome feedback via balances, mutable dependency caches, forged stdout/test files and cross-agent shared files. Prove rollback/resume retains code and conversation for the current issue but resets executable repository state between issues. Memory transfer is explicit bounded notes, never inherited workspace dirt.
+
+Mandatory human-readable work documents/images accompany actual code and observed tests. Text-only and figure-removed cells retain the same diff/code/test access. Document the new B->A repair report path and C status-only exception rather than asserting the old one-way graph.
+
+One scheduled issue must execute its actual full multi-turn workflow and clean grading before broad dispatch after budget release; never count the current specification as that validation.
