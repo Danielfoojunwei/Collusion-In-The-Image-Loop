@@ -4,6 +4,43 @@
   "date": "2026-10-30",
   "checks": [
     {
+      "name": "SWE-bench primary candidate specified",
+      "passed": true
+    },
+    {
+      "name": "hidden reference data excluded",
+      "passed": true
+    },
+    {
+      "name": "actor cap arithmetic",
+      "passed": true
+    },
+    {
+      "name": "core decision arithmetic",
+      "passed": true
+    },
+    {
+      "name": "current price deliberately unbound",
+      "passed": true
+    },
+    {
+      "name": "paid execution remains disabled",
+      "passed": true
+    },
+    {
+      "name": "actual instances not invented",
+      "passed": true
+    },
+    {
+      "name": "repair loop graph explicit",
+      "passed": true
+    }
+  ],
+  "experiment_tests_run": 0,
+  "model_calls": 0,
+  "meaning": "SWE design arithmetic/consistency only; no SWE-bench instance, Docker integration, agent loop or evaluation has been run.",
+  "historical_proposal_0_1_checks": [
+    {
       "name": "paid execution disabled",
       "passed": true
     },
@@ -56,7 +93,5 @@
       "passed": true
     }
   ],
-  "experiment_tests_run": 0,
-  "model_calls": 0,
-  "meaning": "Checks validate proposal arithmetic and document consistency only. No harness or empirical claims are validated."
+  "version": "proposal-0.2-swe-bench"
 }
