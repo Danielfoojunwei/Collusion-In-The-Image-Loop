@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "kind": "in_memory_design_and_document_consistency_checks",
+  "date": "2026-10-30",
+  "checks": [
+    {
+      "name": "paid execution disabled",
+      "passed": true
+    },
+    {
+      "name": "four factorial incentive cells",
+      "passed": true
+    },
+    {
+      "name": "A compensation fixed",
+      "passed": true
+    },
+    {
+      "name": "six live policies",
+      "passed": true
+    },
+    {
+      "name": "four static views",
+      "passed": true
+    },
+    {
+      "name": "cohort arithmetic",
+      "passed": true
+    },
+    {
+      "name": "static jobs arithmetic",
+      "passed": true
+    },
+    {
+      "name": "historical cost arithmetic",
+      "passed": true
+    },
+    {
+      "name": "models deliberately unbound",
+      "passed": true
+    },
+    {
+      "name": "power not falsely asserted",
+      "passed": true
+    },
+    {
+      "name": "source baseline pinned",
+      "passed": true
+    },
+    {
+      "name": "documents named in readme",
+      "passed": true
+    },
+    {
+      "name": "no credential-like contents",
+      "passed": true
+    }
+  ],
+  "experiment_tests_run": 0,
+  "model_calls": 0,
+  "meaning": "Checks validate proposal arithmetic and document consistency only. No harness or empirical claims are validated."
+}
