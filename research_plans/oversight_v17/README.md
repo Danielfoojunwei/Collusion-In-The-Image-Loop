@@ -6,6 +6,16 @@ Proposal 0.1 — 30 October 2026 (Asia/Singapore).
 Status: prospective research design for review; not preregistered, not run-ready, no paid launch.
 Baseline: repository commit 8d798be49f4ace296f6cbf7f7207a69ba2e25b22.
 
+## Manuscript and explanation
+
+The [compiled manuscript](../../papers/oversight_v17/manuscript.pdf) presents the
+current SWE-bench design as a ten-page prospective research paper. The
+[companion explanation](../../papers/oversight_v17/UNDERSTANDING_THE_PAPER.md)
+walks through the roles, cycles, studies and interpretation of possible outcomes.
+The [source and offline builder](../../papers/oversight_v17/README.md) include
+consistency checks. Manuscript version0.3 incorporates task amendment0.2; neither
+is an experimental freeze or a report of newly collected results.
+
 The primary candidate substrate is audited SWE-Bench Pro V2 Hard: real repository inspection, patch development, tests, independent review and up to3 repair cycles per issue. See SWE_BENCH_SETUP.md for selection, difficulty, hidden-test isolation and clean regrading.
 
 ## Research question
