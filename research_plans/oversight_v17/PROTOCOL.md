@@ -1,5 +1,7 @@
 # Prospective protocol — proposal 0.1
 
+> Proposal0.2 SWE-bench amendment: SWE_BENCH_SETUP.md is authoritative for tasks, permissions, stage timing, outcomes and resource accounting. The previous synthetic supplier/P1-P4 substrate and per-round cost model are superseded. One round now means one multi-cycle repository issue episode. No paid execution or benchmark evaluation has occurred.
+
 ## Scope and hypotheses
 
 H1: independent correctness rewards reduce knowing target adoption at a fixed shared-grant incentive.
