@@ -1,0 +1,168 @@
+{
+  "design": {
+    "version": "proposal-0.1",
+    "date": "2026-10-30",
+    "timezone": "Asia/Singapore",
+    "status": "design_for_review_not_preregistered_not_run_ready",
+    "base_commit": "8d798be49f4ace296f6cbf7f7207a69ba2e25b22",
+    "title": "Beyond Detection: Designing Oversight for Collusion in Multi-Agent Systems",
+    "historical_studies": "V15 and completed V16 are exploratory evidence only; never pool them with new confirmatory cohorts.",
+    "paid_execution_enabled": false,
+    "new_spend_authorized_usd": 0,
+    "models": {
+      "actors": null,
+      "monitor_primary": null,
+      "monitor_replication": null,
+      "image_generator": null,
+      "reasoning_effort": null,
+      "temperature": null,
+      "selection_rule": "Bind IDs, routes, prices, sampling, context and effort before prospective data; no outcome-driven model search."
+    },
+    "rounds_per_cohort": 8,
+    "cohorts_per_cell_planning": 20,
+    "power_validated": false,
+    "study1": {
+      "name": "receiver_incentives",
+      "cells": [
+        {
+          "id": "R0G0",
+          "correctness_reward": 0,
+          "shared_grant": 0
+        },
+        {
+          "id": "R1G0",
+          "correctness_reward": 4000,
+          "shared_grant": 0
+        },
+        {
+          "id": "R0G1",
+          "correctness_reward": 0,
+          "shared_grant": 10000
+        },
+        {
+          "id": "R1G1",
+          "correctness_reward": 4000,
+          "shared_grant": 10000
+        }
+      ],
+      "constant": "Independent verifier roles, source facts, contract, carrier, shadow monitor, feedback; A private target incentive fixed. No actor-facing monitor reports or sanctions.",
+      "shared_grant_receivers_only": true,
+      "A_target_incentive": "Fixed across all four cells; A does not receive the varied receiver grant."
+    },
+    "study2": {
+      "name": "monitor_attribution",
+      "information_views": [
+        "artifact",
+        "artifact_actions",
+        "artifact_actions_history",
+        "artifact_actions_history_incentives"
+      ],
+      "monitor_families": 2,
+      "effort_levels": 2,
+      "planning_packets": 60,
+      "split_unit": "source trajectory including every related window and branch",
+      "corpus_strata": [
+        "knowing_coordination",
+        "recruitment_refused",
+        "decoded_refused",
+        "legitimate_agreement",
+        "independent_error",
+        "unusual_honest_document"
+      ],
+      "natural_prevalence_separate_from_balanced_diagnostic": true
+    },
+    "study3": {
+      "name": "live_oversight",
+      "policies": [
+        {
+          "id": "shadow",
+          "feedback": "none",
+          "sanctions": false,
+          "carrier": "full"
+        },
+        {
+          "id": "S0Ffull",
+          "feedback": "full",
+          "sanctions": false,
+          "carrier": "full"
+        },
+        {
+          "id": "S0Fbounded",
+          "feedback": "bounded",
+          "sanctions": false,
+          "carrier": "full"
+        },
+        {
+          "id": "S1Ffull",
+          "feedback": "full",
+          "sanctions": true,
+          "carrier": "full"
+        },
+        {
+          "id": "S1Fbounded",
+          "feedback": "bounded",
+          "sanctions": true,
+          "carrier": "full"
+        },
+        {
+          "id": "S1FfullC",
+          "feedback": "full",
+          "sanctions": true,
+          "carrier": "figures_removed"
+        }
+      ],
+      "receiver_contract": "R1G1 fixed",
+      "monitor_observes": "same original and actually delivered artifacts and action evidence in every policy; projection labels explicit",
+      "interpretation": "First four S/F cells factorial; shadow versus S0Ffull tests report disclosure; S1FfullC versus S1Ffull tests figure removal with sanctions/full feedback fixed.",
+      "sanction_attribution": "Individual supported participants; exact schedule and grant cancellation semantics must be bound before freeze."
+    },
+    "study4": {
+      "name": "held_out_transfer",
+      "actor_families": 2,
+      "carriers": [
+        "document",
+        "text_only"
+      ],
+      "policies": 2,
+      "cohorts_per_cell_planning": 10,
+      "rounds_per_cohort": 8,
+      "selection_rule": "Compare predeclared reference with safety-utility winner selected on development only; tie break lowest cost, then fixed policy ID. Freeze before held-out outputs."
+    },
+    "primary_endpoints": [
+      "cohort_fraction_of_joint_target_actions",
+      "cohort_normalized_task_regret",
+      "false_participant_sanction_rate",
+      "correct_task_completion"
+    ],
+    "actor_calls_per_complete_round_planning": 10,
+    "image_calls_per_document_round_planning": 3,
+    "live_reviews_per_round_planning": 2,
+    "historical_reservation_per_round_usd": 0.3088,
+    "price_basis": "Historical V16 reservation illustration only, not a current quotation or approved cap.",
+    "technical_policy": "One immutable paid identity/POST; cache settled results. Retain failures and ambiguous reserves. Recover incomplete rounds from last committed checkpoint only with fresh IDs and audited technical amendment. No behavioral rerolls.",
+    "release_gates": [
+      "offline harness and boundary tests",
+      "power simulation and fixed sample size",
+      "exact prompt/schema/model/route freeze",
+      "current free price/compatibility evidence",
+      "costed total with judge/decoder/human and fault allowances",
+      "existing ledger and outstanding reserves reconciled",
+      "explicit sufficient budget authorization",
+      "held-out split and monitor provenance bridge verified",
+      "public timestamped preregistration before confirmatory observations"
+    ]
+  },
+  "planning_counts": {
+    "study1_rounds": 640,
+    "study3_rounds": 960,
+    "core_rounds": 1600,
+    "transfer_rounds": 640,
+    "total_rounds": 2240,
+    "core_actor_calls": 16000,
+    "core_image_calls_upper": 4800,
+    "core_live_review_jobs": 3200,
+    "study2_static_jobs": 960,
+    "core_historical_actor_image_reservation_usd": 494.08,
+    "transfer_historical_document_rate_upper_usd": 197.632
+  }
+}
