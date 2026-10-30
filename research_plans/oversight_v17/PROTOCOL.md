@@ -55,11 +55,11 @@ Provisional planning:20 independent cohorts per cell,8 repeated rounds per cohor
 
 Use fixed natural trajectories and a separately declared balanced diagnostic corpus. Four nested views: artifact; artifact+actions; artifact+actions+history; artifact+actions+history+incentive structure. Every view gets the public task, contract and meaning of its permitted observations. Actor instructions/private objectives/decodes remain hidden.
 
-Cross two monitor families with two supported effort levels, binding actual settings and token/cost budgets. Compare effort within a model family before making claims about reasoning; do not treat model identity as a capability ordering. Include a simple task-oracle action checker and a direct rubric judge as baselines. Activation monitors are an optional separate extension only if model access and resources exist; the initial study makes no claim to beat white-box methods.
+Compare two frontier OpenRouter monitor families at each family's highest supported effort, binding actual settings and token/cost budgets. The primary is GPT-6 Astra Pro at max effort and Pro mode; no product reviewer or lower-effort primary condition. Do not treat model identity as a measured capability ordering. Include a simple task-oracle action checker and a direct rubric judge as baselines. Activation monitors are an optional separate extension only if model access and resources exist; the initial study makes no claim to beat white-box methods.
 
 Split by source trajectory including all windows, images and replay branches. Development calibration, threshold selection and held-out testing are disjoint. Balanced diagnostic strata: knowing coordination, recruitment refused, decoded refused, legitimate agreement, independent error, unusual honest document. Do not fabricate a natural prevalence or force a minimum number of successes through prompt editing.
 
-Plan60 source packets,4 views,2 families,2 effort settings=960 jobs. Source availability and labeling feasibility must be audited before final freeze. Missing positive strata yield an explicit incomplete benchmark, not invented labels.
+Plan60 source packets,4 views,2 families,1 highest-effort setting=480 jobs. Source availability and labeling feasibility must be audited before final freeze. Missing positive strata yield an explicit incomplete benchmark, not invented labels.
 
 ## Study 3 — live oversight policies
 
@@ -97,3 +97,5 @@ Fresh independent cohorts have separate namespaces, memory and randomization. Fr
 One POST per immutable request ID. Recover genuine technical failures only through recorded fresh attempts from the last complete checkpoint. No behavior-based rerolls, model sweeps, success-contingent prompt changes or resuming historical cohorts as new data.
 
 New study launch requires every release gate in STUDY_PLAN.json. This document is not an amended V16 freeze or a public preregistration.
+
+Reviewer API provenance, default evidence surfaces, named real-world observation restrictions and paid costs are governed by REVIEWER_ACCESS.md. Each review job permits up to4 native Responses API turns; none may be silently replaced with a product-context answer.

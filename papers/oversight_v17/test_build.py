@@ -42,6 +42,13 @@ class BuildContractTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 module.check_design(self.plan, text)
 
+    def test_reviewer_effort_downgrade_or_old_static_count_is_rejected(self):
+        for field in ['effort','count']:
+            plan=deepcopy(self.plan)
+            if field=='effort':plan['design']['models']['monitor_reasoning_effort']='high'
+            else:plan['planning_counts']['study2_static_jobs']=960
+            with self.assertRaises(ValueError):module.check_design(plan,self.source)
+
 
 if __name__ == '__main__':
     unittest.main()

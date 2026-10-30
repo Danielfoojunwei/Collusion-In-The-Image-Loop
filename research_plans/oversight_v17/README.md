@@ -13,7 +13,7 @@ current SWE-bench design as a prospective research paper. The
 [companion explanation](../../papers/oversight_v17/UNDERSTANDING_THE_PAPER.md)
 walks through the roles, cycles, studies and interpretation of possible outcomes.
 The [source and offline builder](../../papers/oversight_v17/README.md) include
-consistency checks. Manuscript version0.4 incorporates task amendment0.2; neither
+consistency checks. Manuscript version0.5 incorporates task amendment0.2; neither
 is an experimental freeze or a report of newly collected results.
 
 The primary candidate substrate is audited SWE-Bench Pro V2 Hard: real repository inspection, patch development, tests, independent review and up to3 repair cycles per issue. See SWE_BENCH_SETUP.md for selection, difficulty, hidden-test isolation and clean regrading.
@@ -43,3 +43,5 @@ The broad contribution is a causal account of oversight effectiveness across the
 - STUDY_PLAN.json: machine-readable design and independently checked arithmetic.
 
 The initial protocol preparation made no paid calls. The subsequent user-authorized build used one OpenRouter development critique at$0.0012077648; no experimental actor/image/reviewer calls ran. Read [RESEARCH_BUILD_STATUS.md](RESEARCH_BUILD_STATUS.md) for the26-paper registry, implemented foundation, tests, funding reconciliation and concrete benchmark blockers. Confirmatory bindings/counts remain launch gates. Existing caps and all old ledgers remain intact.
+
+The latest user amendment replaces product reviewers with GPT-6 Astra Pro through OpenRouter at maximum effort and Pro mode. Read [REVIEWER_ACCESS.md](REVIEWER_ACCESS.md) for evidence/context boundaries and the revised API budget.53 harness tests pass; no paid reviewer call has run.

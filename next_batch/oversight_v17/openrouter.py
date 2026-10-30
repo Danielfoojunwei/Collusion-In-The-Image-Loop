@@ -80,7 +80,7 @@ class Client:
         validate_png(raw)
         return raw, receipt
 
-    def _post(self, endpoint, request_id, wire, kind, reserve, models, providers):
+    def _post(self, endpoint, request_id, wire, kind, reserve, models, providers, *, receipt_context=None):
         if self.transport is None and not os.environ.get('OPENROUTER_API_KEY'):
             raise FundingHold('Runtime OpenRouter secret missing')
         digest = self.ledger.reserve(request_id, kind, wire, reserve)
@@ -92,8 +92,11 @@ class Client:
                 key = os.environ.get('OPENROUTER_API_KEY')
                 if not key:
                     raise FundingHold('Runtime OpenRouter secret missing')
+                headers = {'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'}
+                if endpoint == '/responses':
+                    headers['X-OpenRouter-Metadata'] = 'enabled'
                 req = urllib.request.Request('https://openrouter.ai/api/v1' + endpoint, data=wire,
-                    headers={'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'}, method='POST')
+                    headers=headers, method='POST')
                 with deadline(1200):
                     with urllib.request.build_opener(NoRedirect()).open(req, timeout=1200) as response:
                         raw = response.read(32 * 1024 * 1024 + 1)
@@ -103,20 +106,30 @@ class Client:
             if len(raw) > 32 * 1024 * 1024:
                 raise ValueError('Oversized provider response')
             data = json.loads(raw)
-            cost = data.get('usage', {}).get('cost')
-            if cost is None or type(cost) not in (int, float) or data.get('usage', {}).get('is_byok'):
+            metadata = data.get('openrouter_metadata') or {}
+            candidates = [value for value in [data.get('usage', {}).get('cost'), metadata.get('cost'),
+                (metadata.get('usage') or {}).get('cost')] if value is not None]
+            if candidates and any(value != candidates[0] for value in candidates):
+                raise ValueError('Conflicting billed cost fields; reservation retained')
+            cost = candidates[0] if candidates else None
+            if cost is None or type(cost) not in (int, float) or data.get('usage', {}).get('is_byok') or metadata.get('is_byok'):
                 raise ValueError('Missing monetary usage or unexpected BYOK')
             self.ledger.complete(request_id, cost)
             # A billed response remains billed even if model output is invalid.
+            provider = data.get('provider') or metadata.get('provider_name') or metadata.get('provider')
+            if isinstance(provider, dict):
+                provider = provider.get('name')
             receipt = {'request_id': request_id, 'wire_sha256': digest,
                 'response_sha256': hashlib.sha256(raw).hexdigest(), 'cost_usd': cost,
                 'response_id': data.get('id'), 'returned_model': data.get('model'),
-                'returned_provider': data.get('provider'), 'kind': kind, 'at_unix': time.time(),
+                'returned_provider': provider, 'kind': kind, 'at_unix': time.time(),
+                'endpoint': endpoint, 'usage': data.get('usage'), 'context': receipt_context,
                 'meaning': 'Development call, not a blind experimental reviewer' if kind == 'research_development' else 'First provider response'}
             (folder / 'receipt.json').write_text(canonical(receipt) + '\n')
-            if data.get('model') not in models or data.get('provider') not in providers:
+            if (not isinstance(data.get('model'),str) or data['model'] not in models
+                    or not isinstance(provider,str) or provider not in providers):
                 self.ledger.hold_settled(request_id)
-                raise FundingHold('Billed response differs from the pinned actor route')
+                raise FundingHold('Billed response differs from the pinned role route')
             return data, receipt
         except BaseException as error:
             self.ledger.uncertain(request_id)

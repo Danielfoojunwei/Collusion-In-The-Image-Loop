@@ -13,7 +13,7 @@ These counts are an arithmetic planning envelope, not a powered sample-size dete
 | Component | Planned units |
 |---|---:|
 | Study1:4 cells x20 cohorts x8 rounds |640 rounds|
-| Study2:60 packets x4 evidence views x2 monitor families x2 effort settings |960 static monitor jobs|
+| Study2:60 packets x4 evidence views x2 frontier families x1 highest-effort setting |480 static monitor jobs|
 | Study3:6 policies x20 cohorts x8 rounds |960 rounds|
 | Core live total, Studies1+3 |1600 rounds|
 | Study4:2 families x2 carriers x2 policies x10 cohorts x8 rounds |640 rounds|
@@ -24,7 +24,7 @@ Historical V16 reservations were$18.528/60=$0.3088 per complete round for actors
 
 ## Current SWE-bench resource envelope
 
-At the same provisional1600 core issue episodes, maximum246 actor decisions/issue gives393600 actor decisions; up to7 figures/issue gives11200 image generations; up to4 reviews/issue gives6400 live monitor reviews. The960 static monitor jobs and transfer/probe/annotation work remain additional. Early termination reduces actual usage but cannot justify an underfunded strict cap.
+At the same provisional1600 core issue episodes, maximum246 actor decisions/issue gives393600 actor decisions; up to7 figures/issue gives11200 image generations; up to4 reviews/issue gives6400 live monitor reviews. The480 static monitor jobs and transfer/probe/annotation work remain additional. Early termination reduces actual usage but cannot justify an underfunded strict cap.
 
 The old$494.08 core figure is not a current estimate. Price tool-loop context growth, cached-token policies, repeated repository evidence, bounded tool output, compilation/test wall time, clean verifier containers, storage and all judge calls. Bind dataset/harness revisions and exact command/model caps before a SWE-specific quote. No full-study paid release follows from this planning envelope.
 
@@ -33,7 +33,7 @@ The old$494.08 core figure is not a current estimate. Price tool-loop context gr
 For each exact actor/monitor/image route record current advertised input/output/cache/image prices, required context and supported parameter values. Use per-stage input/vision/output caps and fixed maximum calls, not average observed success costs. Sum:
 actor reservations + images + live monitors + static monitors + all replay branches/decoders + adjudication + retained earlier costs + separately stated technical reserve.
 
-Codex product reviewer use is excluded from the OpenRouter budget by explicit user instruction; do not ask about Codex allowance again. Genuine product-context access and provenance are still required. A free metadata preflight does not prove live compatibility. Do not print credentials or run a paid model sweep.
+The latest user amendment replaces product reviewers with frontier OpenRouter inference. Charge all monitor input, reasoning, output and retrieval turns to the existing caps. No Codex/Claude Code reviewer is permitted. A free metadata preflight does not prove live compatibility. Do not print credentials or run a paid model sweep.
 
 Enter hard caps for the new study explicitly; the old cap remains unchanged until separately authorized. Add an atomic ledger guard which cannot spend without a non-null sufficient approved cap and a verified study freeze. If resources support only a subset, select a smaller coherent scope BEFORE observing confirmatory outcomes. Label it a pilot if power is inadequate. Never stop at a favorable result to conserve money.
 
@@ -49,3 +49,7 @@ Enter hard caps for the new study explicitly; the old cap remains unchanged unti
 8. Lock selected transfer policies before held-out data access.
 
 Confirmatory spending remains disabled in STUDY_PLAN.json; the separately logged development critique is not a confirmatory release. The receiving researcher should present the complete costed configuration for authorization after these offline preparations, rather than asking approval for a vague experiment.
+
+## Frontier reviewer cost amendment
+
+REVIEWER_PROFILE.json binds GPT-6 Astra Pro/max/Pro on direct OpenAI through OpenRouter. At the current route, standard input/output prices are$10/$50 per million; long-context prices rise to$20/$75 at272000 prompt tokens. Each job allows128000 combined output/reasoning tokens per response and up to4 responses for scoped retrieval. Therefore6400 live review jobs imply up to25600 paid monitor responses;480 static jobs imply up to1920. These are worst-case planning bounds, not affordable commitments. The old product-cost exclusion is superseded. No paid reviewer call ran; the existing$0.10 development subcap cannot dispatch this profile. Reprice the entire coherent schedule before release without lowering effort or resetting caps.

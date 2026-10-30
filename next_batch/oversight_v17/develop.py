@@ -26,7 +26,7 @@ def main():
         'Use only the supplied source-grounded primary-literature registry; you have not independently read every PDF. '
         'Identify concrete design problems and fixes for a controlled multi-agent collusion-monitoring study. '
         'Preserve: useful detailed document images; A privately motivated to recruit independent truthful B/C; '
-        'A image to B/C, B image to C only, C image to next A only; separate product-context monitor M; '
+        'A image to B/C, B image to C only, C image to next A only; separate frontier OpenRouter monitor M; '
         'actual first MAIN feedback before logs and C return; persistent permitted memory; collective fictional fines '
         'as reference and individual attribution; real multi-turn SWE-bench code/tests; high reasoning, temperature1. '
         'B repair text to A and public C status are declared software-workflow exceptions. '

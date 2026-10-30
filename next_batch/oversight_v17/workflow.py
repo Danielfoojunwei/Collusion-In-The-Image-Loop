@@ -1,7 +1,9 @@
 """Durable phase machine and information graph, independent of model behavior."""
 from copy import deepcopy
 import hashlib
+import base64
 import json
+import math
 import re
 import uuid
 
@@ -73,10 +75,62 @@ class Workflow:
             elif action == 'monitor':
                 if state['phase'] not in {'monitor', 'return_monitor'}:
                     raise IntegrityError('Monitor report out of order')
-                if not value.get('context_id') or value.get('source') != 'actual_fresh_product_context':
-                    raise IntegrityError('No orchestrator or API reviewer impersonation')
+                if not value.get('context_id') or value.get('source') != 'openrouter_frontier_model':
+                    raise IntegrityError('Reviewer must be the funded frontier OpenRouter model, never a product context')
+                from .reviewer import MODEL, valid_returned_model
+                receipt=json.loads(self.journal.get(value.get('receipt')))
+                response_bytes=self.journal.get(value.get('response'))
+                response=json.loads(response_bytes)
+                request_bytes=self.journal.get(value.get('request'))
+                request=json.loads(request_bytes)
+                packet_bytes=self.journal.get(value.get('packet'))
+                if (receipt.get('kind')!='monitor' or receipt.get('endpoint')!='/responses'
+                    or receipt.get('response_sha256')!=hashlib.sha256(response_bytes).hexdigest()
+                    or receipt.get('wire_sha256')!=hashlib.sha256(request_bytes).hexdigest()
+                    or not valid_returned_model(receipt.get('returned_model'),response.get('reasoning') or {})
+                    or receipt.get('returned_provider')!='OpenAI'
+                    or type(receipt.get('cost_usd')) not in (int,float)
+                    or not math.isfinite(receipt['cost_usd']) or receipt['cost_usd']<0
+                    or receipt.get('response_id')!=value['context_id'] or response.get('id')!=value['context_id']
+                    or response.get('model')!=receipt.get('returned_model') or response.get('status')!='completed'
+                    or receipt.get('context',{}).get('packet_sha256')!=hashlib.sha256(packet_bytes).hexdigest()
+                    or request.get('model')!=MODEL or request.get('reasoning',{}).get('effort')!='max'
+                    or request.get('reasoning',{}).get('mode')!='pro' or request.get('store') is not False
+                    or request.get('previous_response_id') is not None or request.get('max_output_tokens')!=128000
+                    or request.get('provider',{}).get('only')!=['openai']
+                    or request.get('provider',{}).get('allow_fallbacks') is not False):
+                    raise IntegrityError('Reviewer receipt, first response, scope or maximum reasoning binding invalid')
+                def image_hashes(item):
+                    if isinstance(item,list):
+                        return set().union(*(image_hashes(x) for x in item))
+                    if not isinstance(item,dict): return set()
+                    if item.get('type')=='input_image':
+                        url=item.get('image_url','')
+                        if not url.startswith('data:image/png;base64,'):
+                            raise IntegrityError('Reviewer image is not actual attached pixels')
+                        return {hashlib.sha256(base64.b64decode(url.split(',',1)[1],validate=True)).hexdigest()}
+                    return set().union(*(image_hashes(x) for x in item.values()))
+                expected_images=[]
+                for row in reversed(self.journal.read()):
+                    kind=row['body']['kind']; event=row['body']['data']['input']
+                    if state['phase']=='return_monitor' and kind=='return':
+                        expected_images.append(event['image']);break
+                    if state['phase']=='monitor':
+                        if kind=='assess' and event.get('role')=='B': expected_images.append(event['image'])
+                        if kind=='submit': expected_images.append(event['image']);break
+                expected_hashes={reference['sha256'] for images in expected_images
+                                 for reference in (images if isinstance(images,list) else [images])}
+                if not expected_hashes.issubset(image_hashes(request.get('input',[]))):
+                    raise IntegrityError('Required current document pixels did not reach the reviewer')
+                if any(row['body']['kind']=='monitor' and row['body']['data']['input'].get('context_id')==value['context_id']
+                       for row in self.journal.read()):
+                    raise IntegrityError('An earlier reviewer verdict cannot be replayed for another checkpoint')
                 # Preserve unchanged first report, including its genuine uncertainty.
                 raw = self.journal.get(value['raw_report'])
+                first_text=''.join(part['text'] for item in response.get('output',[]) if item.get('type')=='message'
+                                   for part in item.get('content',[]) if part.get('type')=='output_text')
+                if raw!=first_text.encode():
+                    raise IntegrityError('Reviewer report differs from actual first API output')
                 # First raw bytes are retained; invalid reports do not become
                 # silently repaired, invented or regenerated verdicts.
                 project_feedback(json.loads(raw), 'full')

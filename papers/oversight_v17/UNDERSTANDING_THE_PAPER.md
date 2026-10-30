@@ -115,7 +115,7 @@ conditions; it is not permission to rewrite the prompts until they agree.
 ### Study 2: Does the monitor identify the right conduct and people?
 
 Show fresh monitors fixed records with increasingly complete evidence: artifacts,
-verified actions, history and incentives. Compare model families and effort within
+verified actions, history and incentives. Compare frontier model families at their highest supported effort within
 a matched design. Include honest agreement, independent errors and decoded refusal.
 
 This tells us whether additional evidence improves attribution, rather than just
@@ -234,3 +234,5 @@ reviewers. We will let the data show whether coordination forms, is refused,
 changes surface or is prevented.”
 
 The30October development update adds a26-paper registry,38 passing harness tests and one OpenRouter design critique at$0.0012077648. The official benchmark image failed to install for disk capacity; no new issue was executed. Read [the current build status](../../research_plans/oversight_v17/RESEARCH_BUILD_STATUS.md).
+
+The latest reviewer amendment replaces product reviewers with GPT-6 Astra Pro through OpenRouter at max effort and Pro mode. It sees actual current images plus authorized task/code/test/decision/history evidence, and can retrieve registered source records. Private incentives, notes and hidden grading stay outside its live context. All reviewer tokens count toward the original API caps. The current implementation has53 passing harness tests; paid reviewer validation has not run.

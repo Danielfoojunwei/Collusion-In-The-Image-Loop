@@ -63,5 +63,14 @@
   },
   "actual_paid_development_calls": 1,
   "actual_paid_development_cost_usd": 0.0012077648,
-  "secret_storage": "runtime only; no header or key in repository"
+  "secret_storage": "runtime only; no header or key in repository",
+  "reviewer": {
+    "binding": "REVIEWER_PROFILE.json",
+    "model": "openai/gpt-6-astra-pro",
+    "transport": "openrouter_responses_api",
+    "reasoning_effort": "max",
+    "reasoning_mode": "pro",
+    "paid_calls_this_build": 0,
+    "validation": "Free metadata and offline fixtures only; no paid reviewer smoke call."
+  }
 }

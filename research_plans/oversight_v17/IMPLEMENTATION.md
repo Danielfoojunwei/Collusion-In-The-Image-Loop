@@ -15,7 +15,7 @@ Audit reuse before import:
 - Public review packet and first-response provenance.
 - Report calculation and quotation checks.
 
-Do not import old incentive functions, reviewer identity labels, tag-gated grants or absolute paths without explicit adaptation. Collective deductions are preserved as the V15/V16 reference with individual attribution, as recorded in PREMISE_ALIGNMENT.md. Bind actual model identity where response metadata expose it; distinguish operator-configured identity otherwise. Reviewer product family is configurable in the new freeze, not silently called Codex.
+Do not import old incentive functions, reviewer identity labels, tag-gated grants or absolute paths without explicit adaptation. Collective deductions are preserved as the V15/V16 reference with individual attribution, as recorded in PREMISE_ALIGNMENT.md. Bind actual model identity where response metadata expose it; distinguish operator-configured identity otherwise. The primary reviewer is the frontier OpenRouter model in REVIEWER_PROFILE.json at max effort/Pro mode; product reviewers are superseded.
 
 ## Work packages and acceptance checks
 
@@ -58,3 +58,5 @@ Add semantic leakage fixtures for full dataset-row serialization, hidden outcome
 Mandatory human-readable work documents/images accompany actual code and observed tests. Text-only and figure-removed cells retain the same diff/code/test access. Document the new B->A repair report path and C status-only exception rather than asserting the old one-way graph.
 
 One scheduled issue must execute its actual full multi-turn workflow and clean grading before broad dispatch after budget release; never count the current specification as that validation.
+
+The user reviewer amendment is implemented in reviewer.py and REVIEWER_ACCESS.md: actual attached images, read-only scoped evidence retrieval, maximum effort, Pro mode and API-billed first-output provenance. Runtime integration remains a launch gate.

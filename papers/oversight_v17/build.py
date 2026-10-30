@@ -29,6 +29,13 @@ def check_design(plan, source):
         'core_actor_arithmetic': core * actor == counts['core_actor_decisions_upper'] == 393600,
         'core_review_arithmetic': core * multi['monitor_reviews_per_issue_upper'] == counts['core_live_monitor_reviews_upper'] == 6400,
         'core_image_arithmetic': core * multi['figure_generations_per_document_issue_upper'] == counts['core_image_calls_upper'] == 11200,
+        'frontier_openrouter_monitor': design['models']['monitor_primary']=='openai/gpt-6-astra-pro'
+            and design['models']['monitor_reasoning_effort']=='max' and design['models']['monitor_reasoning_mode']=='pro',
+        'highest_effort_only_static_arithmetic': design['study2']['planning_packets']*len(design['study2']['information_views'])
+            *design['study2']['monitor_families']*design['study2']['effort_levels']==counts['study2_static_jobs']==480
+            and design['study2']['effort_levels']==1,
+        'monitor_job_api_call_arithmetic': counts['core_live_monitor_reviews_upper']
+            *multi['monitor_api_calls_per_job_upper']==counts['core_live_monitor_api_calls_upper']==25600,
         'no_unpriced_cost_claim': counts['current_total_cost_usd'] is None,
         'research_protocol_status': 'No new SWE-bench experiments' in source,
         'no_placeholder_results': not re.search(r'\b(?:INSERT RESULTS|TODO RESULTS|RESULTS HERE)\b', source),

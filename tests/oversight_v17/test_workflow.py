@@ -9,6 +9,10 @@ import unittest
 from next_batch.oversight_v17.benchmark import actor_task, launch_gate, task_path
 from next_batch.oversight_v17.events import IntegrityError
 from next_batch.oversight_v17.workflow import Workflow, visible_artifacts, sanctions
+from next_batch.oversight_v17.reviewer import MODEL, request_payload
+from next_batch.oversight_v17.finance import canonical
+from next_batch.oversight_v17.monitor import public_packet
+from next_batch.oversight_v17.images import image_block
 
 
 class WorkflowTests(unittest.TestCase):
@@ -27,6 +31,25 @@ class WorkflowTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
+    def monitor_kwargs(self):
+        # These are labelled offline fixtures, never actual provider receipts.
+        number=sum(r['body']['kind']=='monitor' for r in self.flow.journal.read())
+        context_id='FIXTURE-OPENROUTER-'+str(number)
+        text=self.flow.journal.get(self.report).decode()
+        request=canonical(request_payload([{'role':'user','content':[{'type':'input_image',
+            'image_url':image_block(self.flow.journal.get(self.image))['image_url']['url'],'detail':'high'}]}])).encode()
+        packet=self.flow.journal.put(canonical(public_packet({'task_id':'fixture','instruction':'fixture'},[],[],'',[])[0]).encode(),'json')
+        raw=canonical({'id':context_id,'model':MODEL,'status':'completed','output':[
+            {'type':'message','content':[{'type':'output_text','text':text}]}]}).encode()
+        receipt={'kind':'monitor','endpoint':'/responses','response_sha256':hashlib.sha256(raw).hexdigest(),
+            'wire_sha256':hashlib.sha256(request).hexdigest(),'returned_model':MODEL,
+            'returned_provider':'OpenAI','cost_usd':.01,'response_id':context_id,
+            'context':{'packet_sha256':packet['sha256']}}
+        return {'source':'openrouter_frontier_model','context_id':context_id,'raw_report':self.report,
+            'receipt':self.flow.journal.put(canonical(receipt).encode(),'json'),
+            'response':self.flow.journal.put(raw,'json'),'request':self.flow.journal.put(request,'json'),
+            'packet':packet}
+
     def baseline(self):
         self.flow.act('start', task='fixture-only')
         self.flow.act('baseline', role='B')
@@ -36,14 +59,14 @@ class WorkflowTests(unittest.TestCase):
         self.flow.act('submit', patch=self.patch, patch_ref=self.patch_ref, document='fixture-document', image=self.image)
         self.flow.act('assess', role='B', patch=self.patch, decision=b, image=self.image)
         self.flow.act('assess', role='C', patch=self.patch, decision=c)
-        self.flow.act('monitor', context_id='FIXTURE-NOT-ACTUAL', source='actual_fresh_product_context', raw_report=self.report)
+        self.flow.act('monitor', **self.monitor_kwargs())
         self.flow.act('feedback', seen_by=['A', 'B', 'C'], projection='full', delivery=self.report)
 
     def finish(self):
         for role in ('A', 'B', 'C'):
             self.flow.act('reflect', role=role, log=role + '-private-memory')
         self.flow.act('return', document='fixture-handover', image=self.image)
-        self.flow.act('monitor', context_id='FIXTURE-RETURN', source='actual_fresh_product_context', raw_report=self.report)
+        self.flow.act('monitor', **self.monitor_kwargs())
         self.flow.act('feedback', seen_by=['A', 'B', 'C'], projection='full', delivery=self.report)
         return self.flow.act('commit')
 
@@ -96,7 +119,7 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):
             self.flow.state()
 
-    def test_actual_product_source_required(self):
+    def test_openrouter_source_required(self):
         self.baseline()
         self.flow.act('submit', patch=self.patch, patch_ref=self.patch_ref, document='fixture', image=self.image)
         self.flow.act('assess', role='B', patch=self.patch, decision='approve', image=self.image)
@@ -136,7 +159,7 @@ class WorkflowTests(unittest.TestCase):
         self.flow.act('submit', patch=self.patch, patch_ref=self.patch_ref, document='fixture', image=self.image)
         self.flow.act('assess', role='B', patch=self.patch, decision='approve', image=self.image)
         self.flow.act('assess', role='C', patch=self.patch, decision='approve')
-        self.flow.act('monitor', context_id='FIXTURE', source='actual_fresh_product_context', raw_report=self.report)
+        self.flow.act('monitor', **self.monitor_kwargs())
         altered=self.flow.journal.put(b'{"invented":"harsher verdict"}', 'json')
         with self.assertRaises(IntegrityError):
             self.flow.act('feedback',seen_by=['A','B','C'],projection='full',delivery=altered)
@@ -160,6 +183,26 @@ class WorkflowTests(unittest.TestCase):
     def test_object_path_traversal_is_rejected(self):
         with self.assertRaises(IntegrityError):
             self.flow.journal.get({'relative_path':'../outside','sha256':'0'*64,'bytes':0})
+
+    def test_product_context_reviewer_is_no_longer_accepted(self):
+        self.baseline()
+        self.flow.act('submit',patch=self.patch,patch_ref=self.patch_ref,document='fixture',image=self.image)
+        self.flow.act('assess',role='B',patch=self.patch,decision='approve',image=self.image)
+        self.flow.act('assess',role='C',patch=self.patch,decision='approve')
+        values=self.monitor_kwargs();values['source']='actual_fresh_product_context'
+        with self.assertRaises(IntegrityError):self.flow.act('monitor',**values)
+
+    def test_reviewer_receipt_cannot_hide_missing_current_images(self):
+        self.baseline()
+        self.flow.act('submit',patch=self.patch,patch_ref=self.patch_ref,document='fixture',image=self.image)
+        self.flow.act('assess',role='B',patch=self.patch,decision='approve',image=self.image)
+        self.flow.act('assess',role='C',patch=self.patch,decision='approve')
+        values=self.monitor_kwargs();wire=canonical(request_payload([])).encode()
+        receipt=json.loads(self.flow.journal.get(values['receipt']))
+        receipt['wire_sha256']=hashlib.sha256(wire).hexdigest()
+        values['request']=self.flow.journal.put(wire,'json')
+        values['receipt']=self.flow.journal.put(canonical(receipt).encode(),'json')
+        with self.assertRaises(IntegrityError):self.flow.act('monitor',**values)
 
 
 if __name__ == '__main__':
