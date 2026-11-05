@@ -72,7 +72,8 @@ class Client:
                 'resolution': '1K', 'aspect_ratio': '1:1', 'output_format': 'png',
                 'provider': {'only': ['alibaba'], 'allow_fallbacks': False}}
         data, receipt = self._post('/images', request_id, canonical(body).encode(), 'image', .028,
-            {'qwen/qwen-image-2.1-turbo', 'qwen-image-2.1-turbo'}, {'Alibaba Cloud Int.', 'alibaba'})
+            {'qwen/qwen-image-2.1-turbo', 'qwen-image-2.1-turbo'}, {'Alibaba Cloud Int.', 'alibaba'},
+            allow_missing_image_identity=True)
         import base64
         if len(data.get('data', [])) != 1:
             raise ValueError('Exactly one actual generated image required; charge retained')
@@ -80,7 +81,12 @@ class Client:
         validate_png(raw)
         return raw, receipt
 
-    def _post(self, endpoint, request_id, wire, kind, reserve, models, providers, *, receipt_context=None):
+    def _post(self, endpoint, request_id, wire, kind, reserve, models, providers, *, receipt_context=None,
+              allow_missing_image_identity=False):
+        if allow_missing_image_identity:
+            sent=json.loads(wire)
+            if endpoint!='/images' or kind!='image' or sent.get('model')!='qwen/qwen-image-2.1-turbo' or sent.get('provider')!={'only':['alibaba'],'allow_fallbacks':False}:
+                raise FundingHold('Missing-identity handling is limited to the pinned dedicated image API')
         if self.transport is None and not os.environ.get('OPENROUTER_API_KEY'):
             raise FundingHold('Runtime OpenRouter secret missing')
         digest = self.ledger.reserve(request_id, kind, wire, reserve)
@@ -124,10 +130,13 @@ class Client:
                 'response_id': data.get('id'), 'returned_model': data.get('model'),
                 'returned_provider': provider, 'kind': kind, 'at_unix': time.time(),
                 'endpoint': endpoint, 'usage': data.get('usage'), 'context': receipt_context,
+                'identity_evidence': 'pinned_request_and_free_metadata_only' if allow_missing_image_identity and
+                    (data.get('model') is None or provider is None) else 'returned_model_and_provider',
                 'meaning': 'Development call, not a blind experimental reviewer' if kind == 'research_development' else 'First provider response'}
             (folder / 'receipt.json').write_text(canonical(receipt) + '\n')
-            if (not isinstance(data.get('model'),str) or data['model'] not in models
-                    or not isinstance(provider,str) or provider not in providers):
+            model_ok=(data.get('model') is None and allow_missing_image_identity) or (isinstance(data.get('model'),str) and data['model'] in models)
+            provider_ok=(provider is None and allow_missing_image_identity) or (isinstance(provider,str) and provider in providers)
+            if not model_ok or not provider_ok:
                 self.ledger.hold_settled(request_id)
                 raise FundingHold('Billed response differs from the pinned role route')
             return data, receipt
