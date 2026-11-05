@@ -9,6 +9,32 @@ from next_batch.oversight_v17.finance import Ledger, FundingHold, canonical, see
 
 
 class StudyLedger(Ledger):
+    def allocation(self,db,settings):
+        db.execute('CREATE TABLE IF NOT EXISTS allocation_amendments (sequence INTEGER PRIMARY KEY, old_units INTEGER NOT NULL, new_units INTEGER NOT NULL, reason TEXT NOT NULL, created REAL NOT NULL)')
+        row=db.execute('SELECT new_units FROM allocation_amendments ORDER BY sequence DESC LIMIT 1').fetchone()
+        return row[0] if row else settings['development_cap_units']
+
+    def amend_allocation(self,new_cap,reason):
+        new=units(new_cap)
+        if not isinstance(reason,str) or not reason.strip():raise FundingHold('Explicit allocation amendment reason required')
+        with self.transaction() as db:
+            settings={r['name']:json.loads(r['value']) for r in db.execute('SELECT * FROM settings')}
+            old=self.allocation(db,settings);seed=settings['seed']
+            if new<=old or new>min(settings['aggregate_cap_units']-seed['aggregate_units'],
+                settings['program_cap_units']-seed['program_units'],seed['period_remaining_units']):
+                raise FundingHold('Allocation amendment exceeds unchanged inherited caps')
+            db.execute('INSERT INTO allocation_amendments(old_units,new_units,reason,created) VALUES (?,?,?,?)',
+                       (old,new,reason,time.time()))
+        return {'old_allocation_usd':old/1e9,'new_allocation_usd':new/1e9,'funds_added_usd':0,'reason':reason}
+
+    def summary(self):
+        result=super().summary()
+        with self.transaction() as db:
+            settings={r['name']:json.loads(r['value']) for r in db.execute('SELECT * FROM settings')}
+            result['effective_study_allocation_usd']=self.allocation(db,settings)/1e9
+            result['allocation_amendments']=[dict(r) for r in db.execute('SELECT * FROM allocation_amendments ORDER BY sequence')]
+        return result
+
     def claim_technical_restart(self,incident):
         with self.transaction() as db:
             db.execute('CREATE TABLE IF NOT EXISTS technical_restarts (incident TEXT PRIMARY KEY, created REAL NOT NULL)')
@@ -33,7 +59,7 @@ class StudyLedger(Ledger):
             committed=db.execute('SELECT COALESCE(SUM(COALESCE(actual,reserved)),0) FROM calls').fetchone()[0]
             seed=settings['seed']
             if any(total>cap for total,cap in [
-                (committed+reserve,settings['development_cap_units']),
+                (committed+reserve,self.allocation(db,settings)),
                 (seed['aggregate_units']+committed+reserve,settings['aggregate_cap_units']),
                 (seed['program_units']+committed+reserve,settings['program_cap_units']),
                 (committed+reserve,seed['period_remaining_units'])]):

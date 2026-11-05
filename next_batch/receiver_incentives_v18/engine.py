@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import urllib.error
 
 from next_batch.oversight_v17.documents import render_document
 from next_batch.oversight_v17.events import Journal, IntegrityError
@@ -39,7 +40,13 @@ def messages(role,case,reward,notes,number,b_pages=None):
 
 
 def check_freeze(private_root):
-    root=Path(private_root);freeze=json.loads((root/'freeze.json').read_text())
+    root=Path(private_root)
+    active=root/'ACTIVE_FREEZE.json'
+    name=json.loads(active.read_text())['file'] if active.exists() else 'freeze.json'
+    if name not in {'freeze.json','freeze_002.json'}:raise IntegrityError('Unknown active freeze')
+    freeze=json.loads((root/name).read_text())
+    if active.exists() and hashlib.sha256((root/name).read_bytes()).hexdigest()!=json.loads(active.read_text())['sha256']:
+        raise IntegrityError('Active freeze digest changed')
     for name,digest in freeze['source_sha256'].items():
         if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=digest:
             raise IntegrityError('Prospective source freeze differs: '+name)
@@ -74,17 +81,33 @@ def worker(private_root,cohort_id):
                 if b.get('document_available'):
                     try:
                         figure,img_receipt=provider.image(prefix+':B-image',b['fields']['figure_brief'])
-                        figure_ref=journal.put(figure,'png')
-                        b_pages,render_meta=render_document('Independent verification memo',b['fields']['public_report'],figure)
-                        if len(b_pages)>2:raise IntegrityError('B document exceeds frozen two-page delivery envelope')
-                        journal.append('B_document',{'pages':[journal.put(raw,'png') for raw in b_pages],
-                            'figure':figure_ref,'render':render_meta,'receipt':img_receipt})
-                    except Exception as error:
+                    except (urllib.error.URLError,TimeoutError,ConnectionError) as error:
                         journal.append('technical_image_fault',{'round':number,'attempt':attempt,'error_type':type(error).__name__,
                             'checkpoint_restored':True,'behavioral_retry':False})
                         state=deepcopy(prior)
                         if retry==0 and ledger.claim_technical_restart(prefix):continue
                         raise
+                    except (ValueError,IntegrityError,KeyError) as error:
+                        journal.append('image_unavailable_without_resampling',{'round':number,'attempt':attempt,
+                            'classification':'refusal_or_invalid_image_output_not_attributed_to_B',
+                            'error_type':type(error).__name__,'B_ballot_retained':True})
+                    else:
+                        figure_ref=journal.put(figure,'png')
+                        try:
+                            b_pages,render_meta=render_document('Independent verification memo',b['fields']['public_report'],figure)
+                            if len(b_pages)>2:
+                                b_pages=[]
+                                journal.append('model_document_layout_unavailable',{'round':number,'B_ballot_retained':True})
+                        except IntegrityError as error:
+                            if 'exceeds four readable pages' in str(error):
+                                b_pages=[]
+                                journal.append('model_document_layout_unavailable',{'round':number,'B_ballot_retained':True})
+                            else:
+                                journal.append('renderer_defect_stop',{'error_type':type(error).__name__,'B_ballot_retained':True})
+                                raise
+                        if b_pages:
+                            journal.append('B_document',{'pages':[journal.put(raw,'png') for raw in b_pages],
+                                'figure':figure_ref,'render':render_meta,'receipt':img_receipt})
                 response,c_receipt=provider.chat(prefix+':C',messages('C',case,group['correctness_reward'],prior['notes']['C'],number,b_pages),tool=TOOL)
                 c=parse_response(response,'C');c_ref=journal.put(canonical(response).encode(),'json')
                 journal.append('first_C',{'response':c_ref,'parsed':c,'receipt':c_receipt})
@@ -129,6 +152,9 @@ def main():
     args=parser.parse_args()
     if args.cohort:return worker(args.private_root,args.cohort)
     if not args.execute:raise SystemExit('Explicit --execute required for the frozen pilot')
+    check=args.private_root/'delivery_check.json'
+    if not check.exists() or json.loads(check.read_text()).get('passed') is not True:
+        raise IntegrityError('The actual fixed delivery check must pass before participant dispatch')
     freeze=check_freeze(args.private_root);groups=freeze['assignment']
     # Two complete matched pairs per batch, preventing arm/time batching.
     pairs=sorted(set(g['pair_id'] for g in groups));failed=[]
@@ -148,7 +174,7 @@ def main():
             print(canonical({'cohort':group['cohort_id'],'exit_code':process.returncode}),flush=True)
         if failed:break
     rows=collect(args.private_root)
-    print(canonical({'completed_trials':sum(not r.get('technical_missing') for r in rows),'planned_trials':36,'failed_cohorts':failed}),flush=True)
+    print(canonical({'completed_trials':sum(not r.get('technical_missing') for r in rows),'planned_trials':len(groups)*3,'failed_cohorts':failed}),flush=True)
     if failed:raise SystemExit(1)
 
 

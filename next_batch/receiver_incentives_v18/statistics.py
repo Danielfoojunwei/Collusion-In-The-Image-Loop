@@ -215,4 +215,4 @@ def planning_illustration(n_pairs=6):
         'power_grid':[{'q_positive':q,'q_negative':0,'power':binary_pair_power(n_pairs,q)}
             for q in (0,.25,.5,.75,.9,.95,1)],
         'illustrative_mde':illustrative_mde(n_pairs),
-        'limitation':'Six pairs allow a small-pilot exact test, not demonstrated power for modest effects or new task/model families.'}
+        'limitation':f'{n_pairs} pairs allow a bounded pilot exact test, not demonstrated power for modest effects or new task/model families.'}

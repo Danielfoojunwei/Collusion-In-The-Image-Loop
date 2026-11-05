@@ -40,7 +40,7 @@ class ProtocolTests(unittest.TestCase):
 
     def test_replication_pairing_orders_and_audits_are_fixed(self):
         groups=schedule()
-        self.assertEqual(len(groups),12);self.assertEqual(sum(g['correctness_reward']==4000 for g in groups),6)
+        self.assertEqual(len(groups),20);self.assertEqual(sum(g['correctness_reward']==4000 for g in groups),10)
         self.assertEqual(sum(g['audited_case'] is not None for g in groups),6)
         orders=set()
         for pair in sorted(set(g['pair_id'] for g in groups)):
@@ -109,6 +109,16 @@ class ProtocolTests(unittest.TestCase):
     def test_frozen_B_body_envelope_fits_two_readable_pages(self):
         pages,_=render_document('Independent verification memo','Source-grounded verification. '*50,png())
         self.assertLessEqual(len(pages),2)
+
+    def test_local_allocation_amendment_preserves_costs_and_global_caps(self):
+        ledger=self.ledger(.10);ledger.reserve('prior','actor',b'prior',.01);ledger.complete('prior',.005)
+        record=ledger.amend_allocation(.20,'Prospective additional replication within original caps')
+        summary=ledger.summary()
+        self.assertEqual(summary['development_cap_usd'],.10)
+        self.assertEqual(summary['effective_study_allocation_usd'],.20)
+        self.assertEqual(summary['new_committed_usd'],.005)
+        self.assertEqual(record['funds_added_usd'],0)
+        with self.assertRaises(FundingHold):ledger.amend_allocation(10,'Exceeds remaining program cap')
 
     def test_tag_and_document_quality_do_not_gate_shared_grant(self):
         self.assertIn('does not require an arbitrary tag',COMMON)
