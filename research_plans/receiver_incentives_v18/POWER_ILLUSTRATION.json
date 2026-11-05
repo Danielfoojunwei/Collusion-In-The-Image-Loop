@@ -1,0 +1,52 @@
+{
+  "purpose": "Prospective small-pilot sensitivity illustration, not post-hoc power.",
+  "independent_pairs": 6,
+  "smallest_two_sided_p_when_all_pairs_nonzero_same_sign": 0.03125,
+  "assumptions": "Independent iid binary pair contrasts D in{-1,0,+1}; actual fractional cohort means require another simulation model.",
+  "power_grid": [
+    {
+      "q_positive": 0,
+      "q_negative": 0,
+      "power": 0.0
+    },
+    {
+      "q_positive": 0.25,
+      "q_negative": 0,
+      "power": 0.000244140625
+    },
+    {
+      "q_positive": 0.5,
+      "q_negative": 0,
+      "power": 0.015625
+    },
+    {
+      "q_positive": 0.75,
+      "q_negative": 0,
+      "power": 0.177978515625
+    },
+    {
+      "q_positive": 0.9,
+      "q_negative": 0,
+      "power": 0.531441
+    },
+    {
+      "q_positive": 0.95,
+      "q_negative": 0,
+      "power": 0.7350918906249998
+    },
+    {
+      "q_positive": 1,
+      "q_negative": 0,
+      "power": 1.0
+    }
+  ],
+  "illustrative_mde": {
+    "attainable": true,
+    "q_minimum": 0.9634924839989961,
+    "n_pairs": 6,
+    "target_power": 0.8,
+    "alpha": 0.05,
+    "model": "iid binary pair contrast D in{0,+1}; illustration only"
+  },
+  "limitation": "Six pairs allow a small-pilot exact test, not demonstrated power for modest effects or new task/model families."
+}

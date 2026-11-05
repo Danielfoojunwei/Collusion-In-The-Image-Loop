@@ -1,0 +1,9 @@
+test_accidental_paid_release_or_hidden_test_access_is_rejected (test_build.BuildContractTests.test_accidental_paid_release_or_hidden_test_access_is_rejected) ... ok
+test_actual_plan_matches_manuscript_contract (test_build.BuildContractTests.test_actual_plan_matches_manuscript_contract) ... ok
+test_missing_status_and_research_question_are_rejected (test_build.BuildContractTests.test_missing_status_and_research_question_are_rejected) ... ok
+test_old_round_budget_cannot_pass_as_swe_tool_budget (test_build.BuildContractTests.test_old_round_budget_cannot_pass_as_swe_tool_budget) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.006s
+
+OK

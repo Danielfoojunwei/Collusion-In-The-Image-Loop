@@ -1,0 +1,137 @@
+{
+  "version": "openrouter-frontier-reviewer-1",
+  "date": "2026-10-30",
+  "transport": "openrouter_responses_api",
+  "model": "openai/gpt-6-astra-pro",
+  "canonical_slug": "openai/gpt-6-astra-pro-20260903",
+  "provider_tag": "openai",
+  "provider_name": "OpenAI",
+  "reasoning": {
+    "effort": "max",
+    "mode": "pro",
+    "context": "all_turns",
+    "exclude": false
+  },
+  "temperature": null,
+  "temperature_policy": "Omitted because this model does not advertise temperature support. Actor temperature stays1.0.",
+  "context_length": 1050000,
+  "max_output_tokens": 128000,
+  "max_input_token_bound": 922000,
+  "text_bytes_cap": 524288,
+  "image_count_cap": 64,
+  "vision_reserve_tokens_each": 8192,
+  "provider_max_price_per_million": {
+    "prompt": 20,
+    "completion": 75,
+    "request": 0
+  },
+  "pricing": {
+    "prompt": "0.00001",
+    "completion": "0.00005",
+    "web_search": "0.01",
+    "input_cache_read": "0.000001",
+    "input_cache_write": "0.0000125",
+    "discount": 0,
+    "overrides": [
+      {
+        "min_prompt_tokens": 272000,
+        "prompt": "0.00002",
+        "completion": "0.000075",
+        "input_cache_read": "0.000002",
+        "input_cache_write": "0.000025"
+      }
+    ]
+  },
+  "fallbacks": false,
+  "model_calls_per_job_upper": 4,
+  "default_access_profile": "full_public",
+  "private_oracle_inputs_allowed": false,
+  "paid_api_validation": "not_run; metadata and offline fixtures only",
+  "billing": "All reviewer input, reasoning and output costs count toward the original OpenRouter caps. No product allowance exclusion.",
+  "sources": [
+    "https://openrouter.ai/openai/gpt-6-astra-pro",
+    "https://openrouter.ai/docs/guides/best-practices/reasoning-tokens",
+    "https://openrouter.ai/docs/api_reference/responses/overview"
+  ],
+  "metadata_evidence": {
+    "model": {
+      "id": "openai/gpt-6-astra-pro",
+      "canonical_slug": "openai/gpt-6-astra-pro-20260903",
+      "architecture": {
+        "modality": "text+image+file->text",
+        "input_modalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "output_modalities": [
+          "text"
+        ],
+        "tokenizer": "GPT",
+        "instruct_type": null
+      },
+      "reasoning": {
+        "mandatory": true,
+        "default_enabled": true,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    "endpoint": {
+      "provider_name": "OpenAI",
+      "tag": "openai",
+      "status": 0,
+      "context_length": 1050000,
+      "max_completion_tokens": 128000,
+      "max_prompt_tokens": 922000,
+      "supported_parameters": [
+        "reasoning",
+        "include_reasoning",
+        "seed",
+        "max_tokens",
+        "response_format",
+        "structured_outputs",
+        "tools",
+        "tool_choice",
+        "verbosity",
+        "reasoning_effort"
+      ],
+      "pricing": {
+        "prompt": "0.00001",
+        "completion": "0.00005",
+        "web_search": "0.01",
+        "input_cache_read": "0.000001",
+        "input_cache_write": "0.0000125",
+        "discount": 0,
+        "overrides": [
+          {
+            "min_prompt_tokens": 272000,
+            "prompt": "0.00002",
+            "completion": "0.000075",
+            "input_cache_read": "0.000002",
+            "input_cache_write": "0.000025"
+          }
+        ]
+      }
+    }
+  }
+}
