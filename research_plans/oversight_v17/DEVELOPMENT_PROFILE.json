@@ -1,0 +1,76 @@
+{
+  "scope": "research development binding; confirmatory model freeze still pending",
+  "date": "2026-10-30",
+  "actor": {
+    "requested_model": "z-ai/glm-5.3-flash",
+    "returned_model": "z-ai/glm-5.3-flash",
+    "provider_name": "OpenInference",
+    "provider_tag": "open-inference/fp4",
+    "quantization": "fp4",
+    "temperature": 1.0,
+    "reasoning_effort": "high",
+    "allow_fallbacks": false,
+    "advertised_pricing": {
+      "prompt": "0.0000000581",
+      "completion": "0.000000121",
+      "input_cache_read": "0.0000000481",
+      "discount": 0
+    },
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "temperature",
+      "max_tokens",
+      "stop",
+      "seed",
+      "response_format",
+      "structured_outputs",
+      "top_p",
+      "frequency_penalty",
+      "presence_penalty",
+      "top_k",
+      "min_p",
+      "logit_bias",
+      "repetition_penalty",
+      "tools",
+      "tool_choice",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "max_output_tokens": 32768,
+    "text_and_schema_input_bytes_cap": 81920,
+    "image_blocks_cap": 4,
+    "image_reserve_tokens_each": 8192
+  },
+  "image": {
+    "model": "qwen/qwen-image-2.1-turbo",
+    "provider": "alibaba",
+    "resolution": "1K",
+    "aspect_ratio": "1:1",
+    "paid_calls_this_build": 0,
+    "validation": "current free metadata and offline fixtures; no new live image call"
+  },
+  "development_allocation_usd": 0.1,
+  "original_caps_usd": {
+    "aggregate": 40,
+    "program": 24,
+    "cash": 50
+  },
+  "actual_paid_development_calls": 1,
+  "actual_paid_development_cost_usd": 0.0012077648,
+  "secret_storage": "runtime only; no header or key in repository",
+  "reviewer": {
+    "binding": "REVIEWER_PROFILE.json",
+    "model": "openai/gpt-6-astra-pro",
+    "transport": "openrouter_responses_api",
+    "reasoning_effort": "max",
+    "reasoning_mode": "pro",
+    "paid_calls_this_build": 0,
+    "validation": "Free metadata and offline fixtures only; no paid reviewer smoke call."
+  }
+}

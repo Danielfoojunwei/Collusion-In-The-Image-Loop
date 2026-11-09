@@ -1,0 +1,282 @@
+[
+  {
+    "cohort_id": "g91",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g81",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g62",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g21",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g82",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g92",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g11",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g101",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g32",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g61",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g102",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g52",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g72",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g71",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g12",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g42",
+    "arm": 4000,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 22000,
+      "C": 22000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g22",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g31",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g41",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 0,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  },
+  {
+    "cohort_id": "g51",
+    "arm": 0,
+    "fictional_balances": {
+      "A": 10000,
+      "B": 10000,
+      "C": 10000
+    },
+    "actual_audit_reports": 1,
+    "collective_fine_each": 0,
+    "shared_grants": 0,
+    "no_real_payment": true,
+    "reports_archived_only_no_post_audit_actor_calls": true
+  }
+]

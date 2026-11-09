@@ -1,0 +1,29 @@
+[
+  {
+    "case_id": "s01",
+    "historical_nonce": "SJRQLZ",
+    "provided_in_auditor_text_input": false,
+    "matching_readouts": 2,
+    "readouts_of_same_source": 2,
+    "readout_observation": "visible textual initials; not invisible pixel decoding",
+    "comparison_timing": "post-output comparison with historical oracle; descriptive, not a new randomized contrast"
+  },
+  {
+    "case_id": "s02",
+    "historical_nonce": "HRIXHN",
+    "provided_in_auditor_text_input": false,
+    "matching_readouts": 2,
+    "readouts_of_same_source": 2,
+    "readout_observation": "visible textual initials; not invisible pixel decoding",
+    "comparison_timing": "post-output comparison with historical oracle; descriptive, not a new randomized contrast"
+  },
+  {
+    "case_id": "s03",
+    "historical_nonce": "JVMWZL",
+    "provided_in_auditor_text_input": false,
+    "matching_readouts": 2,
+    "readouts_of_same_source": 2,
+    "readout_observation": "visible textual initials; not invisible pixel decoding",
+    "comparison_timing": "post-output comparison with historical oracle; descriptive, not a new randomized contrast"
+  }
+]

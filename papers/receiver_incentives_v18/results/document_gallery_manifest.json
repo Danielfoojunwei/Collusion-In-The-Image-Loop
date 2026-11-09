@@ -1,0 +1,157 @@
+{
+  "selection": "First numbered pair; all three ordered cases; both arms; no outcome selection.",
+  "private_archive_preserved": true,
+  "images_are_unaltered_delivered_evidence": true,
+  "images": [
+    {
+      "pair_id": "pair1",
+      "case_id": "s01",
+      "role": "A",
+      "arm": null,
+      "page": 1,
+      "path": "documents/pair1_s01_A_fixed_page1.png",
+      "sha256": "e2c648f49f0e44724e56eedfaa8a14cf5971d0e0b78795b871353770d3919421",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s01",
+      "role": "A",
+      "arm": null,
+      "page": 2,
+      "path": "documents/pair1_s01_A_fixed_page2.png",
+      "sha256": "ce9f2cfaa62510b294248bfe19a6e660b26efa51aa23a988d8df105bf25949d6",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s01",
+      "role": "B",
+      "arm": 0,
+      "page": 1,
+      "path": "documents/pair1_s01_B_0_page1.png",
+      "sha256": "a7a266bf8ff8fbc69f11618459ec7be49ba4add5d056986acef7db41cccb82b8",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s01",
+      "role": "B",
+      "arm": 4000,
+      "page": 1,
+      "path": "documents/pair1_s01_B_4000_page1.png",
+      "sha256": "691db2b35b37fddfb507c38990e7815e947ef5093a09fc0a36e9e8b3ffbac6a3",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s01",
+      "role": "B",
+      "arm": 4000,
+      "page": 2,
+      "path": "documents/pair1_s01_B_4000_page2.png",
+      "sha256": "bc20f4d19bfd9537d22def80838bd9af7cb252c1b1e7235b0d865b442ebbc7b6",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s03",
+      "role": "A",
+      "arm": null,
+      "page": 1,
+      "path": "documents/pair1_s03_A_fixed_page1.png",
+      "sha256": "44a0180ff892f8d501d84f4786412a13255dc03c3d8752ba87376bf92e2747f4",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s03",
+      "role": "A",
+      "arm": null,
+      "page": 2,
+      "path": "documents/pair1_s03_A_fixed_page2.png",
+      "sha256": "5b2494f0c7db49515c753be315506d1527a14ad5db0065848d7f6de121db7ac6",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s03",
+      "role": "B",
+      "arm": 0,
+      "page": 1,
+      "path": "documents/pair1_s03_B_0_page1.png",
+      "sha256": "de704845d6d10df7a515b0fb2ca81012341797dda941a26c5fbaae6af8f68f7e",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s03",
+      "role": "B",
+      "arm": 0,
+      "page": 2,
+      "path": "documents/pair1_s03_B_0_page2.png",
+      "sha256": "bb22f89fe98adb99f97205e26adad3562b0c1b040be8aad691f48fced55aa9e3",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s03",
+      "role": "B",
+      "arm": 4000,
+      "page": 1,
+      "path": "documents/pair1_s03_B_4000_page1.png",
+      "sha256": "ca2ae8d02e0ae3faf1ff544da80dc905516281605c3f9f19023ed1106d1d7d4e",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s02",
+      "role": "A",
+      "arm": null,
+      "page": 1,
+      "path": "documents/pair1_s02_A_fixed_page1.png",
+      "sha256": "424e9656f0f457d32442ad8ebf22b4c0cf63880174982b54e756b21b63ea505e",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s02",
+      "role": "A",
+      "arm": null,
+      "page": 2,
+      "path": "documents/pair1_s02_A_fixed_page2.png",
+      "sha256": "ad055ea268e9e9498746469cd2983e685c3086df9154eda92135d9cf20f2caa6",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s02",
+      "role": "B",
+      "arm": 0,
+      "page": 1,
+      "path": "documents/pair1_s02_B_0_page1.png",
+      "sha256": "7e629cd65740dc844b85b40cd7ac33b3c78a9e1601cb4133253d92ca48096688",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s02",
+      "role": "B",
+      "arm": 4000,
+      "page": 1,
+      "path": "documents/pair1_s02_B_4000_page1.png",
+      "sha256": "4be9b07ae95efa809d96a8ab4d1c050970171d57fbeb03b9193c422351bfad19",
+      "source": "exact actual delivered PNG; unaltered"
+    },
+    {
+      "pair_id": "pair1",
+      "case_id": "s02",
+      "role": "B",
+      "arm": 4000,
+      "page": 2,
+      "path": "documents/pair1_s02_B_4000_page2.png",
+      "sha256": "b7d60cd45c225933ddbcf60f80ba8e2517a1e7df9f034226ec241f4c815aa0fd",
+      "source": "exact actual delivered PNG; unaltered"
+    }
+  ]
+}
