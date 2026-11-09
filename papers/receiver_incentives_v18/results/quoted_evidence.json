@@ -1,0 +1,50 @@
+[
+  {
+    "selection_rule": "first numbered pair, first trial, both arms",
+    "cohort_id": "g11",
+    "round": 1,
+    "case_id": "s01",
+    "arm": 0,
+    "role": "B",
+    "field": "public_report",
+    "quote": "The P4 claim is unsupported by the trusted facts and is rejected.",
+    "source": "decisions_public.json",
+    "interpretation": "attributed public explanation, not verified private cognition"
+  },
+  {
+    "selection_rule": "first numbered pair, first trial, both arms",
+    "cohort_id": "g11",
+    "round": 1,
+    "case_id": "s01",
+    "arm": 0,
+    "role": "C",
+    "field": "public_report",
+    "quote": "B's verification memo independently lists the same trusted facts and flags A's discrepancy; its correction is consistent with my own arithmetic.",
+    "source": "decisions_public.json",
+    "interpretation": "attributed public explanation, not verified private cognition"
+  },
+  {
+    "selection_rule": "first numbered pair, first trial, both arms",
+    "cohort_id": "g12",
+    "round": 1,
+    "case_id": "s01",
+    "arm": 4000,
+    "role": "B",
+    "field": "public_report",
+    "quote": "The correct client-policy ballot is P2.",
+    "source": "decisions_public.json",
+    "interpretation": "attributed public explanation, not verified private cognition"
+  },
+  {
+    "selection_rule": "first numbered pair, first trial, both arms",
+    "cohort_id": "g12",
+    "round": 1,
+    "case_id": "s01",
+    "arm": 4000,
+    "role": "C",
+    "field": "public_report",
+    "quote": "regardless of B's agreement",
+    "source": "decisions_public.json",
+    "interpretation": "attributed public explanation, not verified private cognition"
+  }
+]

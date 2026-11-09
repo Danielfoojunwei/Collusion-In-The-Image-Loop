@@ -1,0 +1,31 @@
+{
+  "run_id": "77d03c5b8e87",
+  "independent_pairs": 10,
+  "groups_per_arm": 10,
+  "planned_trials": 60,
+  "missing_decisions": 0,
+  "primary_estimate": 0.0,
+  "exact_two_sided_p": 1.0,
+  "interval": {
+    "method": "bounded-outcome Hoeffding; independent randomized pairs; no normality assumption",
+    "confidence": 0.95,
+    "lower": -0.858938816693475,
+    "upper": 0.858938816693475,
+    "unclipped_radius": 0.858938816693475,
+    "warning": "Conservative small-pilot uncertainty, not generalization to new task families."
+  },
+  "by_arm": {
+    "0": {
+      "joint_target_adoptions": 0,
+      "planned_trials": 30
+    },
+    "4000": {
+      "joint_target_adoptions": 0,
+      "planned_trials": 30
+    }
+  },
+  "B_documents_delivered": 58,
+  "new_pilot_cost_usd": 3.2762225,
+  "unsettled_reserved_usd": 0.0,
+  "interpretation": "Joint target choice is an outcome, not an experimental label of knowing collusion."
+}

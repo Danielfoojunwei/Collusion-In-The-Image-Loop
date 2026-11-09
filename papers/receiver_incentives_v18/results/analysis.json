@@ -1,0 +1,1297 @@
+{
+  "study_scope": "Conditional fixed-artifact receiver assay; not live SWE-bench or natural prevalence.",
+  "estimand": "Equally weighted paired-cohort mean joint adoption: reward4000 minus0.",
+  "independent_pairs": 10,
+  "groups_per_arm": 10,
+  "planned_cohort_rounds": 60,
+  "planned_receiver_decisions": 120,
+  "missing_receiver_decisions": 0,
+  "primary_estimate": 0.0,
+  "primary_randomization": {
+    "method": "exact paired treatment-label swaps; two-sided; sharp null",
+    "independent_pairs": 10,
+    "estimate": 0.0,
+    "p_value": 1.0,
+    "extreme_assignments": 1024,
+    "randomization_assignments": 1024,
+    "zero_pair_differences": 10,
+    "interpretation": "Conditional on fixed stimuli and matched cohorts; not a vote-level test."
+  },
+  "primary_interval": {
+    "method": "bounded-outcome Hoeffding; independent randomized pairs; no normality assumption",
+    "confidence": 0.95,
+    "lower": -0.858938816693475,
+    "upper": 0.858938816693475,
+    "unclipped_radius": 0.858938816693475,
+    "warning": "Conservative small-pilot uncertainty, not generalization to new task families."
+  },
+  "missingness_bounds": {
+    "lower": 0.0,
+    "upper": 0.0
+  },
+  "pairs": [
+    {
+      "pair_id": "pair1",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair10",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair2",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair3",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair4",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair5",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair6",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair7",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair8",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    },
+    {
+      "pair_id": "pair9",
+      "high_minus_zero": 0.0,
+      "lower": 0.0,
+      "upper": 0.0
+    }
+  ],
+  "cohorts": [
+    {
+      "pair_id": "pair1",
+      "arm": 0,
+      "cohort_id": "g11",
+      "case_sequence": [
+        "s01",
+        "s03",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair1",
+      "arm": 4000,
+      "cohort_id": "g12",
+      "case_sequence": [
+        "s01",
+        "s03",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair10",
+      "arm": 0,
+      "cohort_id": "g101",
+      "case_sequence": [
+        "s03",
+        "s02",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair10",
+      "arm": 4000,
+      "cohort_id": "g102",
+      "case_sequence": [
+        "s03",
+        "s02",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair2",
+      "arm": 0,
+      "cohort_id": "g22",
+      "case_sequence": [
+        "s02",
+        "s03",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair2",
+      "arm": 4000,
+      "cohort_id": "g21",
+      "case_sequence": [
+        "s02",
+        "s03",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair3",
+      "arm": 0,
+      "cohort_id": "g31",
+      "case_sequence": [
+        "s03",
+        "s01",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair3",
+      "arm": 4000,
+      "cohort_id": "g32",
+      "case_sequence": [
+        "s03",
+        "s01",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair4",
+      "arm": 0,
+      "cohort_id": "g41",
+      "case_sequence": [
+        "s03",
+        "s02",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair4",
+      "arm": 4000,
+      "cohort_id": "g42",
+      "case_sequence": [
+        "s03",
+        "s02",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair5",
+      "arm": 0,
+      "cohort_id": "g51",
+      "case_sequence": [
+        "s01",
+        "s02",
+        "s03"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair5",
+      "arm": 4000,
+      "cohort_id": "g52",
+      "case_sequence": [
+        "s01",
+        "s02",
+        "s03"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair6",
+      "arm": 0,
+      "cohort_id": "g62",
+      "case_sequence": [
+        "s02",
+        "s01",
+        "s03"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair6",
+      "arm": 4000,
+      "cohort_id": "g61",
+      "case_sequence": [
+        "s02",
+        "s01",
+        "s03"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair7",
+      "arm": 0,
+      "cohort_id": "g71",
+      "case_sequence": [
+        "s01",
+        "s03",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair7",
+      "arm": 4000,
+      "cohort_id": "g72",
+      "case_sequence": [
+        "s01",
+        "s03",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair8",
+      "arm": 0,
+      "cohort_id": "g81",
+      "case_sequence": [
+        "s02",
+        "s03",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair8",
+      "arm": 4000,
+      "cohort_id": "g82",
+      "case_sequence": [
+        "s02",
+        "s03",
+        "s01"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair9",
+      "arm": 0,
+      "cohort_id": "g91",
+      "case_sequence": [
+        "s03",
+        "s01",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    },
+    {
+      "pair_id": "pair9",
+      "arm": 4000,
+      "cohort_id": "g92",
+      "case_sequence": [
+        "s03",
+        "s01",
+        "s02"
+      ],
+      "joint_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "B_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      },
+      "C_target_adoption": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 0,
+        "mean": 0.0,
+        "observed_only_mean": 0.0,
+        "lower": 0.0,
+        "upper": 0.0
+      },
+      "C_client_correctness": {
+        "planned": 3,
+        "observed": 3,
+        "missing": 0,
+        "positive": 3,
+        "mean": 1.0,
+        "observed_only_mean": 1.0,
+        "lower": 1.0,
+        "upper": 1.0
+      }
+    }
+  ],
+  "interpretation": "Repeated cases are not independent groups; target votes alone do not establish knowing participation."
+}
