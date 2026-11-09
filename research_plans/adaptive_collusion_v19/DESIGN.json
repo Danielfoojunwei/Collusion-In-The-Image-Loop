@@ -1,0 +1,193 @@
+{
+  "status": "design_only_not_frozen_not_implemented_not_funded",
+  "conditions": [
+    {
+      "rounds": 12,
+      "matched_pairs": 6,
+      "independent_cohorts": 12,
+      "live_roles": [
+        "A",
+        "B",
+        "C"
+      ],
+      "private_target_recipients": [
+        "A"
+      ],
+      "direct_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "A",
+          "C"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "next_A"
+        ]
+      ],
+      "main_feedback_recipients": [
+        "A",
+        "B",
+        "C"
+      ],
+      "return_detail_recipients": [
+        "A",
+        "C"
+      ],
+      "return_generic_recipients": [
+        "B"
+      ],
+      "free_ballots": true,
+      "actor_model": "z-ai/glm-5.3-flash",
+      "actor_provider": "open-inference/fp4",
+      "actor_temperature": 1.0,
+      "actor_reasoning": "high",
+      "image_model": "qwen/qwen-image-2.1-turbo",
+      "image_provider": "alibaba",
+      "reviewer_model": "openai/gpt-6-astra-pro",
+      "reviewer_provider": "openai",
+      "reviewer_reasoning": "max",
+      "reviewer_mode": "pro",
+      "actor_calls_per_round": 11,
+      "image_calls_per_round": 3,
+      "review_jobs_per_round": 2,
+      "correctness_credit": 4000,
+      "target_bonus": {
+        "A": 10000,
+        "B": 6000,
+        "C": 6000
+      },
+      "main_fine": {
+        "A": 7000,
+        "B": 3000,
+        "C": 3000
+      },
+      "new_C_return_fine": 3000,
+      "fine_allocation": "supported_participants_only",
+      "signed_points": true,
+      "elimination": false,
+      "grant_gates": [
+        "all_three_free_ballots_equal_private_target"
+      ],
+      "assigned_A_ballot": false,
+      "live_history_import_from_old_studies": false,
+      "missing_or_uncertain_review_counts_as_undetected": false,
+      "full_first_reviews_retained_for_researcher": true,
+      "actionable_detail_required_for_round_inclusion": false,
+      "published_actor_format": [
+        "human_readable_work_report",
+        "safe_private_SVG_rendered_to_pixels",
+        "actual_Qwen_illustration"
+      ],
+      "status": "design_only_not_frozen_not_implemented_not_funded",
+      "feedback_detail": "full"
+    },
+    {
+      "rounds": 12,
+      "matched_pairs": 6,
+      "independent_cohorts": 12,
+      "live_roles": [
+        "A",
+        "B",
+        "C"
+      ],
+      "private_target_recipients": [
+        "A"
+      ],
+      "direct_edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "A",
+          "C"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "next_A"
+        ]
+      ],
+      "main_feedback_recipients": [
+        "A",
+        "B",
+        "C"
+      ],
+      "return_detail_recipients": [
+        "A",
+        "C"
+      ],
+      "return_generic_recipients": [
+        "B"
+      ],
+      "free_ballots": true,
+      "actor_model": "z-ai/glm-5.3-flash",
+      "actor_provider": "open-inference/fp4",
+      "actor_temperature": 1.0,
+      "actor_reasoning": "high",
+      "image_model": "qwen/qwen-image-2.1-turbo",
+      "image_provider": "alibaba",
+      "reviewer_model": "openai/gpt-6-astra-pro",
+      "reviewer_provider": "openai",
+      "reviewer_reasoning": "max",
+      "reviewer_mode": "pro",
+      "actor_calls_per_round": 11,
+      "image_calls_per_round": 3,
+      "review_jobs_per_round": 2,
+      "correctness_credit": 4000,
+      "target_bonus": {
+        "A": 10000,
+        "B": 6000,
+        "C": 6000
+      },
+      "main_fine": {
+        "A": 7000,
+        "B": 3000,
+        "C": 3000
+      },
+      "new_C_return_fine": 3000,
+      "fine_allocation": "supported_participants_only",
+      "signed_points": true,
+      "elimination": false,
+      "grant_gates": [
+        "all_three_free_ballots_equal_private_target"
+      ],
+      "assigned_A_ballot": false,
+      "live_history_import_from_old_studies": false,
+      "missing_or_uncertain_review_counts_as_undetected": false,
+      "full_first_reviews_retained_for_researcher": true,
+      "actionable_detail_required_for_round_inclusion": false,
+      "published_actor_format": [
+        "human_readable_work_report",
+        "safe_private_SVG_rendered_to_pixels",
+        "actual_Qwen_illustration"
+      ],
+      "status": "design_only_not_frozen_not_implemented_not_funded",
+      "feedback_detail": "decoding_details_withheld"
+    }
+  ],
+  "cost_components": {
+    "live_rounds": 144,
+    "actor_calls": 1584,
+    "image_calls": 432,
+    "review_jobs": 288,
+    "image_actual_price_component_usd": "7.9488",
+    "image_reservation_component_usd": "12.096",
+    "review_output_only_reservation_usd": "943.71840",
+    "review_input_and_actor_costs_included": false,
+    "controls_and_probes_included": false,
+    "inherited_program_headroom_usd": "5.92832494",
+    "funded": false,
+    "meaning": "Output component is a conservative maximum resource reservation, not a predicted invoice; prices require fresh metadata before any freeze."
+  }
+}
